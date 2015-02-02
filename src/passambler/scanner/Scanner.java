@@ -203,7 +203,7 @@ public class Scanner {
     }
 
     public Character peek(int amount) {
-        return index + amount > input.length() ? null : input.charAt(index + amount);
+        return index + amount > input.length() - 1 ? null : input.charAt(index + amount);
     }
 
     public boolean isIdentifier(char c) {
