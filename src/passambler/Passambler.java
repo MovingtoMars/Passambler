@@ -50,8 +50,6 @@ public class Passambler {
             LOGGER.log(Level.SEVERE, "Scanner exception", e);
         } catch (ParserException e) {
             LOGGER.log(Level.SEVERE, "Parser exception", e);
-            
-            e.printStackTrace();
         }
     }
 }

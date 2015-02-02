@@ -16,6 +16,14 @@ public class LogHandler extends Handler {
         
         if (record.getThrown() != null) {
             output.println(String.format("%s: %s", record.getMessage(), record.getThrown().getMessage()));
+            
+            if (Passambler.DEBUG) {
+                output.println("Stacktrace:");
+
+                for (StackTraceElement stackTrace : record.getThrown().getStackTrace()) {
+                    output.println(" @ " + stackTrace.toString());
+                }
+            }
         } else {
             output.println(String.format("%s", record.getMessage()));
         }
