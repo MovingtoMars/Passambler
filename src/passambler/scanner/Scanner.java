@@ -48,20 +48,43 @@ public class Scanner {
     public List<Token> scan() throws ScannerException {
         List<Token> tokens = new ArrayList<>();
         
+        char stringChar = 0;
         boolean inString = false;
 
         while (hasNext()) {
-            if (current() == '\'') {
+            if (current() == '\'' || current() == '"') {
                 inString = !inString;
 
                 if (inString) {
+                    stringChar = current();
+                    
                     tokens.add(createToken(Token.Type.STRING, ""));
+                } else {
+                    if (stringChar != current()) {
+                        throw new ScannerException(String.format("invalid closing of string literal", current()), line, column);
+                    }
                 }
 
                 next();
             } else if (inString) {
-                tokens.get(tokens.size() - 1).setValue(tokens.get(tokens.size() - 1).getStringValue() + current());
-
+                Token token = tokens.get(tokens.size() - 1);
+                
+                if (stringChar == '"' && current() == '\\' && peek() != null && (peek() == 'n' || peek() == 'r' || peek() == 't')) {
+                    switch (peek()) {
+                        case 'n':
+                        case 'r':
+                            token.setValue(tokens.get(tokens.size() - 1).getStringValue() + System.getProperty("line.separator"));
+                            break;
+                        case 't':
+                            token.setValue(tokens.get(tokens.size() - 1).getStringValue() + "\t");
+                            break;
+                    }
+                    
+                    next();
+                } else {
+                    token.setValue(tokens.get(tokens.size() - 1).getStringValue() + current());
+                }
+                
                 next();
             } else if (current() == '&' && peek() != null && peek() == '&') {
                 tokens.add(createToken(Token.Type.AND));
