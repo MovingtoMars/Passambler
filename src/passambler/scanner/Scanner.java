@@ -6,17 +6,18 @@ import java.util.List;
 import java.util.Map;
 
 public class Scanner {
+
     private Map<Character, Token.Type> tokenMap = new HashMap();
-    
+
     private int line = 1, column = 1;
-    
+
     private int index;
 
     private final String input;
 
     public Scanner(String input) {
         this.input = input;
-        
+
         tokenMap.put('=', Token.Type.ASSIGN);
         tokenMap.put('>', Token.Type.GT);
         tokenMap.put('<', Token.Type.LT);
@@ -36,28 +37,37 @@ public class Scanner {
         tokenMap.put(';', Token.Type.SEMICOL);
         tokenMap.put('^', Token.Type.POWER);
     }
-    
+
     public Token createToken(Token.Type type, Object value) {
         return new Token(type, value, new SourcePosition(line, column));
     }
-    
+
     public Token createToken(Token.Type type) {
         return createToken(type, null);
     }
 
     public List<Token> scan() throws ScannerException {
         List<Token> tokens = new ArrayList<>();
-        
+
         char stringChar = 0;
-        boolean inString = false;
+        boolean inString = false, inComment = false;
 
         while (hasNext()) {
-            if (current() == '\'' || current() == '"') {
+            if (current() == '\n') {
+                line++;
+                column = 0;
+
+                inComment = false;
+                
+                next();
+            } else if (inComment) {
+                next();
+            } else if (current() == '\'' || current() == '"') {
                 inString = !inString;
 
                 if (inString) {
                     stringChar = current();
-                    
+
                     tokens.add(createToken(Token.Type.STRING, ""));
                 } else {
                     if (stringChar != current()) {
@@ -68,7 +78,7 @@ public class Scanner {
                 next();
             } else if (inString) {
                 Token token = tokens.get(tokens.size() - 1);
-                
+
                 if (stringChar == '"' && current() == '\\' && peek() != null && (peek() == 'n' || peek() == 'r' || peek() == 't')) {
                     switch (peek()) {
                         case 'n':
@@ -79,46 +89,51 @@ public class Scanner {
                             token.setValue(tokens.get(tokens.size() - 1).getStringValue() + "\t");
                             break;
                     }
-                    
+
                     next();
                 } else {
                     token.setValue(tokens.get(tokens.size() - 1).getStringValue() + current());
                 }
-                
+
                 next();
             } else if (current() == '&' && peek() != null && peek() == '&') {
                 tokens.add(createToken(Token.Type.AND));
-                
+
                 next();
                 next();
             } else if (current() == '|' && peek() != null && peek() == '|') {
                 tokens.add(createToken(Token.Type.OR));
-                
+
                 next();
                 next();
             } else if (current() == '>' && peek() != null && peek() == '=') {
                 tokens.add(createToken(Token.Type.GTE));
-                
+
                 next();
                 next();
             } else if (current() == '<' && peek() != null && peek() == '=') {
                 tokens.add(createToken(Token.Type.LTE));
-                
+
                 next();
                 next();
             } else if (current() == '=' && peek() != null && peek() == '=') {
                 tokens.add(createToken(Token.Type.EQUAL));
-                
+
                 next();
                 next();
             } else if (current() == '!' && peek() != null && peek() == '=') {
                 tokens.add(createToken(Token.Type.NEQUAL));
-                
+
+                next();
+                next();
+            } else if (current() == '-' && peek() != null && peek() == '-') {
+                inComment = true;
+
                 next();
                 next();
             } else if (current() == '-' && peek() != null && peek() == '>') {
                 tokens.add(createToken(Token.Type.STREAM));
-                
+
                 next();
                 next();
             } else if (isIdentifier(current())) {
@@ -133,12 +148,12 @@ public class Scanner {
 
                     next();
                 }
-                
+
                 Token constant = tokens.get(tokens.size() - 1);
 
                 if (Scanner.isNumber(constant.getStringValue())) {
                     constant.setType(Token.Type.NUMBER);
-                    
+
                     constant.setValue(constant.getStringValue());
                 }
             } else if (tokenMap.containsKey(current())) {
@@ -146,34 +161,29 @@ public class Scanner {
 
                 next();
             } else if (current() == ' ' || current() == '\t') {
-                next(); 
-            } else if (current() == '\n') {
-                line++;
-                column = 0;
-                
                 next();
             } else {
                 throw new ScannerException(String.format("unexpected character %c", current()), line, column);
             }
         }
-        
+
         return tokens;
     }
 
     public char current() {
         return input.charAt(index);
     }
-    
+
     public void next() {
         index++;
-        
+
         column++;
     }
 
     public boolean hasNext() {
         return index < input.length();
     }
-    
+
     public Character peek() {
         return peek(1);
     }
@@ -181,11 +191,11 @@ public class Scanner {
     public Character peek(int amount) {
         return index + amount > input.length() ? null : input.charAt(index + amount);
     }
-    
+
     public boolean isIdentifier(char c) {
         return Character.isLetterOrDigit(c) || c == '_';
     }
-    
+
     public static boolean isNumber(String data) {
         try {
             Integer.parseInt(data);
