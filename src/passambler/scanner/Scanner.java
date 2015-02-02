@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Scanner {
-
     private Map<Character, Token.Type> tokenMap = new HashMap();
 
     private int line = 1, column = 1;
@@ -50,17 +49,27 @@ public class Scanner {
         List<Token> tokens = new ArrayList<>();
 
         char stringChar = 0;
-        boolean inString = false, inComment = false;
+        boolean inString = false, inComment = false, multiLineComment = false;
 
         while (hasNext()) {
             if (current() == '\n') {
                 line++;
                 column = 0;
 
-                inComment = false;
+                if (!multiLineComment) {
+                    inComment = false;
+                }
                 
                 next();
             } else if (inComment) {
+                if (current() == '-' && peek() != null && peek() == '-' && peek(2) != null && peek(2) == '-') {
+                    inComment = false;
+                    multiLineComment = false;
+                    
+                    next();
+                    next();
+                }
+                
                 next();
             } else if (current() == '\'' || current() == '"') {
                 inString = !inString;
@@ -128,7 +137,12 @@ public class Scanner {
                 next();
             } else if (current() == '-' && peek() != null && peek() == '-') {
                 inComment = true;
-
+                multiLineComment = peek(2) != null && peek(2) == '-';
+                
+                if (multiLineComment) {
+                    next();
+                }
+                
                 next();
                 next();
             } else if (current() == '-' && peek() != null && peek() == '>') {
