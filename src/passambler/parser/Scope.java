@@ -8,12 +8,12 @@ import passambler.function.FunctionExit;
 import passambler.function.FunctionList;
 import passambler.function.FunctionSeq;
 import passambler.function.FunctionSqrt;
-import passambler.function.FunctionWrite;
 import passambler.function.Function;
 import passambler.function.FunctionRand;
 import passambler.val.Val;
 import passambler.val.ValBool;
 import passambler.val.ValNumber;
+import passambler.val.ValPrintStream;
 
 public class Scope {
     private Scope parent;
@@ -30,8 +30,6 @@ public class Scope {
         parent = parentScope;
         
         functions.put("exit", new FunctionExit());
-        functions.put("writeln", new FunctionWrite(true));
-        functions.put("write", new FunctionWrite(false));
         functions.put("array", new FunctionArray());
         functions.put("array_set", new FunctionArraySet());
         functions.put("list", new FunctionList());
@@ -41,6 +39,8 @@ public class Scope {
         
         variables.put("nil", Val.nil);
         variables.put("pi", new ValNumber(Math.PI));
+        variables.put("stdout", new ValPrintStream(System.out));
+        variables.put("stderr", new ValPrintStream(System.err));
         variables.put("true", new ValBool(true));
         variables.put("false", new ValBool(false));
         variables.put("nil", new ValBool(false));
