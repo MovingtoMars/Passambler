@@ -40,6 +40,8 @@ public class Passambler {
                     data = String.join("\n", Files.readAllLines(Paths.get(args[0]), Charset.forName("UTF-8")));
                 } catch (IOException e) {
                     LOGGER.log(Level.SEVERE, String.format("Could not read input file: %s", args[0]));
+                    
+                    System.exit(-1);
                 }
 
                 Parser parser = new Parser();
