@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import passambler.parser.Parser;
@@ -23,15 +24,15 @@ public class Passambler {
     public static void main(String[] args) {
         LOGGER.setUseParentHandlers(false);
         LOGGER.addHandler(new LogHandler());
-
+       
         OptionParser optionParser = new OptionParser();
         optionParser.accepts("v");
         optionParser.accepts("a");
         optionParser.accepts("f").withRequiredArg();
         
-        OptionSet options = optionParser.parse(args);
-        
         try {
+            OptionSet options = optionParser.parse(args);
+            
             if (options.has("v")) {
                 LOGGER.log(Level.INFO, String.format("Passambler %s", VERSION));
             }
@@ -71,6 +72,8 @@ public class Passambler {
             LOGGER.log(Level.SEVERE, "Scanner exception", e);
         } catch (ParserException e) {
             LOGGER.log(Level.SEVERE, "Parser exception", e);
+        } catch (OptionException e) {
+            LOGGER.log(Level.SEVERE, "Option exception", e);    
         }
     }
 }
