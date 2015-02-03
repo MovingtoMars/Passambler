@@ -15,6 +15,10 @@ public class ValInputStream extends Val implements Stream {
     public void onStream(Val value) {
         Scanner scanner = new Scanner(inputStream);
         
-        value.setValue(scanner.next());
+        if (value instanceof ValNumber) {
+            value.setValue(scanner.nextDouble());
+        } else {
+            value.setValue(scanner.next());
+        }
     }
 }
