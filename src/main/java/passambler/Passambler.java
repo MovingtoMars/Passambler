@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.scanner.Scanner;
@@ -22,8 +24,19 @@ public class Passambler {
         LOGGER.setUseParentHandlers(false);
         LOGGER.addHandler(new LogHandler());
 
+        OptionParser optionParser = new OptionParser();
+        optionParser.accepts("v");
+        optionParser.accepts("a");
+        optionParser.accepts("f").withRequiredArg();
+        
+        OptionSet options = optionParser.parse(args);
+        
         try {
-            if (args.length == 1 && args[0].equals("-a")) {
+            if (options.has("v")) {
+                LOGGER.log(Level.INFO, String.format("Passambler %s", VERSION));
+            }
+            
+            if (options.has("a")) {
                 LOGGER.log(Level.INFO, "Interactive mode enabled.");
 
                 Parser parser = new Parser();
@@ -35,13 +48,17 @@ public class Passambler {
                 while (input.hasNextLine()) {
                     parser.parseScanner(new Scanner(input.nextLine()));
                 }
-            } else if (args.length == 1) {
+            }
+            
+            if (options.has("f")) {
+                String file = String.valueOf(options.valueOf("f"));
+                
                 String data = null;
 
                 try {
-                    data = String.join("\n", Files.readAllLines(Paths.get(args[0]), Charset.forName("UTF-8")));
+                    data = String.join("\n", Files.readAllLines(Paths.get(file), Charset.forName("UTF-8")));
                 } catch (IOException e) {
-                    LOGGER.log(Level.SEVERE, String.format("Could not read input file: %s", args[0]));
+                    LOGGER.log(Level.SEVERE, String.format("Could not read input file: %s", file));
 
                     System.exit(-1);
                 }
