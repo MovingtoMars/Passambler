@@ -12,7 +12,7 @@ public class ParserException extends Exception {
         UNDEFINED_FUNCTION("undefined function %s"),
         UNDEFINED_VARIABLE("undefined variable %s"),
         UNEXPECTED_EOF("unexpected end of file"),
-        UNEXPECTED_TOKEN("unexpected token"),
+        UNEXPECTED_TOKEN("unexpected token %s"),
         UNSUPPORTED_OPERATOR("unsupported operator %s"),
         ZERO_DIVISION("cannot divide by 0");
 
