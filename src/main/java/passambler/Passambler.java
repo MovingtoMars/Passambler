@@ -54,15 +54,7 @@ public class Passambler {
             if (options.has("f")) {
                 String file = String.valueOf(options.valueOf("f"));
                 
-                String data = null;
-
-                try {
-                    data = String.join("\n", Files.readAllLines(Paths.get(file), Charset.forName("UTF-8")));
-                } catch (IOException e) {
-                    LOGGER.log(Level.SEVERE, String.format("Could not read input file: %s", file));
-
-                    System.exit(-1);
-                }
+                String data = String.join("\n", Files.readAllLines(Paths.get(file), Charset.forName("UTF-8")));
 
                 Parser parser = new Parser();
 
@@ -74,6 +66,8 @@ public class Passambler {
             LOGGER.log(Level.SEVERE, "Parser exception", e);
         } catch (OptionException e) {
             LOGGER.log(Level.SEVERE, "Option exception", e);    
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "IO exception", e);    
         }
     }
 }
