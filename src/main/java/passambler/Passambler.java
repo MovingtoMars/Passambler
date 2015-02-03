@@ -38,7 +38,7 @@ public class Passambler {
                 LOGGER.log(Level.INFO, String.format("Passambler %s", VERSION));
             }
             
-            if (options.has("h")) {
+            if (options.has("h") || !options.hasOptions()) {
                 optionParser.printHelpOn(System.out);
             }
             
