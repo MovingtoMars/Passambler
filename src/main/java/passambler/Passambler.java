@@ -12,6 +12,8 @@ import passambler.scanner.Scanner;
 import passambler.scanner.ScannerException;
 
 public class Passambler {
+    public static final String VERSION = "0.1.0-SNAPSHOT";
+    
     public static final boolean DEBUG = true;
 
     public static final Logger LOGGER = Logger.getLogger("Passambler");
