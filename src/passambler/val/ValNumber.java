@@ -50,7 +50,7 @@ public class ValNumber extends Val {
             
             return newVal;
         } else if (value instanceof ValString && tokenType == Token.Type.PLUS) {
-            return new ValString(String.valueOf(getValue()) + ((ValString) value).getValue());
+            return new ValString(toString() + ((ValString) value).getValue());
         } else if (value == Val.nil) {
             return this;
         }
