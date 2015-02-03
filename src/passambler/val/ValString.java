@@ -6,21 +6,21 @@ public class ValString extends Val implements IndexAccess {
     public ValString(String data) {
         setValue(data);
     }
-    
+
     @Override
     public String getValue() {
         return (String) value;
     }
-    
+
     @Override
     public Val onOperator(Val value, Token.Type tokenType) {
         if (tokenType == Token.Type.PLUS) {
             return new ValString(getValue() + (value != Val.nil ? value.toString() : ""));
         }
-        
+
         return null;
     }
-    
+
     @Override
     public boolean isOperatorSupported(Token.Type tokenType) {
         return tokenType == Token.Type.PLUS;
@@ -32,11 +32,11 @@ public class ValString extends Val implements IndexAccess {
     }
 
     @Override
-    public void setIndex(int index, Val value) {        
+    public void setIndex(int index, Val value) {
         char[] array = getValue().toCharArray();
-        
+
         array[index] = ((ValString) value).getValue().charAt(0);
-        
+
         setValue(new String(array));
     }
 

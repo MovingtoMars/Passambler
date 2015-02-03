@@ -59,17 +59,17 @@ public class Scanner {
                 if (!multiLineComment) {
                     inComment = false;
                 }
-                
+
                 next();
             } else if (inComment) {
                 if (current() == '-' && peek() != null && peek() == '-' && peek(2) != null && peek(2) == '-') {
                     inComment = false;
                     multiLineComment = false;
-                    
+
                     next();
                     next();
                 }
-                
+
                 next();
             } else if (current() == '\'' || current() == '"') {
                 inString = !inString;
@@ -138,11 +138,11 @@ public class Scanner {
             } else if (current() == '-' && peek() != null && peek() == '-') {
                 inComment = true;
                 multiLineComment = peek(2) != null && peek(2) == '-';
-                
+
                 if (multiLineComment) {
                     next();
                 }
-                
+
                 next();
                 next();
             } else if (current() == '-' && peek() != null && peek() == '>') {

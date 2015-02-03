@@ -18,7 +18,7 @@ public class Token {
     private Type type;
 
     private SourcePosition position;
-    
+
     private Object value;
 
     public Token(Type type, SourcePosition position) {
@@ -30,7 +30,7 @@ public class Token {
         this.value = value;
         this.position = position;
     }
-    
+
     public SourcePosition getPosition() {
         return position;
     }
@@ -58,7 +58,7 @@ public class Token {
     public void setValue(Object value) {
         this.value = value;
     }
-    
+
     @Override
     public String toString() {
         return type + "(" + value + ")";

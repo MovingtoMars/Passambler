@@ -101,7 +101,7 @@ public class Evaluator {
                     if (val == null) {
                         throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
                     }
-                    
+
                     stream.next();
 
                     Val comp1 = val;
@@ -292,7 +292,7 @@ public class Evaluator {
                                 parCount = 0;
                             }
                         }
-                        
+
                         Function currentFunction = parser.getScope().getFunction(currentFunctionName);
 
                         if (currentFunction.getArguments() != -1 && currentFunction.getArguments() != arguments.size()) {
@@ -308,18 +308,18 @@ public class Evaluator {
                         Val[] vals = new Val[arguments.size()];
 
                         Val functionReturn = currentFunction.invoke(parser, arguments.toArray(vals));
-                        
+
                         if (val == null) {
                             val = functionReturn;
                         } else {
                             val = val.onOperator(functionReturn, currentFunctionOperator);
                         }
-                        
+
                         currentFunctionName = null;
                         currentFunctionOperator = null;
                     } else if (!tokensInPar.isEmpty()) {
                         performOperatorCheck(parser, stream);
-                        
+
                         if (val == null) {
                             val = Evaluator.evaluate(parser, new TokenStream(tokensInPar));
                         } else {

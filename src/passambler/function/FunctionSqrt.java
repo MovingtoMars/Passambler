@@ -10,7 +10,7 @@ public class FunctionSqrt implements Function {
     public int getArguments() {
         return 1;
     }
-    
+
     @Override
     public boolean isArgumentValid(Val value, int argument) {
         return value instanceof ValNumber;

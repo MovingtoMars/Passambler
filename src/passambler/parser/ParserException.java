@@ -26,15 +26,15 @@ public class ParserException extends Exception {
             this.message = message;
         }
     }
-    
+
     public ParserException(String message, Object... args) {
         super(String.format(message, args));
     }
-    
+
     public ParserException(Type type, Object... args) {
         this(type.message, args);
     }
-    
+
     public ParserException(Type type, SourcePosition position, Object... args) {
         this(type.message + " at line " + position.getLine() + ", column " + position.getColumn(), args);
     }

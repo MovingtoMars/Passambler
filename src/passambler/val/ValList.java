@@ -8,7 +8,7 @@ public class ValList extends Val implements IndexAccess, Stream {
     private List<Val> list = new ArrayList<>();
 
     @Override
-    public Val getIndex(int index) {        
+    public Val getIndex(int index) {
         return list.get(index);
     }
 
@@ -21,7 +21,7 @@ public class ValList extends Val implements IndexAccess, Stream {
     public int getIndexCount() {
         return list.size();
     }
-    
+
     @Override
     public String toString() {
         return list.toString();

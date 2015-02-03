@@ -21,7 +21,7 @@ public class Parser {
     public Parser() {
         this(new Scope());
     }
-    
+
     public Parser(Scope scope) {
         this.scope = scope;
     }
@@ -41,12 +41,12 @@ public class Parser {
     public void parse(TokenStream stream) throws ParserException {
         if (isAssignment(stream.copy())) {
             String key = stream.current().getStringValue();
-            
+
             stream.next();
             stream.next();
-            
+
             Val value = Evaluator.evaluate(this, new TokenStream(stream.rest()));
-            
+
             if (value instanceof ValBlock) {
                 scope.setFunction(key, (Function) value);
             } else {
@@ -55,26 +55,26 @@ public class Parser {
         } else if (isStream(stream.copy())) {
             List<Token> tokensBeforeStream = new ArrayList<>();
             List<Token> tokensAfterStream = new ArrayList<>();
-            
+
             boolean passed = false;
-            
+
             while (stream.hasNext()) {
                 if (!passed && stream.current().getType() == Token.Type.STREAM) {
                     passed = true;
                 } else {
                     (passed ? tokensAfterStream : tokensBeforeStream).add(stream.current());
                 }
-                
+
                 stream.next();
             }
-            
+
             Val toSend = Evaluator.evaluate(this, new TokenStream(tokensBeforeStream));
             Val toReceive = Evaluator.evaluate(this, new TokenStream(tokensAfterStream));
-            
+
             if (toSend instanceof IndexAccess && toReceive instanceof ValBlock) {
                 IndexAccess indexAccess = (IndexAccess) toSend;
-                
-                for (int i = 0; i < indexAccess.getIndexCount(); ++i) {               
+
+                for (int i = 0; i < indexAccess.getIndexCount(); ++i) {
                     ((ValBlock) toReceive).invoke(((ValBlock) toReceive).getParser(), new Val[] {
                         indexAccess.getIndex(i),
                         new ValNumber(i)
@@ -83,13 +83,13 @@ public class Parser {
             } else if (toSend instanceof ValBool && toReceive instanceof ValBlock) {
                 while (((ValBool) toSend).getValue() == true) {
                     ((ValBlock) toReceive).invoke(((ValBlock) toReceive).getParser());
-                    
-                    /* we need to refresh the condition for the while loop */
+
+                    // We need to refresh the condition for the while loop
                     toSend = Evaluator.evaluate(this, new TokenStream(tokensBeforeStream));
                 }
             } else {
                 if (!(toReceive instanceof Stream)) {
-                    /* I'm using stream.back() here as the while loop is always one too far */
+                    // I'm using stream.back() here as the while loop is always one too far
                     throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.back().getPosition(), "not a stream");
                 }
 
@@ -103,7 +103,7 @@ public class Parser {
             }
         }
     }
-    
+
     public void parseScanner(Scanner scanner) throws ScannerException, ParserException {
         parseSemicolons(scanner.scan());
     }
@@ -133,19 +133,19 @@ public class Parser {
             throw new ParserException(ParserException.Type.UNEXPECTED_EOF);
         }
     }
-    
+
     public boolean isStream(TokenStream stream) {
         while (stream.hasNext()) {
             if (stream.current().getType() == Token.Type.STREAM) {
                 return true;
             }
-            
+
             stream.next();
         }
-        
+
         return false;
     }
-    
+
     public boolean isAssignment(TokenStream stream) {
         return stream.size() >= 3 && stream.first().getType() == Token.Type.IDENTIFIER && stream.peek().getType() == Token.Type.ASSIGN;
     }

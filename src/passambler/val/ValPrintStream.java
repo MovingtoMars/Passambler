@@ -5,7 +5,7 @@ import passambler.parser.Stream;
 
 public class ValPrintStream extends Val implements Stream {
     private PrintStream printStream;
-    
+
     public ValPrintStream(PrintStream printStream) {
         this.printStream = printStream;
     }

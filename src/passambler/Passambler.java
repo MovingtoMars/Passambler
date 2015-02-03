@@ -13,13 +13,13 @@ import passambler.scanner.ScannerException;
 
 public class Passambler {
     public static final boolean DEBUG = true;
-    
+
     public static final Logger LOGGER = Logger.getLogger("Passambler");
 
     public static void main(String[] args) {
         LOGGER.setUseParentHandlers(false);
         LOGGER.addHandler(new LogHandler());
-        
+
         try {
             if (args.length == 1 && args[0].equals("-a")) {
                 LOGGER.log(Level.INFO, "Interactive mode enabled.");
@@ -40,7 +40,7 @@ public class Passambler {
                     data = String.join("\n", Files.readAllLines(Paths.get(args[0]), Charset.forName("UTF-8")));
                 } catch (IOException e) {
                     LOGGER.log(Level.SEVERE, String.format("Could not read input file: %s", args[0]));
-                    
+
                     System.exit(-1);
                 }
 

@@ -17,18 +17,18 @@ import passambler.val.ValPrintStream;
 
 public class Scope {
     private Scope parent;
-    
+
     private Map<String, Val> variables = new HashMap();
 
     private Map<String, Function> functions = new HashMap();
-    
+
     public Scope() {
         this(null);
     }
-    
+
     public Scope(Scope parentScope) {
         parent = parentScope;
-        
+
         functions.put("exit", new FunctionExit());
         functions.put("array", new FunctionArray());
         functions.put("array_set", new FunctionArraySet());
@@ -36,7 +36,7 @@ public class Scope {
         functions.put("sqrt", new FunctionSqrt());
         functions.put("seq", new FunctionSeq());
         functions.put("rand", new FunctionRand());
-        
+
         variables.put("nil", Val.nil);
         variables.put("pi", new ValNumber(Math.PI));
         variables.put("stdout", new ValPrintStream(System.out));
