@@ -26,15 +26,20 @@ public class Passambler {
         LOGGER.addHandler(new LogHandler());
        
         OptionParser optionParser = new OptionParser();
-        optionParser.accepts("v");
-        optionParser.accepts("a");
-        optionParser.accepts("f").withRequiredArg();
+        optionParser.accepts("v", "Version number");
+        optionParser.accepts("h", "Help");
+        optionParser.accepts("a", "Run interactively");
+        optionParser.accepts("f", "Parse and execute a file").withRequiredArg();
         
         try {
             OptionSet options = optionParser.parse(args);
             
             if (options.has("v")) {
                 LOGGER.log(Level.INFO, String.format("Passambler %s", VERSION));
+            }
+            
+            if (options.has("h")) {
+                optionParser.printHelpOn(System.out);
             }
             
             if (options.has("a")) {
@@ -52,9 +57,7 @@ public class Passambler {
             }
             
             if (options.has("f")) {
-                String file = String.valueOf(options.valueOf("f"));
-                
-                String data = String.join("\n", Files.readAllLines(Paths.get(file), Charset.forName("UTF-8")));
+                String data = String.join("\n", Files.readAllLines(Paths.get(String.valueOf(options.valueOf("f"))), Charset.forName("UTF-8")));
 
                 Parser parser = new Parser();
 
