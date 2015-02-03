@@ -12,6 +12,7 @@ import passambler.function.Function;
 import passambler.function.FunctionRand;
 import passambler.val.Val;
 import passambler.val.ValBool;
+import passambler.val.ValInputStream;
 import passambler.val.ValNumber;
 import passambler.val.ValPrintStream;
 
@@ -41,6 +42,7 @@ public class Scope {
         variables.put("pi", new ValNumber(Math.PI));
         variables.put("stdout", new ValPrintStream(System.out));
         variables.put("stderr", new ValPrintStream(System.err));
+        variables.put("stdin", new ValInputStream(System.in));
         variables.put("true", new ValBool(true));
         variables.put("false", new ValBool(false));
         variables.put("nil", new ValBool(false));
