@@ -80,7 +80,7 @@ public class Scanner {
                     tokens.add(createToken(Token.Type.STRING, ""));
                 } else {
                     if (stringChar != current()) {
-                        throw new ScannerException(String.format("invalid closing of string literal", current()), line, column);
+                        throw new ScannerException("invalid closing of string literal", line, column);
                     }
                 }
 
