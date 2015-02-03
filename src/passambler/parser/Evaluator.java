@@ -17,6 +17,7 @@ public class Evaluator {
         Val val = null;
 
         String currentFunctionName = null;
+        Token.Type currentFunctionOperator = null;
 
         while (stream.hasNext()) {
             Token token = stream.current();
@@ -100,27 +101,11 @@ public class Evaluator {
                     if (val == null) {
                         throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
                     }
-
-                    Val comp1 = val;
-
-                    List<Token> comp2tok = new ArrayList<>();
-
+                    
                     stream.next();
 
-                    /* here we compute the next stmt to check, we won't go futher than && or ||. */
-                    while (stream.hasNext()) {
-                        if (stream.current().getType() == Token.Type.OR || stream.current().getType() == Token.Type.AND) {
-                            break;
-                        }
-
-                        comp2tok.add(stream.current());
-
-                        stream.next();
-                    }
-
-                    stream.position--;
-
-                    Val comp2 = Evaluator.evaluate(parser, new TokenStream(comp2tok));
+                    Val comp1 = val;
+                    Val comp2 = Evaluator.evaluate(parser, new TokenStream(stream.rest()));
 
                     if (comp2 == null) {
                         throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition(), "invalid assertion");
@@ -183,6 +168,7 @@ public class Evaluator {
                                 throw new ParserException(ParserException.Type.UNDEFINED_FUNCTION, token.getPosition(), functionName);
                             }
 
+                            currentFunctionOperator = stream.current() == stream.first() ? Token.Type.PLUS : stream.back().getType();
                             currentFunctionName = functionName;
                         } else {
                             if (!parser.getScope().hasVariable(token.getStringValue())) {
@@ -255,8 +241,6 @@ public class Evaluator {
 
                     break;
                 case LPAREN:
-                    Token.Type operator = stream.current() == stream.first() ? Token.Type.PLUS : stream.back().getType();
-
                     List<Token> tokensInPar = new ArrayList<>();
 
                     int parOpen = 1, parClose = 0;
@@ -328,17 +312,18 @@ public class Evaluator {
                         if (val == null) {
                             val = functionReturn;
                         } else {
-                            val = val.onOperator(functionReturn, operator);
+                            val = val.onOperator(functionReturn, currentFunctionOperator);
                         }
                         
                         currentFunctionName = null;
+                        currentFunctionOperator = null;
                     } else if (!tokensInPar.isEmpty()) {
                         performOperatorCheck(parser, stream);
                         
                         if (val == null) {
                             val = Evaluator.evaluate(parser, new TokenStream(tokensInPar));
                         } else {
-                            val = val.onOperator(Evaluator.evaluate(parser, new TokenStream(tokensInPar)), operator);
+                            val = val.onOperator(Evaluator.evaluate(parser, new TokenStream(tokensInPar)), stream.current() == stream.first() ? Token.Type.PLUS : stream.back().getType());
                         }
                     }
 
