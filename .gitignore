@@ -2,6 +2,7 @@ nbproject/
 build/
 manifest.mf
 build.xml
+nb-configuration.xml
 Thumbs.db
 test
 TODO.txt
