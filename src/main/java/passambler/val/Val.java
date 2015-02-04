@@ -17,6 +17,49 @@ public abstract class Val {
     
     protected Object value;
 
+    public Val() {
+        if (this instanceof IndexAccess) {
+            // TODO: Remove this?
+            Val theVal = this;
+            
+            IndexAccess indexAccess = (IndexAccess) this;
+            
+            setProperty("Size", () -> new ValNumber(indexAccess.getIndexCount()));
+            
+            setProperty("Set", new Function() {
+                @Override
+                public int getArguments() {
+                    return 2;
+                }
+
+                @Override
+                public boolean isArgumentValid(Val value, int argument) {
+                    switch (argument) {
+                        case 0:
+                            return value instanceof ValNumber;
+                        case 1:
+                            return value instanceof Val;
+                        default:
+                            return false;
+                    }
+                }
+
+                @Override
+                public Val invoke(Parser parser, Val... arguments) throws ParserException {
+                    int index = ((ValNumber) arguments[0]).getValueAsInteger();
+
+                    if (index < 0 || index > indexAccess.getIndexCount() - 1) {
+                        throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, index, indexAccess.getIndexCount());
+                    }
+
+                    indexAccess.setIndex(index, arguments[1]);
+
+                    return theVal;
+                }
+            });
+        }
+    }
+    
     public boolean isLocked() {
         return locked;
     }

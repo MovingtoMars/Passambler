@@ -6,10 +6,6 @@ import passambler.parser.Stream;
 
 public class ValList extends Val implements IndexAccess, Stream {
     private List<Val> list = new ArrayList<>();
-
-    public ValList() {
-        setProperty("Size", () -> new ValNumber(list.size()));
-    }
     
     @Override
     public Val getIndex(int index) {

@@ -14,8 +14,6 @@ public class ValArray extends Val implements IndexAccess {
         for (int i = 0; i < size; ++i) {
             this.items[i] = Val.nil;
         }
-        
-        setProperty("Size", () -> new ValNumber(size));
     }
 
     @Override

@@ -8,9 +8,7 @@ import passambler.scanner.Token;
 public class ValString extends Val implements IndexAccess {
     public ValString(String data) {
         setValue(data);
-        
-        setProperty("Length", () -> new ValNumber(data.length()));
-        
+
         setProperty("Append", new Function() {
             @Override
             public int getArguments() {
