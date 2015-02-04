@@ -19,9 +19,6 @@ public abstract class Val {
 
     public Val() {
         if (this instanceof IndexAccess) {
-            // TODO: Remove this?
-            Val theVal = this;
-            
             IndexAccess indexAccess = (IndexAccess) this;
             
             setProperty("size", () -> new ValNumber(indexAccess.getIndexCount()));
@@ -54,7 +51,7 @@ public abstract class Val {
 
                     indexAccess.setIndex(index, arguments[1]);
 
-                    return theVal;
+                    return Val.this;
                 }
             });
         }
