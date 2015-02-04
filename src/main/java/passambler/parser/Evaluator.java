@@ -17,7 +17,6 @@ public class Evaluator {
         Val val = null;
 
         String currentFunctionName = null;
-        Token.Type currentFunctionOperator = null;
 
         while (stream.hasNext()) {
             Token token = stream.current();
@@ -166,7 +165,6 @@ public class Evaluator {
                                 throw new ParserException(ParserException.Type.UNDEFINED_FUNCTION, token.getPosition(), functionName);
                             }
 
-                            currentFunctionOperator = stream.current() == stream.first() ? Token.Type.PLUS : stream.back().getType();
                             currentFunctionName = functionName;
                         } else {
                             if (!parser.getScope().hasVariable(token.getStringValue())) {
@@ -237,10 +235,22 @@ public class Evaluator {
                 case LPAREN:
                     List<Token> tokensInPar = new ArrayList<>();
 
+                    Token.Type operator = null;
+                    
                     int paren = 1;
 
-                    stream.next();
+                    if (currentFunctionName != null) {
+                        if (stream.back(2) != null) {
+                            operator = stream.back(2).getType();
+                        }
+                    } else {
+                        if (stream.back() != null) {
+                            operator = stream.back().getType();
+                        }
+                    }
                     
+                    stream.next();
+
                     while (stream.hasNext()) {
                         if (stream.current().getType() == Token.Type.LPAREN) {
                             paren++;
@@ -300,24 +310,21 @@ public class Evaluator {
                         if (val == null) {
                             val = functionReturn;
                         } else {
-                            val = val.onOperator(functionReturn, currentFunctionOperator);
+                            val = val.onOperator(functionReturn, operator);
                             
                             if (val == null) {
-                                throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, token.getPosition(), currentFunctionOperator);
+                                throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, token.getPosition(), operator);
                             }
                         }
 
                         currentFunctionName = null;
-                        currentFunctionOperator = null;
                     } else if (!tokensInPar.isEmpty()) {
-                        performOperatorCheck(parser, stream);
-
                         Val valueInParen = Evaluator.evaluate(parser, new TokenStream(tokensInPar));
                         
                         if (val == null) {
                             val = valueInParen;
                         } else {
-                            val = val.onOperator(valueInParen, stream.back().getType());
+                            val = val.onOperator(valueInParen, operator);
                             
                             if (val == null) {
                                 throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, stream.back().getPosition(), stream.back().getType());

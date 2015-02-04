@@ -21,7 +21,7 @@ public class TokenStream {
     }
 
     public Token back(int amount) {
-        return tokens.get(position - amount);
+        return position - amount < 0 ? null : tokens.get(position - amount);
     }
 
     public Token current() {
