@@ -9,7 +9,7 @@ public class ValString extends Val implements IndexAccess {
     public ValString(String data) {
         setValue(data);
 
-        setProperty("Append", new Function() {
+        setProperty("append", new Function() {
             @Override
             public int getArguments() {
                 return 1;

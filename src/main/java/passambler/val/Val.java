@@ -24,9 +24,9 @@ public abstract class Val {
             
             IndexAccess indexAccess = (IndexAccess) this;
             
-            setProperty("Size", () -> new ValNumber(indexAccess.getIndexCount()));
+            setProperty("size", () -> new ValNumber(indexAccess.getIndexCount()));
             
-            setProperty("Set", new Function() {
+            setProperty("set", new Function() {
                 @Override
                 public int getArguments() {
                     return 2;
