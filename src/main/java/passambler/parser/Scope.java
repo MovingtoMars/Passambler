@@ -45,7 +45,6 @@ public class Scope {
         variables.put("stdin", new ValInputStream(System.in));
         variables.put("true", new ValBool(true));
         variables.put("false", new ValBool(false));
-        variables.put("nil", new ValBool(false));
     }
 
     public void setVariable(String key, Val value) {
