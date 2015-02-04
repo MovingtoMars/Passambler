@@ -23,7 +23,7 @@ public class ValString extends Val implements IndexAccess {
             @Override
             public Val invoke(Parser parser, Val... arguments) throws ParserException {
                 return new ValString(getValue() + ((ValString) arguments[0]).getValue());
-            } 
+            }
         });
     }
 
