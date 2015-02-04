@@ -255,7 +255,7 @@ public class Evaluator {
                     
                     int paren = 1;
 
-                    if (currentFunctionName != null) {
+                    if (currentFunctionName != null || val instanceof ValBlock) {
                         if (stream.back(2) != null) {
                             operator = stream.back(2).getType();
                         }
@@ -285,7 +285,7 @@ public class Evaluator {
                         stream.next();
                     }
                     
-                    if (currentFunctionName != null) {
+                    if (currentFunctionName != null || val instanceof ValBlock) {
                         List<Token> argumentTokens = new ArrayList<>();
                         List<Val> arguments = new ArrayList<>();
 
@@ -309,7 +309,7 @@ public class Evaluator {
                             }
                         }
 
-                        Function currentFunction = parser.getScope().getFunction(currentFunctionName);
+                        Function currentFunction = currentFunctionName != null ? parser.getScope().getFunction(currentFunctionName) : (Function) val;
 
                         if (currentFunction.getArguments() != -1 && currentFunction.getArguments() != arguments.size()) {
                             throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, token.getPosition(), currentFunction, currentFunction.getArguments(), arguments.size());
@@ -325,7 +325,7 @@ public class Evaluator {
 
                         Val functionReturn = currentFunction.invoke(parser, arguments.toArray(vals));
 
-                        if (val == null) {
+                        if (val == null || val instanceof ValBlock) {
                             val = functionReturn;
                         } else {
                             val = val.onOperator(functionReturn, operator);
