@@ -3,7 +3,6 @@ package passambler.parser;
 import java.util.HashMap;
 import java.util.Map;
 import passambler.function.FunctionArray;
-import passambler.function.FunctionArraySet;
 import passambler.function.FunctionExit;
 import passambler.function.FunctionList;
 import passambler.function.FunctionSeq;
@@ -33,7 +32,6 @@ public class Scope {
 
         functions.put("Exit", new FunctionExit());
         functions.put("Array", new FunctionArray());
-        functions.put("ArraySet", new FunctionArraySet());
         functions.put("List", new FunctionList());
         functions.put("Sqrt", new FunctionSqrt());
         functions.put("Seq", new FunctionSeq());
