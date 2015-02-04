@@ -244,6 +244,8 @@ public class Evaluator {
                             operator = stream.back(2).getType();
                         }
                     } else {
+                        performOperatorCheck(parser, stream);
+                        
                         if (stream.back() != null) {
                             operator = stream.back().getType();
                         }
