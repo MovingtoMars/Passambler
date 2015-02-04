@@ -71,17 +71,13 @@ public class Scanner {
                 }
 
                 next();
-            } else if (current() == '\'' || current() == '"') {
+            } else if ((current() == '\'' || current() == '"') && (!inString || current() == stringChar)) {
                 inString = !inString;
 
                 if (inString) {
                     stringChar = current();
 
                     tokens.add(createToken(Token.Type.STRING, ""));
-                } else {
-                    if (stringChar != current()) {
-                        throw new ScannerException("invalid closing of string literal", line, column);
-                    }
                 }
 
                 next();
