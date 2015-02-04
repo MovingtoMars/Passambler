@@ -188,6 +188,22 @@ public class Evaluator {
                     }
 
                     break;
+                case DOT:
+                    if (val == null || !stream.hasNext() || (stream.hasNext() && stream.peek().getType() != Token.Type.IDENTIFIER)) {
+                        throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition());
+                    }
+                
+                    stream.next();
+                    
+                    String propertyName = stream.current().getStringValue();
+                    
+                    if (!val.hasProperty(propertyName)) {
+                        throw new ParserException(ParserException.Type.UNDEFINED_PROPERTY, token.getPosition(), propertyName);
+                    }
+
+                    val = val.getProperty(propertyName);
+                    
+                    break;
                 case LBRACKET:
                     if (!(val instanceof IndexAccess)) {
                         throw new ParserException(ParserException.Type.NOT_INDEXED, token.getPosition());

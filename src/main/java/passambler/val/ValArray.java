@@ -35,4 +35,13 @@ public class ValArray extends Val implements IndexAccess {
     public String toString() {
         return Arrays.toString(items);
     }
+    
+    @Override
+    public Val getProperty(String key) {
+        if (key.equals("size")) {
+            return new ValNumber(getIndexCount());
+        } else {
+            return super.getProperty(key);
+        }
+    }
 }

@@ -11,6 +11,7 @@ public class ParserException extends Exception {
         INVALID_ARGUMENT_COUNT("function %s expects %d arguments, %d given"),
         UNDEFINED_FUNCTION("undefined function %s"),
         UNDEFINED_VARIABLE("undefined variable %s"),
+        UNDEFINED_PROPERTY("undefined property %s"),
         UNEXPECTED_EOF("unexpected end of file"),
         UNEXPECTED_TOKEN("unexpected token %s"),
         UNSUPPORTED_OPERATOR("unsupported operator %s"),

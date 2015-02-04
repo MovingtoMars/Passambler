@@ -39,4 +39,13 @@ public class ValString extends Val implements IndexAccess {
     public int getIndexCount() {
         return getValue().length();
     }
+    
+    @Override
+    public Val getProperty(String key) {
+        if (key.equals("length")) {
+            return new ValNumber(getIndexCount());
+        } else {
+            return super.getProperty(key);
+        }
+    }
 }
