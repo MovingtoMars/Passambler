@@ -150,6 +150,11 @@ public class Scanner {
 
                 next();
                 next();
+            } else if (current() == '<' && peek() != null && peek() == '-') {
+                tokens.add(createToken(Token.Type.STREAM_REVERSE));
+
+                next();
+                next();
             } else if (isIdentifier(current())) {
                 tokens.add(createToken(Token.Type.IDENTIFIER, String.valueOf(current())));
 

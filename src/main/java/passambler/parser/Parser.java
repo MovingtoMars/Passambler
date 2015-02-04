@@ -52,17 +52,27 @@ public class Parser {
             } else {
                 scope.setVariable(key, value);
             }
-        } else if (isStream(stream.copy())) {
+        } else if (isStream(stream.copy()) || isReverseStream(stream.copy())) {
             List<Token> tokensBeforeStream = new ArrayList<>();
             List<Token> tokensAfterStream = new ArrayList<>();
+            
+            boolean reverseStream = isReverseStream(stream.copy());
 
             boolean passed = false;
+            
+            int braces = 0;
 
             while (stream.hasNext()) {
-                if (!passed && stream.current().getType() == Token.Type.STREAM) {
+                if (stream.current().getType() == Token.Type.LBRACE) {
+                    braces++;
+                } else if (stream.current().getType() == Token.Type.RBRACE) {
+                    braces--;
+                }
+                
+                if (!passed && braces == 0 && (stream.current().getType() == Token.Type.STREAM || stream.current().getType() == Token.Type.STREAM_REVERSE)) {
                     passed = true;
                 } else {
-                    (passed ? tokensAfterStream : tokensBeforeStream).add(stream.current());
+                    (passed ? (reverseStream ? tokensBeforeStream : tokensAfterStream) : (reverseStream ? tokensAfterStream : tokensBeforeStream)).add(stream.current());
                 }
 
                 stream.next();
@@ -135,15 +145,11 @@ public class Parser {
     }
 
     public boolean isStream(TokenStream stream) {
-        while (stream.hasNext()) {
-            if (stream.current().getType() == Token.Type.STREAM) {
-                return true;
-            }
-
-            stream.next();
-        }
-
-        return false;
+        return stream.rest().stream().anyMatch(t -> t.getType() == Token.Type.STREAM);
+    }
+    
+    public boolean isReverseStream(TokenStream stream) {
+        return stream.rest().stream().anyMatch(t -> t.getType() == Token.Type.STREAM_REVERSE);
     }
 
     public boolean isAssignment(TokenStream stream) {
