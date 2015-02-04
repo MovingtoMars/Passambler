@@ -43,10 +43,17 @@ public class Parser {
             String key = stream.current().getStringValue();
 
             stream.next();
+            
+            boolean locked = stream.current().getType() == Token.Type.ASSIGN_LOCKED;
+            
             stream.next();
 
             Val value = Evaluator.evaluate(this, new TokenStream(stream.rest()));
 
+            if (locked) {
+                value.lock();
+            }
+            
             if (value instanceof ValBlock) {
                 scope.setFunction(key, (Function) value);
             } else {
@@ -153,6 +160,6 @@ public class Parser {
     }
 
     public boolean isAssignment(TokenStream stream) {
-        return stream.size() >= 3 && stream.first().getType() == Token.Type.IDENTIFIER && stream.peek().getType() == Token.Type.ASSIGN;
+        return stream.size() >= 3 && stream.first().getType() == Token.Type.IDENTIFIER && (stream.peek().getType() == Token.Type.ASSIGN || stream.peek().getType() == Token.Type.ASSIGN_LOCKED);
     }
 }

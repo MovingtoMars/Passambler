@@ -52,6 +52,8 @@ public class Scope {
     public void setVariable(String key, Val value) {
         if (parent != null && parent.hasVariable(key)) {
             parent.setVariable(key, value);
+        } else if (variables.containsKey(key) && variables.get(key).isLocked()) {
+            throw new RuntimeException(String.format("Variable %s is locked", key));
         } else {
             variables.put(key, value);
         }

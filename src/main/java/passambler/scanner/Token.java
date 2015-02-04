@@ -7,7 +7,7 @@ public class Token {
         LBRACKET, RBRACKET,
         COMMA,
         DOT,
-        ASSIGN,
+        ASSIGN, ASSIGN_LOCKED,
         PLUS, MINUS, MULTIPLY, DIVIDE, POWER,
         SEMICOL, PIPE,
         LBRACE, RBRACE, STREAM, STREAM_REVERSE,

@@ -7,15 +7,29 @@ import passambler.scanner.Token;
 public abstract class Val {
     public static ValNil nil = new ValNil();
 
+    protected boolean locked = false;
+    
     protected Map<String, Val> properties = new HashMap();
     
     protected Object value;
 
+    public boolean isLocked() {
+        return locked;
+    }
+    
+    public void lock() {
+        locked = true;
+    }
+    
     public Object getValue() {
         return value;
     }
 
     public void setValue(Object value) {
+        if (locked) {
+            throw new RuntimeException("Value is locked");
+        }
+        
         this.value = value;
     }
     

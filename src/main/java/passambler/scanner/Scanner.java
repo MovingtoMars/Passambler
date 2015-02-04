@@ -110,6 +110,11 @@ public class Scanner {
 
                 next();
                 next();
+            } else if (current() == '|' && peek() != null && peek() == '=') {
+                tokens.add(createToken(Token.Type.ASSIGN_LOCKED));
+
+                next();
+                next();                
             } else if (current() == '|' && peek() != null && peek() == '|') {
                 tokens.add(createToken(Token.Type.OR));
 
