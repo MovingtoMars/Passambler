@@ -68,9 +68,11 @@ public class Passambler {
         } catch (ParserException e) {
             LOGGER.log(Level.SEVERE, "Parser exception", e);
         } catch (OptionException e) {
-            LOGGER.log(Level.SEVERE, "Option exception", e);    
+            LOGGER.log(Level.SEVERE, "Option exception", e);
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "IO exception", e);    
+            LOGGER.log(Level.SEVERE, "IO exception", e);
+        } catch (RuntimeException e) {
+            LOGGER.log(Level.SEVERE, "Runtime exception", e);
         }
     }
 }
