@@ -55,4 +55,9 @@ public class ValBlock extends Val implements Function {
 
         return null;
     }
+    
+    @Override
+    public String toString() {
+        return "block";
+    }
 }
