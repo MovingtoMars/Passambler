@@ -19,10 +19,6 @@ public abstract class Val {
         return null;
     }
 
-    public boolean isOperatorSupported(Token.Type tokenType) {
-        return false;
-    }
-
     @Override
     public String toString() {
         return value.toString();

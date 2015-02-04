@@ -14,16 +14,11 @@ public class ValString extends Val implements IndexAccess {
 
     @Override
     public Val onOperator(Val value, Token.Type tokenType) {
-        if (tokenType == Token.Type.PLUS) {
+        if (value instanceof ValString && tokenType == Token.Type.PLUS) {
             return new ValString(getValue() + (value != Val.nil ? value.toString() : ""));
         }
 
         return null;
-    }
-
-    @Override
-    public boolean isOperatorSupported(Token.Type tokenType) {
-        return tokenType == Token.Type.PLUS;
     }
 
     @Override

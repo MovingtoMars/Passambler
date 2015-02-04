@@ -49,18 +49,9 @@ public class ValNumber extends Val {
             }
 
             return newVal;
-        } else if (value instanceof ValString && tokenType == Token.Type.PLUS) {
-            return new ValString(toString() + ((ValString) value).getValue());
-        } else if (value == Val.nil) {
-            return this;
         }
 
         return null;
-    }
-
-    @Override
-    public boolean isOperatorSupported(Token.Type tokenType) {
-        return tokenType == Token.Type.PLUS || tokenType == Token.Type.MINUS || tokenType == Token.Type.MULTIPLY || tokenType == Token.Type.DIVIDE || tokenType == Token.Type.POWER;
     }
 
     @Override

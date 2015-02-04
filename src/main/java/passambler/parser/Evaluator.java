@@ -181,11 +181,11 @@ public class Evaluator {
                         if (val == null) {
                             val = newVal;
                         } else {
-                            if (!val.isOperatorSupported(stream.back().getType())) {
+                            val = val.onOperator(newVal, stream.back().getType());
+                            
+                            if (val == null) {
                                 throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, stream.back().getPosition(), stream.back().getType());
                             }
-
-                            val = val.onOperator(newVal, stream.back().getType());
                         }
                     }
 
@@ -301,6 +301,10 @@ public class Evaluator {
                             val = functionReturn;
                         } else {
                             val = val.onOperator(functionReturn, currentFunctionOperator);
+                            
+                            if (val == null) {
+                                throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, token.getPosition(), currentFunctionOperator);
+                            }
                         }
 
                         currentFunctionName = null;
@@ -308,10 +312,16 @@ public class Evaluator {
                     } else if (!tokensInPar.isEmpty()) {
                         performOperatorCheck(parser, stream);
 
+                        Val valueInParen = Evaluator.evaluate(parser, new TokenStream(tokensInPar));
+                        
                         if (val == null) {
-                            val = Evaluator.evaluate(parser, new TokenStream(tokensInPar));
+                            val = valueInParen;
                         } else {
-                            val = val.onOperator(Evaluator.evaluate(parser, new TokenStream(tokensInPar)), stream.current() == stream.first() ? Token.Type.PLUS : stream.back().getType());
+                            val = val.onOperator(valueInParen, stream.back().getType());
+                            
+                            if (val == null) {
+                                throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, stream.back().getPosition(), stream.back().getType());
+                            }
                         }
                     }
 
