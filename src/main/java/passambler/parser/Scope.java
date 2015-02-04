@@ -9,6 +9,7 @@ import passambler.function.FunctionList;
 import passambler.function.FunctionSeq;
 import passambler.function.FunctionSqrt;
 import passambler.function.Function;
+import passambler.function.FunctionStr;
 import passambler.function.FunctionRand;
 import passambler.val.Val;
 import passambler.val.ValBool;
@@ -37,6 +38,7 @@ public class Scope {
         functions.put("sqrt", new FunctionSqrt());
         functions.put("seq", new FunctionSeq());
         functions.put("rand", new FunctionRand());
+        functions.put("str", new FunctionStr());
 
         variables.put("nil", Val.nil);
         variables.put("pi", new ValNumber(Math.PI));
