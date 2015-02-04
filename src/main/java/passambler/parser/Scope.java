@@ -31,22 +31,22 @@ public class Scope {
     public Scope(Scope parentScope) {
         parent = parentScope;
 
-        functions.put("exit", new FunctionExit());
-        functions.put("array", new FunctionArray());
-        functions.put("array_set", new FunctionArraySet());
-        functions.put("list", new FunctionList());
-        functions.put("sqrt", new FunctionSqrt());
-        functions.put("seq", new FunctionSeq());
-        functions.put("rand", new FunctionRand());
-        functions.put("str", new FunctionStr());
+        functions.put("Exit", new FunctionExit());
+        functions.put("Array", new FunctionArray());
+        functions.put("ArraySet", new FunctionArraySet());
+        functions.put("List", new FunctionList());
+        functions.put("Sqrt", new FunctionSqrt());
+        functions.put("Seq", new FunctionSeq());
+        functions.put("Rand", new FunctionRand());
+        functions.put("Str", new FunctionStr());
 
-        variables.put("nil", Val.nil.lock());
-        variables.put("pi", new ValNumber(Math.PI).lock());
-        variables.put("stdout", new ValPrintStream(System.out).lock());
-        variables.put("stderr", new ValPrintStream(System.err).lock());
-        variables.put("stdin", new ValInputStream(System.in).lock());
-        variables.put("true", new ValBool(true).lock());
-        variables.put("false", new ValBool(false).lock());
+        variables.put("Nil", Val.nil.lock());
+        variables.put("PI", new ValNumber(Math.PI).lock());
+        variables.put("StdOut", new ValPrintStream(System.out).lock());
+        variables.put("StdErr", new ValPrintStream(System.err).lock());
+        variables.put("StdIn", new ValInputStream(System.in).lock());
+        variables.put("True", new ValBool(true).lock());
+        variables.put("False", new ValBool(false).lock());
     }
 
     public void setVariable(String key, Val value) {
