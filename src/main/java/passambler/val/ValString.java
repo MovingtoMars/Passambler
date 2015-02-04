@@ -1,8 +1,36 @@
 package passambler.val;
 
+import passambler.parser.Parser;
+import passambler.parser.ParserException;
+import passambler.parser.Scope;
 import passambler.scanner.Token;
 
 public class ValString extends Val implements IndexAccess {
+    class FunctionAppend extends ValBlock {
+        private String currentValue;
+        
+        public FunctionAppend(String currentValue) {
+            super(new Scope(), null);
+            
+            this.currentValue = currentValue;
+        }
+        
+        @Override
+        public int getArguments() {
+            return 1;
+        }
+
+        @Override
+        public boolean isArgumentValid(Val value, int argument) {
+            return value instanceof ValString;
+        }
+        
+        @Override
+        public Val invoke(Parser parser, Val... arguments) throws ParserException {
+            return new ValString(currentValue + ((ValString) arguments[0]).getValue());
+        }
+    }
+    
     public ValString(String data) {
         setValue(data);
     }
@@ -42,8 +70,10 @@ public class ValString extends Val implements IndexAccess {
     
     @Override
     public Val getProperty(String key) {
-        if (key.equals("length")) {
+        if (key.equals("Length")) {
             return new ValNumber(getIndexCount());
+        } else if (key.equals("Append")) {
+            return new FunctionAppend(getValue());
         } else {
             return super.getProperty(key);
         }
