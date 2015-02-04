@@ -34,7 +34,7 @@ public class ValList extends Val implements IndexAccess, Stream {
     
     @Override
     public Val getProperty(String key) {
-        if (key.equals("size")) {
+        if (key.equals("Size")) {
             return new ValNumber(getIndexCount());
         } else {
             return super.getProperty(key);

@@ -58,6 +58,6 @@ public class ValBlock extends Val implements Function {
     
     @Override
     public String toString() {
-        return "block";
+        return "Block";
     }
 }
