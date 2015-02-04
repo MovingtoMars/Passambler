@@ -47,11 +47,11 @@ public class ValBlock extends Val implements Function {
     public Val invoke(Parser parser, Val... arguments) throws ParserException {
         for (int i = 0; i < argumentNames.size(); ++i) {
             if (i < arguments.length) {
-                parser.getScope().setVariable(argumentNames.get(i), arguments[i]);
+                this.parser.getScope().setVariable(argumentNames.get(i), arguments[i]);
             }
         }
 
-        parser.parseSemicolons(tokens);
+        this.parser.parseSemicolons(tokens);
 
         return null;
     }
