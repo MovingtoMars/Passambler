@@ -14,6 +14,8 @@ public class ValArray extends Val implements IndexAccess {
         for (int i = 0; i < size; ++i) {
             this.items[i] = Val.nil;
         }
+        
+        setProperty("Size", () -> new ValNumber(size));
     }
 
     @Override
@@ -34,14 +36,5 @@ public class ValArray extends Val implements IndexAccess {
     @Override
     public String toString() {
         return Arrays.toString(items);
-    }
-    
-    @Override
-    public Val getProperty(String key) {
-        if (key.equals("Size")) {
-            return new ValNumber(getIndexCount());
-        } else {
-            return super.getProperty(key);
-        }
     }
 }

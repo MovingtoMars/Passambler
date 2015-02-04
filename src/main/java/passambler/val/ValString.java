@@ -1,38 +1,32 @@
 package passambler.val;
 
+import passambler.function.Function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
-import passambler.parser.Scope;
 import passambler.scanner.Token;
 
 public class ValString extends Val implements IndexAccess {
-    class FunctionAppend extends ValBlock {
-        private String currentValue;
-        
-        public FunctionAppend(String currentValue) {
-            super(new Scope(), null);
-            
-            this.currentValue = currentValue;
-        }
-        
-        @Override
-        public int getArguments() {
-            return 1;
-        }
-
-        @Override
-        public boolean isArgumentValid(Val value, int argument) {
-            return value instanceof ValString;
-        }
-        
-        @Override
-        public Val invoke(Parser parser, Val... arguments) throws ParserException {
-            return new ValString(currentValue + ((ValString) arguments[0]).getValue());
-        }
-    }
-    
     public ValString(String data) {
         setValue(data);
+        
+        setProperty("Length", () -> new ValNumber(data.length()));
+        
+        setProperty("Append", new Function() {
+            @Override
+            public int getArguments() {
+                return 1;
+            }
+
+            @Override
+            public boolean isArgumentValid(Val value, int argument) {
+                return value instanceof ValString;
+            }
+
+            @Override
+            public Val invoke(Parser parser, Val... arguments) throws ParserException {
+                return new ValString(getValue() + ((ValString) arguments[0]).getValue());
+            } 
+        });
     }
 
     @Override
@@ -66,16 +60,5 @@ public class ValString extends Val implements IndexAccess {
     @Override
     public int getIndexCount() {
         return getValue().length();
-    }
-    
-    @Override
-    public Val getProperty(String key) {
-        if (key.equals("Length")) {
-            return new ValNumber(getIndexCount());
-        } else if (key.equals("Append")) {
-            return new FunctionAppend(getValue());
-        } else {
-            return super.getProperty(key);
-        }
     }
 }

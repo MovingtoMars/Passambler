@@ -2,42 +2,18 @@ package passambler.val;
 
 import java.util.HashMap;
 import java.util.Map;
+import passambler.function.Function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.parser.Scope;
 import passambler.scanner.Token;
 
 public abstract class Val {
-    class FunctionLock extends ValBlock {
-        private Val value;
-        
-        public FunctionLock(Val value) {
-            super(new Scope(), null);
-            
-            this.value = value;
-        }
-        
-        @Override
-        public int getArguments() {
-            return 0;
-        }
-
-        @Override
-        public boolean isArgumentValid(Val value, int argument) {
-            return false;
-        }
-        
-        @Override
-        public Val invoke(Parser parser, Val... arguments) throws ParserException {
-            return value.lock();
-        }
-    }
-    
     public static ValNil nil = new ValNil();
 
     protected boolean locked = false;
     
-    protected Map<String, Val> properties = new HashMap();
+    protected Map<String, Object> properties = new HashMap();
     
     protected Object value;
 
@@ -64,14 +40,7 @@ public abstract class Val {
     }
     
     public Val getProperty(String key) {
-        switch (key) {
-            case "Lock":
-                return new FunctionLock(this);
-            case "Locked":
-                return new ValBool(isLocked());
-            default:
-                return properties.get(key);
-        }
+        return properties.get(key) instanceof DynamicProperty ? ((DynamicProperty) properties.get(key)).getValue() : (Val) properties.get(key);
     }
     
     public boolean hasProperty(String key) {
@@ -80,6 +49,29 @@ public abstract class Val {
     
     public void setProperty(String key, Val value) {
         properties.put(key, value);
+    }
+    
+    public void setProperty(String key, DynamicProperty dynamicProperty) {
+        properties.put(key, dynamicProperty);
+    }
+    
+    public void setProperty(String key, Function function) {
+        properties.put(key, new ValBlock(new Scope(), null) {
+            @Override
+            public int getArguments() {
+                return function.getArguments();
+            }
+
+            @Override
+            public boolean isArgumentValid(Val value, int argument) {
+                return function.isArgumentValid(value, argument);
+            }
+
+            @Override
+            public Val invoke(Parser parser, Val... arguments) throws ParserException {
+                return function.invoke(parser, arguments);
+            }
+        });
     }
 
     public Val onOperator(Val value, Token.Type tokenType) {
