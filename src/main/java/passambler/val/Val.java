@@ -17,8 +17,10 @@ public abstract class Val {
         return locked;
     }
     
-    public void lock() {
+    public Val lock() {
         locked = true;
+        
+        return this;
     }
     
     public Object getValue() {

@@ -40,13 +40,13 @@ public class Scope {
         functions.put("rand", new FunctionRand());
         functions.put("str", new FunctionStr());
 
-        variables.put("nil", Val.nil);
-        variables.put("pi", new ValNumber(Math.PI));
-        variables.put("stdout", new ValPrintStream(System.out));
-        variables.put("stderr", new ValPrintStream(System.err));
-        variables.put("stdin", new ValInputStream(System.in));
-        variables.put("true", new ValBool(true));
-        variables.put("false", new ValBool(false));
+        variables.put("nil", Val.nil.lock());
+        variables.put("pi", new ValNumber(Math.PI).lock());
+        variables.put("stdout", new ValPrintStream(System.out).lock());
+        variables.put("stderr", new ValPrintStream(System.err).lock());
+        variables.put("stdin", new ValInputStream(System.in).lock());
+        variables.put("true", new ValBool(true).lock());
+        variables.put("false", new ValBool(false).lock());
     }
 
     public void setVariable(String key, Val value) {
