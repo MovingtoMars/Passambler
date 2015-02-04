@@ -85,6 +85,23 @@ public class ValString extends Val implements IndexAccess {
             }
         });
         
+        setProperty("indexOf", new Function() {
+            @Override
+            public int getArguments() {
+                return 1;
+            }
+
+            @Override
+            public boolean isArgumentValid(Val value, int argument) {
+                return value instanceof ValString;
+            }
+
+            @Override
+            public Val invoke(Parser parser, Val... arguments) throws ParserException {
+                return new ValNumber(getValue().indexOf(((ValString) arguments[0]).getValue()));
+            }
+        });
+        
         setProperty("lowerCase", new Function() {
             @Override
             public int getArguments() {
