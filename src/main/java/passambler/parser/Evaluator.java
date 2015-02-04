@@ -49,9 +49,7 @@ public class Evaluator {
                                 commaCheck = true;
 
                                 argumentNames.add(stream.current().getStringValue());
-                            } else if (stream.current().getType() == Token.Type.COMMA) {
-                                /* falltrough */
-                            } else {
+                            } else if (stream.current().getType() != Token.Type.COMMA) {
                                 throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, stream.current().getPosition(), stream.current().getType());
                             }
                         }
