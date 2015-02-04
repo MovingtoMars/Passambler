@@ -25,8 +25,8 @@ public class Evaluator {
             switch (token.getType()) {
                 case LBRACE:
                 case PIPE:
-                    int leftBraceCount = 1, rightBraceCount = 0;
-
+                    int braces = 1;
+                    
                     boolean commaCheck = false;
 
                     List<String> argumentNames = new ArrayList<>();
@@ -65,12 +65,12 @@ public class Evaluator {
                         Token tokenInBlock = stream.current();
 
                         if (tokenInBlock.getType() == Token.Type.LBRACE) {
-                            leftBraceCount++;
+                            braces++;
                         } else if (tokenInBlock.getType() == Token.Type.RBRACE) {
-                            rightBraceCount++;
+                            braces--;
                         }
 
-                        if (tokenInBlock.getType() == Token.Type.RBRACE && leftBraceCount == rightBraceCount) {
+                        if (braces == 0 && tokenInBlock.getType() == Token.Type.RBRACE) {
                             return val;
                         } else {
                             ((ValBlock) val).addToken(tokenInBlock);
@@ -199,28 +199,24 @@ public class Evaluator {
 
                     List<Token> tokensInBrackets = new ArrayList<>();
 
-                    int brOpen = 1, brClose = 0;
+                    int brackets = 1;
 
                     stream.next();
 
                     while (stream.hasNext()) {
                         if (stream.current().getType() == Token.Type.LBRACKET) {
-                            brOpen++;
+                            brackets++;
                         } else if (stream.current().getType() == Token.Type.RBRACKET) {
-                            brClose++;
-
-                            if (brOpen == brClose) {
-                                break;
-                            }
+                            brackets--;
+                        }
+                        
+                        if (brackets == 0) {
+                            break;
                         }
 
                         tokensInBrackets.add(stream.current());
 
                         stream.next();
-                    }
-
-                    if (brOpen != brClose) {
-                        throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition(), "unmatching brackets");
                     }
 
                     Val indexVal = Evaluator.evaluate(parser, new TokenStream(tokensInBrackets));
@@ -241,44 +237,40 @@ public class Evaluator {
                 case LPAREN:
                     List<Token> tokensInPar = new ArrayList<>();
 
-                    int parOpen = 1, parClose = 0;
+                    int paren = 1;
 
+                    stream.next();
+                    
                     while (stream.hasNext()) {
-                        stream.next();
-
                         if (stream.current().getType() == Token.Type.LPAREN) {
-                            parOpen++;
+                            paren++;
                         } else if (stream.current().getType() == Token.Type.RPAREN) {
-                            parClose++;
+                            paren--;
                         }
 
-                        if (parOpen == parClose) {
+                        if (paren == 0) {
                             break;
                         }
 
                         tokensInPar.add(stream.current());
+                        
+                        stream.next();
                     }
-
-                    if (parOpen != parClose) {
-                        throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "unmatching parens");
-                    }
-
+                    
                     if (currentFunctionName != null) {
                         List<Token> argumentTokens = new ArrayList<>();
                         List<Val> arguments = new ArrayList<>();
 
-                        int parCount = 0;
-
                         for (Token t : tokensInPar) {
                             if (t.getType() == Token.Type.LPAREN) {
-                                parCount++;
+                                paren++;
                             } else if (t.getType() == Token.Type.RPAREN) {
-                                parCount--;
+                                paren--;
                             }
 
                             argumentTokens.add(t);
 
-                            if (parCount == 0 && (t.getType() == Token.Type.COMMA || tokensInPar.indexOf(t) == tokensInPar.size() - 1)) {
+                            if (paren == 0 && (t.getType() == Token.Type.COMMA || tokensInPar.indexOf(t) == tokensInPar.size() - 1)) {
                                 if (t.getType() == Token.Type.COMMA) {
                                     argumentTokens.remove(argumentTokens.size() - 1);
                                 }
@@ -286,8 +278,6 @@ public class Evaluator {
                                 arguments.add(Evaluator.evaluate(parser, new TokenStream(argumentTokens)));
 
                                 argumentTokens.clear();
-
-                                parCount = 0;
                             }
                         }
 
