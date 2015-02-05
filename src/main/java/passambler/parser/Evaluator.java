@@ -274,9 +274,7 @@ public class Evaluator {
                         stream.next();
                     }
 
-                    if (val == null && (list.getIndexCount() > 0 || tokensInBrackets.isEmpty())) {
-                        val = list;
-                    } else if (doubleDotLeft != null && doubleDotRight != null) {
+                    if (doubleDotLeft != null && doubleDotRight != null) {
                         if (!(doubleDotLeft instanceof ValNumber) || !(doubleDotRight instanceof ValNumber)) {
                             throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "range syntax only supports numbers");
                         }
@@ -307,6 +305,8 @@ public class Evaluator {
                         }
                         
                         val = sequence;
+                    } else if (val == null && (list.getIndexCount() > 0 || tokensInBrackets.isEmpty())) {
+                        val = list;
                     } else {
                         if (!(val instanceof IndexAccess)) {
                             throw new ParserException(ParserException.Type.NOT_INDEXED, token.getPosition());
