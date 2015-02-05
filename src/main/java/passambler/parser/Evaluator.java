@@ -251,7 +251,9 @@ public class Evaluator {
                         stream.next();
                     }
 
-                    if (doubleDotLeft != null && doubleDotRight != null) {
+                    if (tokensInBrackets.size() == 0) {
+                        val = new ValList();
+                    } else if (doubleDotLeft != null && doubleDotRight != null) {
                         if (!(doubleDotLeft instanceof ValNumber) || !(doubleDotRight instanceof ValNumber)) {
                             throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "range syntax only supports numbers");
                         }
