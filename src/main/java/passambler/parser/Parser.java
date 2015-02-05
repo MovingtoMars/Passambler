@@ -128,16 +128,16 @@ public class Parser {
     public void parseSemicolons(List<Token> tokens) throws ParserException {
         List<Token> subTokens = new ArrayList<>();
 
-        int doCount = 0, endCount = 0;
+        int braces = 0;
 
         for (Token token : tokens) {
             if (token.getType() == Token.Type.LBRACE) {
-                doCount++;
+                braces++;
             } else if (token.getType() == Token.Type.RBRACE) {
-                endCount++;
+                braces--;
             }
 
-            if (token.getType() == Token.Type.SEMICOL && doCount == endCount) {
+            if (braces == 0 && token.getType() == Token.Type.SEMICOL) {
                 parse(new TokenStream(subTokens));
 
                 subTokens.clear();
