@@ -393,6 +393,10 @@ public class Evaluator {
 
                         Function currentFunction = currentFunctionName != null ? parser.getScope().getFunction(currentFunctionName) : (Function) val;
 
+                        if (currentFunction == null) {
+                            continue;
+                        }
+                        
                         if (currentFunction.getArguments() != -1 && currentFunction.getArguments() != arguments.size()) {
                             throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, token.getPosition(), currentFunction, currentFunction.getArguments(), arguments.size());
                         }
