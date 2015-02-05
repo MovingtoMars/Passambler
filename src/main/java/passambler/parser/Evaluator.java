@@ -218,9 +218,32 @@ public class Evaluator {
                     
                     Val doubleDotLeft = null;
                     Val doubleDotRight = null;
+                    
+                    ValList list = new ValList();
 
                     while (stream.hasNext()) {
-                        if (stream.current().getType() == Token.Type.LBRACKET) {
+                        if ((stream.current().getType() == Token.Type.COMMA || stream.current().getType() == Token.Type.RBRACKET) && brackets == 1 && paren == 0) {
+                            if (tokensInBrackets.size() == 0) {
+                                // If we go back two times, it should give us null if it's an empty declaration.
+                                // If we are in an empty declaration, do nothing and leave the list empty.
+                                
+                                if (stream.back(2) != null) {
+                                    throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "no value specified");
+                                }
+                            } else {
+                                list.add(Evaluator.evaluate(parser, new TokenStream(tokensInBrackets));
+                                
+                                tokensInBrackets.clear();
+                            }
+                            
+                            if (stream.current().getType() == Token.Type.RBRACKET) {
+                                brackets--;
+                            } else {
+                                stream.next();
+                                
+                                continue;
+                            }
+                        } else if (stream.current().getType() == Token.Type.LBRACKET) {
                             brackets++;
                         } else if (stream.current().getType() == Token.Type.RBRACKET) {
                             brackets--;
@@ -251,8 +274,8 @@ public class Evaluator {
                         stream.next();
                     }
 
-                    if (tokensInBrackets.size() == 0) {
-                        val = new ValList();
+                    if (list.getIndexCount() > 0 || tokensInBrackets.size() == 0) {
+                        val = list;
                     } else if (doubleDotLeft != null && doubleDotRight != null) {
                         if (!(doubleDotLeft instanceof ValNumber) || !(doubleDotRight instanceof ValNumber)) {
                             throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "range syntax only supports numbers");
