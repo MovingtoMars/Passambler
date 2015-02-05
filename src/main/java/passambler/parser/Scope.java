@@ -3,7 +3,6 @@ package passambler.parser;
 import java.util.HashMap;
 import java.util.Map;
 import passambler.function.FunctionExit;
-import passambler.function.FunctionList;
 import passambler.function.FunctionSqrt;
 import passambler.function.Function;
 import passambler.function.FunctionStr;
@@ -29,7 +28,6 @@ public class Scope {
         parent = parentScope;
 
         functions.put("exit", new FunctionExit());
-        functions.put("list", new FunctionList());
         functions.put("sqrt", new FunctionSqrt());
         functions.put("rand", new FunctionRand());
         functions.put("str", new FunctionStr());
