@@ -33,6 +33,10 @@ public class ValList extends Val implements IndexAccess, Stream {
     }
     
     public void add(Val value) {
+        if (isLocked()) {
+            throw new RuntimeException("Value is locked");
+        }
+        
         list.add(value);
     }
 }
