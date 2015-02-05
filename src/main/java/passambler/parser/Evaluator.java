@@ -394,7 +394,7 @@ public class Evaluator {
                         Function currentFunction = currentFunctionName != null ? parser.getScope().getFunction(currentFunctionName) : (Function) val;
 
                         if (currentFunction == null) {
-                            continue;
+                            break;
                         }
                         
                         if (currentFunction.getArguments() != -1 && currentFunction.getArguments() != arguments.size()) {
