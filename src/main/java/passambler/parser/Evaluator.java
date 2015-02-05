@@ -223,7 +223,7 @@ public class Evaluator {
 
                     while (stream.hasNext()) {
                         if ((stream.current().getType() == Token.Type.COMMA || stream.current().getType() == Token.Type.RBRACKET) && brackets == 1 && paren == 0) {
-                            if (tokensInBrackets.size() == 0) {
+                            if (tokensInBrackets.isEmpty()) {
                                 // If we go back two times, it should give us null if it's an empty declaration.
                                 // If we are in an empty declaration, do nothing and leave the list empty.
                                 
@@ -231,15 +231,15 @@ public class Evaluator {
                                     throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "no value specified");
                                 }
                             } else {
-                                list.add(Evaluator.evaluate(parser, new TokenStream(tokensInBrackets));
-                                
-                                tokensInBrackets.clear();
+                                list.add(Evaluator.evaluate(parser, new TokenStream(tokensInBrackets)));
                             }
                             
                             if (stream.current().getType() == Token.Type.RBRACKET) {
                                 brackets--;
                             } else {
                                 stream.next();
+                                
+                                tokensInBrackets.clear();
                                 
                                 continue;
                             }
@@ -274,7 +274,7 @@ public class Evaluator {
                         stream.next();
                     }
 
-                    if (list.getIndexCount() > 0 || tokensInBrackets.size() == 0) {
+                    if (val == null && (list.getIndexCount() > 0 || tokensInBrackets.isEmpty())) {
                         val = list;
                     } else if (doubleDotLeft != null && doubleDotRight != null) {
                         if (!(doubleDotLeft instanceof ValNumber) || !(doubleDotRight instanceof ValNumber)) {
