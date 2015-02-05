@@ -7,6 +7,7 @@ import passambler.val.Val;
 import passambler.scanner.Token;
 import passambler.scanner.TokenStream;
 import passambler.val.IndexAccess;
+import passambler.val.ValArray;
 import passambler.val.ValBlock;
 import passambler.val.ValBool;
 import passambler.val.ValNumber;
@@ -209,17 +210,14 @@ public class Evaluator {
                     
                     break;
                 case LBRACKET:
-                    if (!(val instanceof IndexAccess)) {
-                        throw new ParserException(ParserException.Type.NOT_INDEXED, token.getPosition());
-                    }
-
-                    IndexAccess indexAccess = (IndexAccess) val;
-
                     List<Token> tokensInBrackets = new ArrayList<>();
 
                     brackets = 1;
 
                     stream.next();
+                    
+                    Val doubleDotLeft = null;
+                    Val doubleDotRight = null;
 
                     while (stream.hasNext()) {
                         if (stream.current().getType() == Token.Type.LBRACKET) {
@@ -230,9 +228,21 @@ public class Evaluator {
                             paren++;
                         } else if (stream.current().getType() == Token.Type.RPAREN) {
                             paren--;
+                        } else if (stream.current().getType() == Token.Type.DOT_DOUBLE && brackets == 1 && paren == 0) {
+                            doubleDotLeft = Evaluator.evaluate(parser, new TokenStream(tokensInBrackets));
+                            
+                            tokensInBrackets.clear();
+                            
+                            stream.next();
+                            
+                            continue;
                         }
                         
                         if (brackets == 0 && paren == 0) {
+                            if (doubleDotLeft != null) {
+                                doubleDotRight = Evaluator.evaluate(parser, new TokenStream(tokensInBrackets));
+                            }
+                            
                             break;
                         }
 
@@ -241,19 +251,64 @@ public class Evaluator {
                         stream.next();
                     }
 
-                    Val indexVal = Evaluator.evaluate(parser, new TokenStream(tokensInBrackets));
+                    if (doubleDotLeft != null && doubleDotRight != null) {
+                        if (!(doubleDotLeft instanceof ValNumber) || !(doubleDotRight instanceof ValNumber)) {
+                            throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "range syntax only supports numbers");
+                        }
+                        
+                        int min = ((ValNumber) doubleDotLeft).getValueAsInteger();
+                        int max = ((ValNumber) doubleDotRight).getValueAsInteger();
+                        
+                        if (min > max) {
+                            throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition(), "%d can't be bigger than %d", min, max);
+                        }
+                        
+                        ValArray sequence = new ValArray(max - min + 1);
 
-                    if (!(indexVal instanceof ValNumber)) {
-                        throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition(), "array index should be a number");
+                        int i = 0;
+                        
+                        if (val == null) {
+                            for (int current = min; current <= max; ++current) {
+                                sequence.setIndex(i, new ValNumber(current));
+
+                                i++;
+                            }
+                        } else {
+                            if (!(val instanceof IndexAccess)) {
+                                throw new ParserException(ParserException.Type.NOT_INDEXED, token.getPosition());
+                            }
+
+                            IndexAccess indexAccess = (IndexAccess) val;
+
+                            for (int current = min; current <= max; ++current) {
+                                sequence.setIndex(i, indexAccess.getIndex(current));
+
+                                i++;
+                            }
+                        }
+                        
+                        val = sequence;
+                    } else {
+                        if (!(val instanceof IndexAccess)) {
+                            throw new ParserException(ParserException.Type.NOT_INDEXED, token.getPosition());
+                        }
+
+                        IndexAccess indexAccess = (IndexAccess) val;
+                    
+                        Val indexVal = Evaluator.evaluate(parser, new TokenStream(tokensInBrackets));
+
+                        if (!(indexVal instanceof ValNumber)) {
+                            throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition(), "array index should be a number");
+                        }
+
+                        int index = ((ValNumber) indexVal).getValueAsInteger();
+
+                        if (index < 0 || index > indexAccess.getIndexCount() - 1) {
+                            throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, token.getPosition(), index, indexAccess.getIndexCount());
+                        }
+
+                        val = indexAccess.getIndex(index);
                     }
-
-                    int index = ((ValNumber) indexVal).getValueAsInteger();
-
-                    if (index < 0 || index > indexAccess.getIndexCount() - 1) {
-                        throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, token.getPosition(), index, indexAccess.getIndexCount());
-                    }
-
-                    val = indexAccess.getIndex(index);
 
                     break;
                 case LPAREN:
