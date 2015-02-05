@@ -21,10 +21,12 @@ public class Evaluator {
         while (stream.hasNext()) {
             Token token = stream.current();
 
+            int paren = 0, brackets = 0, braces = 0;
+            
             switch (token.getType()) {
                 case LBRACE:
                 case PIPE:
-                    int braces = 1;
+                    braces = 1;
                     
                     boolean commaCheck = false;
 
@@ -101,36 +103,38 @@ public class Evaluator {
 
                     stream.next();
 
-                    Val comp1 = val;
-                    Val comp2 = Evaluator.evaluate(parser, new TokenStream(stream.rest()));
+                    Val[] compare = new Val[] {
+                        val,
+                        Evaluator.evaluate(parser, new TokenStream(stream.rest()))
+                    };
 
-                    if (comp2 == null) {
+                    if (compare[1] == null) {
                         throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition(), "invalid assertion");
                     }
 
                     switch (token.getType()) {
                         case EQUAL:
-                            val = new ValBool(comp1.getValue().equals(comp2.getValue()));
+                            val = new ValBool(compare[0].getValue().equals(compare[1].getValue()));
 
                             break;
                         case NEQUAL:
-                            val = new ValBool(!comp1.getValue().equals(comp2.getValue()));
+                            val = new ValBool(!compare[0].getValue().equals(compare[1].getValue()));
 
                             break;
                         case GT:
-                            val = new ValBool((((ValNumber) comp1).getValue() > ((ValNumber) comp2).getValue()));
+                            val = new ValBool((((ValNumber) compare[0]).getValue() > ((ValNumber) compare[1]).getValue()));
 
                             break;
                         case LT:
-                            val = new ValBool((((ValNumber) comp1).getValue() < ((ValNumber) comp2).getValue()));
+                            val = new ValBool((((ValNumber) compare[0]).getValue() < ((ValNumber) compare[1]).getValue()));
 
                             break;
                         case GTE:
-                            val = new ValBool((((ValNumber) comp1).getValue() >= ((ValNumber) comp2).getValue()));
+                            val = new ValBool((((ValNumber) compare[0]).getValue() >= ((ValNumber) compare[1]).getValue()));
 
                             break;
                         case LTE:
-                            val = new ValBool((((ValNumber) comp1).getValue() <= ((ValNumber) comp2).getValue()));
+                            val = new ValBool((((ValNumber) compare[0]).getValue() <= ((ValNumber) compare[1]).getValue()));
 
                             break;
                     }
@@ -213,7 +217,7 @@ public class Evaluator {
 
                     List<Token> tokensInBrackets = new ArrayList<>();
 
-                    int brackets = 1;
+                    brackets = 1;
 
                     stream.next();
 
@@ -222,9 +226,13 @@ public class Evaluator {
                             brackets++;
                         } else if (stream.current().getType() == Token.Type.RBRACKET) {
                             brackets--;
+                        } else if (stream.current().getType() == Token.Type.LPAREN) {
+                            paren++;
+                        } else if (stream.current().getType() == Token.Type.RPAREN) {
+                            paren--;
                         }
                         
-                        if (brackets == 0) {
+                        if (brackets == 0 && paren == 0) {
                             break;
                         }
 
@@ -249,11 +257,11 @@ public class Evaluator {
 
                     break;
                 case LPAREN:
-                    List<Token> tokensInPar = new ArrayList<>();
+                    List<Token> tokensBetweenParen = new ArrayList<>();
 
                     Token.Type operator = null;
                     
-                    int paren = 1;
+                    paren = 1;
 
                     if (currentFunctionName != null || val instanceof ValBlock) {
                         if (stream.back(2) != null) {
@@ -280,7 +288,7 @@ public class Evaluator {
                             break;
                         }
 
-                        tokensInPar.add(stream.current());
+                        tokensBetweenParen.add(stream.current());
                         
                         stream.next();
                     }
@@ -289,17 +297,17 @@ public class Evaluator {
                         List<Token> argumentTokens = new ArrayList<>();
                         List<Val> arguments = new ArrayList<>();
 
-                        for (Token t : tokensInPar) {
-                            if (t.getType() == Token.Type.LPAREN) {
+                        for (Token tokenBetweenParen : tokensBetweenParen) {
+                            if (tokenBetweenParen.getType() == Token.Type.LPAREN) {
                                 paren++;
-                            } else if (t.getType() == Token.Type.RPAREN) {
+                            } else if (tokenBetweenParen.getType() == Token.Type.RPAREN) {
                                 paren--;
                             }
 
-                            argumentTokens.add(t);
+                            argumentTokens.add(tokenBetweenParen);
 
-                            if (paren == 0 && (t.getType() == Token.Type.COMMA || tokensInPar.indexOf(t) == tokensInPar.size() - 1)) {
-                                if (t.getType() == Token.Type.COMMA) {
+                            if (paren == 0 && (tokenBetweenParen.getType() == Token.Type.COMMA || tokensBetweenParen.indexOf(tokenBetweenParen) == tokensBetweenParen.size() - 1)) {
+                                if (tokenBetweenParen.getType() == Token.Type.COMMA) {
                                     argumentTokens.remove(argumentTokens.size() - 1);
                                 }
 
@@ -315,9 +323,9 @@ public class Evaluator {
                             throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, token.getPosition(), currentFunction, currentFunction.getArguments(), arguments.size());
                         }
 
-                        for (int ii = 0; ii < arguments.size(); ++ii) {
-                            if (!currentFunction.isArgumentValid(arguments.get(ii), ii)) {
-                                throw new ParserException(ParserException.Type.INVALID_ARGUMENT, token.getPosition(), ii, currentFunction);
+                        for (int argument = 0; argument < arguments.size(); ++argument) {
+                            if (!currentFunction.isArgumentValid(arguments.get(argument), argument)) {
+                                throw new ParserException(ParserException.Type.INVALID_ARGUMENT, token.getPosition(), argument, currentFunction);
                             }
                         }
 
@@ -336,8 +344,8 @@ public class Evaluator {
                         }
 
                         currentFunctionName = null;
-                    } else if (!tokensInPar.isEmpty()) {
-                        Val valueInParen = Evaluator.evaluate(parser, new TokenStream(tokensInPar));
+                    } else if (!tokensBetweenParen.isEmpty()) {
+                        Val valueInParen = Evaluator.evaluate(parser, new TokenStream(tokensBetweenParen));
                         
                         if (val == null) {
                             val = valueInParen;
