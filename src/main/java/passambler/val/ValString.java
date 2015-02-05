@@ -39,15 +39,13 @@ public class ValString extends Val implements IndexAccess {
 
             @Override
             public Val invoke(Parser parser, Val... arguments) throws ParserException {
-                String[] parts = getValue().split(((ValString) arguments[0]).getValue());
+                ValList list = new ValList();
                 
-                ValArray array = new ValArray(parts.length);
-                
-                for (int i = 0; i < parts.length; ++i) {
-                    array.setIndex(i, new ValString(parts[i]));
+                for (String part : getValue().split(((ValString) arguments[0]).getValue())) {
+                    list.add(new ValString(part));
                 }
                 
-                return array;
+                return list;
             }
         });
         

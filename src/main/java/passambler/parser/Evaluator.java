@@ -7,9 +7,9 @@ import passambler.val.Val;
 import passambler.scanner.Token;
 import passambler.scanner.TokenStream;
 import passambler.val.IndexAccess;
-import passambler.val.ValArray;
 import passambler.val.ValBlock;
 import passambler.val.ValBool;
+import passambler.val.ValList;
 import passambler.val.ValNumber;
 import passambler.val.ValString;
 
@@ -263,15 +263,11 @@ public class Evaluator {
                             throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition(), String.format("%d can't be bigger than %d", min, max));
                         }
                         
-                        ValArray sequence = new ValArray(max - min + 1);
+                        ValList sequence = new ValList();
 
-                        int i = 0;
-                        
                         if (val == null) {
                             for (int current = min; current <= max; ++current) {
-                                sequence.setIndex(i, new ValNumber(current));
-
-                                i++;
+                                sequence.add(new ValNumber(current));
                             }
                         } else {
                             if (!(val instanceof IndexAccess)) {
@@ -281,9 +277,7 @@ public class Evaluator {
                             IndexAccess indexAccess = (IndexAccess) val;
 
                             for (int current = min; current <= max; ++current) {
-                                sequence.setIndex(i, indexAccess.getIndex(current));
-
-                                i++;
+                                sequence.add(indexAccess.getIndex(current));
                             }
                         }
                         

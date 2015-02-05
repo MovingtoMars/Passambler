@@ -29,6 +29,10 @@ public class ValList extends Val implements IndexAccess, Stream {
 
     @Override
     public void onStream(Val value) {
+        add(value);
+    }
+    
+    public void add(Val value) {
         list.add(value);
     }
 }
