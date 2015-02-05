@@ -5,7 +5,6 @@ import java.util.Map;
 import passambler.function.FunctionArray;
 import passambler.function.FunctionExit;
 import passambler.function.FunctionList;
-import passambler.function.FunctionSeq;
 import passambler.function.FunctionSqrt;
 import passambler.function.Function;
 import passambler.function.FunctionStr;
@@ -34,7 +33,6 @@ public class Scope {
         functions.put("array", new FunctionArray());
         functions.put("list", new FunctionList());
         functions.put("sqrt", new FunctionSqrt());
-        functions.put("seq", new FunctionSeq());
         functions.put("rand", new FunctionRand());
         functions.put("str", new FunctionStr());
 
