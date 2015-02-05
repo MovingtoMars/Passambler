@@ -260,7 +260,7 @@ public class Evaluator {
                         int max = ((ValNumber) doubleDotRight).getValueAsInteger();
                         
                         if (min > max) {
-                            throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition(), "%d can't be bigger than %d", min, max);
+                            throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition(), String.format("%d can't be bigger than %d", min, max));
                         }
                         
                         ValArray sequence = new ValArray(max - min + 1);
