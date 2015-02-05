@@ -33,7 +33,7 @@ public class FunctionRand implements Function {
         }
 
         if (min > max) {
-            throw new ParserException("%d can't be bigger than %d", min, max);
+            throw new ParserException(ParserException.Type.BAD_SYNTAX, "%d can't be bigger than %d", min, max);
         }
 
         return new ValNumber(new Random().nextInt((max - min) + 1) + min);
