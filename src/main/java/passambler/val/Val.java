@@ -17,7 +17,7 @@ public abstract class Val {
     protected Object value;
 
     public Val() {
-        setProperty("str", () -> new ValString(value.toString()));
+        setProperty("str", () -> new ValString(toString()));
         
         if (this instanceof IndexAccess) {
             IndexAccess indexAccess = (IndexAccess) this;
