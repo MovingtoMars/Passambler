@@ -5,7 +5,6 @@ import java.util.Map;
 import passambler.function.Function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
-import passambler.parser.Scope;
 import passambler.scanner.Token;
 
 public abstract class Val {
