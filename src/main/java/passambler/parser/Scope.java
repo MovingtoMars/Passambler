@@ -51,7 +51,7 @@ public class Scope {
     }
 
     public void setSymbol(String key, Function function) {
-        symbols.put(key, Val.transform(function));
+        symbols.put(key, ValBlock.transform(function));
     }
     
     public Val getSymbol(String key) {

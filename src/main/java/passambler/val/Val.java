@@ -98,7 +98,7 @@ public abstract class Val {
     }
     
     public void setProperty(String key, Function function) {
-        properties.put(key, transform(function));
+        properties.put(key, ValBlock.transform(function));
     }
 
     public Val onOperator(Val value, Token.Type tokenType) {
@@ -115,24 +115,5 @@ public abstract class Val {
     @Override
     public String toString() {
         return value.toString();
-    }
-    
-    public static ValBlock transform(Function function) {
-        return new ValBlock(new Scope(), null) {
-            @Override
-            public int getArguments() {
-                return function.getArguments();
-            }
-
-            @Override
-            public boolean isArgumentValid(Val value, int argument) {
-                return function.isArgumentValid(value, argument);
-            }
-
-            @Override
-            public Val invoke(Parser parser, Val... arguments) throws ParserException {
-                return function.invoke(parser, arguments);
-            }
-        };
     }
 }
