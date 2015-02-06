@@ -6,12 +6,11 @@ import passambler.function.FunctionExit;
 import passambler.function.FunctionSqrt;
 import passambler.function.Function;
 import passambler.function.FunctionRandom;
+import passambler.function.FunctionWrite;
 import passambler.val.Val;
 import passambler.val.ValBlock;
 import passambler.val.ValBool;
-import passambler.val.ValIn;
 import passambler.val.ValNum;
-import passambler.val.ValOut;
 
 public class Scope {
     private Scope parent;
@@ -30,12 +29,10 @@ public class Scope {
         setSymbol("exit", new FunctionExit());
         setSymbol("sqrt", new FunctionSqrt());
         setSymbol("random", new FunctionRandom());
-
+        setSymbol("write", new FunctionWrite(false));
+        setSymbol("writeln", new FunctionWrite(true));
         setSymbol("nil", Val.nil.lock());
         setSymbol("pi", new ValNum(Math.PI).lock());
-        setSymbol("stdout", new ValOut(System.out).lock());
-        setSymbol("stderr", new ValOut(System.err).lock());
-        setSymbol("stdin", new ValIn(System.in).lock());
         setSymbol("true", new ValBool(true).lock());
         setSymbol("false", new ValBool(false).lock());
     }

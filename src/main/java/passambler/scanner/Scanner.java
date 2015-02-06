@@ -22,8 +22,6 @@ public class Scanner {
         tokenMap.put("!=", Token.Type.NEQUAL);
         tokenMap.put(">=", Token.Type.GTE);
         tokenMap.put("<=", Token.Type.LTE);
-        tokenMap.put("->", Token.Type.STREAM);
-        tokenMap.put("<-", Token.Type.STREAM_REVERSE);
         tokenMap.put("&&", Token.Type.AND);
         tokenMap.put("||", Token.Type.OR);
         tokenMap.put("..", Token.Type.DOT_DOUBLE);

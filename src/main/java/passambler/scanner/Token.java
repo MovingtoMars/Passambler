@@ -10,7 +10,7 @@ public class Token {
         ASSIGN, ASSIGN_LOCKED,
         PLUS, MINUS, MULTIPLY, DIVIDE, POWER,
         SEMICOL, PIPE,
-        LBRACE, RBRACE, STREAM, STREAM_REVERSE,
+        LBRACE, RBRACE,
         EQUAL, NEQUAL, GT, LT, GTE, LTE,
         AND, OR;
         

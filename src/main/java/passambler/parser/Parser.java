@@ -59,59 +59,6 @@ public class Parser {
             } else {
                 scope.setSymbol(key, value);
             }
-        } else if (isStream(stream.copy()) || isReverseStream(stream.copy())) {
-            List<Token> tokensBeforeStream = new ArrayList<>();
-            List<Token> tokensAfterStream = new ArrayList<>();
-            
-            boolean reverseStream = isReverseStream(stream.copy());
-
-            boolean passed = false;
-            
-            int braces = 0;
-
-            while (stream.hasNext()) {
-                if (stream.current().getType() == Token.Type.LBRACE) {
-                    braces++;
-                } else if (stream.current().getType() == Token.Type.RBRACE) {
-                    braces--;
-                }
-                
-                if (!passed && braces == 0 && (stream.current().getType() == Token.Type.STREAM || stream.current().getType() == Token.Type.STREAM_REVERSE)) {
-                    passed = true;
-                } else {
-                    (passed ? (reverseStream ? tokensBeforeStream : tokensAfterStream) : (reverseStream ? tokensAfterStream : tokensBeforeStream)).add(stream.current());
-                }
-
-                stream.next();
-            }
-
-            Val toSend = Evaluator.evaluate(this, new TokenStream(tokensBeforeStream));
-            Val toReceive = Evaluator.evaluate(this, new TokenStream(tokensAfterStream));
-
-            if (toSend instanceof IndexAccess && toReceive instanceof ValBlock) {
-                IndexAccess indexAccess = (IndexAccess) toSend;
-
-                for (int i = 0; i < indexAccess.getIndexCount(); ++i) {
-                    ((ValBlock) toReceive).invoke(((ValBlock) toReceive).getParser(), new Val[] {
-                        indexAccess.getIndex(i),
-                        new ValNum(i)
-                    });
-                }
-            } else if (toSend instanceof ValBool && toReceive instanceof ValBlock) {
-                while (((ValBool) toSend).getValue() == true) {
-                    ((ValBlock) toReceive).invoke(((ValBlock) toReceive).getParser());
-
-                    // We need to refresh the condition for the while loop
-                    toSend = Evaluator.evaluate(this, new TokenStream(tokensBeforeStream));
-                }
-            } else {
-                if (!(toReceive instanceof Stream)) {
-                    // I'm using stream.back() here as the while loop is always one too far
-                    throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.back().getPosition(), "not a stream");
-                }
-
-                ((Stream) toReceive).onStream(toSend);
-            }
         } else {
             Val val = Evaluator.evaluate(this, stream);
 
@@ -149,14 +96,6 @@ public class Parser {
         if (!subTokens.isEmpty()) {
             throw new ParserException(ParserException.Type.UNEXPECTED_EOF);
         }
-    }
-
-    public boolean isStream(TokenStream stream) {
-        return stream.rest().stream().anyMatch(t -> t.getType() == Token.Type.STREAM);
-    }
-    
-    public boolean isReverseStream(TokenStream stream) {
-        return stream.rest().stream().anyMatch(t -> t.getType() == Token.Type.STREAM_REVERSE);
     }
 
     public boolean isAssignment(TokenStream stream) {
