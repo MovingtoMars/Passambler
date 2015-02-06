@@ -51,22 +51,7 @@ public class Scope {
     }
 
     public void setSymbol(String key, Function function) {
-        symbols.put(key, new ValBlock(new Scope(), null) {
-            @Override
-            public int getArguments() {
-                return function.getArguments();
-            }
-
-            @Override
-            public boolean isArgumentValid(Val value, int argument) {
-                return function.isArgumentValid(value, argument);
-            }
-
-            @Override
-            public Val invoke(Parser parser, Val... arguments) throws ParserException {
-                return function.invoke(parser, arguments);
-            }
-        });
+        symbols.put(key, Val.transform(function));
     }
     
     public Val getSymbol(String key) {

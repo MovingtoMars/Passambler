@@ -5,6 +5,7 @@ import java.util.Map;
 import passambler.function.Function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
+import passambler.parser.Scope;
 import passambler.scanner.Token;
 
 public abstract class Val {
@@ -97,22 +98,7 @@ public abstract class Val {
     }
     
     public void setProperty(String key, Function function) {
-        properties.put(key, new ValBlock(null, null) {
-            @Override
-            public int getArguments() {
-                return function.getArguments();
-            }
-
-            @Override
-            public boolean isArgumentValid(Val value, int argument) {
-                return function.isArgumentValid(value, argument);
-            }
-
-            @Override
-            public Val invoke(Parser parser, Val... arguments) throws ParserException {
-                return function.invoke(parser, arguments);
-            }
-        });
+        properties.put(key, transform(function));
     }
 
     public Val onOperator(Val value, Token.Type tokenType) {
@@ -129,5 +115,24 @@ public abstract class Val {
     @Override
     public String toString() {
         return value.toString();
+    }
+    
+    public static ValBlock transform(Function function) {
+        return new ValBlock(new Scope(), null) {
+            @Override
+            public int getArguments() {
+                return function.getArguments();
+            }
+
+            @Override
+            public boolean isArgumentValid(Val value, int argument) {
+                return function.isArgumentValid(value, argument);
+            }
+
+            @Override
+            public Val invoke(Parser parser, Val... arguments) throws ParserException {
+                return function.invoke(parser, arguments);
+            }
+        };
     }
 }
