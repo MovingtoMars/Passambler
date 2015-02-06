@@ -30,8 +30,8 @@ public class Passambler {
         optionParser.accepts("v", "Version number");
         optionParser.accepts("h", "Help");
         optionParser.accepts("a", "Run interactively");
-        optionParser.accepts("t", "Show tokens");
         optionParser.accepts("f", "Parse and execute a file").withRequiredArg();
+        optionParser.accepts("t", "Show tokens");
         
         try {
             OptionSet options = optionParser.parse(args);
@@ -45,8 +45,6 @@ public class Passambler {
             }
             
             if (options.has("a")) {
-                LOGGER.log(Level.INFO, "Interactive mode enabled.");
-
                 Parser parser = new Parser();
                 
                 parser.getScope().addStd();
@@ -66,8 +64,6 @@ public class Passambler {
                 Scanner scanner = new Scanner(data);
                 
                 if (options.has("t")) {
-                    LOGGER.log(Level.INFO, "Token representation");
-                        
                     for (Token token : scanner.scan()) {
                         LOGGER.log(Level.INFO, token.toString());
                     }
