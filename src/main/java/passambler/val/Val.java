@@ -5,7 +5,6 @@ import java.util.Map;
 import passambler.function.Function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
-import passambler.parser.Scope;
 import passambler.scanner.Token;
 
 public abstract class Val {
@@ -18,6 +17,8 @@ public abstract class Val {
     protected Object value;
 
     public Val() {
+        setProperty("str", () -> new ValString(value.toString()));
+        
         if (this instanceof IndexAccess) {
             IndexAccess indexAccess = (IndexAccess) this;
             
@@ -96,7 +97,7 @@ public abstract class Val {
     }
     
     public void setProperty(String key, Function function) {
-        properties.put(key, new ValBlock(new Scope(), null) {
+        properties.put(key, new ValBlock(null, null) {
             @Override
             public int getArguments() {
                 return function.getArguments();

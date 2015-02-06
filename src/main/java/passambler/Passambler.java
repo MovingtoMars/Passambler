@@ -46,6 +46,8 @@ public class Passambler {
                 LOGGER.log(Level.INFO, "Interactive mode enabled.");
 
                 Parser parser = new Parser();
+                
+                parser.getScope().addStd();
 
                 parser.setInInteractiveMode(true);
 
@@ -60,6 +62,8 @@ public class Passambler {
                 String data = String.join("\n", Files.readAllLines(Paths.get(String.valueOf(options.valueOf("f"))), Charset.forName("UTF-8")));
 
                 Parser parser = new Parser();
+                
+                parser.getScope().addStd();
 
                 parser.parseScanner(new Scanner(data));
             }

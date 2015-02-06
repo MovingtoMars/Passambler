@@ -5,7 +5,6 @@ import java.util.Map;
 import passambler.function.FunctionExit;
 import passambler.function.FunctionSqrt;
 import passambler.function.Function;
-import passambler.function.FunctionStr;
 import passambler.function.FunctionRand;
 import passambler.val.Val;
 import passambler.val.ValBool;
@@ -26,11 +25,12 @@ public class Scope {
 
     public Scope(Scope parentScope) {
         parent = parentScope;
-
+    }
+    
+    public void addStd() {
         functions.put("exit", new FunctionExit());
         functions.put("sqrt", new FunctionSqrt());
         functions.put("rand", new FunctionRand());
-        functions.put("str", new FunctionStr());
 
         variables.put("nil", Val.nil.lock());
         variables.put("pi", new ValNumber(Math.PI).lock());

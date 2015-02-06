@@ -14,7 +14,7 @@ public class ValBlock extends Val implements Function {
     private List<String> argumentNames;
 
     private List<Token> tokens = new ArrayList<>();
-
+    
     public ValBlock(Scope parentScope, List<String> argumentNames) {
         this.argumentNames = argumentNames;
 
