@@ -185,7 +185,7 @@ public class Evaluator {
 
                         stream.next();
                     }
-
+                    
                     if (doubleDotLeft != null && doubleDotRight != null) {
                         if (!(doubleDotLeft instanceof ValNum) || !(doubleDotRight instanceof ValNum)) {
                             throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "range syntax only supports numbers");
