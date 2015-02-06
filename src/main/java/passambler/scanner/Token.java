@@ -12,7 +12,11 @@ public class Token {
         SEMICOL, PIPE,
         LBRACE, RBRACE, STREAM, STREAM_REVERSE,
         EQUAL, NEQUAL, GT, LT, GTE, LTE,
-        AND, OR
+        AND, OR;
+        
+        public boolean isOperator() {
+            return this == PLUS || this == MINUS || this == MULTIPLY || this == DIVIDE || this == POWER || this == GT || this == LT || this == GTE || this == LTE || this == EQUAL || this == NEQUAL || this == AND || this == OR;
+        }
     }
 
     private Type type;
