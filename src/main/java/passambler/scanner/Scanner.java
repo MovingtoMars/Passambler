@@ -22,6 +22,7 @@ public class Scanner {
         
         tokenMap.put("|=", Token.Type.ASSIGN_LOCKED);
         tokenMap.put("==", Token.Type.EQUAL);
+        tokenMap.put("->", Token.Type.ARROW);
         tokenMap.put("!=", Token.Type.NEQUAL);
         tokenMap.put(">=", Token.Type.GTE);
         tokenMap.put("<=", Token.Type.LTE);

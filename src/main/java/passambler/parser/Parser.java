@@ -65,13 +65,19 @@ public class Parser {
             List<Token> iteratorTokens = new ArrayList<>();
             
             while (stream.hasNext()) {
-                if (stream.current().getType() == Token.Type.LBRACE || stream.current().getType() == Token.Type.PIPE) {
+                if (stream.current().getType() == Token.Type.ARROW) {
+                    stream.next();
+                    
                     break;
                 }
                 
                 iteratorTokens.add(stream.current());
                 
                 stream.next();
+            }
+            
+            if (stream.back().getType() != Token.Type.ARROW) {
+                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.back().getPosition(), "missing arrow token");
             }
             
             Val iteratorVal = Evaluator.evaluate(this, new TokenStream(iteratorTokens));
