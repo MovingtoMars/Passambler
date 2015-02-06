@@ -22,36 +22,6 @@ public class Evaluator {
             int paren = 0, brackets = 0, braces = 0;
             
             switch (token.getType()) {
-                case PLUS:
-                case MINUS:
-                case MULTIPLY:
-                case DIVIDE:
-                case POWER:
-                case GT:
-                case LT:
-                case GTE:
-                case LTE:
-                case AND:
-                case OR:
-                case EQUAL:
-                case NEQUAL:
-                    if (token == stream.last()) {
-                        throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
-                    }
-                    
-                    stream.next();
-                    
-                    if (val != null) {
-                        Val valAfterOperator = Evaluator.evaluate(parser, new TokenStream(stream.rest()));
-
-                        if (val.onOperator(valAfterOperator, token.getType()) == null) {
-                            throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, token.getPosition(), token.getType());
-                        }
-                        
-                        return val.onOperator(valAfterOperator, token.getType());
-                    }
-
-                    break;
                 case LBRACE:
                 case PIPE:
                     braces = 1;
@@ -340,9 +310,45 @@ public class Evaluator {
 
                     break;
                 default:
-                    throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
+                    if (!token.getType().isOperator()) {
+                        throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
+                    }
             }
-
+            
+            // Here check if the next is an operator, and then keep looping until next matching operator is found.
+            if (val != null && stream.peek() != null) {
+                Token.Type type = stream.peek().getType();
+                
+                if (type.isOperator()) {
+                    stream.next();
+                    stream.next();
+                    
+                    List<Token> tokens = new ArrayList<>();
+                    
+                    while (stream.hasNext()) {
+                        if (stream.current().getType() == Token.Type.LPAREN) {
+                            paren++;
+                        } else if (stream.current().getType() == Token.Type.RPAREN) {
+                            paren--;
+                        }
+                        
+                        if ((stream.current().getType() == Token.Type.AND || stream.current().getType() == Token.Type.OR) && paren == 0) {
+                            break;
+                        } else {
+                            tokens.add(stream.current());
+                            
+                            stream.next();
+                        }
+                    }
+                    
+                    val = val.onOperator(evaluate(parser, new TokenStream(tokens)), type);
+                    
+                    // We use continue here so the last stream.next() doesn't get called.
+                    // It already gets called in the while loop.
+                    continue;
+                }
+            }
+            
             stream.next();
         }
 
