@@ -7,7 +7,7 @@ import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.scanner.Token;
 
-public abstract class Val {
+public class Val {
     public static ValNil nil = new ValNil();
 
     protected boolean locked = false;
