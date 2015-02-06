@@ -3,6 +3,7 @@ package passambler.val;
 import passambler.function.Function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
+import passambler.scanner.Token;
 
 public class ValStr extends Val implements IndexAccess {
     public ValStr(String data) {
@@ -139,6 +140,15 @@ public class ValStr extends Val implements IndexAccess {
         return (String) value;
     }
 
+    @Override
+    public Val onOperator(Val value, Token.Type tokenType) {
+        if (value instanceof ValStr && tokenType == Token.Type.PLUS) {
+            return new ValStr(getValue() + value.toString());
+        }
+
+        return super.onOperator(value, tokenType);
+    }
+    
     @Override
     public Val getIndex(int index) {
         return new ValStr(String.valueOf(getValue().charAt(index)));
