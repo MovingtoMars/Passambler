@@ -13,6 +13,7 @@ import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.scanner.Scanner;
 import passambler.scanner.ScannerException;
+import passambler.scanner.Token;
 
 public class Passambler {
     public static final String VERSION = "0.1.0-SNAPSHOT";
@@ -29,6 +30,7 @@ public class Passambler {
         optionParser.accepts("v", "Version number");
         optionParser.accepts("h", "Help");
         optionParser.accepts("a", "Run interactively");
+        optionParser.accepts("t", "Show tokens");
         optionParser.accepts("f", "Parse and execute a file").withRequiredArg();
         
         try {
@@ -61,11 +63,21 @@ public class Passambler {
             if (options.has("f")) {
                 String data = String.join("\n", Files.readAllLines(Paths.get(String.valueOf(options.valueOf("f"))), Charset.forName("UTF-8")));
 
-                Parser parser = new Parser();
+                Scanner scanner = new Scanner(data);
                 
-                parser.getScope().addStd();
+                if (options.has("t")) {
+                    LOGGER.log(Level.INFO, "Token representation");
+                        
+                    for (Token token : scanner.scan()) {
+                        LOGGER.log(Level.INFO, token.toString());
+                    }
+                } else {
+                    Parser parser = new Parser();
 
-                parser.parseScanner(new Scanner(data));
+                    parser.getScope().addStd();
+
+                    parser.parseScanner(scanner);
+                }
             }
         } catch (ScannerException e) {
             LOGGER.log(Level.SEVERE, "Scanner exception", e);
