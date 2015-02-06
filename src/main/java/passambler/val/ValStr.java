@@ -3,10 +3,9 @@ package passambler.val;
 import passambler.function.Function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
-import passambler.scanner.Token;
 
-public class ValString extends Val implements IndexAccess {
-    public ValString(String data) {
+public class ValStr extends Val implements IndexAccess {
+    public ValStr(String data) {
         setValue(data);
 
         setProperty("append", new Function() {
@@ -17,12 +16,12 @@ public class ValString extends Val implements IndexAccess {
 
             @Override
             public boolean isArgumentValid(Val value, int argument) {
-                return value instanceof ValString;
+                return value instanceof ValStr;
             }
 
             @Override
             public Val invoke(Parser parser, Val... arguments) throws ParserException {
-                return new ValString(getValue() + ((ValString) arguments[0]).getValue());
+                return new ValStr(getValue() + ((ValStr) arguments[0]).getValue());
             }
         });
         
@@ -34,15 +33,15 @@ public class ValString extends Val implements IndexAccess {
 
             @Override
             public boolean isArgumentValid(Val value, int argument) {
-                return value instanceof ValString;
+                return value instanceof ValStr;
             }
 
             @Override
             public Val invoke(Parser parser, Val... arguments) throws ParserException {
                 ValList list = new ValList();
                 
-                for (String part : getValue().split(((ValString) arguments[0]).getValue())) {
-                    list.add(new ValString(part));
+                for (String part : getValue().split(((ValStr) arguments[0]).getValue())) {
+                    list.add(new ValStr(part));
                 }
                 
                 return list;
@@ -57,12 +56,12 @@ public class ValString extends Val implements IndexAccess {
 
             @Override
             public boolean isArgumentValid(Val value, int argument) {
-                return value instanceof ValString;
+                return value instanceof ValStr;
             }
 
             @Override
             public Val invoke(Parser parser, Val... arguments) throws ParserException {
-                return new ValString(getValue().replace(((ValString) arguments[0]).getValue(), ((ValString) arguments[1]).getValue()));
+                return new ValStr(getValue().replace(((ValStr) arguments[0]).getValue(), ((ValStr) arguments[1]).getValue()));
             }
         });
         
@@ -74,12 +73,12 @@ public class ValString extends Val implements IndexAccess {
 
             @Override
             public boolean isArgumentValid(Val value, int argument) {
-                return value instanceof ValString;
+                return value instanceof ValStr;
             }
 
             @Override
             public Val invoke(Parser parser, Val... arguments) throws ParserException {
-                return new ValBool(getValue().contains(((ValString) arguments[0]).getValue()));
+                return new ValBool(getValue().contains(((ValStr) arguments[0]).getValue()));
             }
         });
         
@@ -91,12 +90,12 @@ public class ValString extends Val implements IndexAccess {
 
             @Override
             public boolean isArgumentValid(Val value, int argument) {
-                return value instanceof ValString;
+                return value instanceof ValStr;
             }
 
             @Override
             public Val invoke(Parser parser, Val... arguments) throws ParserException {
-                return new ValNumber(getValue().indexOf(((ValString) arguments[0]).getValue()));
+                return new ValNum(getValue().indexOf(((ValStr) arguments[0]).getValue()));
             }
         });
         
@@ -108,12 +107,12 @@ public class ValString extends Val implements IndexAccess {
 
             @Override
             public boolean isArgumentValid(Val value, int argument) {
-                return value instanceof ValString;
+                return value instanceof ValStr;
             }
 
             @Override
             public Val invoke(Parser parser, Val... arguments) throws ParserException {
-                return new ValString(getValue().toLowerCase());
+                return new ValStr(getValue().toLowerCase());
             }
         });
         
@@ -125,12 +124,12 @@ public class ValString extends Val implements IndexAccess {
 
             @Override
             public boolean isArgumentValid(Val value, int argument) {
-                return value instanceof ValString;
+                return value instanceof ValStr;
             }
 
             @Override
             public Val invoke(Parser parser, Val... arguments) throws ParserException {
-                return new ValString(getValue().toUpperCase());
+                return new ValStr(getValue().toUpperCase());
             }
         });
     }
@@ -141,24 +140,15 @@ public class ValString extends Val implements IndexAccess {
     }
 
     @Override
-    public Val onOperator(Val value, Token.Type tokenType) {
-        if (value instanceof ValString && tokenType == Token.Type.PLUS) {
-            return new ValString(getValue() + (value != Val.nil ? value.toString() : ""));
-        }
-
-        return null;
-    }
-
-    @Override
     public Val getIndex(int index) {
-        return new ValString(String.valueOf(getValue().charAt(index)));
+        return new ValStr(String.valueOf(getValue().charAt(index)));
     }
 
     @Override
     public void setIndex(int index, Val value) {
         char[] array = getValue().toCharArray();
 
-        array[index] = ((ValString) value).getValue().charAt(0);
+        array[index] = ((ValStr) value).getValue().charAt(0);
 
         setValue(new String(array));
     }

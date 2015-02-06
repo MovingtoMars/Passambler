@@ -17,12 +17,12 @@ public abstract class Val {
     protected Object value;
 
     public Val() {
-        setProperty("str", () -> new ValString(toString()));
+        setProperty("str", () -> new ValStr(toString()));
         
         if (this instanceof IndexAccess) {
             IndexAccess indexAccess = (IndexAccess) this;
             
-            setProperty("size", () -> new ValNumber(indexAccess.getIndexCount()));
+            setProperty("size", () -> new ValNum(indexAccess.getIndexCount()));
             
             setProperty("set", new Function() {
                 @Override
@@ -34,7 +34,7 @@ public abstract class Val {
                 public boolean isArgumentValid(Val value, int argument) {
                     switch (argument) {
                         case 0:
-                            return value instanceof ValNumber;
+                            return value instanceof ValNum;
                         case 1:
                             return value instanceof Val;
                         default:
@@ -44,7 +44,7 @@ public abstract class Val {
 
                 @Override
                 public Val invoke(Parser parser, Val... arguments) throws ParserException {
-                    int index = ((ValNumber) arguments[0]).getValueAsInteger();
+                    int index = ((ValNum) arguments[0]).getValueAsInteger();
 
                     if (index < 0 || index > indexAccess.getIndexCount() - 1) {
                         throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, index, indexAccess.getIndexCount());
@@ -116,6 +116,13 @@ public abstract class Val {
     }
 
     public Val onOperator(Val value, Token.Type tokenType) {
+        switch (tokenType) {
+            case EQUAL:
+                return new ValBool(getValue().equals(value.getValue()));
+            case NEQUAL:
+                return new ValBool(!getValue().equals(value.getValue()));
+        }
+        
         return null;
     }
 

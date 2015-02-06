@@ -23,11 +23,6 @@ public class ValList extends Val implements IndexAccess, Stream {
     }
 
     @Override
-    public String toString() {
-        return list.toString();
-    }
-
-    @Override
     public void onStream(Val value) {
         add(value);
     }
@@ -38,5 +33,10 @@ public class ValList extends Val implements IndexAccess, Stream {
         }
         
         list.add(value);
+    }
+    
+    @Override
+    public String toString() {
+        return list.toString();
     }
 }

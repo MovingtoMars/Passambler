@@ -3,10 +3,10 @@ package passambler.val;
 import java.io.PrintStream;
 import passambler.parser.Stream;
 
-public class ValPrintStream extends Val implements Stream {
+public class ValOut extends Val implements Stream {
     private PrintStream printStream;
 
-    public ValPrintStream(PrintStream printStream) {
+    public ValOut(PrintStream printStream) {
         this.printStream = printStream;
     }
 

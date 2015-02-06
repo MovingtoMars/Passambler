@@ -8,23 +8,50 @@ import passambler.scanner.Token;
 import passambler.scanner.TokenStream;
 import passambler.val.IndexAccess;
 import passambler.val.ValBlock;
-import passambler.val.ValBool;
 import passambler.val.ValList;
-import passambler.val.ValNumber;
-import passambler.val.ValString;
+import passambler.val.ValNum;
+import passambler.val.ValStr;
 
 public class Evaluator {
     public static Val evaluate(Parser parser, TokenStream stream) throws ParserException {
         Val val = null;
-
-        String currentFunctionName = null;
-
+        
         while (stream.hasNext()) {
             Token token = stream.current();
 
             int paren = 0, brackets = 0, braces = 0;
             
             switch (token.getType()) {
+                case PLUS:
+                case MINUS:
+                case MULTIPLY:
+                case DIVIDE:
+                case POWER:
+                case GT:
+                case LT:
+                case GTE:
+                case LTE:
+                case AND:
+                case OR:
+                case EQUAL:
+                case NEQUAL:
+                    if (token == stream.last()) {
+                        throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
+                    }
+                    
+                    stream.next();
+                    
+                    if (val != null) {
+                        Val valAfterOperator = Evaluator.evaluate(parser, new TokenStream(stream.rest()));
+
+                        if (val.onOperator(valAfterOperator, token.getType()) == null) {
+                            throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, token.getPosition(), token.getType());
+                        }
+                        
+                        return val.onOperator(valAfterOperator, token.getType());
+                    }
+
+                    break;
                 case LBRACE:
                 case PIPE:
                     braces = 1;
@@ -82,74 +109,11 @@ public class Evaluator {
                     }
 
                     break;
-                case PLUS:
-                case MINUS:
-                case MULTIPLY:
-                case DIVIDE:
-                case POWER:
-                    if (token == stream.last()) {
-                        throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
-                    }
-
-                    break;
-                case EQUAL:
-                case NEQUAL:
-                case LT:
-                case GT:
-                case LTE:
-                case GTE:
-                    if (val == null) {
-                        throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
-                    }
-
-                    stream.next();
-
-                    Val[] compare = new Val[] {
-                        val,
-                        Evaluator.evaluate(parser, new TokenStream(stream.rest()))
-                    };
-
-                    if (compare[1] == null) {
-                        throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition(), "invalid assertion");
-                    }
-
-                    switch (token.getType()) {
-                        case EQUAL:
-                            val = new ValBool(compare[0].getValue().equals(compare[1].getValue()));
-
-                            break;
-                        case NEQUAL:
-                            val = new ValBool(!compare[0].getValue().equals(compare[1].getValue()));
-
-                            break;
-                        case GT:
-                            val = new ValBool((((ValNumber) compare[0]).getValue() > ((ValNumber) compare[1]).getValue()));
-
-                            break;
-                        case LT:
-                            val = new ValBool((((ValNumber) compare[0]).getValue() < ((ValNumber) compare[1]).getValue()));
-
-                            break;
-                        case GTE:
-                            val = new ValBool((((ValNumber) compare[0]).getValue() >= ((ValNumber) compare[1]).getValue()));
-
-                            break;
-                        case LTE:
-                            val = new ValBool((((ValNumber) compare[0]).getValue() <= ((ValNumber) compare[1]).getValue()));
-
-                            break;
-                    }
-
-                    break;
                 case STRING:
                 case NUMBER:
                 case IDENTIFIER:
-                    performOperatorCheck(parser, stream);
-
-                    Val newVal = null;
-
                     if (token.getType() == Token.Type.STRING) {
-                        newVal = new ValString(token.getStringValue());
+                        val = new ValStr(token.getStringValue());
                     } else if (token.getType() == Token.Type.NUMBER) {
                         double number = Double.valueOf(token.getStringValue());
 
@@ -157,45 +121,23 @@ public class Evaluator {
                             number *= -1;
                         }
 
-                        newVal = new ValNumber(number);
+                        val = new ValNum(number);
 
                         if (stream.getPosition() > 0 && stream.back().getType() == Token.Type.DIVIDE && token.getIntValue() == 0) {
                             throw new ParserException(ParserException.Type.ZERO_DIVISION, token.getPosition());
                         }
                     } else if (token.getType() == Token.Type.IDENTIFIER) {
-                        if (stream.peek() != null && stream.peek().getType() == Token.Type.LPAREN) {
-                            String functionName = token.getStringValue();
-
-                            if (!parser.getScope().hasFunction(functionName)) {
-                                throw new ParserException(ParserException.Type.UNDEFINED_FUNCTION, token.getPosition(), functionName);
-                            }
-
-                            currentFunctionName = functionName;
-                        } else {
-                            if (!parser.getScope().hasVariable(token.getStringValue())) {
-                                throw new ParserException(ParserException.Type.UNDEFINED_VARIABLE, token.getPosition(), token.getStringValue());
-                            }
-
-                            newVal = parser.getScope().getVariable(token.getStringValue());
+                        if (!parser.getScope().hasSymbol(token.getStringValue())) {
+                            throw new ParserException(stream.peek().getType() == Token.Type.LPAREN ? ParserException.Type.UNDEFINED_FUNCTION : ParserException.Type.UNDEFINED_VARIABLE, token.getPosition(), token.getStringValue());
                         }
-                    }
 
-                    if (newVal != null) {
-                        if (val == null) {
-                            val = newVal;
-                        } else {
-                            val = val.onOperator(newVal, stream.back().getType());
-                            
-                            if (val == null) {
-                                throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, stream.back().getPosition(), stream.back().getType());
-                            }
-                        }
+                        val = parser.getScope().getSymbol(token.getStringValue());
                     }
-
+                
                     break;
                 case DOT:
                     if (val == null || !stream.hasNext() || (stream.hasNext() && stream.peek().getType() != Token.Type.IDENTIFIER)) {
-                        throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition());
+                        throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition(), "property name not found");
                     }
                 
                     stream.next();
@@ -231,7 +173,7 @@ public class Evaluator {
                                     throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "no value specified");
                                 }
                             } else {
-                                list.add(Evaluator.evaluate(parser, new TokenStream(tokensInBrackets)));
+                                list.add(evaluate(parser, new TokenStream(tokensInBrackets)));
                             }
                             
                             if (stream.current().getType() == Token.Type.RBRACKET) {
@@ -252,7 +194,7 @@ public class Evaluator {
                         } else if (stream.current().getType() == Token.Type.RPAREN) {
                             paren--;
                         } else if (stream.current().getType() == Token.Type.DOT_DOUBLE && brackets == 1 && paren == 0) {
-                            doubleDotLeft = Evaluator.evaluate(parser, new TokenStream(tokensInBrackets));
+                            doubleDotLeft = evaluate(parser, new TokenStream(tokensInBrackets));
                             
                             tokensInBrackets.clear();
                             
@@ -263,7 +205,7 @@ public class Evaluator {
                         
                         if (brackets == 0 && paren == 0) {
                             if (doubleDotLeft != null) {
-                                doubleDotRight = Evaluator.evaluate(parser, new TokenStream(tokensInBrackets));
+                                doubleDotRight = evaluate(parser, new TokenStream(tokensInBrackets));
                             }
                             
                             break;
@@ -275,12 +217,12 @@ public class Evaluator {
                     }
 
                     if (doubleDotLeft != null && doubleDotRight != null) {
-                        if (!(doubleDotLeft instanceof ValNumber) || !(doubleDotRight instanceof ValNumber)) {
+                        if (!(doubleDotLeft instanceof ValNum) || !(doubleDotRight instanceof ValNum)) {
                             throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "range syntax only supports numbers");
                         }
                         
-                        int min = ((ValNumber) doubleDotLeft).getValueAsInteger();
-                        int max = ((ValNumber) doubleDotRight).getValueAsInteger();
+                        int min = ((ValNum) doubleDotLeft).getValueAsInteger();
+                        int max = ((ValNum) doubleDotRight).getValueAsInteger();
                         
                         if (min > max) {
                             throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition(), String.format("%d can't be bigger than %d", min, max));
@@ -290,7 +232,7 @@ public class Evaluator {
 
                         if (val == null) {
                             for (int current = min; current <= max; ++current) {
-                                sequence.add(new ValNumber(current));
+                                sequence.add(new ValNum(current));
                             }
                         } else {
                             if (!(val instanceof IndexAccess)) {
@@ -314,13 +256,13 @@ public class Evaluator {
 
                         IndexAccess indexAccess = (IndexAccess) val;
                     
-                        Val indexVal = Evaluator.evaluate(parser, new TokenStream(tokensInBrackets));
+                        Val indexVal = evaluate(parser, new TokenStream(tokensInBrackets));
 
-                        if (!(indexVal instanceof ValNumber)) {
+                        if (!(indexVal instanceof ValNum)) {
                             throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition(), "array index should be a number");
                         }
 
-                        int index = ((ValNumber) indexVal).getValueAsInteger();
+                        int index = ((ValNum) indexVal).getValueAsInteger();
 
                         if (index < 0 || index > indexAccess.getIndexCount() - 1) {
                             throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, token.getPosition(), index, indexAccess.getIndexCount());
@@ -333,21 +275,7 @@ public class Evaluator {
                 case LPAREN:
                     List<Token> tokensBetweenParen = new ArrayList<>();
 
-                    Token.Type operator = null;
-                    
                     paren = 1;
-
-                    if (currentFunctionName != null || val instanceof ValBlock) {
-                        if (stream.back(2) != null) {
-                            operator = stream.back(2).getType();
-                        }
-                    } else {
-                        performOperatorCheck(parser, stream);
-                        
-                        if (stream.back() != null) {
-                            operator = stream.back().getType();
-                        }
-                    }
                     
                     stream.next();
 
@@ -367,7 +295,7 @@ public class Evaluator {
                         stream.next();
                     }
                     
-                    if (currentFunctionName != null || val instanceof ValBlock) {
+                    if (val instanceof ValBlock) {
                         List<Token> argumentTokens = new ArrayList<>();
                         List<Val> arguments = new ArrayList<>();
 
@@ -385,18 +313,14 @@ public class Evaluator {
                                     argumentTokens.remove(argumentTokens.size() - 1);
                                 }
 
-                                arguments.add(Evaluator.evaluate(parser, new TokenStream(argumentTokens)));
+                                arguments.add(evaluate(parser, new TokenStream(argumentTokens)));
 
                                 argumentTokens.clear();
                             }
                         }
 
-                        Function currentFunction = currentFunctionName != null ? parser.getScope().getFunction(currentFunctionName) : (Function) val;
+                        Function currentFunction = (Function) val;
 
-                        if (currentFunction == null) {
-                            break;
-                        }
-                        
                         if (currentFunction.getArguments() != -1 && currentFunction.getArguments() != arguments.size()) {
                             throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, token.getPosition(), currentFunction, currentFunction.getArguments(), arguments.size());
                         }
@@ -409,31 +333,9 @@ public class Evaluator {
 
                         Val[] vals = new Val[arguments.size()];
 
-                        Val functionReturn = currentFunction.invoke(parser, arguments.toArray(vals));
-
-                        if (val == null || val instanceof ValBlock) {
-                            val = functionReturn;
-                        } else {
-                            val = val.onOperator(functionReturn, operator);
-                            
-                            if (val == null) {
-                                throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, token.getPosition(), operator);
-                            }
-                        }
-
-                        currentFunctionName = null;
+                        val = currentFunction.invoke(parser, arguments.toArray(vals));
                     } else if (!tokensBetweenParen.isEmpty()) {
-                        Val valueInParen = Evaluator.evaluate(parser, new TokenStream(tokensBetweenParen));
-                        
-                        if (val == null) {
-                            val = valueInParen;
-                        } else {
-                            val = val.onOperator(valueInParen, operator);
-                            
-                            if (val == null) {
-                                throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, stream.back().getPosition(), stream.back().getType());
-                            }
-                        }
+                        val = evaluate(parser, new TokenStream(tokensBetweenParen));
                     }
 
                     break;
@@ -445,15 +347,5 @@ public class Evaluator {
         }
 
         return val;
-    }
-
-    public static void performOperatorCheck(Parser parser, TokenStream stream) throws ParserException {
-        if (stream.current() != stream.first()) {
-            Token.Type type = stream.back().getType();
-
-            if (type != Token.Type.MINUS && type != Token.Type.MULTIPLY && type != Token.Type.DIVIDE && type != Token.Type.POWER && type != Token.Type.PLUS) {
-                throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, stream.current().getPosition(), type);
-            }
-        }
     }
 }

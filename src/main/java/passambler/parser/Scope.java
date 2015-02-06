@@ -5,19 +5,18 @@ import java.util.Map;
 import passambler.function.FunctionExit;
 import passambler.function.FunctionSqrt;
 import passambler.function.Function;
-import passambler.function.FunctionRand;
+import passambler.function.FunctionRandom;
 import passambler.val.Val;
+import passambler.val.ValBlock;
 import passambler.val.ValBool;
-import passambler.val.ValInputStream;
-import passambler.val.ValNumber;
-import passambler.val.ValPrintStream;
+import passambler.val.ValIn;
+import passambler.val.ValNum;
+import passambler.val.ValOut;
 
 public class Scope {
     private Scope parent;
 
-    private Map<String, Val> variables = new HashMap();
-
-    private Map<String, Function> functions = new HashMap();
+    private Map<String, Val> symbols = new HashMap();
 
     public Scope() {
         this(null);
@@ -28,58 +27,59 @@ public class Scope {
     }
     
     public void addStd() {
-        functions.put("exit", new FunctionExit());
-        functions.put("sqrt", new FunctionSqrt());
-        functions.put("rand", new FunctionRand());
+        setSymbol("exit", new FunctionExit());
+        setSymbol("sqrt", new FunctionSqrt());
+        setSymbol("random", new FunctionRandom());
 
-        variables.put("nil", Val.nil.lock());
-        variables.put("pi", new ValNumber(Math.PI).lock());
-        variables.put("stdout", new ValPrintStream(System.out).lock());
-        variables.put("stderr", new ValPrintStream(System.err).lock());
-        variables.put("stdin", new ValInputStream(System.in).lock());
-        variables.put("true", new ValBool(true).lock());
-        variables.put("false", new ValBool(false).lock());
+        setSymbol("nil", Val.nil.lock());
+        setSymbol("pi", new ValNum(Math.PI).lock());
+        setSymbol("stdout", new ValOut(System.out).lock());
+        setSymbol("stderr", new ValOut(System.err).lock());
+        setSymbol("stdin", new ValIn(System.in).lock());
+        setSymbol("true", new ValBool(true).lock());
+        setSymbol("false", new ValBool(false).lock());
     }
 
-    public void setVariable(String key, Val value) {
-        if (parent != null && parent.hasVariable(key)) {
-            parent.setVariable(key, value);
-        } else if (variables.containsKey(key) && variables.get(key).isLocked()) {
+    public void setSymbol(String key, Val value) {
+        if (parent != null && parent.hasSymbol(key)) {
+            parent.setSymbol(key, value);
+        } else if (symbols.containsKey(key) && symbols.get(key).isLocked()) {
             throw new RuntimeException(String.format("Variable %s is locked", key));
         } else {
-            variables.put(key, value);
+            symbols.put(key, value);
         }
     }
 
-    public Val getVariable(String key) {
-        if (variables.containsKey(key)) {
-            return variables.get(key);
+    public void setSymbol(String key, Function function) {
+        symbols.put(key, new ValBlock(new Scope(), null) {
+            @Override
+            public int getArguments() {
+                return function.getArguments();
+            }
+
+            @Override
+            public boolean isArgumentValid(Val value, int argument) {
+                return function.isArgumentValid(value, argument);
+            }
+
+            @Override
+            public Val invoke(Parser parser, Val... arguments) throws ParserException {
+                return function.invoke(parser, arguments);
+            }
+        });
+    }
+    
+    public Val getSymbol(String key) {
+        if (symbols.containsKey(key)) {
+            return symbols.get(key);
         } else if (parent != null) {
-            return parent.getVariable(key);
+            return parent.getSymbol(key);
         } else {
             return null;
         }
     }
 
-    public boolean hasVariable(String key) {
-        return getVariable(key) != null;
-    }
-
-    public void setFunction(String key, Function value) {
-        functions.put(key, value);
-    }
-
-    public Function getFunction(String key) {
-        if (functions.containsKey(key)) {
-            return functions.get(key);
-        } else if (parent != null) {
-            return parent.getFunction(key);
-        } else {
-            return null;
-        }
-    }
-
-    public boolean hasFunction(String key) {
-        return getFunction(key) != null;
+    public boolean hasSymbol(String key) {
+        return getSymbol(key) != null;
     }
 }

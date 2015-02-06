@@ -11,7 +11,7 @@ import passambler.val.IndexAccess;
 import passambler.val.Val;
 import passambler.val.ValBlock;
 import passambler.val.ValBool;
-import passambler.val.ValNumber;
+import passambler.val.ValNum;
 
 public class Parser {
     private boolean interactiveMode = false;
@@ -55,9 +55,9 @@ public class Parser {
             }
             
             if (value instanceof ValBlock) {
-                scope.setFunction(key, (Function) value);
+                scope.setSymbol(key, (Function) value);
             } else {
-                scope.setVariable(key, value);
+                scope.setSymbol(key, value);
             }
         } else if (isStream(stream.copy()) || isReverseStream(stream.copy())) {
             List<Token> tokensBeforeStream = new ArrayList<>();
@@ -94,7 +94,7 @@ public class Parser {
                 for (int i = 0; i < indexAccess.getIndexCount(); ++i) {
                     ((ValBlock) toReceive).invoke(((ValBlock) toReceive).getParser(), new Val[] {
                         indexAccess.getIndex(i),
-                        new ValNumber(i)
+                        new ValNum(i)
                     });
                 }
             } else if (toSend instanceof ValBool && toReceive instanceof ValBlock) {
