@@ -59,6 +59,47 @@ public class Parser {
             } else {
                 scope.setSymbol(key, value);
             }
+        } else if (isFor(stream.copy())) {
+            stream.next();
+            
+            List<Token> iteratorTokens = new ArrayList<>();
+            
+            while (stream.hasNext()) {
+                if (stream.current().getType() == Token.Type.LBRACE || stream.current().getType() == Token.Type.PIPE) {
+                    break;
+                }
+                
+                iteratorTokens.add(stream.current());
+                
+                stream.next();
+            }
+            
+            Val iteratorVal = Evaluator.evaluate(this, new TokenStream(iteratorTokens));
+            
+            if (!(iteratorVal instanceof IndexAccess)) {
+                throw new ParserException(ParserException.Type.NOT_INDEXED, stream.current().getPosition());
+            }
+            
+            IndexAccess iterator = (IndexAccess) iteratorVal;
+            
+            Val callback = Evaluator.evaluate(this, new TokenStream(stream.rest()));
+            
+            if (!(callback instanceof ValBlock)) {
+                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "callback should be a block");
+            }
+            
+            ValBlock callbackBlock = (ValBlock) callback;
+            
+            if (callbackBlock.getArgumentNames().size() > 2) {
+                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "invalid argument count expected");
+            }
+            
+            for (int i = 0; i < iterator.getIndexCount(); ++i) {
+                callbackBlock.invoke(this, new Val[] {
+                    iterator.getIndex(i),
+                    new ValNum(i)
+                });
+            }
         } else {
             Val val = Evaluator.evaluate(this, stream);
 
@@ -98,6 +139,10 @@ public class Parser {
         }
     }
 
+    public boolean isFor(TokenStream stream) {
+        return stream.size() >= 3 && stream.first().getType() == Token.Type.FOR;
+    }
+    
     public boolean isAssignment(TokenStream stream) {
         return stream.size() >= 3 && stream.first().getType() == Token.Type.IDENTIFIER && (stream.peek().getType() == Token.Type.ASSIGN || stream.peek().getType() == Token.Type.ASSIGN_LOCKED);
     }
