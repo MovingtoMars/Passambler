@@ -3,7 +3,7 @@ package passambler.scanner;
 import java.util.List;
 
 public class TokenStream {
-    public int position;
+    private int position;
 
     private List<Token> tokens;
 
