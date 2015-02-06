@@ -7,7 +7,7 @@ import passambler.parser.Parser;
 import passambler.parser.ParserException;
 
 public class ValList extends Val implements IndexAccess {
-    private List<Val> list = new ArrayList<>();
+    protected List<Val> list = new ArrayList<>();
 
     public ValList() {
         setProperty("add", new Function() {

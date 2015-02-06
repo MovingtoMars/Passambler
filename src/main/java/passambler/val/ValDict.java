@@ -7,7 +7,7 @@ import passambler.parser.Parser;
 import passambler.parser.ParserException;
 
 public class ValDict extends Val {
-    Map<Val, Val> dict = new HashMap();
+    protected Map<Val, Val> dict = new HashMap();
     
     public ValDict() {
         setProperty("set", new Function() {
