@@ -317,9 +317,9 @@ public class Evaluator {
             
             // Here check if the next is an operator, and then keep looping until next matching operator is found.
             if (val != null && stream.peek() != null) {
-                Token.Type type = stream.peek().getType();
+                Token operatorToken = stream.peek();
                 
-                if (type.isOperator()) {
+                if (operatorToken.getType().isOperator()) {
                     stream.next();
                     stream.next();
                     
@@ -341,7 +341,13 @@ public class Evaluator {
                         }
                     }
                     
-                    val = val.onOperator(evaluate(parser, new TokenStream(tokens)), type);
+                    Val valOnOperator = val.onOperator(evaluate(parser, new TokenStream(tokens)), operatorToken.getType());
+                    
+                    if (valOnOperator == null) {
+                        throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, operatorToken.getPosition(), operatorToken.getType());
+                    }
+                    
+                    val = valOnOperator;
                     
                     // We use continue here so the last stream.next() doesn't get called.
                     // It already gets called in the while loop.
