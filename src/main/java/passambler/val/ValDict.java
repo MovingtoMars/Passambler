@@ -68,6 +68,57 @@ public class ValDict extends Val {
                 return list;
             }
         });
+        
+        setProperty("values", new Function() {
+            @Override
+            public int getArguments() {
+                return 0;
+            }
+
+            @Override
+            public boolean isArgumentValid(Val value, int argument) {
+                return false;
+            }
+
+            @Override
+            public Val invoke(Parser parser, Val... arguments) throws ParserException {
+                ValList list = new ValList();
+                
+                dict.values().stream().forEach((value) -> {
+                    list.add(value);
+                });
+                
+                return list;
+            }
+        });
+        
+        setProperty("entries", new Function() {
+            @Override
+            public int getArguments() {
+                return 0;
+            }
+
+            @Override
+            public boolean isArgumentValid(Val value, int argument) {
+                return false;
+            }
+
+            @Override
+            public Val invoke(Parser parser, Val... arguments) throws ParserException {
+                ValList list = new ValList();
+                
+                dict.entrySet().stream().forEach((set) -> {
+                    Val value = new Val();
+                    
+                    value.setProperty("key", set.getKey());
+                    value.setProperty("value", set.getValue());
+                    
+                    list.add(value);
+                });
+                
+                return list;
+            }
+        });
     }
     
     public void set(Val key, Val value) {
