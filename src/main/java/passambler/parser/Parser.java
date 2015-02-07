@@ -126,6 +126,10 @@ public class Parser {
                 }
             }
         } else if (isReturn(stream.copy())) {
+            if (!stream.hasNext()) {
+                return null;
+            }
+            
             stream.next();
             
             return Evaluator.evaluate(this, new TokenStream(stream.rest()));
@@ -177,7 +181,7 @@ public class Parser {
     }
 
     public boolean isReturn(TokenStream stream) {
-        return stream.size() >= 3 && stream.first().getType() == Token.Type.RETURN;
+        return stream.size() >= 1 && stream.first().getType() == Token.Type.RETURN;
     }
     
     public boolean isFor(TokenStream stream) {
