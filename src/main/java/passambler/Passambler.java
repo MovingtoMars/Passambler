@@ -18,23 +18,23 @@ import passambler.scanner.Token;
 public class Passambler {
     public static final String VERSION = "0.1.0-SNAPSHOT";
     
-    public static final boolean DEBUG = true;
-
     public static final Logger LOGGER = Logger.getLogger("Passambler");
 
     public static void main(String[] args) {
-        LOGGER.setUseParentHandlers(false);
-        LOGGER.addHandler(new LogHandler());
-       
         OptionParser optionParser = new OptionParser();
+        
         optionParser.accepts("v", "Version number");
         optionParser.accepts("h", "Help");
         optionParser.accepts("a", "Run interactively");
+        optionParser.accepts("s", "Shows the stacktrace of the parser");
         optionParser.accepts("f", "Parse and execute a file").withRequiredArg();
         optionParser.accepts("t", "Show tokens");
         
         try {
             OptionSet options = optionParser.parse(args);
+            
+            LOGGER.setUseParentHandlers(false);
+            LOGGER.addHandler(new LogHandler(options.has("s")));
             
             if (options.has("v")) {
                 LOGGER.log(Level.INFO, String.format("Passambler %s", VERSION));

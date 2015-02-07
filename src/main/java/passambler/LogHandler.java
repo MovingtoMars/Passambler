@@ -6,6 +6,12 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 public class LogHandler extends Handler {
+    private boolean stacktrace;
+    
+    public LogHandler(boolean stacktrace) {
+        this.stacktrace = stacktrace;
+    }
+    
     @Override
     public void publish(LogRecord record) {
         PrintStream output = System.out;
@@ -17,7 +23,7 @@ public class LogHandler extends Handler {
         if (record.getThrown() != null) {
             output.println(String.format("%s: %s", record.getMessage(), record.getThrown().getMessage()));
 
-            if (Passambler.DEBUG) {
+            if (stacktrace) {
                 output.println("Stacktrace:");
 
                 for (StackTraceElement stackTrace : record.getThrown().getStackTrace()) {
