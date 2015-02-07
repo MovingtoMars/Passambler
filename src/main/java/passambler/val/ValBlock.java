@@ -51,9 +51,7 @@ public class ValBlock extends Val implements Function {
             }
         }
 
-        this.parser.parseSemicolons(tokens);
-
-        return null;
+        return this.parser.parseSemicolons(tokens);
     }
     
     @Override

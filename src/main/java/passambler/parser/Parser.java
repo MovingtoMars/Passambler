@@ -38,7 +38,7 @@ public class Parser {
         return interactiveMode;
     }
 
-    public void parse(TokenStream stream) throws ParserException {
+    public Val parse(TokenStream stream) throws ParserException {
         if (isAssignment(stream.copy())) {
             String key = stream.current().getStringValue();
 
@@ -125,6 +125,10 @@ public class Parser {
                     });
                 }
             }
+        } else if (isReturn(stream.copy())) {
+            stream.next();
+            
+            return Evaluator.evaluate(this, new TokenStream(stream.rest()));
         } else {
             Val val = Evaluator.evaluate(this, stream);
 
@@ -132,13 +136,15 @@ public class Parser {
                 System.out.println("=> " + val);
             }
         }
+        
+        return null;
     }
 
-    public void parseScanner(Scanner scanner) throws ScannerException, ParserException {
-        parseSemicolons(scanner.scan());
+    public Val parseScanner(Scanner scanner) throws ScannerException, ParserException {
+        return parseSemicolons(scanner.scan());
     }
 
-    public void parseSemicolons(List<Token> tokens) throws ParserException {
+    public Val parseSemicolons(List<Token> tokens) throws ParserException {
         List<Token> subTokens = new ArrayList<>();
 
         int braces = 0;
@@ -151,9 +157,13 @@ public class Parser {
             }
 
             if (braces == 0 && token.getType() == Token.Type.SEMICOL) {
-                parse(new TokenStream(subTokens));
+                Val result = parse(new TokenStream(subTokens));
 
                 subTokens.clear();
+                
+                if (result != null) {
+                    return result;
+                }
             } else {
                 subTokens.add(token);
             }
@@ -162,8 +172,14 @@ public class Parser {
         if (!subTokens.isEmpty()) {
             throw new ParserException(ParserException.Type.UNEXPECTED_EOF);
         }
+        
+        return Val.nil;
     }
 
+    public boolean isReturn(TokenStream stream) {
+        return stream.size() >= 3 && stream.first().getType() == Token.Type.RETURN;
+    }
+    
     public boolean isFor(TokenStream stream) {
         return stream.size() >= 5 && stream.first().getType() == Token.Type.FOR;
     }

@@ -17,6 +17,7 @@ public class Scanner {
     public Scanner(String input) {
         this.input = input;
 
+        tokenMap.put("return", Token.Type.RETURN);
         tokenMap.put("while", Token.Type.WHILE);
         tokenMap.put("for", Token.Type.FOR);
         
