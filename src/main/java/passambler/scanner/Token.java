@@ -10,7 +10,8 @@ public class Token {
         DOT, DOT_DOUBLE,
         ASSIGN, ASSIGN_LOCKED,
         PLUS, MINUS, MULTIPLY, DIVIDE, POWER,
-        SEMICOL, PIPE,
+        SEMICOL, COL,
+        PIPE,
         LBRACE, RBRACE,
         EQUAL, NEQUAL, GT, LT, GTE, LTE,
         AND, OR;

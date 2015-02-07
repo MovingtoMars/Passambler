@@ -8,6 +8,7 @@ import passambler.scanner.Token;
 import passambler.scanner.TokenStream;
 import passambler.val.IndexAccess;
 import passambler.val.ValBlock;
+import passambler.val.ValDict;
 import passambler.val.ValList;
 import passambler.val.ValNum;
 import passambler.val.ValStr;
@@ -26,55 +27,104 @@ public class Evaluator {
                 case PIPE:
                     braces = 1;
                     
-                    boolean commaCheck = false;
-
-                    List<String> argumentNames = new ArrayList<>();
-
-                    if (stream.current().getType() == Token.Type.PIPE) {
+                    if (stream.current().getType() == Token.Type.LBRACE && stream.peek() != null && ((stream.peek().getType() == Token.Type.IDENTIFIER && stream.peek(2) != null && stream.peek(2).getType() == Token.Type.COL) || stream.peek().getType() == Token.Type.RBRACE)) {
+                        stream.next();
+                        
+                        val = new ValDict();
+                        
+                        List<Token> tokens = new ArrayList<>();
+                        
                         while (stream.hasNext()) {
-                            stream.next();
-
-                            if (stream.current().getType() == Token.Type.PIPE) {
-                                if (stream.back().getType() == Token.Type.COMMA) {
-                                    throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, stream.current().getPosition(), stream.current().getType());
-                                }
-
-                                break;
-                            } else if (stream.current().getType() == Token.Type.IDENTIFIER) {
-                                if (commaCheck && stream.back().getType() != Token.Type.COMMA) {
-                                    throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, stream.current().getPosition(), stream.current().getType());
-                                }
-
-                                commaCheck = true;
-
-                                argumentNames.add(stream.current().getStringValue());
-                            } else if (stream.current().getType() != Token.Type.COMMA) {
-                                throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, stream.current().getPosition(), stream.current().getType());
+                            Token tokenInBlock = stream.current();
+                            
+                            if (tokenInBlock.getType() == Token.Type.LBRACE) {
+                                braces++;
+                            } else if (tokenInBlock.getType() == Token.Type.RBRACE) {
+                                braces--;
                             }
+                            
+                            tokens.add(tokenInBlock);
+                            
+                            // Check if the current value is a comma and when there is still one brace.
+                            // But if there is on the last element no comma, peek 2 values more (ending brace and then nothing, should be null).
+                            if ((tokenInBlock.getType() == Token.Type.COMMA || stream.peek(2) == null) && braces == 1) {
+                                if (tokenInBlock.getType() == Token.Type.COMMA) {
+                                    tokens.remove(tokens.size() - 1);
+                                }
+                                
+                                TokenStream element = new TokenStream(tokens);
+                                
+                                if (element.current().getType() != Token.Type.IDENTIFIER) {
+                                    throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "identifier expected");
+                                }
+                                
+                                String key = element.current().getStringValue();
+                                
+                                element.next();
+                                element.next();
+                                
+                                Val value = evaluate(parser, new TokenStream(element.rest()));
+                                
+                                ((ValDict) val).set(new ValStr(key), value);
+                                
+                                tokens.clear();
+                            }
+ 
+                            stream.next();
                         }
+                        
+                        return val;
+                    } else {
+                        boolean commaCheck = false;
+
+                        List<String> argumentNames = new ArrayList<>();
+
+                        if (stream.current().getType() == Token.Type.PIPE) {
+                            while (stream.hasNext()) {
+                                stream.next();
+
+                                if (stream.current().getType() == Token.Type.PIPE) {
+                                    if (stream.back().getType() == Token.Type.COMMA) {
+                                        throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, stream.current().getPosition(), stream.current().getType());
+                                    }
+
+                                    break;
+                                } else if (stream.current().getType() == Token.Type.IDENTIFIER) {
+                                    if (commaCheck && stream.back().getType() != Token.Type.COMMA) {
+                                        throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, stream.current().getPosition(), stream.current().getType());
+                                    }
+
+                                    commaCheck = true;
+
+                                    argumentNames.add(stream.current().getStringValue());
+                                } else if (stream.current().getType() != Token.Type.COMMA) {
+                                    throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, stream.current().getPosition(), stream.current().getType());
+                                }
+                            }
+
+                            stream.next();
+                        }
+
+                        val = new ValBlock(parser.getScope(), argumentNames);
 
                         stream.next();
-                    }
 
-                    val = new ValBlock(parser.getScope(), argumentNames);
+                        while (stream.hasNext()) {
+                            Token tokenInBlock = stream.current();
 
-                    stream.next();
+                            if (tokenInBlock.getType() == Token.Type.LBRACE) {
+                                braces++;
+                            } else if (tokenInBlock.getType() == Token.Type.RBRACE) {
+                                braces--;
+                            }
 
-                    while (stream.hasNext()) {
-                        Token tokenInBlock = stream.current();
+                            if (braces == 0 && tokenInBlock.getType() == Token.Type.RBRACE) {
+                                return val;
+                            } else {
+                                ((ValBlock) val).addToken(tokenInBlock);
 
-                        if (tokenInBlock.getType() == Token.Type.LBRACE) {
-                            braces++;
-                        } else if (tokenInBlock.getType() == Token.Type.RBRACE) {
-                            braces--;
-                        }
-
-                        if (braces == 0 && tokenInBlock.getType() == Token.Type.RBRACE) {
-                            return val;
-                        } else {
-                            ((ValBlock) val).addToken(tokenInBlock);
-
-                            stream.next();
+                                stream.next();
+                            }
                         }
                     }
 

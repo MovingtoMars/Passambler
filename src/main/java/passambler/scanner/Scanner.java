@@ -47,6 +47,7 @@ public class Scanner {
         tokenMap.put("*", Token.Type.MULTIPLY);
         tokenMap.put("/", Token.Type.DIVIDE);
         tokenMap.put(";", Token.Type.SEMICOL);
+        tokenMap.put(":", Token.Type.COL);
         tokenMap.put("^", Token.Type.POWER);
     }
 

@@ -5,7 +5,6 @@ import java.util.Map;
 import passambler.function.FunctionExit;
 import passambler.function.FunctionSqrt;
 import passambler.function.Function;
-import passambler.function.FunctionDict;
 import passambler.function.FunctionRandom;
 import passambler.function.FunctionWrite;
 import passambler.val.Val;
@@ -30,7 +29,6 @@ public class Scope {
         setSymbol("exit", new FunctionExit());
         setSymbol("sqrt", new FunctionSqrt());
         setSymbol("random", new FunctionRandom());
-        setSymbol("dict", new FunctionDict());
         setSymbol("write", new FunctionWrite(false));
         setSymbol("writeln", new FunctionWrite(true));
         setSymbol("nil", Val.nil.lock());
