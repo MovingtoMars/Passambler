@@ -18,7 +18,9 @@ public class ValBool extends Val {
         if (value instanceof ValBool) {
             switch (tokenType) {
                 case AND:
-                    return new ValBool(Objects.equals(getValue(), ((ValBool) value).getValue()));
+                    return new ValBool(getValue() == ((ValBool) value).getValue());
+                case OR:
+                    return new ValBool(getValue() || ((ValBool) value).getValue());
             }
         }
         
