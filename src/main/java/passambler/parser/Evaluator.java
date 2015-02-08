@@ -148,7 +148,7 @@ public class Evaluator {
                         }
                     } else if (token.getType() == Token.Type.IDENTIFIER) {
                         if (!parser.getScope().hasSymbol(token.getStringValue())) {
-                            throw new ParserException(stream.peek().getType() == Token.Type.LPAREN ? ParserException.Type.UNDEFINED_FUNCTION : ParserException.Type.UNDEFINED_VARIABLE, token.getPosition(), token.getStringValue());
+                            throw new ParserException(stream.peek() != null && stream.peek().getType() == Token.Type.LPAREN ? ParserException.Type.UNDEFINED_FUNCTION : ParserException.Type.UNDEFINED_VARIABLE, token.getPosition(), token.getStringValue());
                         }
 
                         val = parser.getScope().getSymbol(token.getStringValue());
