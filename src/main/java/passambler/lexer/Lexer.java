@@ -210,12 +210,12 @@ public class Lexer {
     }
 
     public static boolean isNumber(String data) {
-        try {
-            Integer.parseInt(data);
-
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
+        for (int character : data.chars().toArray()) {
+            if (!Character.isDigit(character)) {
+                return false;
+            }
         }
+        
+        return true;
     }
 }
