@@ -25,13 +25,13 @@ public class Token {
 
     private SourcePosition position;
 
-    private Object value;
+    private String value;
 
     public Token(Type type, SourcePosition position) {
         this(type, null, position);
     }
 
-    public Token(Type type, Object value, SourcePosition position) {
+    public Token(Type type, String value, SourcePosition position) {
         this.type = type;
         this.value = value;
         this.position = position;
@@ -45,23 +45,19 @@ public class Token {
         return type;
     }
 
-    public Object getValue() {
+    public String getValue() {
         return value;
     }
 
-    public Integer getIntValue() {
-        return Integer.valueOf((String) value);
-    }
-
-    public String getStringValue() {
-        return String.valueOf(value);
+    public Integer getValueAsInteger() {
+        return Integer.valueOf(value);
     }
 
     public void setType(Type type) {
         this.type = type;
     }
 
-    public void setValue(Object value) {
+    public void setValue(String value) {
         this.value = value;
     }
 

@@ -40,7 +40,7 @@ public class Parser {
 
     public Value parse(TokenStream stream) throws ParserException {
         if (isAssignment(stream.copy())) {           
-            String key = stream.current().getStringValue();
+            String key = stream.current().getValue();
 
             stream.next();
             
@@ -107,17 +107,17 @@ public class Parser {
             List<String> arguments = new ArrayList<>();
 
             if (stream.peek().getType() == Token.Type.IN) {
-                arguments.add(stream.current().getStringValue());
+                arguments.add(stream.current().getValue());
                 
                 stream.next();
                 stream.next();
             } else if (stream.peek(3).getType() == Token.Type.IN) {
-                arguments.add(stream.current().getStringValue());
+                arguments.add(stream.current().getValue());
                 
                 stream.next();
                 stream.next();
                 
-                arguments.add(stream.current().getStringValue());
+                arguments.add(stream.current().getValue());
                 
                 stream.next();
                 stream.next();

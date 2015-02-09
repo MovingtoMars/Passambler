@@ -288,7 +288,7 @@ public class Evaluator {
     public static Value parseProperty(Parser parser, TokenStream stream, Value currentValue) throws ParserException {
         stream.next();
 
-        String propertyName = stream.current().getStringValue();
+        String propertyName = stream.current().getValue();
 
         if (!currentValue.hasProperty(propertyName)) {
             throw new ParserException(ParserException.Type.UNDEFINED_PROPERTY, stream.current().getPosition(), propertyName);
@@ -301,25 +301,25 @@ public class Evaluator {
         Token token = stream.current();
 
         if (token.getType() == Token.Type.STRING) {
-            return new ValueStr(token.getStringValue());
+            return new ValueStr(token.getValue());
         } else if (token.getType() == Token.Type.NUMBER) {
-            double number = Double.valueOf(token.getStringValue());
+            double number = Double.valueOf(token.getValue());
 
             if (stream.current() != stream.first() && stream.back().getType() == Token.Type.MINUS) {
                 number *= -1;
             }
 
-            if (stream.getPosition() > 0 && stream.back().getType() == Token.Type.DIVIDE && token.getIntValue() == 0) {
+            if (stream.getPosition() > 0 && stream.back().getType() == Token.Type.DIVIDE && token.getValueAsInteger() == 0) {
                 throw new ParserException(ParserException.Type.ZERO_DIVISION, token.getPosition());
             }
 
             return new ValueNum(number);
         } else if (token.getType() == Token.Type.IDENTIFIER) {
-            if (!parser.getScope().hasSymbol(token.getStringValue())) {
-                throw new ParserException(stream.peek() != null && stream.peek().getType() == Token.Type.LPAREN ? ParserException.Type.UNDEFINED_FUNCTION : ParserException.Type.UNDEFINED_VARIABLE, token.getPosition(), token.getStringValue());
+            if (!parser.getScope().hasSymbol(token.getValue())) {
+                throw new ParserException(stream.peek() != null && stream.peek().getType() == Token.Type.LPAREN ? ParserException.Type.UNDEFINED_FUNCTION : ParserException.Type.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());
             }
 
-            return parser.getScope().getSymbol(token.getStringValue());
+            return parser.getScope().getSymbol(token.getValue());
         }
 
         return null;
@@ -357,7 +357,7 @@ public class Evaluator {
                         throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "identifier expected");
                     }
 
-                    String key = element.current().getStringValue();
+                    String key = element.current().getValue();
 
                     element.next();
                     element.next();

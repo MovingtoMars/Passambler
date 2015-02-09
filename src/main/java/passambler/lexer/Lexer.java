@@ -50,7 +50,7 @@ public class Lexer {
         tokenMap.put("!", Token.Type.EXCL);
     }
 
-    public Token createToken(Token.Type type, Object value) {
+    public Token createToken(Token.Type type, String value) {
         return new Token(type, value, new SourcePosition(line, column));
     }
 
@@ -103,16 +103,16 @@ public class Lexer {
                     switch (peek()) {
                         case 'n':
                         case 'r':
-                            token.setValue(tokens.get(tokens.size() - 1).getStringValue() + System.getProperty("line.separator"));
+                            token.setValue(tokens.get(tokens.size() - 1).getValue() + System.getProperty("line.separator"));
                             break;
                         case 't':
-                            token.setValue(tokens.get(tokens.size() - 1).getStringValue() + "\t");
+                            token.setValue(tokens.get(tokens.size() - 1).getValue() + "\t");
                             break;
                     }
 
                     next();
                 } else {
-                    token.setValue(tokens.get(tokens.size() - 1).getStringValue() + current());
+                    token.setValue(tokens.get(tokens.size() - 1).getValue() + current());
                 }
 
                 next();              
@@ -159,16 +159,16 @@ public class Lexer {
                     while (hasNext() && isIdentifier(current())) {
                         Token token = tokens.get(tokens.size() - 1);
 
-                        token.setValue(token.getStringValue() + current());
+                        token.setValue(token.getValue() + current());
 
                         next();
                     }
 
                     Token identifier = tokens.get(tokens.size() - 1);
 
-                    if (Lexer.isNumber(identifier.getStringValue())) {
+                    if (Lexer.isNumber(identifier.getValue())) {
                         identifier.setType(Token.Type.NUMBER);
-                        identifier.setValue(identifier.getStringValue());
+                        identifier.setValue(identifier.getValue());
                     }
                 } else if (!matched) {
                     throw new LexerException(String.format("unexpected character %c", current()), line, column);
