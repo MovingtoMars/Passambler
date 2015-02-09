@@ -273,11 +273,15 @@ public class Evaluator {
 
             int index = ((ValueNum) indexVal).getValueAsInteger();
 
-            if (index < 0 || index > indexedValue.getIndexCount() - 1) {
+            if (index < -indexedValue.getIndexCount() || index > indexedValue.getIndexCount() - 1) {
                 throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, stream.current().getPosition(), index, indexedValue.getIndexCount());
             }
 
-            return indexedValue.getIndex(index);
+            if (index < 0) {
+                return indexedValue.getIndex(indexedValue.getIndexCount() - Math.abs(index));
+            } else {
+                return indexedValue.getIndex(index);
+            }
         }
     }
 
