@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import joptsimple.OptionException;
@@ -43,21 +44,7 @@ public class Main {
             if (options.has("h") || !options.hasOptions()) {
                 optionParser.printHelpOn(System.out);
             }
-            
-            if (options.has("a")) {
-                Parser parser = new Parser();
-                
-                parser.getScope().addStd();
-
-                parser.setInInteractiveMode(true);
-
-                java.util.Scanner input = new java.util.Scanner(System.in);
-
-                while (input.hasNextLine()) {
-                    parser.parseLexer(new Lexer(input.nextLine()));
-                }
-            }
-            
+                       
             if (options.has("f")) {
                 Lexer lexer = new Lexer(String.join("\n", Files.readAllLines(Paths.get(String.valueOf(options.valueOf("f"))), Charset.forName("UTF-8"))));
                 
@@ -71,6 +58,20 @@ public class Main {
                     parser.getScope().addStd();
 
                     parser.parseLexer(lexer);
+                }
+            }
+            
+            if (options.has("a")) {
+                Parser parser = new Parser();
+                
+                parser.getScope().addStd();
+
+                parser.setInInteractiveMode(true);
+
+                Scanner input = new Scanner(System.in);
+
+                while (input.hasNextLine()) {
+                    parser.parseLexer(new Lexer(input.nextLine()));
                 }
             }
         } catch (LexerException e) {
