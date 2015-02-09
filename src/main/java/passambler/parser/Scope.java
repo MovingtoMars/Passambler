@@ -33,6 +33,8 @@ public class Scope {
         setSymbol("writeln", new FunctionWrite(true));
         setSymbol("nil", Value.nil.lock());
         setSymbol("pi", new ValueNum(Math.PI).lock());
+        setSymbol("max_num", new ValueNum(Integer.MAX_VALUE).lock());
+        setSymbol("min_num", new ValueNum(Integer.MIN_VALUE).lock());
         setSymbol("true", new ValueBool(true).lock());
         setSymbol("false", new ValueBool(false).lock());
     }

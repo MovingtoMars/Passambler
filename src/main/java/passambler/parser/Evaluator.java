@@ -265,13 +265,13 @@ public class Evaluator {
 
             IndexedValue indexedValue = (IndexedValue) currentValue;
 
-            Value indexVal = evaluate(parser, new TokenStream(tokens));
+            Value indexValue = evaluate(parser, new TokenStream(tokens));
 
-            if (!(indexVal instanceof ValueNum)) {
+            if (!(indexValue instanceof ValueNum)) {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "array index should be a number");
             }
 
-            int index = ((ValueNum) indexVal).getValueAsInteger();
+            int index = ((ValueNum) indexValue).getValueAsInteger();
 
             if (index < -indexedValue.getIndexCount() || index > indexedValue.getIndexCount() - 1) {
                 throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, stream.current().getPosition(), index, indexedValue.getIndexCount());
@@ -336,18 +336,18 @@ public class Evaluator {
             List<Token> tokens = new ArrayList<>();
 
             while (stream.hasNext()) {
-                Token tokenInBlock = stream.current();
+                Token token = stream.current();
 
-                if (tokenInBlock.getType() == Token.Type.LBRACE) {
+                if (token.getType() == Token.Type.LBRACE) {
                     braces++;
-                } else if (tokenInBlock.getType() == Token.Type.RBRACE) {
+                } else if (token.getType() == Token.Type.RBRACE) {
                     braces--;
                 }
 
-                tokens.add(tokenInBlock);
+                tokens.add(token);
 
-                if ((tokenInBlock.getType() == Token.Type.COMMA || stream.peek(2) == null) && braces == 1) {
-                    if (tokenInBlock.getType() == Token.Type.COMMA) {
+                if ((token.getType() == Token.Type.COMMA || stream.peek(2) == null) && braces == 1) {
+                    if (token.getType() == Token.Type.COMMA) {
                         tokens.remove(tokens.size() - 1);
                     }
 

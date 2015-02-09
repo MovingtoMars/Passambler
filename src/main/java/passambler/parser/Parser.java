@@ -76,13 +76,13 @@ public class Parser {
              
             Value value = Evaluator.evaluate(this, new TokenStream(tokens));
              
-            Value callbackVal = Evaluator.evaluate(this, new TokenStream(stream.rest()));
+            Value callbackValue = Evaluator.evaluate(this, new TokenStream(stream.rest()));
 
-            if (!(callbackVal instanceof ValueBlock)) {
+            if (!(callbackValue instanceof ValueBlock)) {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "callback should be a block");
             }
 
-            ValueBlock callback = (ValueBlock) callbackVal;
+            ValueBlock callback = (ValueBlock) callbackValue;
             
             if (!(value instanceof ValueBool)) {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "expecting bool");
@@ -106,7 +106,6 @@ public class Parser {
                 stream.next();
                 stream.next();
             } else if (stream.peek(3).getType() == Token.Type.IN) {
-                System.out.println(stream.current().getStringValue());
                 arguments.add(stream.current().getStringValue());
                 
                 stream.next();
@@ -132,13 +131,13 @@ public class Parser {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.back().getPosition(), "missing brace");
             }
 
-            Value callbackVal = Evaluator.evaluate(this, new TokenStream(stream.rest()));
+            Value callbackValue = Evaluator.evaluate(this, new TokenStream(stream.rest()));
 
-            if (!(callbackVal instanceof ValueBlock)) {
+            if (!(callbackValue instanceof ValueBlock)) {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "callback should be a block");
             }
 
-            ValueBlock callback = (ValueBlock) callbackVal;
+            ValueBlock callback = (ValueBlock) callbackValue;
 
             callback.getArgumentNames().addAll(arguments);
 
@@ -169,10 +168,10 @@ public class Parser {
 
             return Evaluator.evaluate(this, new TokenStream(stream.rest()));
         } else {
-            Value val = Evaluator.evaluate(this, stream);
+            Value value = Evaluator.evaluate(this, stream);
 
-            if (isInInteractiveMode() && val != null) {
-                System.out.println("=> " + val);
+            if (isInInteractiveMode() && value != null) {
+                System.out.println(value);
             }
         }
 

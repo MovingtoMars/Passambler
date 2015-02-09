@@ -149,10 +149,6 @@ public class Lexer {
                             break;
                         }
                     }
-                    
-                    if (matched) {
-                        break;
-                    }
                 }
             
                 if (!matched && isIdentifier(current())) {

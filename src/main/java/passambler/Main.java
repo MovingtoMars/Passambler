@@ -70,8 +70,12 @@ public class Main {
 
                 Scanner input = new Scanner(System.in);
 
-                while (input.hasNextLine()) {
-                    parser.parseLexer(new Lexer(input.nextLine()));
+                while (true) {
+                    System.out.print("~> ");
+                    
+                    String line = input.nextLine();
+
+                    parser.parseLexer(new Lexer(line));
                 }
             }
         } catch (LexerException e) {
