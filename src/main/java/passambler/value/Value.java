@@ -17,7 +17,9 @@ public class Value {
     protected Object value;
 
     public Value() {
-        setProperty("str", () -> new ValueStr(toString()));
+        setProperty("str", () -> {
+            return new ValueStr(toString());
+        });
         
         if (this instanceof IndexedValue) {
             IndexedValue indexAccess = (IndexedValue) this;
@@ -113,6 +115,6 @@ public class Value {
 
     @Override
     public String toString() {
-        return value.toString();
+        return value == null ? Value.nil.toString() : value.toString();
     }
 }

@@ -15,7 +15,8 @@ public class ParserException extends Exception {
         UNEXPECTED_EOF("unexpected end of file"),
         UNEXPECTED_TOKEN("unexpected token %s"),
         UNSUPPORTED_OPERATOR("unsupported operator %s"),
-        ZERO_DIVISION("cannot divide by 0");
+        ZERO_DIVISION("cannot divide by 0"),
+        NO_STR_REPRESENTATION("value has no string representation");
 
         String message;
 
