@@ -1,4 +1,4 @@
-package passambler.scanner;
+package passambler.lexer;
 
 public class SourcePosition {
     private int line;

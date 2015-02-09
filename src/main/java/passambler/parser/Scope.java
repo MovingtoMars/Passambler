@@ -7,15 +7,15 @@ import passambler.function.FunctionSqrt;
 import passambler.function.Function;
 import passambler.function.FunctionRandom;
 import passambler.function.FunctionWrite;
-import passambler.val.Val;
-import passambler.val.ValBlock;
-import passambler.val.ValBool;
-import passambler.val.ValNum;
+import passambler.value.Value;
+import passambler.value.ValueBlock;
+import passambler.value.ValueBool;
+import passambler.value.ValueNum;
 
 public class Scope {
     private Scope parent;
 
-    private Map<String, Val> symbols = new HashMap();
+    private Map<String, Value> symbols = new HashMap();
 
     public Scope() {
         this(null);
@@ -31,13 +31,13 @@ public class Scope {
         setSymbol("random", new FunctionRandom());
         setSymbol("write", new FunctionWrite(false));
         setSymbol("writeln", new FunctionWrite(true));
-        setSymbol("nil", Val.nil.lock());
-        setSymbol("pi", new ValNum(Math.PI).lock());
-        setSymbol("true", new ValBool(true).lock());
-        setSymbol("false", new ValBool(false).lock());
+        setSymbol("nil", Value.nil.lock());
+        setSymbol("pi", new ValueNum(Math.PI).lock());
+        setSymbol("true", new ValueBool(true).lock());
+        setSymbol("false", new ValueBool(false).lock());
     }
 
-    public void setSymbol(String key, Val value) {
+    public void setSymbol(String key, Value value) {
         if (parent != null && parent.hasSymbol(key)) {
             parent.setSymbol(key, value);
         } else if (symbols.containsKey(key) && symbols.get(key).isLocked()) {
@@ -48,10 +48,10 @@ public class Scope {
     }
 
     public void setSymbol(String key, Function function) {
-        symbols.put(key, ValBlock.transform(function));
+        symbols.put(key, ValueBlock.transform(function));
     }
     
-    public Val getSymbol(String key) {
+    public Value getSymbol(String key) {
         if (symbols.containsKey(key)) {
             return symbols.get(key);
         } else if (parent != null) {

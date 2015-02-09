@@ -1,11 +1,11 @@
-package passambler.scanner;
+package passambler.lexer;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Scanner {
+public class Lexer {
     private Map<String, Token.Type> tokenMap = new LinkedHashMap();
 
     private int line = 1, column = 1;
@@ -14,7 +14,7 @@ public class Scanner {
 
     private final String input;
 
-    public Scanner(String input) {
+    public Lexer(String input) {
         this.input = input;
 
         tokenMap.put("return", Token.Type.RETURN);
@@ -40,14 +40,12 @@ public class Scanner {
         tokenMap.put(")", Token.Type.RPAREN);
         tokenMap.put("{", Token.Type.LBRACE);
         tokenMap.put("}", Token.Type.RBRACE);
-        tokenMap.put("|", Token.Type.PIPE);
         tokenMap.put(",", Token.Type.COMMA);
         tokenMap.put(".", Token.Type.DOT);
         tokenMap.put("+", Token.Type.PLUS);
         tokenMap.put("-", Token.Type.MINUS);
         tokenMap.put("*", Token.Type.MULTIPLY);
         tokenMap.put("/", Token.Type.DIVIDE);
-        tokenMap.put(";", Token.Type.SEMICOL);
         tokenMap.put(":", Token.Type.COL);
         tokenMap.put("^", Token.Type.POWER);
     }
@@ -60,7 +58,7 @@ public class Scanner {
         return createToken(type, null);
     }
 
-    public List<Token> scan() throws ScannerException {
+    public List<Token> scan() throws LexerException {
         List<Token> tokens = new ArrayList<>();
 
         char stringChar = 0;
@@ -74,6 +72,8 @@ public class Scanner {
                 if (!multiLineComment) {
                     inComment = false;
                 }
+                
+                tokens.add(createToken(Token.Type.NEW_LINE));
 
                 next();
             } else if (inComment) {
@@ -170,12 +170,12 @@ public class Scanner {
 
                     Token identifier = tokens.get(tokens.size() - 1);
 
-                    if (Scanner.isNumber(identifier.getStringValue())) {
+                    if (Lexer.isNumber(identifier.getStringValue())) {
                         identifier.setType(Token.Type.NUMBER);
                         identifier.setValue(identifier.getStringValue());
                     }
                 } else if (!matched) {
-                    throw new ScannerException(String.format("unexpected character %c", current()), line, column);
+                    throw new LexerException(String.format("unexpected character %c", current()), line, column);
                 }
             }
         }

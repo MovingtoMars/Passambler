@@ -1,4 +1,4 @@
-package passambler.val;
+package passambler.value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,10 +6,10 @@ import passambler.function.Function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 
-public class ValList extends Val implements IndexAccess {
-    protected List<Val> list = new ArrayList<>();
+public class ValueList extends Value implements IndexedValue {
+    protected List<Value> list = new ArrayList<>();
 
-    public ValList() {
+    public ValueList() {
         setProperty("add", new Function() {
             @Override
             public int getArguments() {
@@ -17,12 +17,12 @@ public class ValList extends Val implements IndexAccess {
             }
 
             @Override
-            public boolean isArgumentValid(Val value, int argument) {
+            public boolean isArgumentValid(Value value, int argument) {
                 return true;
             }
 
             @Override
-            public Val invoke(Parser parser, Val... arguments) throws ParserException {
+            public Value invoke(Parser parser, Value... arguments) throws ParserException {
                 add(arguments[0]);
                 
                 return null;
@@ -31,12 +31,12 @@ public class ValList extends Val implements IndexAccess {
     }
 
     @Override
-    public Val getIndex(int index) {
+    public Value getIndex(int index) {
         return list.get(index);
     }
 
     @Override
-    public void setIndex(int index, Val value) {
+    public void setIndex(int index, Value value) {
         list.set(index, value);
     }
 
@@ -45,7 +45,7 @@ public class ValList extends Val implements IndexAccess {
         return list.size();
     }
 
-    public void add(Val value) {
+    public void add(Value value) {
         if (isLocked()) {
             throw new RuntimeException("Value is locked");
         }

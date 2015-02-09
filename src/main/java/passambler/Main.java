@@ -11,11 +11,11 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
-import passambler.scanner.Scanner;
-import passambler.scanner.ScannerException;
-import passambler.scanner.Token;
+import passambler.lexer.Lexer;
+import passambler.lexer.LexerException;
+import passambler.lexer.Token;
 
-public class Passambler {
+public class Main {
     public static final String VERSION = "0.1.0-SNAPSHOT";
     
     public static final Logger LOGGER = Logger.getLogger("Passambler");
@@ -54,17 +54,15 @@ public class Passambler {
                 java.util.Scanner input = new java.util.Scanner(System.in);
 
                 while (input.hasNextLine()) {
-                    parser.parseScanner(new Scanner(input.nextLine()));
+                    parser.parseLexer(new Lexer(input.nextLine()));
                 }
             }
             
             if (options.has("f")) {
-                String data = String.join("\n", Files.readAllLines(Paths.get(String.valueOf(options.valueOf("f"))), Charset.forName("UTF-8")));
-
-                Scanner scanner = new Scanner(data);
+                Lexer lexer = new Lexer(String.join("\n", Files.readAllLines(Paths.get(String.valueOf(options.valueOf("f"))), Charset.forName("UTF-8"))));
                 
                 if (options.has("t")) {
-                    for (Token token : scanner.scan()) {
+                    for (Token token : lexer.scan()) {
                         LOGGER.log(Level.INFO, token.toString());
                     }
                 } else {
@@ -72,17 +70,17 @@ public class Passambler {
 
                     parser.getScope().addStd();
 
-                    parser.parseScanner(scanner);
+                    parser.parseLexer(lexer);
                 }
             }
-        } catch (ScannerException e) {
-            LOGGER.log(Level.SEVERE, "Scanner exception", e);
+        } catch (LexerException e) {
+            LOGGER.log(Level.SEVERE, "Lexer exception", e);
         } catch (ParserException e) {
             LOGGER.log(Level.SEVERE, "Parser exception", e);
         } catch (OptionException e) {
             LOGGER.log(Level.SEVERE, "Option exception", e);
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "IO exception", e);
+            LOGGER.log(Level.SEVERE, "I/O exception", e);
         } catch (RuntimeException e) {
             LOGGER.log(Level.SEVERE, "Runtime exception", e);
         }

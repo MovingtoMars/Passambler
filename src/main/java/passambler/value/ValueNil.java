@@ -1,6 +1,6 @@
-package passambler.val;
+package passambler.value;
 
-public class ValNil extends Val {
+public class ValueNil extends Value {
     @Override
     public String toString() {
         return "nil";

@@ -2,8 +2,8 @@ package passambler.function;
 
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
-import passambler.val.Val;
-import passambler.val.ValNum;
+import passambler.value.Value;
+import passambler.value.ValueNum;
 
 public class FunctionSqrt implements Function {
     @Override
@@ -12,12 +12,12 @@ public class FunctionSqrt implements Function {
     }
 
     @Override
-    public boolean isArgumentValid(Val value, int argument) {
-        return value instanceof ValNum;
+    public boolean isArgumentValid(Value value, int argument) {
+        return value instanceof ValueNum;
     }
 
     @Override
-    public Val invoke(Parser parser, Val... arguments) throws ParserException {
-        return new ValNum(Math.sqrt(((ValNum) arguments[0]).getValue()));
+    public Value invoke(Parser parser, Value... arguments) throws ParserException {
+        return new ValueNum(Math.sqrt(((ValueNum) arguments[0]).getValue()));
     }
 }

@@ -1,4 +1,4 @@
-package passambler.val;
+package passambler.value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,16 +6,16 @@ import passambler.function.Function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.parser.Scope;
-import passambler.scanner.Token;
+import passambler.lexer.Token;
 
-public class ValBlock extends Val implements Function {
+public class ValueBlock extends Value implements Function {
     private Parser parser;
 
     private List<String> argumentNames;
 
     private List<Token> tokens = new ArrayList<>();
     
-    public ValBlock(Scope parentScope, List<String> argumentNames) {
+    public ValueBlock(Scope parentScope, List<String> argumentNames) {
         this.argumentNames = argumentNames;
 
         this.parser = new Parser(new Scope(parentScope));
@@ -39,40 +39,35 @@ public class ValBlock extends Val implements Function {
     }
 
     @Override
-    public boolean isArgumentValid(Val value, int argument) {
+    public boolean isArgumentValid(Value value, int argument) {
         return argument < argumentNames.size();
     }
 
     @Override
-    public Val invoke(Parser parser, Val... arguments) throws ParserException {
+    public Value invoke(Parser parser, Value... arguments) throws ParserException {
         for (int i = 0; i < argumentNames.size(); ++i) {
             if (i < arguments.length) {
                 this.parser.getScope().setSymbol(argumentNames.get(i), arguments[i]);
             }
         }
 
-        return this.parser.parseSemicolons(tokens);
+        return this.parser.parseLines(tokens);
     }
     
-    @Override
-    public String toString() {
-        return "block";
-    }
-    
-    public static ValBlock transform(Function function) {
-        return new ValBlock(new Scope(), null) {
+    public static ValueBlock transform(Function function) {
+        return new ValueBlock(new Scope(), null) {
             @Override
             public int getArguments() {
                 return function.getArguments();
             }
 
             @Override
-            public boolean isArgumentValid(Val value, int argument) {
+            public boolean isArgumentValid(Value value, int argument) {
                 return function.isArgumentValid(value, argument);
             }
 
             @Override
-            public Val invoke(Parser parser, Val... arguments) throws ParserException {
+            public Value invoke(Parser parser, Value... arguments) throws ParserException {
                 return function.invoke(parser, arguments);
             }
         };

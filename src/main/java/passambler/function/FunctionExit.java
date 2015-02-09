@@ -2,8 +2,8 @@ package passambler.function;
 
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
-import passambler.val.Val;
-import passambler.val.ValNum;
+import passambler.value.Value;
+import passambler.value.ValueNum;
 
 public class FunctionExit implements Function {
     @Override
@@ -12,13 +12,13 @@ public class FunctionExit implements Function {
     }
 
     @Override
-    public boolean isArgumentValid(Val value, int argument) {
-        return value instanceof ValNum;
+    public boolean isArgumentValid(Value value, int argument) {
+        return value instanceof ValueNum;
     }
 
     @Override
-    public Val invoke(Parser parser, Val... arguments) throws ParserException {
-        System.exit(((ValNum) arguments[0]).getValueAsInteger());
+    public Value invoke(Parser parser, Value... arguments) throws ParserException {
+        System.exit(((ValueNum) arguments[0]).getValueAsInteger());
 
         return null;
     }

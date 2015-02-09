@@ -1,4 +1,4 @@
-package passambler.val;
+package passambler.value;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,10 +6,10 @@ import passambler.function.Function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 
-public class ValDict extends Val {
-    protected Map<Val, Val> dict = new HashMap();
+public class ValueDict extends Value {
+    protected Map<Value, Value> dict = new HashMap();
     
-    public ValDict() {
+    public ValueDict() {
         setProperty("set", new Function() {
             @Override
             public int getArguments() {
@@ -17,12 +17,12 @@ public class ValDict extends Val {
             }
 
             @Override
-            public boolean isArgumentValid(Val value, int argument) {
+            public boolean isArgumentValid(Value value, int argument) {
                 return true;
             }
 
             @Override
-            public Val invoke(Parser parser, Val... arguments) throws ParserException {
+            public Value invoke(Parser parser, Value... arguments) throws ParserException {
                 set(arguments[0], arguments[1]);
                 
                 return null;
@@ -36,12 +36,12 @@ public class ValDict extends Val {
             }
 
             @Override
-            public boolean isArgumentValid(Val value, int argument) {
+            public boolean isArgumentValid(Value value, int argument) {
                 return true;
             }
 
             @Override
-            public Val invoke(Parser parser, Val... arguments) throws ParserException {
+            public Value invoke(Parser parser, Value... arguments) throws ParserException {
                 return get(arguments[0]);
             }
         });
@@ -53,13 +53,13 @@ public class ValDict extends Val {
             }
 
             @Override
-            public boolean isArgumentValid(Val value, int argument) {
+            public boolean isArgumentValid(Value value, int argument) {
                 return false;
             }
 
             @Override
-            public Val invoke(Parser parser, Val... arguments) throws ParserException {
-                ValList list = new ValList();
+            public Value invoke(Parser parser, Value... arguments) throws ParserException {
+                ValueList list = new ValueList();
                 
                 dict.keySet().stream().forEach((key) -> {
                     list.add(key);
@@ -76,13 +76,13 @@ public class ValDict extends Val {
             }
 
             @Override
-            public boolean isArgumentValid(Val value, int argument) {
+            public boolean isArgumentValid(Value value, int argument) {
                 return false;
             }
 
             @Override
-            public Val invoke(Parser parser, Val... arguments) throws ParserException {
-                ValList list = new ValList();
+            public Value invoke(Parser parser, Value... arguments) throws ParserException {
+                ValueList list = new ValueList();
                 
                 dict.values().stream().forEach((value) -> {
                     list.add(value);
@@ -99,16 +99,16 @@ public class ValDict extends Val {
             }
 
             @Override
-            public boolean isArgumentValid(Val value, int argument) {
+            public boolean isArgumentValid(Value value, int argument) {
                 return false;
             }
 
             @Override
-            public Val invoke(Parser parser, Val... arguments) throws ParserException {
-                ValList list = new ValList();
+            public Value invoke(Parser parser, Value... arguments) throws ParserException {
+                ValueList list = new ValueList();
                 
                 dict.entrySet().stream().forEach((set) -> {
-                    Val value = new Val();
+                    Value value = new Value();
                     
                     value.setProperty("key", set.getKey());
                     value.setProperty("value", set.getValue());
@@ -121,11 +121,11 @@ public class ValDict extends Val {
         });
     }
     
-    public void set(Val key, Val value) {
+    public void set(Value key, Value value) {
         dict.put(key, value);
     }
     
-    public Val get(Val key) {
+    public Value get(Value key) {
         return dict.get(key);
     }
     

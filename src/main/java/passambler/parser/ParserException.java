@@ -1,6 +1,6 @@
 package passambler.parser;
 
-import passambler.scanner.SourcePosition;
+import passambler.lexer.SourcePosition;
 
 public class ParserException extends Exception {
     public enum Type {

@@ -1,4 +1,4 @@
-package passambler.scanner;
+package passambler.lexer;
 
 import java.util.List;
 

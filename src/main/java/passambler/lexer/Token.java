@@ -1,4 +1,4 @@
-package passambler.scanner;
+package passambler.lexer;
 
 public class Token {
     public enum Type {
@@ -10,8 +10,7 @@ public class Token {
         DOT, DOT_DOUBLE,
         ASSIGN, ASSIGN_LOCKED,
         PLUS, MINUS, MULTIPLY, DIVIDE, POWER,
-        SEMICOL, COL,
-        PIPE,
+        COL, NEW_LINE,
         LBRACE, RBRACE,
         EQUAL, NEQUAL, GT, LT, GTE, LTE,
         AND, OR,

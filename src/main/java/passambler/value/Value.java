@@ -1,14 +1,14 @@
-package passambler.val;
+package passambler.value;
 
 import java.util.HashMap;
 import java.util.Map;
 import passambler.function.Function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
-import passambler.scanner.Token;
+import passambler.lexer.Token;
 
-public class Val {
-    public static ValNil nil = new ValNil();
+public class Value {
+    public static ValueNil nil = new ValueNil();
 
     protected boolean locked = false;
     
@@ -16,13 +16,13 @@ public class Val {
     
     protected Object value;
 
-    public Val() {
-        setProperty("str", () -> new ValStr(toString()));
+    public Value() {
+        setProperty("str", () -> new ValueStr(toString()));
         
-        if (this instanceof IndexAccess) {
-            IndexAccess indexAccess = (IndexAccess) this;
+        if (this instanceof IndexedValue) {
+            IndexedValue indexAccess = (IndexedValue) this;
             
-            setProperty("size", () -> new ValNum(indexAccess.getIndexCount()));
+            setProperty("size", () -> new ValueNum(indexAccess.getIndexCount()));
             
             setProperty("set", new Function() {
                 @Override
@@ -31,20 +31,20 @@ public class Val {
                 }
 
                 @Override
-                public boolean isArgumentValid(Val value, int argument) {
+                public boolean isArgumentValid(Value value, int argument) {
                     switch (argument) {
                         case 0:
-                            return value instanceof ValNum;
+                            return value instanceof ValueNum;
                         case 1:
-                            return value instanceof Val;
+                            return value instanceof Value;
                         default:
                             return false;
                     }
                 }
 
                 @Override
-                public Val invoke(Parser parser, Val... arguments) throws ParserException {
-                    int index = ((ValNum) arguments[0]).getValueAsInteger();
+                public Value invoke(Parser parser, Value... arguments) throws ParserException {
+                    int index = ((ValueNum) arguments[0]).getValueAsInteger();
 
                     if (index < 0 || index > indexAccess.getIndexCount() - 1) {
                         throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, index, indexAccess.getIndexCount());
@@ -52,7 +52,7 @@ public class Val {
 
                     indexAccess.setIndex(index, arguments[1]);
 
-                    return Val.this;
+                    return Value.this;
                 }
             });
         }
@@ -62,7 +62,7 @@ public class Val {
         return locked;
     }
     
-    public Val lock() {
+    public Value lock() {
         locked = true;
         
         return this;
@@ -80,15 +80,15 @@ public class Val {
         this.value = value;
     }
     
-    public Val getProperty(String key) {
-        return properties.get(key) instanceof DynamicProperty ? ((DynamicProperty) properties.get(key)).getValue() : (Val) properties.get(key);
+    public Value getProperty(String key) {
+        return properties.get(key) instanceof DynamicProperty ? ((DynamicProperty) properties.get(key)).getValue() : (Value) properties.get(key);
     }
     
     public boolean hasProperty(String key) {
         return getProperty(key) != null;
     }
     
-    public void setProperty(String key, Val value) {
+    public void setProperty(String key, Value value) {
         properties.put(key, value);
     }
     
@@ -97,15 +97,15 @@ public class Val {
     }
     
     public void setProperty(String key, Function function) {
-        properties.put(key, ValBlock.transform(function));
+        properties.put(key, ValueBlock.transform(function));
     }
 
-    public Val onOperator(Val value, Token.Type tokenType) {
+    public Value onOperator(Value value, Token.Type tokenType) {
         switch (tokenType) {
             case EQUAL:
-                return new ValBool(getValue().equals(value.getValue()));
+                return new ValueBool(getValue().equals(value.getValue()));
             case NEQUAL:
-                return new ValBool(!getValue().equals(value.getValue()));
+                return new ValueBool(!getValue().equals(value.getValue()));
         }
         
         return null;

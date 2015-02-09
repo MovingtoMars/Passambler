@@ -2,12 +2,12 @@ package passambler.function;
 
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
-import passambler.val.Val;
+import passambler.value.Value;
 
 public interface Function {
     public int getArguments();
 
-    public boolean isArgumentValid(Val value, int argument);
+    public boolean isArgumentValid(Value value, int argument);
 
-    public Val invoke(Parser parser, Val... arguments) throws ParserException;
+    public Value invoke(Parser parser, Value... arguments) throws ParserException;
 }
