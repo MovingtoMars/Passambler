@@ -43,9 +43,9 @@ public class Parser {
             String key = stream.current().getStringValue();
 
             stream.next();
-            
+
             boolean locked = stream.current().getType() == Token.Type.ASSIGN_LOCKED;
-            
+
             stream.next();
 
             Value value = Evaluator.evaluate(this, new TokenStream(stream.rest()));
@@ -53,35 +53,29 @@ public class Parser {
             if (locked) {
                 value.lock();
             }
-            
+
             if (value instanceof ValueBlock) {
                 scope.setSymbol(key, (Function) value);
             } else {
                 scope.setSymbol(key, value);
             }
-        } else if (isWhile(stream.copy()) || isFor(stream.copy())) {
-            boolean isWhile = isWhile(stream.copy());
-                        
+        } else if (isWhile(stream.copy())) {
             stream.next();
             
-            List<Token> tokens = new ArrayList<>();
-            
-            while (stream.hasNext()) {
-                if (stream.current().getType() == Token.Type.ARROW) {
-                    stream.next();
-                    
+             List<Token> tokens = new ArrayList<>();
+             
+             while (stream.hasNext()) {
+                if (stream.current().getType() == Token.Type.LBRACE) {
                     break;
                 }
-                
+
                 tokens.add(stream.current());
-                
+
                 stream.next();
             }
-            
-            if (stream.back().getType() != Token.Type.ARROW) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.back().getPosition(), "missing arrow token");
-            }
-            
+             
+            Value value = Evaluator.evaluate(this, new TokenStream(tokens));
+             
             Value callbackVal = Evaluator.evaluate(this, new TokenStream(stream.rest()));
 
             if (!(callbackVal instanceof ValueBlock)) {
@@ -90,47 +84,89 @@ public class Parser {
 
             ValueBlock callback = (ValueBlock) callbackVal;
             
-            Value val = Evaluator.evaluate(this, new TokenStream(tokens));
+            if (!(value instanceof ValueBool)) {
+                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "expecting bool");
+            }
             
-            if (isWhile) {
-                if (!(val instanceof ValueBool)) {
-                    throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "while loop requires a boolean");
-                }
+            while (((ValueBool) value).getValue()) {
+                callback.invoke(this, new Value[] {});
                 
-                if (callback.getArgumentNames().size() > 0) {
-                    throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "invalid argument count expected");
-                }
+                value = Evaluator.evaluate(this, new TokenStream(tokens));
+            }
+        } else if (isFor(stream.copy())) {
+            stream.next();
+
+            List<Token> tokens = new ArrayList<>();
+
+            List<String> arguments = new ArrayList<>();
+
+            if (stream.peek().getType() == Token.Type.IN) {
+                arguments.add(stream.current().getStringValue());
                 
-                while (((ValueBool) val).getValue() == true) {
-                    callback.invoke(this, new Value[] {});
-
-                    val = Evaluator.evaluate(this, new TokenStream(tokens));
+                stream.next();
+                stream.next();
+            } else if (stream.peek(3).getType() == Token.Type.IN) {
+                System.out.println(stream.current().getStringValue());
+                arguments.add(stream.current().getStringValue());
+                
+                stream.next();
+                stream.next();
+                
+                arguments.add(stream.current().getStringValue());
+                
+                stream.next();
+                stream.next();
+            }
+            
+            while (stream.hasNext()) {
+                if (stream.current().getType() == Token.Type.LBRACE) {
+                    break;
                 }
-            } else {
-                if (!(val instanceof IndexedValue)) {
-                    throw new ParserException(ParserException.Type.NOT_INDEXED, stream.current().getPosition());
-                }
 
-                IndexedValue indexAccess = (IndexedValue) val;
+                tokens.add(stream.current());
 
-                if (callback.getArgumentNames().size() > 2) {
-                    throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "invalid argument count expected");
-                }
+                stream.next();
+            }
 
-                for (int i = 0; i < indexAccess.getIndexCount(); ++i) {
-                    callback.invoke(this, new Value[] {
-                        indexAccess.getIndex(i),
-                        new ValueNum(i)
-                    });
-                }
+            if (stream.current().getType() != Token.Type.LBRACE) {
+                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.back().getPosition(), "missing brace");
+            }
+
+            Value callbackVal = Evaluator.evaluate(this, new TokenStream(stream.rest()));
+
+            if (!(callbackVal instanceof ValueBlock)) {
+                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "callback should be a block");
+            }
+
+            ValueBlock callback = (ValueBlock) callbackVal;
+
+            callback.getArgumentNames().addAll(arguments);
+
+            Value val = Evaluator.evaluate(this, new TokenStream(tokens));
+
+            if (!(val instanceof IndexedValue)) {
+                throw new ParserException(ParserException.Type.NOT_INDEXED, stream.current().getPosition());
+            }
+
+            IndexedValue indexAccess = (IndexedValue) val;
+
+            if (callback.getArgumentNames().size() > 2) {
+                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "invalid argument count expected");
+            }
+
+            for (int i = 0; i < indexAccess.getIndexCount(); ++i) {
+                callback.invoke(this, new Value[]{
+                    indexAccess.getIndex(i),
+                    new ValueNum(i)
+                });
             }
         } else if (isReturn(stream.copy())) {
             if (!stream.hasNext()) {
                 return null;
             }
-            
+
             stream.next();
-            
+
             return Evaluator.evaluate(this, new TokenStream(stream.rest()));
         } else {
             Value val = Evaluator.evaluate(this, stream);
@@ -139,7 +175,7 @@ public class Parser {
                 System.out.println("=> " + val);
             }
         }
-        
+
         return null;
     }
 
@@ -158,18 +194,18 @@ public class Parser {
             } else if (token.getType() == Token.Type.RBRACE) {
                 braces--;
             }
-            
+
             subTokens.add(token);
 
             if (braces == 0 && (token.getType() == Token.Type.NEW_LINE || token == tokens.get(tokens.size() - 1))) {
                 if (token.getType() == Token.Type.NEW_LINE) {
                     subTokens.remove(subTokens.size() - 1);
                 }
-                
+
                 Value result = parse(new TokenStream(subTokens));
 
                 subTokens.clear();
-                
+
                 if (result != null) {
                     return result;
                 }
@@ -179,22 +215,22 @@ public class Parser {
         if (!subTokens.isEmpty()) {
             throw new ParserException(ParserException.Type.UNEXPECTED_EOF);
         }
-        
+
         return Value.nil;
     }
 
     public boolean isReturn(TokenStream stream) {
         return stream.size() >= 1 && stream.first().getType() == Token.Type.RETURN;
     }
-    
+
     public boolean isFor(TokenStream stream) {
         return stream.size() >= 5 && stream.first().getType() == Token.Type.FOR;
     }
-    
+
     public boolean isWhile(TokenStream stream) {
         return stream.size() >= 5 && stream.first().getType() == Token.Type.WHILE;
     }
-    
+
     public boolean isAssignment(TokenStream stream) {
         return stream.size() >= 3 && stream.first().getType() == Token.Type.IDENTIFIER && (stream.peek().getType() == Token.Type.ASSIGN || stream.peek().getType() == Token.Type.ASSIGN_LOCKED);
     }

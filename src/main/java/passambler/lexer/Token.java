@@ -6,7 +6,7 @@ public class Token {
         LPAREN, RPAREN,
         LBRACKET, RBRACKET,
         COMMA,
-        WHILE, FOR, ARROW,
+        WHILE, FOR, IN,
         DOT, DOT_DOUBLE,
         ASSIGN, ASSIGN_LOCKED,
         PLUS, MINUS, MULTIPLY, DIVIDE, POWER,

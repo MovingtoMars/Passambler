@@ -21,9 +21,9 @@ public class Lexer {
         tokenMap.put("while", Token.Type.WHILE);
         tokenMap.put("for", Token.Type.FOR);
         
+        tokenMap.put("in", Token.Type.IN);
         tokenMap.put("|=", Token.Type.ASSIGN_LOCKED);
         tokenMap.put("==", Token.Type.EQUAL);
-        tokenMap.put("->", Token.Type.ARROW);
         tokenMap.put("!=", Token.Type.NEQUAL);
         tokenMap.put(">=", Token.Type.GTE);
         tokenMap.put("<=", Token.Type.LTE);
