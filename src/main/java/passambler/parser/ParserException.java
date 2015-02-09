@@ -6,7 +6,7 @@ public class ParserException extends Exception {
     public enum Type {
         BAD_SYNTAX("bad syntax: %s"),
         INDEX_OUT_OF_RANGE("index %d out of range (size: %d)"),
-        NOT_INDEXED("variable not indexed"),
+        NOT_INDEXED("value not indexed"),
         INVALID_ARGUMENT("invalid argument %d"),
         INVALID_ARGUMENT_COUNT("%d arguments expected, %d given"),
         UNDEFINED_FUNCTION("undefined function %s"),
