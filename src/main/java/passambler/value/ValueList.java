@@ -47,7 +47,7 @@ public class ValueList extends Value implements IndexedValue {
 
     public void add(Value value) {
         if (isLocked()) {
-            throw new RuntimeException("Value is locked");
+            throw new RuntimeException("value is locked");
         }
 
         list.add(value);

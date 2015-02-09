@@ -76,7 +76,7 @@ public class Value {
 
     public void setValue(Object value) {
         if (locked) {
-            throw new RuntimeException("Value is locked");
+            throw new RuntimeException("value is locked");
         }
         
         this.value = value;
