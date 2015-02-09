@@ -39,13 +39,19 @@ public class Parser {
     }
 
     public Value parse(TokenStream stream) throws ParserException {
-        if (isAssignment(stream.copy())) {
+        if (isAssignment(stream.copy())) {           
             String key = stream.current().getStringValue();
 
             stream.next();
-
-            boolean locked = stream.current().getType() == Token.Type.ASSIGN_LOCKED;
-
+            
+            boolean locked = false;
+            
+            if (stream.current().getType() == Token.Type.EXCL) {
+                locked = true;
+                
+                stream.next();
+            }
+            
             stream.next();
 
             Value value = Evaluator.evaluate(this, new TokenStream(stream.rest()));
@@ -231,6 +237,6 @@ public class Parser {
     }
 
     public boolean isAssignment(TokenStream stream) {
-        return stream.size() >= 3 && stream.first().getType() == Token.Type.IDENTIFIER && (stream.peek().getType() == Token.Type.ASSIGN || stream.peek().getType() == Token.Type.ASSIGN_LOCKED);
+        return stream.size() >= 3 && stream.current().getType() == Token.Type.IDENTIFIER && stream.peek(stream.peek().getType() == Token.Type.EXCL ? 2 : 1).getType() == Token.Type.ASSIGN;
     }
 }
