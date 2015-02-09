@@ -144,12 +144,12 @@ public class Evaluator {
             Function currentFunction = (Function) currentValue;
 
             if (currentFunction.getArguments() != -1 && currentFunction.getArguments() != arguments.size()) {
-                throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.current().getPosition(), currentFunction, currentFunction.getArguments(), arguments.size());
+                throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.current().getPosition(), currentFunction.getArguments(), arguments.size());
             }
 
             for (int argument = 0; argument < arguments.size(); ++argument) {
                 if (!currentFunction.isArgumentValid(arguments.get(argument), argument)) {
-                    throw new ParserException(ParserException.Type.INVALID_ARGUMENT, stream.current().getPosition(), argument, currentFunction);
+                    throw new ParserException(ParserException.Type.INVALID_ARGUMENT, stream.current().getPosition(), argument);
                 }
             }
 
