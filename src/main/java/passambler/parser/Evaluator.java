@@ -248,10 +248,10 @@ public class Evaluator {
                     throw new ParserException(ParserException.Type.NOT_INDEXED, stream.current().getPosition());
                 }
 
-                IndexedValue indexAccess = (IndexedValue) currentValue;
+                IndexedValue indexedValue = (IndexedValue) currentValue;
 
                 for (int current = min; current <= max; ++current) {
-                    list.add(indexAccess.getIndex(current));
+                    list.add(indexedValue.getIndex(current));
                 }
             }
 
@@ -263,7 +263,7 @@ public class Evaluator {
                 throw new ParserException(ParserException.Type.NOT_INDEXED, stream.current().getPosition());
             }
 
-            IndexedValue indexAccess = (IndexedValue) currentValue;
+            IndexedValue indexedValue = (IndexedValue) currentValue;
 
             Value indexVal = evaluate(parser, new TokenStream(tokens));
 
@@ -273,11 +273,11 @@ public class Evaluator {
 
             int index = ((ValueNum) indexVal).getValueAsInteger();
 
-            if (index < 0 || index > indexAccess.getIndexCount() - 1) {
-                throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, stream.current().getPosition(), index, indexAccess.getIndexCount());
+            if (index < 0 || index > indexedValue.getIndexCount() - 1) {
+                throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, stream.current().getPosition(), index, indexedValue.getIndexCount());
             }
 
-            return indexAccess.getIndex(index);
+            return indexedValue.getIndex(index);
         }
     }
 

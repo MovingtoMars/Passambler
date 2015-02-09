@@ -22,9 +22,9 @@ public class Value {
         });
         
         if (this instanceof IndexedValue) {
-            IndexedValue indexAccess = (IndexedValue) this;
+            IndexedValue indexedValue = (IndexedValue) this;
             
-            setProperty("size", () -> new ValueNum(indexAccess.getIndexCount()));
+            setProperty("size", () -> new ValueNum(indexedValue.getIndexCount()));
             
             setProperty("set", new Function() {
                 @Override
@@ -48,11 +48,11 @@ public class Value {
                 public Value invoke(Parser parser, Value... arguments) throws ParserException {
                     int index = ((ValueNum) arguments[0]).getValueAsInteger();
 
-                    if (index < 0 || index > indexAccess.getIndexCount() - 1) {
-                        throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, index, indexAccess.getIndexCount());
+                    if (index < 0 || index > indexedValue.getIndexCount() - 1) {
+                        throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, index, indexedValue.getIndexCount());
                     }
 
-                    indexAccess.setIndex(index, arguments[1]);
+                    indexedValue.setIndex(index, arguments[1]);
 
                     return Value.this;
                 }

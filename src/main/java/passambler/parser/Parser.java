@@ -148,15 +148,15 @@ public class Parser {
                 throw new ParserException(ParserException.Type.NOT_INDEXED, stream.current().getPosition());
             }
 
-            IndexedValue indexAccess = (IndexedValue) val;
+            IndexedValue indexedValue = (IndexedValue) val;
 
             if (callback.getArgumentNames().size() > 2) {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "invalid argument count expected");
             }
 
-            for (int i = 0; i < indexAccess.getIndexCount(); ++i) {
+            for (int i = 0; i < indexedValue.getIndexCount(); ++i) {
                 callback.invoke(this, new Value[]{
-                    indexAccess.getIndex(i),
+                    indexedValue.getIndex(i),
                     new ValueNum(i)
                 });
             }
