@@ -160,7 +160,7 @@ public class Parser {
             }
 
             for (int i = 0; i < indexedValue.getIndexCount(); ++i) {
-                callback.invoke(this, new Value[]{
+                callback.invoke(this, new Value[] {
                     indexedValue.getIndex(i),
                     new ValueNum(i)
                 });
