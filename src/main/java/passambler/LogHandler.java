@@ -33,6 +33,10 @@ public class LogHandler extends Handler {
         } else {
             output.println(String.format("%s", record.getMessage()));
         }
+        
+        if (record.getLevel() == Level.SEVERE) {
+            System.exit(-1);
+        }
     }
 
     @Override
