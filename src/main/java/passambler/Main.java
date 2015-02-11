@@ -94,7 +94,7 @@ public class Main {
                         LOGGER.log(Level.WARNING, "Runtime exception", e);
                     }
 
-                    if (result != null) {
+                    if (result != null && result != Value.VALUE_NIL) {
                         System.out.println(result);
                     }
                 }
