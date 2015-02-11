@@ -8,7 +8,7 @@ public class Token {
         COMMA,
         WHILE, FOR, IN,
         DOT, DOT_DOUBLE,
-        ASSIGN, EXCL,
+        ASSIGN,
         PLUS, MINUS, MULTIPLY, DIVIDE, POWER,
         COL, NEW_LINE,
         LBRACE, RBRACE,

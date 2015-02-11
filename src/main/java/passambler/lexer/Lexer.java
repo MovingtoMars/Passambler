@@ -47,7 +47,6 @@ public class Lexer {
         tokenMap.put("/", Token.Type.DIVIDE);
         tokenMap.put(":", Token.Type.COL);
         tokenMap.put("^", Token.Type.POWER);
-        tokenMap.put("!", Token.Type.EXCL);
     }
 
     public Token createToken(Token.Type type, String value) {

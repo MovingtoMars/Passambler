@@ -32,23 +32,10 @@ public class Parser {
         if (isAssignment(stream.copy())) {           
             String key = stream.current().getValue();
 
-            stream.next();
-            
-            boolean locked = false;
-            
-            if (stream.current().getType() == Token.Type.EXCL) {
-                locked = true;
-                
-                stream.next();
-            }
-            
+            stream.next();            
             stream.next();
 
             Value value = Evaluator.evaluate(this, new TokenStream(stream.rest()));
-
-            if (locked) {
-                value.lock();
-            }
 
             if (value instanceof ValueBlock) {
                 scope.setSymbol(key, (Function) value);
@@ -223,6 +210,6 @@ public class Parser {
     }
 
     public boolean isAssignment(TokenStream stream) {
-        return stream.size() >= 3 && stream.current().getType() == Token.Type.IDENTIFIER && stream.peek(stream.peek().getType() == Token.Type.EXCL ? 2 : 1).getType() == Token.Type.ASSIGN;
+        return stream.size() >= 3 && stream.current().getType() == Token.Type.IDENTIFIER && stream.peek().getType() == Token.Type.ASSIGN;
     }
 }
