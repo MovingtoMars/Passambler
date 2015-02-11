@@ -5,6 +5,6 @@ build.xml
 nb-configuration.xml
 nbactions.xml
 Thumbs.db
-test
+/test
 TODO.txt
 /target/
