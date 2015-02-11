@@ -298,7 +298,7 @@ public class Evaluator {
             throw new ParserException(ParserException.Type.UNDEFINED_PROPERTY, stream.current().getPosition(), propertyName);
         }
 
-        return currentValue.getProperty(propertyName);
+        return currentValue.getProperty(propertyName).getValue();
     }
 
     public static Value parseSymbol(Parser parser, TokenStream stream) throws ParserException {

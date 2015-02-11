@@ -12,19 +12,27 @@ public class Value {
 
     protected boolean locked = false;
     
-    protected Map<String, Object> properties = new HashMap();
+    protected Map<String, Property> properties = new HashMap();
     
     protected Object value;
 
     public Value() {
-        setProperty("str", () -> {
-            return new ValueStr(toString());
+        setProperty("str", new Property() {
+            @Override
+            public Value getValue() {
+                return new ValueStr(toString());
+            }
         });
         
         if (this instanceof IndexedValue) {
             IndexedValue indexedValue = (IndexedValue) this;
             
-            setProperty("size", () -> new ValueNum(indexedValue.getIndexCount()));
+            setProperty("size", new Property() {
+                @Override
+                public Value getValue() {
+                    return new ValueNum(indexedValue.getIndexCount());
+                }
+            });
             
             setProperty("set", new Function() {
                 @Override
@@ -82,8 +90,8 @@ public class Value {
         this.value = value;
     }
     
-    public Value getProperty(String key) {
-        return properties.get(key) instanceof DynamicProperty ? ((DynamicProperty) properties.get(key)).getValue() : (Value) properties.get(key);
+    public Property getProperty(String key) {
+        return properties.get(key);
     }
     
     public boolean hasProperty(String key) {
@@ -91,15 +99,15 @@ public class Value {
     }
     
     public void setProperty(String key, Value value) {
-        properties.put(key, value);
-    }
-    
-    public void setProperty(String key, DynamicProperty dynamicProperty) {
-        properties.put(key, dynamicProperty);
+        properties.put(key, new Property(value));
     }
     
     public void setProperty(String key, Function function) {
-        properties.put(key, ValueBlock.transform(function));
+        properties.put(key, new Property(ValueBlock.transform(function)));
+    }
+    
+    public void setProperty(String key, Property property) {
+        properties.put(key, property);
     }
 
     public Value onOperator(Value value, Token.Type tokenType) {
