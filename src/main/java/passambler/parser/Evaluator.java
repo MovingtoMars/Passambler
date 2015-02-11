@@ -97,24 +97,28 @@ public class Evaluator {
     public static Value parseParen(Parser parser, TokenStream stream, Value currentValue) throws ParserException {
         List<Token> tokens = new ArrayList<>();
 
-        int paren = 1;
-
         stream.next();
+        
+        int paren = 1;
 
         while (stream.hasNext()) {
             if (stream.current().getType() == Token.Type.LPAREN) {
                 paren++;
             } else if (stream.current().getType() == Token.Type.RPAREN) {
                 paren--;
+                
+                if (paren == 0) {
+                    break;
+                }
             }
-
-            if (paren == 0) {
-                break;
-            }
-
+            
             tokens.add(stream.current());
-
+            
             stream.next();
+        }
+        
+        if (paren != 0) {
+            throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "unmatching parens");
         }
 
         if (currentValue instanceof ValueBlock) {
@@ -144,12 +148,12 @@ public class Evaluator {
             Function currentFunction = (Function) currentValue;
 
             if (currentFunction.getArguments() != -1 && currentFunction.getArguments() != arguments.size()) {
-                throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.current().getPosition(), currentFunction.getArguments(), arguments.size());
+                throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), currentFunction.getArguments(), arguments.size());
             }
 
             for (int argument = 0; argument < arguments.size(); ++argument) {
                 if (!currentFunction.isArgumentValid(arguments.get(argument), argument)) {
-                    throw new ParserException(ParserException.Type.INVALID_ARGUMENT, stream.current().getPosition(), argument);
+                    throw new ParserException(ParserException.Type.INVALID_ARGUMENT, stream.first().getPosition(), argument + 1);
                 }
             }
 
@@ -354,12 +358,21 @@ public class Evaluator {
                     TokenStream element = new TokenStream(tokens);
 
                     if (element.current().getType() != Token.Type.IDENTIFIER) {
-                        throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "identifier expected");
+                        throw new ParserException(ParserException.Type.BAD_SYNTAX, element.current().getPosition(), "identifier expected");
                     }
 
                     String key = element.current().getValue();
-
+                    
+                    if (!element.hasNext() || (element.hasNext() && element.peek().getType() != Token.Type.COL)) {
+                        throw new ParserException(ParserException.Type.BAD_SYNTAX, element.current().getPosition(), "colon missing");
+                    }
+                    
                     element.next();
+                    
+                    if (!element.hasNext()) {
+                        throw new ParserException(ParserException.Type.BAD_SYNTAX, element.current().getPosition(), "value of property missing");    
+                    }
+                    
                     element.next();
 
                     value.set(new ValueStr(key), evaluate(parser, new TokenStream(element.rest())));

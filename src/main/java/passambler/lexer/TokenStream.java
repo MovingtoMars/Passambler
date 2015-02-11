@@ -29,7 +29,7 @@ public class TokenStream {
     }
 
     public boolean hasNext() {
-        return position + 1 != tokens.size() + 1;
+        return position + 1 <= tokens.size();
     }
 
     public void next() {
