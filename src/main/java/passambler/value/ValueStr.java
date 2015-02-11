@@ -142,7 +142,7 @@ public class ValueStr extends Value implements IndexedValue {
 
     @Override
     public Value onOperator(Value value, Token.Type tokenType) {
-        if (value instanceof ValueStr && tokenType == Token.Type.PLUS) {
+        if (value instanceof ValueStr && (tokenType == Token.Type.PLUS || tokenType == Token.Type.ASSIGN_PLUS)) {
             return new ValueStr(getValue() + value.toString());
         }
 
