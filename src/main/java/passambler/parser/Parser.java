@@ -14,8 +14,6 @@ import passambler.value.ValueBool;
 import passambler.value.ValueNum;
 
 public class Parser {
-    private boolean interactiveMode = false;
-
     private Scope scope;
 
     public Parser() {
@@ -28,14 +26,6 @@ public class Parser {
 
     public Scope getScope() {
         return scope;
-    }
-
-    public void setInInteractiveMode(boolean mode) {
-        interactiveMode = mode;
-    }
-
-    public boolean isInInteractiveMode() {
-        return interactiveMode;
     }
 
     public Value parse(TokenStream stream) throws ParserException {
@@ -174,11 +164,7 @@ public class Parser {
 
             return Evaluator.evaluate(this, new TokenStream(stream.rest()));
         } else {
-            Value value = Evaluator.evaluate(this, stream);
-
-            if (isInInteractiveMode() && value != null) {
-                System.out.println(value);
-            }
+            return Evaluator.evaluate(this, stream);
         }
 
         return null;

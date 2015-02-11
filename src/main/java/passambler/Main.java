@@ -15,6 +15,7 @@ import passambler.parser.ParserException;
 import passambler.lexer.Lexer;
 import passambler.lexer.LexerException;
 import passambler.lexer.Token;
+import passambler.value.Value;
 
 public class Main {
     public static final String VERSION = "0.1.0-SNAPSHOT";
@@ -66,8 +67,6 @@ public class Main {
                 
                 parser.getScope().addStd();
 
-                parser.setInInteractiveMode(true);
-
                 Scanner input = new Scanner(System.in);
 
                 while (true) {
@@ -75,7 +74,11 @@ public class Main {
                     
                     String line = input.nextLine();
 
-                    parser.parseLexer(new Lexer(line));
+                    Value result = parser.parseLexer(new Lexer(line));
+                    
+                    if (result != null) {
+                        System.out.println(result);
+                    }
                 }
             }
         } catch (LexerException e) {
