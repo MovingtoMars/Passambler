@@ -125,16 +125,22 @@ public class Evaluator {
             List<Token> argumentTokens = new ArrayList<>();
             List<Value> arguments = new ArrayList<>();
 
+            int brackets = 0;
+            
             for (Token token : tokens) {
                 if (token.getType() == Token.Type.LPAREN) {
                     paren++;
                 } else if (token.getType() == Token.Type.RPAREN) {
                     paren--;
+                } else if (token.getType() == Token.Type.LBRACKET) {
+                    brackets++;
+                } else if (token.getType() == Token.Type.RBRACKET) {
+                    brackets--;
                 }
 
                 argumentTokens.add(token);
 
-                if (paren == 0 && (token.getType() == Token.Type.COMMA || tokens.indexOf(token) == tokens.size() - 1)) {
+                if (paren == 0 && brackets == 0 && (token.getType() == Token.Type.COMMA || tokens.indexOf(token) == tokens.size() - 1)) {
                     if (token.getType() == Token.Type.COMMA) {
                         argumentTokens.remove(argumentTokens.size() - 1);
                     }
