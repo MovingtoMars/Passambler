@@ -85,7 +85,15 @@ public class Main {
                     Value result = null;
 
                     try {
-                        result = parser.parseLexer(new Lexer(input.nextLine()));
+                        Lexer lexer = new Lexer(input.nextLine());
+                        
+                        if (options.has("t")) {
+                            for (Token token : lexer.scan()) {
+                                LOGGER.log(Level.INFO, token.toString());
+                            }
+                        } else {
+                            result = parser.parseLexer(lexer);
+                        }
                     } catch (LexerException e) {
                         LOGGER.log(Level.WARNING, "Lexer exception", e);
                     } catch (ParserException e) {
