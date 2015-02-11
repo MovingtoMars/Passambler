@@ -8,7 +8,7 @@ public class Token {
         COMMA,
         WHILE, FOR, IN,
         DOT, DOT_DOUBLE,
-        ASSIGN,
+        ASSIGN, ASSIGN_PLUS, ASSIGN_MINUS, ASSIGN_MULTIPLY, ASSIGN_DIVIDE, ASSIGN_POWER,
         PLUS, MINUS, MULTIPLY, DIVIDE, POWER,
         COL, NEW_LINE,
         LBRACE, RBRACE,
@@ -18,6 +18,10 @@ public class Token {
         
         public boolean isOperator() {
             return this == PLUS || this == MINUS || this == MULTIPLY || this == DIVIDE || this == POWER || this == GT || this == LT || this == GTE || this == LTE || this == EQUAL || this == NEQUAL || this == AND || this == OR;
+        }
+        
+        public boolean isAssignmentOperator() {
+            return this == ASSIGN || this == ASSIGN_PLUS || this == ASSIGN_MINUS ||  this == ASSIGN_MULTIPLY ||  this == ASSIGN_DIVIDE ||  this == ASSIGN_POWER;
         }
     }
 

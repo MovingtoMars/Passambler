@@ -25,14 +25,19 @@ public class ValueNum extends Value {
         if (value instanceof ValueNum) {
             switch (tokenType) {
                 case PLUS:
+                case ASSIGN_PLUS:
                     return new ValueNum(getValue() + ((ValueNum) value).getValue());
                 case MINUS:
+                case ASSIGN_MINUS:
                     return new ValueNum(getValue() - Math.abs(((ValueNum) value).getValue()));
                 case MULTIPLY:
+                case ASSIGN_MULTIPLY:
                     return new ValueNum(getValue() * ((ValueNum) value).getValue());
                 case DIVIDE:
+                case ASSIGN_DIVIDE:
                     return new ValueNum(getValue() / ((ValueNum) value).getValue());
                 case POWER:
+                case ASSIGN_POWER:
                     return new ValueNum(Math.pow(getValue(), ((ValueNum) value).getValue()));
                 case GT:
                     return new ValueBool(getValue() > ((ValueNum) value).getValue());

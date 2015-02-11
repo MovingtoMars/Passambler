@@ -118,6 +118,8 @@ public class Value {
                 return new ValueBool(getValue().equals(value.getValue()));
             case NEQUAL:
                 return new ValueBool(!getValue().equals(value.getValue()));
+            case ASSIGN:
+                return value;
         }
         
         return null;

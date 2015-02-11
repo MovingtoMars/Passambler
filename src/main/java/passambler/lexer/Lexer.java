@@ -29,6 +29,11 @@ public class Lexer {
         tokenMap.put("&&", Token.Type.AND);
         tokenMap.put("||", Token.Type.OR);
         tokenMap.put("..", Token.Type.DOT_DOUBLE);
+        tokenMap.put("+=", Token.Type.ASSIGN_PLUS);
+        tokenMap.put("-=", Token.Type.ASSIGN_MINUS);
+        tokenMap.put("*=", Token.Type.ASSIGN_MULTIPLY);
+        tokenMap.put("/=", Token.Type.ASSIGN_DIVIDE);
+        tokenMap.put("^=", Token.Type.ASSIGN_POWER);
         
         tokenMap.put("=", Token.Type.ASSIGN);
         tokenMap.put(">", Token.Type.GT);

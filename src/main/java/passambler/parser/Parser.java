@@ -32,11 +32,24 @@ public class Parser {
         if (isAssignment(stream.copy())) {           
             String key = stream.current().getValue();
 
-            stream.next();            
+            stream.next();
+            
+            Token operatorToken = stream.current();
+            
             stream.next();
 
-            Value value = Evaluator.evaluate(this, new TokenStream(stream.rest()));
-
+            Value baseValue = new Value();
+            
+            if (scope.hasSymbol(key)) {
+                baseValue = scope.getSymbol(key);
+            }
+            
+            Value value = baseValue.onOperator(Evaluator.evaluate(this, new TokenStream(stream.rest())), operatorToken.getType());
+            
+            if (value == null) {
+                throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, operatorToken.getPosition(), operatorToken.getType());
+            }
+            
             if (value instanceof ValueBlock) {
                 scope.setSymbol(key, (Function) value);
             } else {
@@ -45,9 +58,9 @@ public class Parser {
         } else if (isWhile(stream.copy())) {
             stream.next();
             
-             List<Token> tokens = new ArrayList<>();
+            List<Token> tokens = new ArrayList<>();
              
-             while (stream.hasNext()) {
+            while (stream.hasNext()) {
                 if (stream.current().getType() == Token.Type.LBRACE) {
                     break;
                 }
@@ -210,6 +223,6 @@ public class Parser {
     }
 
     public boolean isAssignment(TokenStream stream) {
-        return stream.size() >= 3 && stream.current().getType() == Token.Type.IDENTIFIER && stream.peek().getType() == Token.Type.ASSIGN;
+        return stream.size() >= 3 && stream.current().getType() == Token.Type.IDENTIFIER && stream.peek().getType().isAssignmentOperator();
     }
 }
