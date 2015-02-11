@@ -221,7 +221,7 @@ public class Parser {
             throw new ParserException(ParserException.Type.UNEXPECTED_EOF);
         }
 
-        return Value.nil;
+        return Value.VALUE_NIL;
     }
 
     public boolean isReturn(TokenStream stream) {

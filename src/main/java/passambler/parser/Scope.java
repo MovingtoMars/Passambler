@@ -26,17 +26,15 @@ public class Scope {
     }
     
     public void addStd() {
-        setSymbol("exit", new FunctionExit());
-        setSymbol("sqrt", new FunctionSqrt());
-        setSymbol("random", new FunctionRandom());
-        setSymbol("write", new FunctionWrite(false));
-        setSymbol("writeln", new FunctionWrite(true));
-        setSymbol("nil", Value.nil.lock());
-        setSymbol("pi", new ValueNum(Math.PI).lock());
-        setSymbol("max_num", new ValueNum(Integer.MAX_VALUE).lock());
-        setSymbol("min_num", new ValueNum(Integer.MIN_VALUE).lock());
-        setSymbol("true", new ValueBool(true).lock());
-        setSymbol("false", new ValueBool(false).lock());
+        setSymbol("exit", Function.FUNCTION_EXIT);
+        setSymbol("sqrt", Function.FUNCTION_SQRT);
+        setSymbol("random", Function.FUNCTION_RANDOM);
+        setSymbol("write", Function.FUNCTION_WRITE);
+        setSymbol("writeln", Function.FUNCTION_WRITELN);
+        setSymbol("nil", Value.VALUE_NIL);
+        setSymbol("pi", Value.VALUE_PI);
+        setSymbol("true", Value.VALUE_TRUE);
+        setSymbol("false", Value.VALUE_FALSE);
     }
 
     public void setSymbol(String key, Value value) {

@@ -8,8 +8,11 @@ import passambler.parser.ParserException;
 import passambler.lexer.Token;
 
 public class Value {
-    public static ValueNil nil = new ValueNil();
-
+    public static ValueNil VALUE_NIL = (ValueNil) new ValueNil().lock();
+    public static ValueBool VALUE_TRUE = (ValueBool) new ValueBool(true).lock();
+    public static ValueBool VALUE_FALSE = (ValueBool) new ValueBool(false).lock();
+    public static ValueNum VALUE_PI = (ValueNum) new ValueNum(Math.PI).lock();
+    
     protected boolean locked = false;
     
     protected Map<String, Property> properties = new HashMap();
@@ -122,6 +125,6 @@ public class Value {
 
     @Override
     public String toString() {
-        return value == null ? Value.nil.toString() : value.toString();
+        return value == null ? Value.VALUE_NIL.toString() : value.toString();
     }
 }
