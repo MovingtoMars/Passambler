@@ -20,7 +20,7 @@ public class Value {
         setProperty("str", new Property() {
             @Override
             public Value getValue() {
-                return new ValueStr(toString());
+                return new ValueStr(Value.this.toString());
             }
         });
         
@@ -42,14 +42,13 @@ public class Value {
 
                 @Override
                 public boolean isArgumentValid(Value value, int argument) {
-                    switch (argument) {
-                        case 0:
-                            return value instanceof ValueNum;
-                        case 1:
-                            return value instanceof Value;
-                        default:
-                            return false;
+                    if (argument == 0) {
+                        return value instanceof ValueNum;
+                    } else if (argument == 1) {
+                        return true;
                     }
+                    
+                    return false;
                 }
 
                 @Override
