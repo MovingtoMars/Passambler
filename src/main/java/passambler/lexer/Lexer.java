@@ -34,6 +34,7 @@ public class Lexer {
         tokenMap.put("*=", Token.Type.ASSIGN_MULTIPLY);
         tokenMap.put("/=", Token.Type.ASSIGN_DIVIDE);
         tokenMap.put("^=", Token.Type.ASSIGN_POWER);
+        tokenMap.put("%=", Token.Type.ASSIGN_MODULO);
         
         tokenMap.put("=", Token.Type.ASSIGN);
         tokenMap.put(">", Token.Type.GT);
@@ -52,6 +53,7 @@ public class Lexer {
         tokenMap.put("/", Token.Type.DIVIDE);
         tokenMap.put(":", Token.Type.COL);
         tokenMap.put("^", Token.Type.POWER);
+        tokenMap.put("%", Token.Type.MODULO);
     }
 
     public Token createToken(Token.Type type, String value) {
