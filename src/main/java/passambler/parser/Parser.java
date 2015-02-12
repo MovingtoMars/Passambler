@@ -97,15 +97,24 @@ public class Parser {
             List<String> arguments = new ArrayList<>();
 
             if (stream.peek().getType() == Token.Type.IN) {
+                stream.match(Token.Type.IDENTIFIER);
+                
                 arguments.add(stream.current().getValue());
                 
                 stream.next();
                 stream.next();
             } else if (stream.peek(3).getType() == Token.Type.IN) {
+                stream.match(Token.Type.IDENTIFIER);
+                
                 arguments.add(stream.current().getValue());
                 
                 stream.next();
+                
+                stream.match(Token.Type.COMMA);
+                
                 stream.next();
+                
+                stream.match(Token.Type.IDENTIFIER);
                 
                 arguments.add(stream.current().getValue());
                 
@@ -122,10 +131,8 @@ public class Parser {
 
                 stream.next();
             }
-
-            if (stream.current().getType() != Token.Type.LBRACE) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.back().getPosition(), "missing brace");
-            }
+            
+            stream.match(Token.Type.LBRACE);
 
             Value callbackValue = Evaluator.evaluate(this, new TokenStream(stream.rest()));
 

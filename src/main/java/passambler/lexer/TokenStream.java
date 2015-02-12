@@ -1,6 +1,7 @@
 package passambler.lexer;
 
 import java.util.List;
+import passambler.parser.ParserException;
 
 public class TokenStream {
     private int position;
@@ -70,5 +71,11 @@ public class TokenStream {
 
     public TokenStream copyAtCurrentPosition() {
         return new TokenStream(tokens, position);
+    }
+    
+    public void match(Token.Type type) throws ParserException {
+        if (current().getType() != type) {
+            throw new ParserException(ParserException.Type.INVALID_TOKEN, current().getPosition(), type, current().getType());
+        }
     }
 }

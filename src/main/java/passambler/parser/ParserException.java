@@ -9,6 +9,7 @@ public class ParserException extends Exception {
         NOT_INDEXED("value not indexed"),
         INVALID_ARGUMENT("invalid argument %d"),
         INVALID_ARGUMENT_COUNT("%d arguments expected, %d given"),
+        INVALID_TOKEN("token %s expected, %s found"),
         UNDEFINED_FUNCTION("undefined function %s"),
         UNDEFINED_VARIABLE("undefined variable %s"),
         UNDEFINED_PROPERTY("undefined property %s"),

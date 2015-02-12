@@ -297,6 +297,8 @@ public class Evaluator {
 
     public static Value parseProperty(Parser parser, TokenStream stream, Value currentValue) throws ParserException {
         stream.next();
+        
+        stream.match(Token.Type.IDENTIFIER);
 
         String propertyName = stream.current().getValue();
 
@@ -373,17 +375,13 @@ public class Evaluator {
 
                     TokenStream element = new TokenStream(tokens);
 
-                    if (element.current().getType() != Token.Type.IDENTIFIER) {
-                        throw new ParserException(ParserException.Type.BAD_SYNTAX, element.current().getPosition(), "identifier expected");
-                    }
+                    element.match(Token.Type.IDENTIFIER);
 
                     String key = element.current().getValue();
                     
-                    if (!element.hasNext() || (element.hasNext() && element.peek().getType() != Token.Type.COL)) {
-                        throw new ParserException(ParserException.Type.BAD_SYNTAX, element.current().getPosition(), "colon missing");
-                    }
-                    
                     element.next();
+                    
+                    element.match(Token.Type.COL);
                     
                     if (!element.hasNext()) {
                         throw new ParserException(ParserException.Type.BAD_SYNTAX, element.current().getPosition(), "value of property missing");    
