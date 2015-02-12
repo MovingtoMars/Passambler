@@ -3,6 +3,7 @@ package passambler.value;
 import java.util.HashMap;
 import java.util.Map;
 import passambler.function.Function;
+import passambler.function.FunctionSimple;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.lexer.Token;
@@ -65,6 +66,27 @@ public class Value {
                     indexedValue.setIndex(index, arguments[1]);
 
                     return Value.this;
+                }
+            });
+            
+            setProperty("empty", new FunctionSimple() {
+                @Override
+                public Value getValue() {
+                    return new ValueBool(indexedValue.getIndexCount() == 0);
+                }
+            });
+            
+            setProperty("first", new Property() {
+                @Override
+                public Value getValue() {
+                    return indexedValue.getIndex(0);
+                }
+            });
+            
+            setProperty("last", new Property() {
+                @Override
+                public Value getValue() {
+                    return indexedValue.getIndex(indexedValue.getIndexCount() - 1);
                 }
             });
         }
