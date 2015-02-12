@@ -313,17 +313,27 @@ public class Evaluator {
         if (token.getType() == Token.Type.STRING) {
             return new ValueStr(token.getValue());
         } else if (token.getType() == Token.Type.NUMBER) {
-            double number = Double.valueOf(token.getValue());
+            StringBuilder number = new StringBuilder();
 
-            if (stream.current() != stream.first() && stream.back().getType() == Token.Type.MINUS) {
-                number *= -1;
-            }
-
-            if (stream.getPosition() > 0 && stream.back().getType() == Token.Type.DIVIDE && token.getValueAsInteger() == 0) {
+            if (stream.back() != null && stream.back().getType() == Token.Type.DIVIDE && token.getValueAsInteger() == 0) {
                 throw new ParserException(ParserException.Type.ZERO_DIVISION, token.getPosition());
             }
+            
+            if (stream.current() != stream.first() && stream.back().getType() == Token.Type.MINUS) {
+                number.append("-");
+            }
+            
+            number.append(token.getValue());
+            
+            if (stream.peek() != null && stream.peek().getType() == Token.Type.DOT && stream.peek(2) != null && stream.peek(2).getType() == Token.Type.NUMBER) {
+                stream.next();
+                stream.next();
+                
+                number.append(".");
+                number.append(stream.current().getValue());
+            }
 
-            return new ValueNum(number);
+            return new ValueNum(Double.valueOf(number.toString()));
         } else if (token.getType() == Token.Type.IDENTIFIER) {
             if (!parser.getScope().hasSymbol(token.getValue())) {
                 throw new ParserException(stream.peek() != null && stream.peek().getType() == Token.Type.LPAREN ? ParserException.Type.UNDEFINED_FUNCTION : ParserException.Type.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());
