@@ -14,60 +14,39 @@ public interface Function {
     public static FunctionExit FUNCTION_EXIT = new FunctionExit();
     public static FunctionRandom FUNCTION_RANDOM = new FunctionRandom();
     public static FunctionSqrt FUNCTION_SQRT = new FunctionSqrt();
-    
-    public static FunctionBasicMath FUNCTION_ABS = new FunctionBasicMath() {
+
+    public static FunctionMath FUNCTION_SIN = new FunctionMath() {
         @Override
-        public double getValue(double input) {
-            return Math.abs(input);
+        public double getValue(double value) {
+            return Math.sin(value);
         }
     };
     
-    public static FunctionBasicMath FUNCTION_SIN = new FunctionBasicMath() {
+    public static FunctionMath FUNCTION_COS = new FunctionMath() {
         @Override
-        public double getValue(double input) {
-            return Math.sin(input);
+        public double getValue(double value) {
+            return Math.cos(value);
         }
     };
     
-    public static FunctionBasicMath FUNCTION_COS = new FunctionBasicMath() {
+    public static FunctionMath FUNCTION_TAN = new FunctionMath() {
         @Override
-        public double getValue(double input) {
-            return Math.cos(input);
+        public double getValue(double value) {
+            return Math.tan(value);
         }
     };
     
-    public static FunctionBasicMath FUNCTION_TAN = new FunctionBasicMath() {
+    public static FunctionMath FUNCTION_LOG = new FunctionMath() {
         @Override
-        public double getValue(double input) {
-            return Math.tan(input);
+        public double getValue(double value) {
+            return Math.log(value);
         }
     };
     
-    public static FunctionBasicMath FUNCTION_FLOOR = new FunctionBasicMath() {
+    public static FunctionMath FUNCTION_LOG10 = new FunctionMath() {
         @Override
-        public double getValue(double input) {
-            return Math.floor(input);
-        }
-    };
-    
-    public static FunctionBasicMath FUNCTION_CEIL = new FunctionBasicMath() {
-        @Override
-        public double getValue(double input) {
-            return Math.ceil(input);
-        }
-    };
-    
-    public static FunctionBasicMath FUNCTION_LOG = new FunctionBasicMath() {
-        @Override
-        public double getValue(double input) {
-            return Math.log(input);
-        }
-    };
-    
-    public static FunctionBasicMath FUNCTION_LOG10 = new FunctionBasicMath() {
-        @Override
-        public double getValue(double input) {
-            return Math.log10(input);
+        public double getValue(double value) {
+            return Math.log10(value);
         }
     };
 

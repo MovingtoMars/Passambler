@@ -3,23 +3,22 @@ package passambler.function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.value.Value;
-import passambler.value.ValueNum;
 
-public abstract class FunctionBasicMath implements Function {
+public abstract class FunctionSimple implements Function {
     @Override
     public int getArguments() {
-        return 1;
+        return 0;
     }
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof ValueNum;
+        return false;
     }
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        return new ValueNum(getValue(((ValueNum) arguments[0]).getValue()));
+        return getValue();
     }
     
-    public abstract double getValue(double input);
+    public abstract Value getValue();
 }
