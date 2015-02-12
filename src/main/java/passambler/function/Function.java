@@ -56,6 +56,20 @@ public interface Function {
             return Math.ceil(input);
         }
     };
+    
+    public static FunctionBasicMath FUNCTION_LOG = new FunctionBasicMath() {
+        @Override
+        public double getValue(double input) {
+            return Math.log(input);
+        }
+    };
+    
+    public static FunctionBasicMath FUNCTION_LOG10 = new FunctionBasicMath() {
+        @Override
+        public double getValue(double input) {
+            return Math.log10(input);
+        }
+    };
 
     public int getArguments();
 

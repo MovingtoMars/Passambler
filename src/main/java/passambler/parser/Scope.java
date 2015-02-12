@@ -31,6 +31,8 @@ public class Scope {
         setSymbol("tan", Function.FUNCTION_TAN);
         setSymbol("floor", Function.FUNCTION_FLOOR);
         setSymbol("ceil", Function.FUNCTION_CEIL);
+        setSymbol("log", Function.FUNCTION_LOG);
+        setSymbol("log10", Function.FUNCTION_LOG10);
         setSymbol("min", Function.FUNCTION_MIN);
         setSymbol("max", Function.FUNCTION_MAX);
         
