@@ -29,6 +29,10 @@ public class Parser {
     }
 
     public Value parse(TokenStream stream) throws ParserException {
+        if (stream.size() == 0) {
+            return null;
+        }
+        
         if (stream.first().getType() == Token.Type.IDENTIFIER && stream.peek() != null && stream.peek().getType().isAssignmentOperator()) {
             String key = stream.current().getValue();
 
