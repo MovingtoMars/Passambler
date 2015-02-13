@@ -13,7 +13,6 @@ public interface Function {
         
     public static FunctionExit FUNCTION_EXIT = new FunctionExit();
     public static FunctionRandom FUNCTION_RANDOM = new FunctionRandom();
-    public static FunctionSqrt FUNCTION_SQRT = new FunctionSqrt();
 
     public static FunctionMath FUNCTION_SIN = new FunctionMath() {
         @Override
@@ -47,6 +46,13 @@ public interface Function {
         @Override
         public double getValue(double value) {
             return Math.log10(value);
+        }
+    };
+    
+    public static FunctionMath FUNCTION_SQRT = new FunctionMath() {
+        @Override
+        public double getValue(double value) {
+            return Math.sqrt(value);
         }
     };
 
