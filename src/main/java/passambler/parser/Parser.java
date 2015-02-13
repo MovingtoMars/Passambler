@@ -29,7 +29,7 @@ public class Parser {
     }
 
     public Value parse(TokenStream stream) throws ParserException {
-        if (isAssignment(stream.copy())) {           
+        if (stream.first().getType() == Token.Type.IDENTIFIER && stream.peek() != null && stream.peek().getType().isAssignmentOperator()) {
             String key = stream.current().getValue();
 
             stream.next();
@@ -55,7 +55,7 @@ public class Parser {
             } else {
                 scope.setSymbol(key, value);
             }
-        } else if (isWhile(stream.copy())) {
+        } else if (stream.first().getType() == Token.Type.WHILE) {
             stream.next();
             
             List<Token> tokens = new ArrayList<>();
@@ -89,7 +89,7 @@ public class Parser {
                 
                 value = Evaluator.evaluate(this, new TokenStream(tokens));
             }
-        } else if (isFor(stream.copy())) {
+        } else if (stream.first().getType() == Token.Type.FOR) {
             stream.next();
 
             List<Token> tokens = new ArrayList<>();
@@ -162,7 +162,7 @@ public class Parser {
                     new ValueNum(i)
                 });
             }
-        } else if (isReturn(stream.copy())) {
+        } else if (stream.first().getType() == Token.Type.RETURN) {
             if (!stream.hasNext()) {
                 return null;
             }
@@ -215,21 +215,5 @@ public class Parser {
         }
 
         return Value.VALUE_NIL;
-    }
-
-    public boolean isReturn(TokenStream stream) {
-        return stream.size() >= 1 && stream.first().getType() == Token.Type.RETURN;
-    }
-
-    public boolean isFor(TokenStream stream) {
-        return stream.size() >= 5 && stream.first().getType() == Token.Type.FOR;
-    }
-
-    public boolean isWhile(TokenStream stream) {
-        return stream.size() >= 5 && stream.first().getType() == Token.Type.WHILE;
-    }
-
-    public boolean isAssignment(TokenStream stream) {
-        return stream.size() >= 3 && stream.current().getType() == Token.Type.IDENTIFIER && stream.peek().getType().isAssignmentOperator();
     }
 }
