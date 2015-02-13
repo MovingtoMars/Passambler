@@ -3,7 +3,6 @@ package passambler.function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.value.Value;
-import passambler.value.ValueStr;
 
 public class FunctionWrite implements Function {
     protected boolean newLine;
@@ -19,7 +18,7 @@ public class FunctionWrite implements Function {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof ValueStr;
+        return true;
     }
 
     @Override
