@@ -89,7 +89,11 @@ public class Parser {
             }
             
             while (((ValueBool) value).getValue()) {
-                callback.invoke(this, new Value[] {});
+                Value result = callback.invoke(this, new Value[] {});
+                
+                if (result != null) {
+                    return result;
+                }
                 
                 value = Evaluator.evaluate(this, new TokenStream(tokens));
             }
@@ -151,10 +155,11 @@ public class Parser {
             }
 
             for (int i = 0; i < indexedValue.getIndexCount(); ++i) {
-                callback.invoke(this, new Value[] {
-                    indexedValue.getIndex(i),
-                    new ValueNum(i)
-                });
+                Value result = callback.invoke(this, new Value[] { indexedValue.getIndex(i), new ValueNum(i) });
+                
+                if (result != null) {
+                    return result;
+                }
             }
         } else if (stream.first().getType() == Token.Type.RETURN) {
             if (!stream.hasNext()) {
