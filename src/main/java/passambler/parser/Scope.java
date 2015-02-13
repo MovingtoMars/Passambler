@@ -52,6 +52,10 @@ public class Scope {
             symbols.put(key, value);
         }
     }
+    
+    public void setSymbol(String key, ValueBlock block) {
+        symbols.put(key, block);
+    }
 
     public void setSymbol(String key, Function function) {
         symbols.put(key, ValueBlock.transform(function));

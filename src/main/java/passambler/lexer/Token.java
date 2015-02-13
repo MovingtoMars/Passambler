@@ -14,7 +14,7 @@ public class Token {
         LBRACE, RBRACE,
         EQUAL, NEQUAL, GT, LT, GTE, LTE,
         AND, OR,
-        RETURN;
+        FN, RETURN;
         
         public boolean isOperator() {
             return this == PLUS || this == MINUS || this == MULTIPLY || this == DIVIDE || this == POWER || this == MODULO || this == GT || this == LT || this == GTE || this == LTE || this == EQUAL || this == NEQUAL || this == AND || this == OR;

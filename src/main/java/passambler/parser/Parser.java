@@ -148,13 +148,13 @@ public class Parser {
 
             callback.getArgumentNames().addAll(arguments);
 
-            Value val = Evaluator.evaluate(this, new TokenStream(tokens));
+            Value value = Evaluator.evaluate(this, new TokenStream(tokens));
 
-            if (!(val instanceof IndexedValue)) {
+            if (!(value instanceof IndexedValue)) {
                 throw new ParserException(ParserException.Type.NOT_INDEXED, stream.current().getPosition());
             }
 
-            IndexedValue indexedValue = (IndexedValue) val;
+            IndexedValue indexedValue = (IndexedValue) value;
 
             if (callback.getArgumentNames().size() > 2) {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "invalid argument count expected");
@@ -174,6 +174,48 @@ public class Parser {
             stream.next();
 
             return Evaluator.evaluate(this, new TokenStream(stream.rest()));
+        } else if (stream.first().getType() == Token.Type.FN) {
+            stream.next();
+            
+            stream.match(Token.Type.IDENTIFIER);
+            
+            String name = stream.current().getValue();
+            
+            stream.next();
+            
+            List<String> arguments = new ArrayList<>();
+            
+            if (stream.current().getType() == Token.Type.COL) { 
+                while (stream.hasNext()) {
+                    stream.next();
+                    
+                    if (stream.current().getType() == Token.Type.LBRACE) {
+                        break;
+                    } else {
+                        stream.match(Token.Type.IDENTIFIER);
+                        
+                        arguments.add(stream.current().getValue());
+                        
+                        if (stream.peek().getType() != Token.Type.LBRACE) {
+                            stream.match(Token.Type.COMMA);
+                        }
+                    }
+                }
+            }
+            
+            stream.match(Token.Type.LBRACE);
+            
+            Value callbackValue = Evaluator.evaluate(this, new TokenStream(stream.rest()));
+            
+            if (!(callbackValue instanceof ValueBlock)) {
+                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "callback should be a block");
+            }
+
+            ValueBlock callback = (ValueBlock) callbackValue;
+
+            callback.getArgumentNames().addAll(arguments);
+            
+            scope.setSymbol(name, callback);
         } else {
             return Evaluator.evaluate(this, stream);
         }
