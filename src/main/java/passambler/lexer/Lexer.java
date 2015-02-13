@@ -20,8 +20,7 @@ public class Lexer {
         tokenMap.put("return", Token.Type.RETURN);
         tokenMap.put("while", Token.Type.WHILE);
         tokenMap.put("for", Token.Type.FOR);
-        
-        tokenMap.put("in", Token.Type.IN);
+
         tokenMap.put("fn", Token.Type.FN);
         tokenMap.put("==", Token.Type.EQUAL);
         tokenMap.put("!=", Token.Type.NEQUAL);

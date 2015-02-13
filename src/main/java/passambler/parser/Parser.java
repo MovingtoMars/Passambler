@@ -100,40 +100,30 @@ public class Parser {
 
             List<String> arguments = new ArrayList<>();
 
-            if (stream.peek().getType() == Token.Type.IN) {
-                stream.match(Token.Type.IDENTIFIER);
-                
-                arguments.add(stream.current().getValue());
-                
-                stream.next();
-                stream.next();
-            } else if (stream.peek(3).getType() == Token.Type.IN) {
-                stream.match(Token.Type.IDENTIFIER);
-                
-                arguments.add(stream.current().getValue());
-                
-                stream.next();
-                
-                stream.match(Token.Type.COMMA);
-                
-                stream.next();
-                
-                stream.match(Token.Type.IDENTIFIER);
-                
-                arguments.add(stream.current().getValue());
-                
-                stream.next();
-                stream.next();
-            }
-            
             while (stream.hasNext()) {
                 if (stream.current().getType() == Token.Type.LBRACE) {
                     break;
+                } else if (stream.current().getType() == Token.Type.COL) {
+                    stream.next();
+                    
+                    while (stream.current().getType() != Token.Type.LBRACE) {
+                        stream.match(Token.Type.IDENTIFIER);
+
+                        arguments.add(stream.current().getValue());
+
+                        if (stream.peek().getType() != Token.Type.LBRACE) {
+                            stream.next();
+                            
+                            stream.match(Token.Type.COMMA);
+                        }
+                        
+                        stream.next();
+                    }
+                } else {
+                    tokens.add(stream.current());
+                    
+                    stream.next();
                 }
-
-                tokens.add(stream.current());
-
-                stream.next();
             }
             
             stream.match(Token.Type.LBRACE);
