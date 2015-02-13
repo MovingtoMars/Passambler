@@ -55,7 +55,7 @@ public class Parser {
             }
             
             if (value instanceof ValueBlock) {
-                scope.setSymbol(key, (Function) value);
+                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "cannot declare a block");
             } else {
                 scope.setSymbol(key, value);
             }
