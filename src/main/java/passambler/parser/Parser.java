@@ -255,6 +255,6 @@ public class Parser {
             throw new ParserException(ParserException.Type.UNEXPECTED_EOF);
         }
 
-        return Value.VALUE_NIL;
+        return null;
     }
 }

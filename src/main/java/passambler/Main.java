@@ -102,7 +102,7 @@ public class Main {
                         LOGGER.log(Level.WARNING, "Runtime exception", e);
                     }
 
-                    if (result != null && result != Value.VALUE_NIL) {
+                    if (result != null) {
                         System.out.println(result);
                     }
                 }
