@@ -1,5 +1,6 @@
 package passambler.function;
 
+import passambler.function.FunctionRead.ReadType;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.value.Value;
@@ -14,6 +15,10 @@ public interface Function {
     public static FunctionExit FUNCTION_EXIT = new FunctionExit();
     public static FunctionRandom FUNCTION_RANDOM = new FunctionRandom();
 
+    public static FunctionRead FUNCTION_READSTR = new FunctionRead(ReadType.STRING);
+    public static FunctionRead FUNCTION_READINT = new FunctionRead(ReadType.INTEGER);
+    public static FunctionRead FUNCTION_READDOUBLE = new FunctionRead(ReadType.DOUBLE);
+    
     public static FunctionMath FUNCTION_SIN = new FunctionMath() {
         @Override
         public double getValue(double value) {

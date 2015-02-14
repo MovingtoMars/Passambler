@@ -27,6 +27,10 @@ public class Scope {
         setSymbol("write", Function.FUNCTION_WRITE);
         setSymbol("writeln", Function.FUNCTION_WRITELN);
         
+        setSymbol("readstr", Function.FUNCTION_READSTR);
+        setSymbol("readdouble", Function.FUNCTION_READDOUBLE);
+        setSymbol("readint", Function.FUNCTION_READINT);
+        
         setSymbol("sin", Function.FUNCTION_SIN);
         setSymbol("cos", Function.FUNCTION_COS);
         setSymbol("tan", Function.FUNCTION_TAN);
@@ -38,9 +42,16 @@ public class Scope {
         setSymbol("max", Function.FUNCTION_MAX);
         
         setSymbol("nil", Value.VALUE_NIL);
+        
         setSymbol("pi", Value.VALUE_PI);
+        
         setSymbol("true", Value.VALUE_TRUE);
         setSymbol("false", Value.VALUE_FALSE);
+        
+        setSymbol("stdout", Value.VALUE_STDOUT);
+        setSymbol("stderr", Value.VALUE_STDERR);
+        
+        setSymbol("stdin", Value.VALUE_STDIN);
     }
 
     public void setSymbol(String key, Value value) {

@@ -10,9 +10,16 @@ import passambler.lexer.Token;
 
 public class Value {
     public static ValueNil VALUE_NIL = (ValueNil) new ValueNil().lock();
+        
     public static ValueBool VALUE_TRUE = (ValueBool) new ValueBool(true).lock();
     public static ValueBool VALUE_FALSE = (ValueBool) new ValueBool(false).lock();
+    
     public static ValueNum VALUE_PI = (ValueNum) new ValueNum(Math.PI).lock();
+    
+    public static ValueOutStream VALUE_STDOUT = (ValueOutStream) new ValueOutStream(System.out).lock();
+    public static ValueOutStream VALUE_STDERR = (ValueOutStream) new ValueOutStream(System.err).lock();
+    
+    public static ValueInStream VALUE_STDIN = (ValueInStream) new ValueInStream(System.in).lock();
     
     protected boolean locked = false;
     
