@@ -18,9 +18,15 @@ public class Lexer {
         this.input = input;
 
         tokenMap.put("return", Token.Type.RETURN);
+        tokenMap.put("elseif", Token.Type.ELSEIF);
+        
         tokenMap.put("while", Token.Type.WHILE);
+        
+        tokenMap.put("else", Token.Type.ELSE);
+        
         tokenMap.put("for", Token.Type.FOR);
 
+        tokenMap.put("if", Token.Type.IF);
         tokenMap.put("fn", Token.Type.FN);
         tokenMap.put("==", Token.Type.EQUAL);
         tokenMap.put("!=", Token.Type.NEQUAL);

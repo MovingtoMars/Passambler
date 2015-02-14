@@ -1,7 +1,10 @@
 package passambler.parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import passambler.function.Function;
 import passambler.lexer.Lexer;
 import passambler.lexer.LexerException;
@@ -32,28 +35,115 @@ public class Parser {
         if (stream.size() == 0) {
             return null;
         }
-        
-        if (stream.first().getType() == Token.Type.IDENTIFIER && stream.peek() != null && stream.peek().getType().isAssignmentOperator()) {
+
+        if (stream.first().getType() == Token.Type.IF) {
+            List<Token> tokens = new ArrayList<>();
+
+            Map<ValueBool, ValueBlock> cases = new HashMap();
+
+            ValueBool currentCondition = null;
+            ValueBlock currentConditionBlock = null;
+
+            boolean condition = true;
+            
+            boolean elseCondition = false;
+
+            int braces = 0;
+
+            stream.next();
+
+            while (stream.hasNext()) {
+                if (condition) {
+                    if (stream.current().getType() == Token.Type.LBRACE) {
+                        condition = false;
+
+                        if (!elseCondition) {
+                            Value value = Evaluator.evaluate(this, new TokenStream(tokens));
+                            
+                            if (!(value instanceof ValueBool)) {
+                                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "expected a bool");
+                            }
+                            
+                            currentCondition = (ValueBool) value;
+                        } else {
+                            currentCondition = new ValueBool(true);
+                        }
+
+                        currentConditionBlock = new ValueBlock(scope, new ArrayList());
+
+                        braces = 1;
+
+                        tokens.clear();
+                    } else {
+                        tokens.add(stream.current());
+                    }
+                } else {
+                    if (stream.current().getType() == Token.Type.LBRACE) {
+                        braces++;
+                    } else if (stream.current().getType() == Token.Type.RBRACE) {
+                        braces--;
+                    }
+
+                    if (braces == 0) {
+                        cases.put(currentCondition, currentConditionBlock);
+
+                        currentCondition = null;
+                        currentConditionBlock = null;
+                        condition = true;
+                        
+                        if (stream.peek() != null) {
+                            if (elseCondition == true) {
+                                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "else should be the last statement");
+                            }
+                            
+                            stream.next();
+                            
+                            stream.match(Token.Type.ELSE, Token.Type.ELSEIF);
+                            
+                            if (stream.current().getType() == Token.Type.ELSE) {
+                                elseCondition = true;
+                            }
+                        }
+                    } else {
+                        currentConditionBlock.addToken(stream.current());
+                    }
+                }
+
+                stream.next();
+            }
+
+            for (Map.Entry<ValueBool, ValueBlock> entry : cases.entrySet()) {
+                if (entry.getKey().getValue() == true) {
+                    Value result = entry.getValue().invoke(this, new Value[] {});
+
+                    if (result != null) {
+                        return result;
+                    }
+
+                    break;
+                }
+            }
+        } else if (stream.first().getType() == Token.Type.IDENTIFIER && stream.peek() != null && stream.peek().getType().isAssignmentOperator()) {
             String key = stream.current().getValue();
 
             stream.next();
-            
+
             Token operatorToken = stream.current();
-            
+
             stream.next();
 
             Value baseValue = new Value();
-            
+
             if (scope.hasSymbol(key)) {
                 baseValue = scope.getSymbol(key);
             }
-            
+
             Value value = baseValue.onOperator(Evaluator.evaluate(this, new TokenStream(stream.rest())), operatorToken.getType());
-            
+
             if (value == null) {
                 throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, operatorToken.getPosition(), operatorToken.getType());
             }
-            
+
             if (value instanceof ValueBlock) {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "cannot declare a block");
             } else {
@@ -61,9 +151,9 @@ public class Parser {
             }
         } else if (stream.first().getType() == Token.Type.WHILE) {
             stream.next();
-            
+
             List<Token> tokens = new ArrayList<>();
-             
+
             while (stream.hasNext()) {
                 if (stream.current().getType() == Token.Type.LBRACE) {
                     break;
@@ -73,9 +163,9 @@ public class Parser {
 
                 stream.next();
             }
-             
+
             Value value = Evaluator.evaluate(this, new TokenStream(tokens));
-             
+
             Value callbackValue = Evaluator.evaluate(this, new TokenStream(stream.rest()));
 
             if (!(callbackValue instanceof ValueBlock)) {
@@ -83,18 +173,18 @@ public class Parser {
             }
 
             ValueBlock callback = (ValueBlock) callbackValue;
-            
+
             if (!(value instanceof ValueBool)) {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "expecting bool");
             }
-            
+
             while (((ValueBool) value).getValue()) {
                 Value result = callback.invoke(this, new Value[] {});
-                
+
                 if (result != null) {
                     return result;
                 }
-                
+
                 value = Evaluator.evaluate(this, new TokenStream(tokens));
             }
         } else if (stream.first().getType() == Token.Type.FOR) {
@@ -109,7 +199,7 @@ public class Parser {
                     break;
                 } else if (stream.current().getType() == Token.Type.COL) {
                     stream.next();
-                    
+
                     while (stream.current().getType() != Token.Type.LBRACE) {
                         stream.match(Token.Type.IDENTIFIER);
 
@@ -117,19 +207,19 @@ public class Parser {
 
                         if (stream.peek().getType() != Token.Type.LBRACE) {
                             stream.next();
-                            
+
                             stream.match(Token.Type.COMMA);
                         }
-                        
+
                         stream.next();
                     }
                 } else {
                     tokens.add(stream.current());
-                    
+
                     stream.next();
                 }
             }
-            
+
             stream.match(Token.Type.LBRACE);
 
             Value callbackValue = Evaluator.evaluate(this, new TokenStream(stream.rest()));
@@ -156,7 +246,7 @@ public class Parser {
 
             for (int i = 0; i < indexedValue.getIndexCount(); ++i) {
                 Value result = callback.invoke(this, new Value[] { indexedValue.getIndex(i), new ValueNum(i) });
-                
+
                 if (result != null) {
                     return result;
                 }
@@ -171,37 +261,37 @@ public class Parser {
             return Evaluator.evaluate(this, new TokenStream(stream.rest()));
         } else if (stream.first().getType() == Token.Type.FN) {
             stream.next();
-            
+
             stream.match(Token.Type.IDENTIFIER);
-            
+
             String name = stream.current().getValue();
-            
+
             stream.next();
-            
+
             List<String> arguments = new ArrayList<>();
-            
-            if (stream.current().getType() == Token.Type.COL) { 
+
+            if (stream.current().getType() == Token.Type.COL) {
                 while (stream.hasNext()) {
                     stream.next();
-                    
+
                     if (stream.current().getType() == Token.Type.LBRACE) {
                         break;
                     } else {
                         stream.match(Token.Type.IDENTIFIER);
-                        
+
                         arguments.add(stream.current().getValue());
-                        
+
                         if (stream.peek().getType() != Token.Type.LBRACE) {
                             stream.match(Token.Type.COMMA);
                         }
                     }
                 }
             }
-            
+
             stream.match(Token.Type.LBRACE);
-            
+
             Value callbackValue = Evaluator.evaluate(this, new TokenStream(stream.rest()));
-            
+
             if (!(callbackValue instanceof ValueBlock)) {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "callback should be a block");
             }
@@ -209,7 +299,7 @@ public class Parser {
             ValueBlock callback = (ValueBlock) callbackValue;
 
             callback.getArgumentNames().addAll(arguments);
-            
+
             scope.setSymbol(name, callback);
         } else {
             return Evaluator.evaluate(this, stream);
@@ -250,7 +340,7 @@ public class Parser {
                 }
             }
         }
-
+        
         if (!subTokens.isEmpty()) {
             throw new ParserException(ParserException.Type.UNEXPECTED_EOF);
         }
