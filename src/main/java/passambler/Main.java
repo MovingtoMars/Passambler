@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -79,20 +81,39 @@ public class Main {
 
                 Scanner input = new Scanner(System.in);
 
+                List<Token> tokens = new ArrayList<>();
+                
                 while (true) {
-                    System.out.print("~> ");
+                    System.out.print((tokens.isEmpty() ? "~>" : "->") + " ");
 
                     Value result = null;
 
                     try {
                         Lexer lexer = new Lexer(input.nextLine());
                         
+                        tokens.addAll(lexer.scan());
+                        tokens.add(new Token(Token.Type.NEW_LINE, null));
+                        
                         if (options.has("t")) {
-                            for (Token token : lexer.scan()) {
+                            for (Token token : tokens) {
                                 LOGGER.log(Level.INFO, token.toString());
                             }
                         } else {
-                            result = parser.parseLexer(lexer);
+                            int braces = 0;
+                            
+                            for (Token token : tokens) {
+                                if (token.getType() == Token.Type.LBRACE) {
+                                    braces++;
+                                } else if (token.getType() == Token.Type.RBRACE) {
+                                    braces--;
+                                }
+                            }
+                            
+                            if (braces == 0) {                               
+                                result = parser.parseLines(tokens);
+                                
+                                tokens.clear();
+                            }
                         }
                     } catch (LexerException e) {
                         LOGGER.log(Level.WARNING, "Lexer exception", e);
