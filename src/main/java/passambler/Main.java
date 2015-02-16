@@ -117,10 +117,16 @@ public class Main {
                         }
                     } catch (LexerException e) {
                         LOGGER.log(Level.WARNING, "Lexer exception", e);
+                        
+                        tokens.clear();
                     } catch (ParserException e) {
                         LOGGER.log(Level.WARNING, "Parser exception", e);
+                        
+                        tokens.clear();
                     } catch (RuntimeException e) {
                         LOGGER.log(Level.WARNING, "Runtime exception", e);
+                        
+                        tokens.clear();
                     }
 
                     if (result != null) {
