@@ -2,10 +2,9 @@ package passambler.parser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import passambler.function.Function;
+import passambler.function.FunctionSimple;
 import passambler.lexer.Lexer;
 import passambler.lexer.LexerException;
 import passambler.lexer.Token;
@@ -17,6 +16,8 @@ import passambler.value.ValueBool;
 import passambler.value.ValueNum;
 
 public class Parser {
+    private ParserRules rules = ParserRules.RULES_NONE;
+    
     private Scope scope;
 
     public Parser() {
@@ -30,13 +31,77 @@ public class Parser {
     public Scope getScope() {
         return scope;
     }
+    
+    public ParserRules getParserRules() {
+        return rules;
+    }
+    
+    public void setParserRules(ParserRules rules) {
+        this.rules = rules;
+    }
 
     public Value parse(TokenStream stream) throws ParserException {
         if (stream.size() == 0) {
             return null;
         }
 
-        if (stream.first().getType() == Token.Type.IF) {
+        if (stream.first().getType() == Token.Type.CLASS) {
+            if (!rules.isClassDeclarationAllowed()) {
+                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
+            }
+            
+            stream.next();
+            
+            stream.match(Token.Type.IDENTIFIER);
+            
+            String className = stream.current().getValue();
+            
+            ValueBlock block = new ValueBlock(null, new ArrayList());
+            
+            block.getParser().setParserRules(ParserRules.RULES_CLASS);
+            block.getParser().getScope().addStd();
+            
+            stream.next();
+            
+            stream.match(Token.Type.LBRACE);
+            
+            int braces = 1;
+            
+            while (stream.hasNext()) {
+                stream.next();
+                
+                if (stream.current().getType() == Token.Type.LBRACE) {
+                    braces++;
+                } else if (stream.current().getType() == Token.Type.RBRACE) {
+                    braces--;
+                }
+
+                if (braces == 0) {
+                    break;
+                } else {
+                    block.addToken(stream.current());
+                }
+            }
+            
+            Value classValue = new Value();
+            
+            block.invoke(null, new Value[] {});
+            
+            for (Map.Entry<String, Value> entry : block.getParser().getScope().getSymbols().entrySet()) {
+                classValue.setProperty(entry.getKey(), entry.getValue());
+            }
+            
+            scope.setSymbol(className, new FunctionSimple() {
+                @Override
+                public Value getValue() {
+                    return classValue;
+                }
+            });
+        } else if (stream.first().getType() == Token.Type.IF) {
+            if (!rules.isIfStatementAllowed()) {
+                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
+            }
+            
             List<Token> tokens = new ArrayList<>();
 
             Map<ValueBool, ValueBlock> cases = new HashMap();
@@ -124,6 +189,10 @@ public class Parser {
                 }
             }
         } else if (stream.first().getType() == Token.Type.IDENTIFIER && stream.peek() != null && stream.peek().getType().isAssignmentOperator()) {
+            if (!rules.isVariableAssignmentAllowed()) {
+                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
+            }
+            
             String key = stream.current().getValue();
 
             stream.next();
@@ -150,6 +219,10 @@ public class Parser {
                 scope.setSymbol(key, value);
             }
         } else if (stream.first().getType() == Token.Type.WHILE) {
+            if (!rules.isWhileStatementAllowed()) {
+                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
+            }
+            
             stream.next();
 
             List<Token> tokens = new ArrayList<>();
@@ -188,6 +261,10 @@ public class Parser {
                 value = Evaluator.evaluate(this, new TokenStream(tokens));
             }
         } else if (stream.first().getType() == Token.Type.FOR) {
+            if (!rules.isForStatementAllowed()) {
+                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
+            }
+            
             stream.next();
 
             List<Token> tokens = new ArrayList<>();
@@ -252,6 +329,10 @@ public class Parser {
                 }
             }
         } else if (stream.first().getType() == Token.Type.RETURN) {
+            if (!rules.isReturnStatementAllowed()) {
+                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
+            }
+            
             if (!stream.hasNext()) {
                 return null;
             }
@@ -260,6 +341,10 @@ public class Parser {
 
             return Evaluator.evaluate(this, new TokenStream(stream.rest()));
         } else if (stream.first().getType() == Token.Type.FN) {
+            if (!rules.isFunctionDeclarationAllowed()) {
+                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
+            }
+            
             stream.next();
 
             stream.match(Token.Type.IDENTIFIER);
@@ -302,6 +387,10 @@ public class Parser {
 
             scope.setSymbol(name, callback);
         } else {
+            if (!rules.isEvaluationAllowed()) {
+                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
+            }
+            
             return Evaluator.evaluate(this, stream);
         }
 

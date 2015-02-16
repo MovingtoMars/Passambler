@@ -15,7 +15,8 @@ public class Token {
         EQUAL, NEQUAL, GT, LT, GTE, LTE,
         AND, OR,
         FN, RETURN,
-        IF, ELSEIF, ELSE;
+        IF, ELSEIF, ELSE,
+        CLASS;
         
         public boolean isOperator() {
             return this == PLUS || this == MINUS || this == MULTIPLY || this == DIVIDE || this == POWER || this == MODULO || this == GT || this == LT || this == GTE || this == LTE || this == EQUAL || this == NEQUAL || this == AND || this == OR;
@@ -68,6 +69,6 @@ public class Token {
 
     @Override
     public String toString() {
-        return type + " (\"" + value + "\")";
+        return type + (value != null ? " (\"" + value + "\")" : "");
     }
 }

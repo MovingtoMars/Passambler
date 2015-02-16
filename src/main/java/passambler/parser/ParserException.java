@@ -16,7 +16,8 @@ public class ParserException extends Exception {
         UNEXPECTED_EOF("unexpected end of file"),
         UNEXPECTED_TOKEN("unexpected token %s"),
         UNSUPPORTED_OPERATOR("unsupported operator %s"),
-        ZERO_DIVISION("cannot divide by 0");
+        ZERO_DIVISION("cannot divide by 0"),
+        NOT_ALLOWED("that is not allowed here");
 
         String message;
 

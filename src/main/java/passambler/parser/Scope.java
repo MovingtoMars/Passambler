@@ -85,4 +85,8 @@ public class Scope {
     public boolean hasSymbol(String key) {
         return getSymbol(key) != null;
     }
+    
+    public Map<String, Value> getSymbols() {
+        return symbols;
+    }
 }
