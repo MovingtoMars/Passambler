@@ -57,8 +57,6 @@ public class Scope {
     public void setSymbol(String key, Value value) {
         if (parent != null && parent.hasSymbol(key)) {
             parent.setSymbol(key, value);
-        } else if (symbols.containsKey(key) && symbols.get(key).isLocked()) {
-            throw new RuntimeException(String.format("value %s is locked", key));
         } else {
             symbols.put(key, value);
         }

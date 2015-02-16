@@ -9,20 +9,18 @@ import passambler.parser.ParserException;
 import passambler.lexer.Token;
 
 public class Value {
-    public static ValueNil VALUE_NIL = (ValueNil) new ValueNil().lock();
+    public static ValueNil VALUE_NIL = new ValueNil();
         
-    public static ValueBool VALUE_TRUE = (ValueBool) new ValueBool(true).lock();
-    public static ValueBool VALUE_FALSE = (ValueBool) new ValueBool(false).lock();
+    public static ValueBool VALUE_TRUE = new ValueBool(true);
+    public static ValueBool VALUE_FALSE = new ValueBool(false);
     
-    public static ValueNum VALUE_PI = (ValueNum) new ValueNum(Math.PI).lock();
+    public static ValueNum VALUE_PI = new ValueNum(Math.PI);
     
-    public static ValueOutStream VALUE_STDOUT = (ValueOutStream) new ValueOutStream(System.out).lock();
-    public static ValueOutStream VALUE_STDERR = (ValueOutStream) new ValueOutStream(System.err).lock();
+    public static ValueOutStream VALUE_STDOUT = new ValueOutStream(System.out);
+    public static ValueOutStream VALUE_STDERR = new ValueOutStream(System.err);
     
-    public static ValueInStream VALUE_STDIN = (ValueInStream) new ValueInStream(System.in).lock();
-    
-    protected boolean locked = false;
-    
+    public static ValueInStream VALUE_STDIN = new ValueInStream(System.in);
+
     protected Map<String, Property> properties = new HashMap();
     
     protected Object value;
@@ -99,25 +97,11 @@ public class Value {
         }
     }
     
-    public boolean isLocked() {
-        return locked;
-    }
-    
-    public Value lock() {
-        locked = true;
-        
-        return this;
-    }
-    
     public Object getValue() {
         return value;
     }
 
     public void setValue(Object value) {
-        if (locked) {
-            throw new RuntimeException("value is locked");
-        }
-        
         this.value = value;
     }
     
