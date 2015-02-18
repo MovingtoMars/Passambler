@@ -351,18 +351,22 @@ public class Parser {
     public Value parse(List<Token> tokens) throws ParserException {
         List<Token> subTokens = new ArrayList<>();
 
-        int braces = 0;
+        int braces = 0, paren = 0;
 
         for (Token token : tokens) {
             if (token.getType() == Token.Type.LBRACE) {
                 braces++;
             } else if (token.getType() == Token.Type.RBRACE) {
                 braces--;
+            } else if (token.getType() == Token.Type.LPAREN) {
+                paren++;
+            } else if (token.getType() == Token.Type.RPAREN) {
+                paren--;
             }
 
             subTokens.add(token);
 
-            if (braces == 0 && (token.getType() == Token.Type.SEMI_COL || token.getType() == Token.Type.RBRACE)) {
+            if (braces == 0 && paren == 0 && (token.getType() == Token.Type.SEMI_COL || token.getType() == Token.Type.RBRACE)) {
                 if (token.getType() == Token.Type.SEMI_COL) {
                     subTokens.remove(subTokens.size() - 1);
                 }
