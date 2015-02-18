@@ -14,7 +14,7 @@ public class Token {
         LBRACE, RBRACE,
         EQUAL, NEQUAL, GT, LT, GTE, LTE,
         AND, OR,
-        FN, RETURN,
+        PROC, RETURN,
         IF, ELSEIF, ELSE,
         CLASS;
         

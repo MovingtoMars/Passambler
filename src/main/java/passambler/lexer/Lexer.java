@@ -23,12 +23,12 @@ public class Lexer {
         tokenMap.put("while", Token.Type.WHILE);
         
         tokenMap.put("class", Token.Type.CLASS);
+        tokenMap.put("proc", Token.Type.PROC);
         tokenMap.put("else", Token.Type.ELSE);
         
         tokenMap.put("for", Token.Type.FOR);
 
         tokenMap.put("if", Token.Type.IF);
-        tokenMap.put("fn", Token.Type.FN);
         tokenMap.put("==", Token.Type.EQUAL);
         tokenMap.put("!=", Token.Type.NEQUAL);
         tokenMap.put(">=", Token.Type.GTE);
