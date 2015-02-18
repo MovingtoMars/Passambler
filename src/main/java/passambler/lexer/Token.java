@@ -15,8 +15,7 @@ public class Token {
         EQUAL, NEQUAL, GT, LT, GTE, LTE,
         AND, OR,
         PROC, RETURN,
-        IF, ELSEIF, ELSE,
-        CLASS;
+        IF, ELSEIF, ELSE;
         
         public boolean isOperator() {
             return this == PLUS || this == MINUS || this == MULTIPLY || this == DIVIDE || this == POWER || this == MODULO || this == GT || this == LT || this == GTE || this == LTE || this == EQUAL || this == NEQUAL || this == AND || this == OR;

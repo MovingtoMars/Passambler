@@ -22,7 +22,6 @@ public class Lexer {
         
         tokenMap.put("while", Token.Type.WHILE);
         
-        tokenMap.put("class", Token.Type.CLASS);
         tokenMap.put("proc", Token.Type.PROC);
         tokenMap.put("else", Token.Type.ELSE);
         

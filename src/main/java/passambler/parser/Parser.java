@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import passambler.function.Function;
-import passambler.function.FunctionSimple;
 import passambler.lexer.Lexer;
 import passambler.lexer.LexerException;
 import passambler.lexer.Token;
@@ -14,7 +12,6 @@ import passambler.value.IndexedValue;
 import passambler.value.Value;
 import passambler.value.ValueBlock;
 import passambler.value.ValueBool;
-import passambler.value.ValueClass;
 import passambler.value.ValueNum;
 
 public class Parser {
@@ -47,85 +44,7 @@ public class Parser {
             return null;
         }
 
-        if (stream.first().getType() == Token.Type.CLASS) {
-            if (!rules.isClassDeclarationAllowed()) {
-                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
-            }
-            
-            stream.next();
-            
-            stream.match(Token.Type.IDENTIFIER);
-            
-            String className = stream.current().getValue();
-            
-            ValueBlock block = new ValueBlock(null, new ArrayList());
-            
-            block.getParser().setParserRules(ParserRules.RULES_CLASS);
-            block.getParser().getScope().addStd();
-            
-            stream.next();
-            
-            stream.match(Token.Type.LBRACE);
-            
-            int braces = 1;
-            
-            while (stream.hasNext()) {
-                stream.next();
-                
-                if (stream.current().getType() == Token.Type.LBRACE) {
-                    braces++;
-                } else if (stream.current().getType() == Token.Type.RBRACE) {
-                    braces--;
-                }
-
-                if (braces == 0) {
-                    break;
-                } else {
-                    block.addToken(stream.current());
-                }
-            }
-            
-            ValueClass classValue = new ValueClass();
-            
-            block.invoke(null, new Value[] {});
-            
-            for (Map.Entry<String, Value> entry : block.getParser().getScope().getSymbols().entrySet()) {
-                if (entry.getKey().equals(className)) {
-                    classValue.setConstructor((Function) entry.getValue());
-                } else {
-                    classValue.setProperty(entry.getKey(), entry.getValue());
-                }
-            }
-            
-            scope.setSymbol(className, new Function() {
-                @Override
-                public int getArguments() {
-                    if (classValue.getConstructor() != null) {
-                        return classValue.getConstructor().getArguments();
-                    }
-                    
-                    return 0;
-                }
-
-                @Override
-                public boolean isArgumentValid(Value value, int argument) {
-                    if (classValue.getConstructor() != null) {
-                        return classValue.getConstructor().isArgumentValid(value, argument);
-                    }
-                    
-                    return false;
-                }
-
-                @Override
-                public Value invoke(Parser parser, Value... arguments) throws ParserException {
-                    if (classValue.getConstructor() != null) {
-                        classValue.getConstructor().invoke(parser, arguments);
-                    }
-                    
-                    return classValue;
-                }
-            });
-        } else if (stream.first().getType() == Token.Type.IF) {
+        if (stream.first().getType() == Token.Type.IF) {
             if (!rules.isIfStatementAllowed()) {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
             }
