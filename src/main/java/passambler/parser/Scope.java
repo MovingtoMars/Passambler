@@ -38,9 +38,6 @@ public class Scope {
         setSymbol("log", Function.FUNCTION_LOG);
         setSymbol("log10", Function.FUNCTION_LOG10);
         
-        setSymbol("min", Function.FUNCTION_MIN);
-        setSymbol("max", Function.FUNCTION_MAX);
-        
         setSymbol("nil", Value.VALUE_NIL);
         
         setSymbol("pi", Value.VALUE_PI);

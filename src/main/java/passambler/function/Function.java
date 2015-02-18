@@ -8,9 +8,6 @@ import passambler.value.Value;
 public interface Function {
     public static FunctionWrite FUNCTION_WRITE = new FunctionWrite(false);
     public static FunctionWrite FUNCTION_WRITELN = new FunctionWrite(true);
-    
-    public static FunctionMinMax FUNCTION_MIN = new FunctionMinMax(true);
-    public static FunctionMinMax FUNCTION_MAX = new FunctionMinMax(false);
         
     public static FunctionExit FUNCTION_EXIT = new FunctionExit();
     public static FunctionRandom FUNCTION_RANDOM = new FunctionRandom();
