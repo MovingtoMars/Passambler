@@ -362,7 +362,7 @@ public class Parser {
 
             subTokens.add(token);
 
-            if (braces == 0 && ((token.getType() == Token.Type.SEMI_COL || token.getType() == Token.Type.RBRACE) || token == tokens.get(tokens.size() - 1))) {
+            if (braces == 0 && (token.getType() == Token.Type.SEMI_COL || token.getType() == Token.Type.RBRACE)) {
                 if (token.getType() == Token.Type.SEMI_COL) {
                     subTokens.remove(subTokens.size() - 1);
                 }
