@@ -1,14 +1,14 @@
-package passambler.function;
+package passambler.procedure;
 
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueOutStream;
 
-public class FunctionWrite implements Function {
+public class ProcedureWrite implements Procedure {
     protected boolean newLine;
     
-    public FunctionWrite(boolean newLine) {
+    public ProcedureWrite(boolean newLine) {
         this.newLine = newLine;
     }
     

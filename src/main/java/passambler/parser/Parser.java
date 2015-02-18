@@ -288,7 +288,7 @@ public class Parser {
 
             return Evaluator.evaluate(this, new TokenStream(stream.rest()));
         } else if (stream.first().getType() == Token.Type.PROC) {
-            if (!rules.isFunctionDeclarationAllowed()) {
+            if (!rules.isProcedureDeclarationAllowed()) {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
             }
             

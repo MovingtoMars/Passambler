@@ -2,13 +2,13 @@ package passambler.value;
 
 import java.util.ArrayList;
 import java.util.List;
-import passambler.function.Function;
+import passambler.procedure.Procedure;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.parser.Scope;
 import passambler.lexer.Token;
 
-public class ValueBlock extends Value implements Function {
+public class ValueBlock extends Value implements Procedure {
     private Parser parser;
 
     private List<String> argumentNames;
@@ -54,21 +54,21 @@ public class ValueBlock extends Value implements Function {
         return this.parser.parse(tokens);
     }
     
-    public static ValueBlock transform(Function function) {
+    public static ValueBlock transform(Procedure procedure) {
         return new ValueBlock(new Scope(), null) {
             @Override
             public int getArguments() {
-                return function.getArguments();
+                return procedure.getArguments();
             }
 
             @Override
             public boolean isArgumentValid(Value value, int argument) {
-                return function.isArgumentValid(value, argument);
+                return procedure.isArgumentValid(value, argument);
             }
 
             @Override
             public Value invoke(Parser parser, Value... arguments) throws ParserException {
-                return function.invoke(parser, arguments);
+                return procedure.invoke(parser, arguments);
             }
         };
     }

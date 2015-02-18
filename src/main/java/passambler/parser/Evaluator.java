@@ -2,7 +2,7 @@ package passambler.parser;
 
 import java.util.ArrayList;
 import java.util.List;
-import passambler.function.Function;
+import passambler.procedure.Procedure;
 import passambler.value.Value;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
@@ -151,21 +151,21 @@ public class Evaluator {
                 }
             }
 
-            Function currentFunction = (Function) currentValue;
+            Procedure currentProcedure = (Procedure) currentValue;
 
-            if (currentFunction.getArguments() != -1 && currentFunction.getArguments() != arguments.size()) {
-                throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), currentFunction.getArguments(), arguments.size());
+            if (currentProcedure.getArguments() != -1 && currentProcedure.getArguments() != arguments.size()) {
+                throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), currentProcedure.getArguments(), arguments.size());
             }
 
             for (int argument = 0; argument < arguments.size(); ++argument) {
-                if (!currentFunction.isArgumentValid(arguments.get(argument), argument)) {
+                if (!currentProcedure.isArgumentValid(arguments.get(argument), argument)) {
                     throw new ParserException(ParserException.Type.INVALID_ARGUMENT, stream.first().getPosition(), argument + 1);
                 }
             }
 
             Value[] vals = new Value[arguments.size()];
 
-            return currentFunction.invoke(parser, arguments.toArray(vals));
+            return currentProcedure.invoke(parser, arguments.toArray(vals));
         } else if (!tokens.isEmpty()) {
             return evaluate(parser, new TokenStream(tokens));
         }
@@ -338,7 +338,7 @@ public class Evaluator {
             return new ValueNum(Double.valueOf(number.toString()));
         } else if (token.getType() == Token.Type.IDENTIFIER) {
             if (!parser.getScope().hasSymbol(token.getValue())) {
-                throw new ParserException(stream.peek() != null && stream.peek().getType() == Token.Type.LPAREN ? ParserException.Type.UNDEFINED_FUNCTION : ParserException.Type.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());
+                throw new ParserException(stream.peek() != null && stream.peek().getType() == Token.Type.LPAREN ? ParserException.Type.UNDEFINED_PROCEDURE : ParserException.Type.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());
             }
 
             return parser.getScope().getSymbol(token.getValue());

@@ -1,10 +1,10 @@
-package passambler.function;
+package passambler.procedure;
 
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 
-public abstract class FunctionSimple implements Function {
+public abstract class ProcedureSimple implements Procedure {
     @Override
     public int getArguments() {
         return 0;

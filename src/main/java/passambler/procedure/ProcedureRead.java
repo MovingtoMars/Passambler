@@ -1,4 +1,4 @@
-package passambler.function;
+package passambler.procedure;
 
 import java.util.Scanner;
 import passambler.parser.Parser;
@@ -8,7 +8,7 @@ import passambler.value.ValueInStream;
 import passambler.value.ValueNum;
 import passambler.value.ValueStr;
 
-public class FunctionRead implements Function {
+public class ProcedureRead implements Procedure {
     public enum ReadType {
         STRING, INTEGER, DOUBLE;
         
@@ -28,7 +28,7 @@ public class FunctionRead implements Function {
     
     private ReadType type;
     
-    public FunctionRead(ReadType type) {
+    public ProcedureRead(ReadType type) {
         this.type = type;
     }
     

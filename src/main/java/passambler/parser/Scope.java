@@ -2,7 +2,7 @@ package passambler.parser;
 
 import java.util.HashMap;
 import java.util.Map;
-import passambler.function.Function;
+import passambler.procedure.Procedure;
 import passambler.value.Value;
 import passambler.value.ValueBlock;
 
@@ -20,23 +20,23 @@ public class Scope {
     }
     
     public void addStd() {
-        setSymbol("exit", Function.FUNCTION_EXIT);
-        setSymbol("sqrt", Function.FUNCTION_SQRT);
-        setSymbol("random", Function.FUNCTION_RANDOM);
+        setSymbol("exit", Procedure.PROCEDURE_EXIT);
+        setSymbol("sqrt", Procedure.PROCEDURE_SQRT);
+        setSymbol("random", Procedure.PROCEDURE_RANDOM);
         
-        setSymbol("write", Function.FUNCTION_WRITE);
-        setSymbol("writeln", Function.FUNCTION_WRITELN);
+        setSymbol("write", Procedure.PROCEDURE_WRITE);
+        setSymbol("writeln", Procedure.PROCEDURE_WRITELN);
         
-        setSymbol("readstr", Function.FUNCTION_READSTR);
-        setSymbol("readdouble", Function.FUNCTION_READDOUBLE);
-        setSymbol("readint", Function.FUNCTION_READINT);
+        setSymbol("readstr", Procedure.PROCEDURE_READSTR);
+        setSymbol("readdouble", Procedure.PROCEDURE_READDOUBLE);
+        setSymbol("readint", Procedure.PROCEDURE_READINT);
         
-        setSymbol("sin", Function.FUNCTION_SIN);
-        setSymbol("cos", Function.FUNCTION_COS);
-        setSymbol("tan", Function.FUNCTION_TAN);
+        setSymbol("sin", Procedure.PROCEDURE_SIN);
+        setSymbol("cos", Procedure.PROCEDURE_COS);
+        setSymbol("tan", Procedure.PROCEDURE_TAN);
         
-        setSymbol("log", Function.FUNCTION_LOG);
-        setSymbol("log10", Function.FUNCTION_LOG10);
+        setSymbol("log", Procedure.PROCEDURE_LOG);
+        setSymbol("log10", Procedure.PROCEDURE_LOG10);
         
         setSymbol("nil", Value.VALUE_NIL);
         
@@ -63,8 +63,8 @@ public class Scope {
         symbols.put(key, block);
     }
 
-    public void setSymbol(String key, Function function) {
-        symbols.put(key, ValueBlock.transform(function));
+    public void setSymbol(String key, Procedure procedure) {
+        symbols.put(key, ValueBlock.transform(procedure));
     }
     
     public Value getSymbol(String key) {

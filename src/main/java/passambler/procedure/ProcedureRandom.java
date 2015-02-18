@@ -1,4 +1,4 @@
-package passambler.function;
+package passambler.procedure;
 
 import java.util.Random;
 import passambler.parser.Parser;
@@ -6,7 +6,7 @@ import passambler.parser.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueNum;
 
-public class FunctionRandom implements Function {
+public class ProcedureRandom implements Procedure {
     @Override
     public int getArguments() {
         return 2;

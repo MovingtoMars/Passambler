@@ -2,8 +2,8 @@ package passambler.value;
 
 import java.util.HashMap;
 import java.util.Map;
-import passambler.function.Function;
-import passambler.function.FunctionSimple;
+import passambler.procedure.Procedure;
+import passambler.procedure.ProcedureSimple;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.lexer.Token;
@@ -43,7 +43,7 @@ public class Value {
                 }
             });
             
-            setProperty("set", new Function() {
+            setProperty("set", new Procedure() {
                 @Override
                 public int getArguments() {
                     return 2;
@@ -74,7 +74,7 @@ public class Value {
                 }
             });
             
-            setProperty("empty", new FunctionSimple() {
+            setProperty("empty", new ProcedureSimple() {
                 @Override
                 public Value getValue() {
                     return new ValueBool(indexedValue.getIndexCount() == 0);
@@ -117,8 +117,8 @@ public class Value {
         properties.put(key, new Property(value));
     }
     
-    public void setProperty(String key, Function function) {
-        properties.put(key, new Property(ValueBlock.transform(function)));
+    public void setProperty(String key, Procedure procedure) {
+        properties.put(key, new Property(ValueBlock.transform(procedure)));
     }
     
     public void setProperty(String key, Property property) {

@@ -2,7 +2,7 @@ package passambler.value;
 
 import java.util.ArrayList;
 import java.util.List;
-import passambler.function.Function;
+import passambler.procedure.Procedure;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 
@@ -10,7 +10,7 @@ public class ValueList extends Value implements IndexedValue {
     protected List<Value> list = new ArrayList<>();
 
     public ValueList() {
-        setProperty("add", new Function() {
+        setProperty("add", new Procedure() {
             @Override
             public int getArguments() {
                 return 1;

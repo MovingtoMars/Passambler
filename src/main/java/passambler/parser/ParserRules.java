@@ -22,7 +22,7 @@ public class ParserRules {
     
     private boolean classDeclarationAllowed = true;
     
-    private boolean functionDeclarationAllowed = true;
+    private boolean procedureDeclarationAllowed = true;
     
     private boolean returnStatementAllowed = true;
     
@@ -62,8 +62,8 @@ public class ParserRules {
         return this;
     }
     
-    public ParserRules setFunctionDeclarationAllowed(boolean allowed) {
-        functionDeclarationAllowed = allowed;
+    public ParserRules setProcedureDeclarationAllowed(boolean allowed) {
+        procedureDeclarationAllowed = allowed;
         
         return this;
     }
@@ -98,8 +98,8 @@ public class ParserRules {
         return classDeclarationAllowed;
     }
     
-    public boolean isFunctionDeclarationAllowed() {
-        return functionDeclarationAllowed;
+    public boolean isProcedureDeclarationAllowed() {
+        return procedureDeclarationAllowed;
     }
     
     public boolean isReturnStatementAllowed() {

@@ -2,7 +2,7 @@ package passambler.value;
 
 import java.util.HashMap;
 import java.util.Map;
-import passambler.function.Function;
+import passambler.procedure.Procedure;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 
@@ -10,7 +10,7 @@ public class ValueDict extends Value {
     protected Map<Value, Value> dict = new HashMap();
     
     public ValueDict() {
-        setProperty("set", new Function() {
+        setProperty("set", new Procedure() {
             @Override
             public int getArguments() {
                 return 2;
@@ -29,7 +29,7 @@ public class ValueDict extends Value {
             }
         });
         
-        setProperty("get", new Function() {
+        setProperty("get", new Procedure() {
             @Override
             public int getArguments() {
                 return 1;
@@ -46,7 +46,7 @@ public class ValueDict extends Value {
             }
         });
         
-        setProperty("keys", new Function() {
+        setProperty("keys", new Procedure() {
             @Override
             public int getArguments() {
                 return 0;
@@ -69,7 +69,7 @@ public class ValueDict extends Value {
             }
         });
         
-        setProperty("values", new Function() {
+        setProperty("values", new Procedure() {
             @Override
             public int getArguments() {
                 return 0;
@@ -92,7 +92,7 @@ public class ValueDict extends Value {
             }
         });
         
-        setProperty("entries", new Function() {
+        setProperty("entries", new Procedure() {
             @Override
             public int getArguments() {
                 return 0;

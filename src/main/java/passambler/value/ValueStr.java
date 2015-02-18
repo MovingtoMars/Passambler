@@ -1,6 +1,6 @@
 package passambler.value;
 
-import passambler.function.Function;
+import passambler.procedure.Procedure;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.lexer.Token;
@@ -9,7 +9,7 @@ public class ValueStr extends Value implements IndexedValue {
     public ValueStr(String data) {
         setValue(data);
 
-        setProperty("append", new Function() {
+        setProperty("append", new Procedure() {
             @Override
             public int getArguments() {
                 return 1;
@@ -26,7 +26,7 @@ public class ValueStr extends Value implements IndexedValue {
             }
         });
         
-        setProperty("split", new Function() {
+        setProperty("split", new Procedure() {
             @Override
             public int getArguments() {
                 return 1;
@@ -49,7 +49,7 @@ public class ValueStr extends Value implements IndexedValue {
             }
         });
         
-        setProperty("replace", new Function() {
+        setProperty("replace", new Procedure() {
             @Override
             public int getArguments() {
                 return 2;
@@ -66,7 +66,7 @@ public class ValueStr extends Value implements IndexedValue {
             }
         });
         
-        setProperty("contains", new Function() {
+        setProperty("contains", new Procedure() {
             @Override
             public int getArguments() {
                 return 1;
@@ -83,7 +83,7 @@ public class ValueStr extends Value implements IndexedValue {
             }
         });
         
-        setProperty("indexOf", new Function() {
+        setProperty("indexOf", new Procedure() {
             @Override
             public int getArguments() {
                 return 1;
@@ -100,7 +100,7 @@ public class ValueStr extends Value implements IndexedValue {
             }
         });
         
-        setProperty("lowerCase", new Function() {
+        setProperty("lowerCase", new Procedure() {
             @Override
             public int getArguments() {
                 return 0;
@@ -117,7 +117,7 @@ public class ValueStr extends Value implements IndexedValue {
             }
         });
         
-        setProperty("upperCase", new Function() {
+        setProperty("upperCase", new Procedure() {
             @Override
             public int getArguments() {
                 return 0;
