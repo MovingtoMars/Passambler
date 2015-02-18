@@ -63,7 +63,7 @@ public class Main {
 
                         parser.getScope().addStd();
 
-                        parser.parseLexer(lexer);
+                        parser.parse(lexer);
                     }
                 } catch (LexerException e) {
                     LOGGER.log(Level.SEVERE, "Lexer exception", e);
@@ -92,7 +92,7 @@ public class Main {
                         Lexer lexer = new Lexer(input.nextLine());
                         
                         tokens.addAll(lexer.scan());
-                        tokens.add(new Token(Token.Type.NEW_LINE, null));
+                        tokens.add(new Token(Token.Type.SEMI_COL, null));
                         
                         if (options.has("t")) {
                             for (Token token : tokens) {
@@ -110,7 +110,7 @@ public class Main {
                             }
                             
                             if (braces == 0) {                               
-                                result = parser.parseLines(tokens);
+                                result = parser.parse(tokens);
                                 
                                 tokens.clear();
                             }

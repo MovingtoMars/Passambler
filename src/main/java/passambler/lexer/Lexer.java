@@ -59,6 +59,7 @@ public class Lexer {
         tokenMap.put("*", Token.Type.MULTIPLY);
         tokenMap.put("/", Token.Type.DIVIDE);
         tokenMap.put(":", Token.Type.COL);
+        tokenMap.put(";", Token.Type.SEMI_COL);
         tokenMap.put("^", Token.Type.POWER);
         tokenMap.put("%", Token.Type.MODULO);
     }
@@ -86,8 +87,6 @@ public class Lexer {
                     inComment = false;
                 }
                 
-                tokens.add(createToken(Token.Type.NEW_LINE));
-
                 next();
             } else if (inComment) {
                 if (current() == '-' && peek() != null && peek() == '-' && peek(2) != null && peek(2) == '-') {

@@ -425,11 +425,11 @@ public class Parser {
         return null;
     }
 
-    public Value parseLexer(Lexer scanner) throws LexerException, ParserException {
-        return parseLines(scanner.scan());
+    public Value parse(Lexer scanner) throws LexerException, ParserException {
+        return parse(scanner.scan());
     }
 
-    public Value parseLines(List<Token> tokens) throws ParserException {
+    public Value parse(List<Token> tokens) throws ParserException {
         List<Token> subTokens = new ArrayList<>();
 
         int braces = 0;
@@ -443,8 +443,8 @@ public class Parser {
 
             subTokens.add(token);
 
-            if (braces == 0 && (token.getType() == Token.Type.NEW_LINE || token == tokens.get(tokens.size() - 1))) {
-                if (token.getType() == Token.Type.NEW_LINE) {
+            if (braces == 0 && ((token.getType() == Token.Type.SEMI_COL || token.getType() == Token.Type.RBRACE) || token == tokens.get(tokens.size() - 1))) {
+                if (token.getType() == Token.Type.SEMI_COL) {
                     subTokens.remove(subTokens.size() - 1);
                 }
 

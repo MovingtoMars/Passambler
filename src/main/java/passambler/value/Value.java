@@ -10,7 +10,7 @@ import passambler.lexer.Token;
 
 public class Value {
     public static ValueNil VALUE_NIL = new ValueNil();
-        
+
     public static ValueBool VALUE_TRUE = new ValueBool(true);
     public static ValueBool VALUE_FALSE = new ValueBool(false);
     

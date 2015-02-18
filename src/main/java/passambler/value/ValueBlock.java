@@ -51,7 +51,7 @@ public class ValueBlock extends Value implements Function {
             }
         }
 
-        return this.parser.parseLines(tokens);
+        return this.parser.parse(tokens);
     }
     
     public static ValueBlock transform(Function function) {
