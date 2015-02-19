@@ -13,6 +13,7 @@ public class ParserException extends Exception {
         UNDEFINED_PROCEDURE("undefined procedure %s"),
         UNDEFINED_VARIABLE("undefined variable %s"),
         UNDEFINED_PROPERTY("undefined property %s"),
+        UNDEFINED_EXTENSION("undefined extension %s"),
         UNEXPECTED_EOF("unexpected end of file"),
         UNEXPECTED_TOKEN("unexpected token %s"),
         UNSUPPORTED_OPERATOR("unsupported operator %s"),

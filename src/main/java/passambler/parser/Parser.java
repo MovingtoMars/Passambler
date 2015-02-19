@@ -1,14 +1,13 @@
 package passambler.parser;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import passambler.Main;
+import passambler.extension.Extension;
 import passambler.lexer.Lexer;
 import passambler.lexer.LexerException;
 import passambler.lexer.Token;
@@ -53,16 +52,24 @@ public class Parser {
         if (stream.first().getType() == Token.Type.IMPORT) {
             stream.next();
             
-            Value value = new ExpressionParser(this, new TokenStream(stream.rest())).parse();
-            
-            if (!(value instanceof ValueStr)) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "expected string");
-            }
-            
-            try {
-                parse(new Lexer(String.join("\n", Files.readAllLines(new File(((ValueStr) value).getValue()).toPath()))));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            if (stream.current().getType() == Token.Type.IDENTIFIER) {
+                String name = stream.current().getValue();
+                
+                Extension extension = Main.EXTENSIONS.stream().filter(ext -> ext.getId().equals(name)).findFirst().orElseThrow(() -> new ParserException(ParserException.Type.UNDEFINED_EXTENSION, stream.current().getPosition(), name));
+                
+                extension.applySymbols(scope);
+            } else {
+                Value value = new ExpressionParser(this, new TokenStream(stream.rest())).parse();
+
+                if (!(value instanceof ValueStr)) {
+                    throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "expected string");
+                }
+
+                try {
+                    parse(new Lexer(String.join("\n", Files.readAllLines(new File(((ValueStr) value).getValue()).toPath()))));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         } else if (stream.first().getType() == Token.Type.IF) {
             if (!rules.isIfStatementAllowed()) {
