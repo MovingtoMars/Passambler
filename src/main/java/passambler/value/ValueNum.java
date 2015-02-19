@@ -34,7 +34,7 @@ public class ValueNum extends Value {
                     return new ValueNum(getValue().add(((ValueNum) value).getValue()));
                 case MINUS:
                 case ASSIGN_MINUS:
-                    return new ValueNum(getValue().min(((ValueNum) value).getValue()));
+                    return new ValueNum(getValue().subtract(((ValueNum) value).getValue()));
                 case MULTIPLY:
                 case ASSIGN_MULTIPLY:
                     return new ValueNum(getValue().multiply(((ValueNum) value).getValue()));
@@ -46,7 +46,7 @@ public class ValueNum extends Value {
                     return new ValueNum(getValue().pow(((ValueNum) value).getValueAsInteger()));
                 case MODULO:
                 case ASSIGN_MODULO:
-                    return new ValueNum(getValueAsInteger() % ((ValueNum) value).getValueAsInteger());
+                    return new ValueNum(getValue().remainder(((ValueNum) value).getValue()));
                 case GT:
                     return new ValueBool(getValue().compareTo(((ValueNum) value).getValue()) > 0);
                 case LT:
