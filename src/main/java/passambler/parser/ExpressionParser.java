@@ -1,5 +1,6 @@
 package passambler.parser;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import passambler.procedure.Procedure;
@@ -288,7 +289,7 @@ public class ExpressionParser {
                 number.append(stream.current().getValue());
             }
 
-            return new ValueNum(Double.valueOf(number.toString()));
+            return new ValueNum(new BigDecimal(number.toString()));
         } else if (token.getType() == Token.Type.IDENTIFIER) {
             if (!parser.getScope().hasSymbol(token.getValue())) {
                 throw new ParserException(stream.peek() != null && stream.peek().getType() == Token.Type.LPAREN ? ParserException.Type.UNDEFINED_PROCEDURE : ParserException.Type.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());

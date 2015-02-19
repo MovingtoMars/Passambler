@@ -19,7 +19,7 @@ public abstract class ProcedureSimpleMath implements Procedure {
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        return new ValueNum(getValue(((ValueNum) arguments[0]).getValue()));
+        return new ValueNum(getValue(((ValueNum) arguments[0]).getValue().doubleValue()));
     }
 
     public abstract double getValue(double value);
