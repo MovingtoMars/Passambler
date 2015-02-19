@@ -17,13 +17,7 @@ public class TestParser {
         this.lines = Files.readAllLines(file.toPath(), Charset.forName("UTF-8"));
     }
 
-    public Test parse() {
-        parseSections();
-
-        return new Test(sections.get("desc").toString(), sections.get("input").toString(), sections.get("result").toString());
-    }
-
-    private void parseSections() {
+    public Test parse() throws TestException {
         String section = null;
 
         for (String line : lines) {
@@ -31,7 +25,7 @@ public class TestParser {
                 section = line.substring(2, line.length() - 2);
 
                 sections.put(section, new StringBuilder());
-            } else {
+            } else if (section != null) {
                 sections.get(section).append(line);
 
                 if (!line.equals(lines.get(lines.size() - 1))) {
@@ -39,5 +33,13 @@ public class TestParser {
                 }
             }
         }
+        
+        for (String requiredSection : new String[] { "desc", "input", "result" }) {
+            if (!sections.containsKey(requiredSection)) {
+                throw new TestException("missing section '%s'", requiredSection);
+            }
+        }
+
+        return new Test(sections.get("desc").toString(), sections.get("input").toString(), sections.get("result").toString());
     }
 }

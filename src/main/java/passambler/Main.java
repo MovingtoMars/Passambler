@@ -111,13 +111,13 @@ public class Main {
         }
 
         for (File file : files) {
-            TestParser parser = new TestParser(file);
-
-            TestRunner runner = new TestRunner(parser.parse());
-
             boolean passed = true;
 
             try {
+                TestParser parser = new TestParser(file);
+
+                TestRunner runner = new TestRunner(parser.parse());
+
                 runner.run();
             } catch (LexerException | ParserException | TestException e) {
                 LOGGER.log(Level.WARNING, String.format("Test %s failed", file.getName()), e);
