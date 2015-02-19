@@ -26,7 +26,7 @@ public class TokenStream {
     }
 
     public Token current() {
-        return tokens.get(position);
+        return position > tokens.size() - 1 ? null : tokens.get(position);
     }
 
     public boolean hasNext() {
@@ -85,11 +85,11 @@ public class TokenStream {
                 typesExpected.append(", ");
             }
 
-            if (current().getType() == types[i]) {
+            if (current() != null && current().getType() == types[i]) {
                 return;
             }
         }
-
-        throw new ParserException(ParserException.Type.INVALID_TOKEN, current().getPosition(), typesExpected.toString(), current().getType());
+        
+        throw new ParserException(ParserException.Type.INVALID_TOKEN, current() == null ? first().getPosition() : current().getPosition(), typesExpected.toString(), current() == null ? "nothing" : current().getType());
     }
 }
