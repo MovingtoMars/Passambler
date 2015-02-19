@@ -272,10 +272,6 @@ public class ExpressionParser {
 
             Value indexValue = new ExpressionParser(parser, new TokenStream(tokens)).parse();
 
-            if (!(indexValue instanceof ValueNum)) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "array index should be a number");
-            }
-
             if (indexValue instanceof ValueNum) {
                 int index = ((ValueNum) indexValue).getValueAsInteger();
 
