@@ -161,7 +161,7 @@ public class ExpressionParser {
             Value[] vals = new Value[arguments.size()];
 
             Value returnValue = currentProcedure.invoke(parser, arguments.toArray(vals));
-            
+
             return returnValue != null ? returnValue : Value.VALUE_NIL;
         } else if (!tokens.isEmpty()) {
             return new ExpressionParser(parser, new TokenStream(tokens)).parse();
