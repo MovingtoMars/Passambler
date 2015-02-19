@@ -1,9 +1,14 @@
 package passambler.parser;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import passambler.lexer.Lexer;
 import passambler.lexer.LexerException;
 import passambler.lexer.Token;
@@ -13,6 +18,7 @@ import passambler.value.Value;
 import passambler.value.ValueBlock;
 import passambler.value.ValueBool;
 import passambler.value.ValueNum;
+import passambler.value.ValueStr;
 
 public class Parser {
     private ParserRules rules = ParserRules.RULES_NONE;
@@ -44,7 +50,21 @@ public class Parser {
             return null;
         }
 
-        if (stream.first().getType() == Token.Type.IF) {
+        if (stream.first().getType() == Token.Type.IMPORT) {
+            stream.next();
+            
+            Value value = new ExpressionParser(this, new TokenStream(stream.rest())).parse();
+            
+            if (!(value instanceof ValueStr)) {
+                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "expected string");
+            }
+            
+            try {
+                parse(new Lexer(String.join("\n", Files.readAllLines(new File(((ValueStr) value).getValue()).toPath()))));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else if (stream.first().getType() == Token.Type.IF) {
             if (!rules.isIfStatementAllowed()) {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
             }
