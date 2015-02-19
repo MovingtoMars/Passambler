@@ -344,8 +344,8 @@ public class Parser {
         return null;
     }
 
-    public Value parse(Lexer scanner) throws LexerException, ParserException {
-        return parse(scanner.scan());
+    public Value parse(Lexer lexer) throws LexerException, ParserException {
+        return parse(lexer.scan());
     }
 
     public Value parse(List<Token> tokens) throws ParserException {
