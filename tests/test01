@@ -1,0 +1,8 @@
+--desc--
+Tests arithmetic operations.
+
+--input--
+return [5 + 5, 5 - 5, 5 * 5, 5 / 5, 3 ^ 2];
+
+--result--
+[10, 0, 25, 1, 9]
