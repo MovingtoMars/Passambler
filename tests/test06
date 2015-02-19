@@ -5,8 +5,7 @@ Tests while statement.
 a = 5;
 b = 0;
 
-while a < 10
-{
+while a < 10 {
     a += 1;
     b += 1;
 }

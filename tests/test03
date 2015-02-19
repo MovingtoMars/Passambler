@@ -2,7 +2,14 @@
 Tests comparison operators.
 
 --input--
-return [10 == 10, 10 != 10, 5 < 10, 10 > 5, 6 >= 6, 8 <= 8];
+return [
+    10 == 10,
+    10 != 10,
+    5 < 10,
+    10 > 5,
+    6 >= 6,
+    8 <= 8
+];
 
 --result--
 [true, false, true, true, true, true]

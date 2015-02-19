@@ -1,17 +1,11 @@
 import std;
 
-for [0..100]:x
-{
-    if (x % 15) == 0
-    {
+for [0..100]:x {
+    if (x % 15) == 0 {
         writeln('FizzBuzz');
-    }
-    elseif (x % 3) == 0
-    {
+    } elseif (x % 3) == 0 {
         writeln('Fizz');
-    }
-    elseif (x % 5) == 0
-    {
+    } elseif (x % 5) == 0 {
         writeln('Buzz');
     }
 }
