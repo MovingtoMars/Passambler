@@ -10,6 +10,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
+import passambler.extension.Extension;
+import passambler.extension.math.ExtensionMath;
+import passambler.extension.std.ExtensionStd;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.lexer.Lexer;
@@ -24,6 +27,8 @@ public class Main {
     public static final String VERSION = "0.1.0-SNAPSHOT";
 
     public static final Logger LOGGER = Logger.getLogger("Passambler");
+    
+    public static List<Extension> EXTENSIONS = new ArrayList<>();
     
     private OptionSet options;
 
@@ -43,6 +48,9 @@ public class Main {
 
         LOGGER.setUseParentHandlers(false);
         LOGGER.addHandler(new LogHandler(options.has("show-stacktrace")));
+        
+        EXTENSIONS.add(new ExtensionStd());
+        EXTENSIONS.add(new ExtensionMath());
 
         if (options.has("v")) {
             LOGGER.log(Level.INFO, String.format("Passambler %s", VERSION));
@@ -79,9 +87,7 @@ public class Main {
                 }
             } else {
                 Parser parser = new Parser();
-
-                parser.getScope().addStd();
-
+                
                 parser.parse(lexer);
             }
         } catch (LexerException e) {
@@ -95,8 +101,6 @@ public class Main {
 
     public void runInteractiveMode() {
         Parser parser = new Parser();
-
-        parser.getScope().addStd();
 
         Scanner input = new Scanner(System.in);
 

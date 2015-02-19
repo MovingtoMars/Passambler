@@ -1,11 +1,12 @@
-package passambler.procedure;
+package passambler.extension.math.procedure;
 
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
+import passambler.procedure.Procedure;
 import passambler.value.Value;
 import passambler.value.ValueNum;
 
-public abstract class ProcedureMath implements Procedure {
+public abstract class ProcedureSimpleMath implements Procedure {
     @Override
     public int getArguments() {
         return 1;

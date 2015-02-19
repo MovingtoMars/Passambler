@@ -1,10 +1,11 @@
-package passambler.procedure;
+package passambler.extension.std.procedure;
 
 import java.util.Scanner;
+import passambler.extension.std.value.ValueInStream;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
+import passambler.procedure.Procedure;
 import passambler.value.Value;
-import passambler.value.ValueInStream;
 import passambler.value.ValueNum;
 import passambler.value.ValueStr;
 

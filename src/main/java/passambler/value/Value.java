@@ -2,22 +2,11 @@ package passambler.value;
 
 import java.util.HashMap;
 import java.util.Map;
+import passambler.extension.std.ExtensionStd;
 import passambler.procedure.Procedure;
 import passambler.lexer.Token;
 
 public class Value {
-    public static ValueNil VALUE_NIL = new ValueNil();
-
-    public static ValueBool VALUE_TRUE = new ValueBool(true);
-    public static ValueBool VALUE_FALSE = new ValueBool(false);
-
-    public static ValueNum VALUE_PI = new ValueNum(Math.PI);
-
-    public static ValueOutStream VALUE_STDOUT = new ValueOutStream(System.out);
-    public static ValueOutStream VALUE_STDERR = new ValueOutStream(System.err);
-
-    public static ValueInStream VALUE_STDIN = new ValueInStream(System.in);
-
     protected Map<String, Property> properties = new HashMap();
 
     protected Object value;
@@ -74,6 +63,6 @@ public class Value {
 
     @Override
     public String toString() {
-        return value == null ? Value.VALUE_NIL.toString() : value.toString();
+        return value == null ? ExtensionStd.VALUE_NIL.toString() : value.toString();
     }
 }

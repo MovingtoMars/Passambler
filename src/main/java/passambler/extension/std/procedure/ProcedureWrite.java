@@ -1,9 +1,10 @@
-package passambler.procedure;
+package passambler.extension.std.procedure;
 
+import passambler.extension.std.value.ValueOutStream;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
+import passambler.procedure.Procedure;
 import passambler.value.Value;
-import passambler.value.ValueOutStream;
 
 public class ProcedureWrite implements Procedure {
     protected boolean newLine;

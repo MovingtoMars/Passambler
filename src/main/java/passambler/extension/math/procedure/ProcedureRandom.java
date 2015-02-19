@@ -1,8 +1,9 @@
-package passambler.procedure;
+package passambler.extension.math.procedure;
 
 import java.util.Random;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
+import passambler.procedure.Procedure;
 import passambler.value.Value;
 import passambler.value.ValueNum;
 
