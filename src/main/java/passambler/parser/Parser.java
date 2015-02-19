@@ -300,10 +300,6 @@ public class Parser {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
             }
 
-            if (!stream.hasNext()) {
-                return null;
-            }
-
             stream.next();
 
             return new ExpressionParser(this, new TokenStream(stream.rest())).parse();
