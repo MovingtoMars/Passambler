@@ -180,11 +180,7 @@ public class Parser {
                 throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, operatorToken.getPosition(), operatorToken.getType());
             }
 
-            if (value instanceof ValueBlock) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "cannot declare a block");
-            } else {
-                scope.setSymbol(key, value);
-            }
+            scope.setSymbol(key, value);
         } else if (stream.first().getType() == Token.Type.WHILE) {
             if (!rules.isWhileStatementAllowed()) {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
