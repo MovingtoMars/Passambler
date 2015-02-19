@@ -53,7 +53,7 @@ public class Lexer {
         tokenMap.put("{", Token.Type.LBRACE);
         tokenMap.put("}", Token.Type.RBRACE);
         tokenMap.put(",", Token.Type.COMMA);
-        tokenMap.put(".", Token.Type.DOT);
+        tokenMap.put(".", Token.Type.PERIOD);
         tokenMap.put("+", Token.Type.PLUS);
         tokenMap.put("-", Token.Type.MINUS);
         tokenMap.put("*", Token.Type.MULTIPLY);

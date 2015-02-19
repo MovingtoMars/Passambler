@@ -34,7 +34,7 @@ public class ExpressionParser {
                 value = parseBrace();
             } else if (token.getType() == Token.Type.STRING || token.getType() == Token.Type.NUMBER || token.getType() == Token.Type.IDENTIFIER) {
                 value = parseSymbol();
-            } else if (token.getType() == Token.Type.DOT) {
+            } else if (token.getType() == Token.Type.PERIOD) {
                 value = parseProperty(value);
             } else if (token.getType() == Token.Type.LBRACKET) {
                 value = parseIndexed(value);
@@ -280,7 +280,7 @@ public class ExpressionParser {
 
             number.append(token.getValue());
 
-            if (stream.peek() != null && stream.peek().getType() == Token.Type.DOT && stream.peek(2) != null && stream.peek(2).getType() == Token.Type.NUMBER) {
+            if (stream.peek() != null && stream.peek().getType() == Token.Type.PERIOD && stream.peek(2) != null && stream.peek(2).getType() == Token.Type.NUMBER) {
                 stream.next();
                 stream.next();
 
