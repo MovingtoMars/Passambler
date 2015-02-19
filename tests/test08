@@ -1,0 +1,20 @@
+--desc--
+Tests procedure declaration.
+
+--input--
+proc a {
+    return;
+}
+
+proc b:x {
+    return x + 2;
+}
+
+proc c:x, y {
+    return x + y;
+}
+
+return [a(), b(5), c(4, 3)];
+
+--result--
+[nil, 7, 7]

@@ -1,0 +1,17 @@
+--desc--
+Tests while statement.
+
+--input--
+a = 5;
+b = 0;
+
+while a < 10
+{
+    a += 1;
+    b += 1;
+}
+
+return [a, b];
+
+--result--
+[10, 5]
