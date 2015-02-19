@@ -30,11 +30,11 @@ public class Main {
     public Main(String[] args) throws IOException {
         OptionParser optionParser = new OptionParser();
 
-        optionParser.accepts("v", "Version number");
-        optionParser.accepts("h", "Help");
+        optionParser.accepts("v", "Show the version number");
+        optionParser.accepts("h", "Show help");
         optionParser.accepts("a", "Run interactively");
-        optionParser.accepts("f", "Parse and execute a file").withRequiredArg();
-        optionParser.accepts("t", "Run a test (file or a whole directory)").withRequiredArg();
+        optionParser.accepts("f", "Run one or multiple file(s)").withRequiredArg();
+        optionParser.accepts("t", "Run a test (file(s) or a whole directory)").withRequiredArg();
 
         optionParser.accepts("show-stacktrace", "Shows the stacktrace of the parser");
         optionParser.accepts("show-tokens", "Shows the tokens of a file");
@@ -53,11 +53,15 @@ public class Main {
         }
 
         if (options.has("t")) {
-            runTestFile(new File(options.valueOf("t").toString()));
+            for (String file : options.valueOf("t").toString().split(",")) {
+                runTestFile(new File(file));
+            }
         }
 
         if (options.has("f")) {
-            runFile(new File(options.valueOf("f").toString()));
+            for (String file : options.valueOf("f").toString().split(",")) {
+                runFile(new File(file));
+            }
         }
 
         if (options.has("a")) {
