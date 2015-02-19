@@ -13,18 +13,18 @@ import passambler.value.ValueList;
 import passambler.value.ValueNum;
 import passambler.value.ValueStr;
 
-public class Evaluator {
+public class ExpressionParser {
     private Parser parser;
     
     private TokenStream stream;
     
-    public Evaluator(Parser parser, TokenStream stream) {
+    public ExpressionParser(Parser parser, TokenStream stream) {
         this.parser = parser;
         
         this.stream = stream;
     }
     
-    public Value evaluate() throws ParserException {
+    public Value parse() throws ParserException {
         Value value = null;
 
         while (stream.hasNext()) {
@@ -86,7 +86,7 @@ public class Evaluator {
                         }
                     }
 
-                    Value operatorChange = value.onOperator(new Evaluator(parser, new TokenStream(tokens)).evaluate(), operatorToken.getType());
+                    Value operatorChange = value.onOperator(new ExpressionParser(parser, new TokenStream(tokens)).parse(), operatorToken.getType());
 
                     if (operatorChange == null) {
                         throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, operatorToken.getPosition(), operatorToken.getType());
@@ -155,7 +155,7 @@ public class Evaluator {
                         argumentTokens.remove(argumentTokens.size() - 1);
                     }
 
-                    arguments.add(new Evaluator(parser, new TokenStream(argumentTokens)).evaluate());
+                    arguments.add(new ExpressionParser(parser, new TokenStream(argumentTokens)).parse());
 
                     argumentTokens.clear();
                 }
@@ -177,7 +177,7 @@ public class Evaluator {
 
             return currentProcedure.invoke(parser, arguments.toArray(vals));
         } else if (!tokens.isEmpty()) {
-            return new Evaluator(parser, new TokenStream(tokens)).evaluate();
+            return new ExpressionParser(parser, new TokenStream(tokens)).parse();
         }
 
         return null;
@@ -202,7 +202,7 @@ public class Evaluator {
                         throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "no value specified");
                     }
                 } else {
-                    inlineDeclaration.add(new Evaluator(parser, new TokenStream(tokens)).evaluate());
+                    inlineDeclaration.add(new ExpressionParser(parser, new TokenStream(tokens)).parse());
                 }
 
                 if (stream.current().getType() == Token.Type.RBRACKET) {
@@ -223,7 +223,7 @@ public class Evaluator {
             } else if (stream.current().getType() == Token.Type.RPAREN) {
                 paren--;
             } else if (stream.current().getType() == Token.Type.DOT_DOUBLE && brackets == 1 && paren == 0) {
-                doubleDotLeft = new Evaluator(parser, new TokenStream(tokens)).evaluate();
+                doubleDotLeft = new ExpressionParser(parser, new TokenStream(tokens)).parse();
 
                 tokens.clear();
 
@@ -234,7 +234,7 @@ public class Evaluator {
 
             if (brackets == 0 && paren == 0) {
                 if (doubleDotLeft != null) {
-                    doubleDotRight = new Evaluator(parser, new TokenStream(tokens)).evaluate();
+                    doubleDotRight = new ExpressionParser(parser, new TokenStream(tokens)).parse();
                 }
 
                 break;
@@ -285,7 +285,7 @@ public class Evaluator {
 
             IndexedValue indexedValue = (IndexedValue) currentValue;
 
-            Value indexValue = new Evaluator(parser, new TokenStream(tokens)).evaluate();
+            Value indexValue = new ExpressionParser(parser, new TokenStream(tokens)).parse();
 
             if (!(indexValue instanceof ValueNum)) {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "array index should be a number");
@@ -399,7 +399,7 @@ public class Evaluator {
                     
                     element.next();
 
-                    value.set(new ValueStr(key), new Evaluator(parser, new TokenStream(element.rest())).evaluate());
+                    value.set(new ValueStr(key), new ExpressionParser(parser, new TokenStream(element.rest())).parse());
 
                     tokens.clear();
                 }

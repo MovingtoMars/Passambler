@@ -70,7 +70,7 @@ public class Parser {
                         condition = false;
 
                         if (!elseCondition) {
-                            Value value = new Evaluator(this, new TokenStream(tokens)).evaluate();
+                            Value value = new ExpressionParser(this, new TokenStream(tokens)).parse();
                             
                             if (!(value instanceof ValueBool)) {
                                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "expected a bool");
@@ -154,7 +154,7 @@ public class Parser {
                 baseValue = scope.getSymbol(key);
             }
 
-            Value value = baseValue.onOperator(new Evaluator(this, new TokenStream(stream.rest())).evaluate(), operatorToken.getType());
+            Value value = baseValue.onOperator(new ExpressionParser(this, new TokenStream(stream.rest())).parse(), operatorToken.getType());
 
             if (value == null) {
                 throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, operatorToken.getPosition(), operatorToken.getType());
@@ -184,9 +184,9 @@ public class Parser {
                 stream.next();
             }
 
-            Value value = new Evaluator(this, new TokenStream(tokens)).evaluate();
+            Value value = new ExpressionParser(this, new TokenStream(tokens)).parse();
 
-            Value callbackValue = new Evaluator(this, new TokenStream(stream.rest())).evaluate();
+            Value callbackValue = new ExpressionParser(this, new TokenStream(stream.rest())).parse();
 
             if (!(callbackValue instanceof ValueBlock)) {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "callback should be a block");
@@ -205,7 +205,7 @@ public class Parser {
                     return result;
                 }
 
-                value = new Evaluator(this, new TokenStream(tokens)).evaluate();
+                value = new ExpressionParser(this, new TokenStream(tokens)).parse();
             }
         } else if (stream.first().getType() == Token.Type.FOR) {
             if (!rules.isForStatementAllowed()) {
@@ -246,7 +246,7 @@ public class Parser {
 
             stream.match(Token.Type.LBRACE);
 
-            Value callbackValue = new Evaluator(this, new TokenStream(stream.rest())).evaluate();
+            Value callbackValue = new ExpressionParser(this, new TokenStream(stream.rest())).parse();
 
             if (!(callbackValue instanceof ValueBlock)) {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "callback should be a block");
@@ -256,7 +256,7 @@ public class Parser {
 
             callback.getArgumentNames().addAll(arguments);
 
-            Value value = new Evaluator(this, new TokenStream(tokens)).evaluate();
+            Value value = new ExpressionParser(this, new TokenStream(tokens)).parse();
 
             if (!(value instanceof IndexedValue)) {
                 throw new ParserException(ParserException.Type.NOT_INDEXED, stream.current().getPosition());
@@ -286,7 +286,7 @@ public class Parser {
 
             stream.next();
 
-            return new Evaluator(this, new TokenStream(stream.rest())).evaluate();
+            return new ExpressionParser(this, new TokenStream(stream.rest())).parse();
         } else if (stream.first().getType() == Token.Type.PROC) {
             if (!rules.isProcedureDeclarationAllowed()) {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
@@ -322,7 +322,7 @@ public class Parser {
 
             stream.match(Token.Type.LBRACE);
 
-            Value callbackValue = new Evaluator(this, new TokenStream(stream.rest())).evaluate();
+            Value callbackValue = new ExpressionParser(this, new TokenStream(stream.rest())).parse();
 
             if (!(callbackValue instanceof ValueBlock)) {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "callback should be a block");
@@ -338,7 +338,7 @@ public class Parser {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
             }
             
-            return new Evaluator(this, stream).evaluate();
+            return new ExpressionParser(this, stream).parse();
         }
 
         return null;
