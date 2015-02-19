@@ -3,13 +3,6 @@ package passambler.parser;
 public class ParserRules {
     public static ParserRules RULES_NONE = new ParserRules();
     
-    public static ParserRules RULES_CLASS = new ParserRules()
-        .setEvaluationAllowed(false)
-        .setForStatementAllowed(false)
-        .setWhileStatementAllowed(false)
-        .setIfStatementAllowed(false)
-        .setReturnStatementAllowed(false);
-    
     private boolean evaluationAllowed = true;
     
     private boolean forStatementAllowed = true;
