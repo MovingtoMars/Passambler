@@ -333,6 +333,8 @@ public class Parser {
                         arguments.add(stream.current().getValue());
 
                         if (stream.peek().getType() != Token.Type.LBRACE) {
+                            stream.next();
+
                             stream.match(Token.Type.COMMA);
                         }
                     }
