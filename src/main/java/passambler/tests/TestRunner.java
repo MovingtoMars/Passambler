@@ -19,7 +19,7 @@ public class TestRunner {
         Value result = parser.parse(new Lexer(test.getInput()));
 
         if (test.getResult() != null) {
-            if (result.getValue() == null) {
+            if (result == null) {
                 throw new TestException("unexpected result, expected '%s'", test.getResult());
             } else if (!test.getResult().equals(result.toString())) {
                 throw new TestException("unexpected result, expected '%s' but got '%s'", test.getResult(), result.toString());
