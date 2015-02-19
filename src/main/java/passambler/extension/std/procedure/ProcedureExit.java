@@ -3,7 +3,6 @@ package passambler.extension.std.procedure;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.procedure.Procedure;
-import passambler.procedure.Procedure;
 import passambler.value.Value;
 import passambler.value.ValueNum;
 
