@@ -60,15 +60,15 @@ public class Main {
             optionParser.printHelpOn(System.out);
         }
 
-        if (options.has("t")) {
-            for (String file : options.valueOf("t").toString().split(",")) {
-                runTestFile(new File(file));
-            }
-        }
-
         if (options.has("f")) {
             for (String file : options.valueOf("f").toString().split(",")) {
                 runFile(new File(file));
+            }
+        }
+
+        if (options.has("t")) {
+            for (String file : options.valueOf("t").toString().split(",")) {
+                runTestFile(new File(file));
             }
         }
 
@@ -96,6 +96,38 @@ public class Main {
             LOGGER.log(Level.SEVERE, "Parser exception", e);
         } catch (RuntimeException e) {
             LOGGER.log(Level.SEVERE, "Runtime exception", e);
+        }
+    }
+
+    public void runTestFile(File testFile) throws IOException {
+        List<File> files = new ArrayList<>();
+
+        if (testFile.isDirectory()) {
+            for (File file : testFile.listFiles()) {
+                files.add(file);
+            }
+        } else {
+            files.add(testFile);
+        }
+
+        for (File file : files) {
+            TestParser parser = new TestParser(file);
+
+            TestRunner runner = new TestRunner(parser.parse());
+
+            boolean passed = true;
+
+            try {
+                runner.run();
+            } catch (LexerException | ParserException | TestException e) {
+                LOGGER.log(Level.WARNING, String.format("Test %s failed", file.getName()), e);
+
+                passed = false;
+            }
+
+            if (passed) {
+                LOGGER.log(Level.INFO, String.format("Test %s passed", file.getName()));
+            }
         }
     }
 
@@ -158,38 +190,6 @@ public class Main {
         }
     }
 
-    public void runTestFile(File testFile) throws IOException {
-        List<File> files = new ArrayList<>();
-
-        if (testFile.isDirectory()) {
-            for (File file : testFile.listFiles()) {
-                files.add(file);
-            }
-        } else {
-            files.add(testFile);
-        }
-
-        for (File file : files) {
-            TestParser parser = new TestParser(file);
-
-            TestRunner runner = new TestRunner(parser.parse());
-
-            boolean passed = true;
-
-            try {
-                runner.run();
-            } catch (LexerException | ParserException | TestException e) {
-                LOGGER.log(Level.WARNING, String.format("Test %s failed", file.getName()), e);
-
-                passed = false;
-            }
-
-            if (passed) {
-                LOGGER.log(Level.INFO, String.format("Test %s passed", file.getName()));
-            }
-        }
-    }
-    
     public static void main(String[] args) throws IOException {
         Main main = new Main(args);
     }
