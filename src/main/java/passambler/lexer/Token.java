@@ -7,7 +7,7 @@ public class Token {
         LBRACKET, RBRACKET,
         COMMA,
         WHILE, FOR,
-        DOT, DOT_DOUBLE,
+        DOT, RANGE,
         ASSIGN, ASSIGN_PLUS, ASSIGN_MINUS, ASSIGN_MULTIPLY, ASSIGN_DIVIDE, ASSIGN_POWER, ASSIGN_MODULO,
         PLUS, MINUS, MULTIPLY, DIVIDE, POWER, MODULO,
         SEMI_COL, COL,
@@ -18,7 +18,7 @@ public class Token {
         IF, ELSEIF, ELSE;
 
         public boolean isOperator() {
-            return this == PLUS || this == MINUS || this == MULTIPLY || this == DIVIDE || this == POWER || this == MODULO || this == GT || this == LT || this == GTE || this == LTE || this == EQUAL || this == NEQUAL || this == AND || this == OR;
+            return this == PLUS || this == MINUS || this == MULTIPLY || this == DIVIDE || this == POWER || this == MODULO || this == GT || this == LT || this == GTE || this == LTE || this == EQUAL || this == NEQUAL || this == AND || this == OR || this == RANGE;
         }
 
         public boolean isAssignmentOperator() {

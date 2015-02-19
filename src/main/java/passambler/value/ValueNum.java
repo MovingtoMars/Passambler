@@ -72,6 +72,14 @@ public class ValueNum extends Value {
                     return new ValueBool(getValue() >= ((ValueNum) value).getValue());
                 case LTE:
                     return new ValueBool(getValue() <= ((ValueNum) value).getValue());
+                case RANGE:
+                    ValueList list = new ValueList();
+                    
+                    for (int i = getValueAsInteger(); i <= ((ValueNum) value).getValueAsInteger(); ++i) {
+                        list.add(new ValueNum(i));
+                    }
+                
+                    return list;
             }
         }
 
