@@ -37,7 +37,7 @@ public class ExpressionParser {
             } else if (token.getType() == Token.Type.DOT) {
                 value = parseProperty(value);
             } else if (token.getType() == Token.Type.LBRACKET) {
-                value = parseIndex(value);
+                value = parseIndexed(value);
             } else if (token.getType() == Token.Type.LPAREN) {
                 value = parseParen(value);
             } else if (!token.getType().isOperator()) {
@@ -168,7 +168,7 @@ public class ExpressionParser {
         return null;
     }
 
-    private Value parseIndex(Value currentValue) throws ParserException {
+    private Value parseIndexed(Value currentValue) throws ParserException {
         List<Token> tokens = new ArrayList<>();
 
         int brackets = 1, paren = 0;
