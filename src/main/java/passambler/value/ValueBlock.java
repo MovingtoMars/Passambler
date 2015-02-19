@@ -14,7 +14,7 @@ public class ValueBlock extends Value implements Procedure {
     private List<String> argumentNames;
 
     private List<Token> tokens = new ArrayList<>();
-    
+
     public ValueBlock(Scope parentScope, List<String> argumentNames) {
         this.argumentNames = argumentNames;
 
@@ -53,7 +53,7 @@ public class ValueBlock extends Value implements Procedure {
 
         return this.parser.parse(tokens);
     }
-    
+
     public static ValueBlock transform(Procedure procedure) {
         return new ValueBlock(new Scope(), null) {
             @Override

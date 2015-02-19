@@ -20,6 +20,6 @@ public abstract class ProcedureMath implements Procedure {
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         return new ValueNum(getValue(((ValueNum) arguments[0]).getValue()));
     }
-    
+
     public abstract double getValue(double value);
 }

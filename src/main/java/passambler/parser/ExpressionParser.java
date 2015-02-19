@@ -15,53 +15,38 @@ import passambler.value.ValueStr;
 
 public class ExpressionParser {
     private Parser parser;
-    
+
     private TokenStream stream;
-    
+
     public ExpressionParser(Parser parser, TokenStream stream) {
         this.parser = parser;
-        
+
         this.stream = stream;
     }
-    
+
     public Value parse() throws ParserException {
         Value value = null;
 
         while (stream.hasNext()) {
             Token token = stream.current();
 
-            switch (token.getType()) {
-                case LBRACE:
-                    value = parseBrace();
-
-                    break;
-                case STRING:
-                case NUMBER:
-                case IDENTIFIER:
-                    value = parseSymbol();
-
-                    break;
-                case DOT:
-                    value = parseProperty(value);
-
-                    break;
-                case LBRACKET:
-                    value = parseIndex(value);
-                    
-                    break;
-                case LPAREN:
-                    value = parseParen(value);
-
-                    break;
-                default:
-                    if (!token.getType().isOperator()) {
-                        throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
-                    }
+            if (token.getType() == Token.Type.LBRACE) {
+                value = parseBrace();
+            } else if (token.getType() == Token.Type.STRING || token.getType() == Token.Type.NUMBER || token.getType() == Token.Type.IDENTIFIER) {
+                value = parseSymbol();
+            } else if (token.getType() == Token.Type.DOT) {
+                value = parseProperty(value);
+            } else if (token.getType() == Token.Type.LBRACKET) {
+                value = parseIndex(value);
+            } else if (token.getType() == Token.Type.LPAREN) {
+                value = parseParen(value);
+            } else if (!token.getType().isOperator()) {
+                throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
             }
 
             if (value != null && stream.peek() != null) {
                 int paren = 0;
-                
+
                 Token operatorToken = stream.peek();
 
                 if (operatorToken.getType().isOperator()) {
@@ -108,7 +93,7 @@ public class ExpressionParser {
         List<Token> tokens = new ArrayList<>();
 
         stream.next();
-        
+
         int paren = 1;
 
         while (stream.hasNext()) {
@@ -116,17 +101,17 @@ public class ExpressionParser {
                 paren++;
             } else if (stream.current().getType() == Token.Type.RPAREN) {
                 paren--;
-                
+
                 if (paren == 0) {
                     break;
                 }
             }
-            
+
             tokens.add(stream.current());
-            
+
             stream.next();
         }
-        
+
         if (paren != 0) {
             throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "unmatching parens");
         }
@@ -136,7 +121,7 @@ public class ExpressionParser {
             List<Value> arguments = new ArrayList<>();
 
             int brackets = 0;
-            
+
             for (Token token : tokens) {
                 if (token.getType() == Token.Type.LPAREN) {
                     paren++;
@@ -293,7 +278,7 @@ public class ExpressionParser {
 
             if (indexValue instanceof ValueNum) {
                 int index = ((ValueNum) indexValue).getValueAsInteger();
-                
+
                 if (index < -indexedValue.getIndexCount() || index > indexedValue.getIndexCount() - 1) {
                     throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, stream.current().getPosition(), index, indexedValue.getIndexCount());
                 }
@@ -311,7 +296,7 @@ public class ExpressionParser {
 
     private Value parseProperty(Value currentValue) throws ParserException {
         stream.next();
-        
+
         stream.match(Token.Type.IDENTIFIER);
 
         String propertyName = stream.current().getValue();
@@ -334,17 +319,17 @@ public class ExpressionParser {
             if (stream.back() != null && stream.back().getType() == Token.Type.DIVIDE && token.getValueAsInteger() == 0) {
                 throw new ParserException(ParserException.Type.ZERO_DIVISION, token.getPosition());
             }
-            
+
             if (stream.current() != stream.first() && stream.back().getType() == Token.Type.MINUS) {
                 number.append("-");
             }
-            
+
             number.append(token.getValue());
-            
+
             if (stream.peek() != null && stream.peek().getType() == Token.Type.DOT && stream.peek(2) != null && stream.peek(2).getType() == Token.Type.NUMBER) {
                 stream.next();
                 stream.next();
-                
+
                 number.append(".");
                 number.append(stream.current().getValue());
             }
@@ -392,15 +377,15 @@ public class ExpressionParser {
                     element.match(Token.Type.IDENTIFIER);
 
                     String key = element.current().getValue();
-                    
+
                     element.next();
-                    
+
                     element.match(Token.Type.COL);
-                    
+
                     if (!element.hasNext()) {
-                        throw new ParserException(ParserException.Type.BAD_SYNTAX, element.current().getPosition(), "value of property missing");    
+                        throw new ParserException(ParserException.Type.BAD_SYNTAX, element.current().getPosition(), "value of property missing");
                     }
-                    
+
                     element.next();
 
                     value.set(new ValueStr(key), new ExpressionParser(parser, new TokenStream(element.rest())).parse());

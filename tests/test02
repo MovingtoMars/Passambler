@@ -1,8 +1,0 @@
---desc--
-Tests string concat.
-
---input--
-return "Hello" + " " + "World";
-
---result--
-Hello World

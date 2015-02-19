@@ -11,7 +11,7 @@ public class ValueBool extends Value {
     public Boolean getValue() {
         return (Boolean) value;
     }
-    
+
     @Override
     public Value onOperator(Value value, Token.Type tokenType) {
         if (value instanceof ValueBool) {
@@ -22,7 +22,7 @@ public class ValueBool extends Value {
                     return new ValueBool(getValue() || ((ValueBool) value).getValue());
             }
         }
-        
+
         return super.onOperator(value, tokenType);
     }
 }

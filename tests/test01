@@ -1,8 +1,0 @@
---desc--
-Tests arithmetic tokens.
-
---input--
-return 2 * 2;
-
---result--
-4

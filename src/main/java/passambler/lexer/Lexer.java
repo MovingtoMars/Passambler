@@ -19,12 +19,12 @@ public class Lexer {
 
         tokenMap.put("return", Token.Type.RETURN);
         tokenMap.put("elseif", Token.Type.ELSEIF);
-        
+
         tokenMap.put("while", Token.Type.WHILE);
-        
+
         tokenMap.put("proc", Token.Type.PROC);
         tokenMap.put("else", Token.Type.ELSE);
-        
+
         tokenMap.put("for", Token.Type.FOR);
 
         tokenMap.put("if", Token.Type.IF);
@@ -41,7 +41,7 @@ public class Lexer {
         tokenMap.put("/=", Token.Type.ASSIGN_DIVIDE);
         tokenMap.put("^=", Token.Type.ASSIGN_POWER);
         tokenMap.put("%=", Token.Type.ASSIGN_MODULO);
-        
+
         tokenMap.put("=", Token.Type.ASSIGN);
         tokenMap.put(">", Token.Type.GT);
         tokenMap.put("<", Token.Type.LT);
@@ -85,7 +85,7 @@ public class Lexer {
                 if (!multiLineComment) {
                     inComment = false;
                 }
-                
+
                 next();
             } else if (inComment) {
                 if (current() == '-' && peek() != null && peek() == '-' && peek(2) != null && peek(2) == '-') {
@@ -126,7 +126,7 @@ public class Lexer {
                     token.setValue(tokens.get(tokens.size() - 1).getValue() + current());
                 }
 
-                next();              
+                next();
             } else if (current() == ' ' || current() == '\t') {
                 next();
             } else if (current() == '-' && peek() != null && peek() == '-') {
@@ -141,11 +141,11 @@ public class Lexer {
                 next();
             } else {
                 boolean matched = false;
-                
-                for (Map.Entry<String, Token.Type> match : tokenMap.entrySet()) {    
+
+                for (Map.Entry<String, Token.Type> match : tokenMap.entrySet()) {
                     for (int i = 0; i < match.getKey().length(); ++i) {
                         char current = match.getKey().charAt(i);
-                        
+
                         if (peek(i) != null && peek(i) == current) {
                             if (i == match.getKey().length() - 1) {
                                 position += match.getKey().length();
@@ -153,7 +153,7 @@ public class Lexer {
                                 tokens.add(createToken(match.getValue(), match.getKey()));
 
                                 matched = true;
-                                
+
                                 break;
                             }
                         } else {
@@ -161,7 +161,7 @@ public class Lexer {
                         }
                     }
                 }
-            
+
                 if (!matched && isIdentifier(current())) {
                     tokens.add(createToken(Token.Type.IDENTIFIER, String.valueOf(current())));
 
@@ -193,7 +193,7 @@ public class Lexer {
     public char current() {
         return input.charAt(position);
     }
-    
+
     public void next() {
         position++;
 
@@ -222,7 +222,7 @@ public class Lexer {
                 return false;
             }
         }
-        
+
         return true;
     }
 }

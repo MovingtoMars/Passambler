@@ -8,16 +8,16 @@ import passambler.value.Value;
 
 public class TestRunner {
     private Test test;
-    
+
     public TestRunner(Test test) {
         this.test = test;
     }
-    
+
     public void run() throws LexerException, ParserException, TestException {
         Parser parser = new Parser();
-        
+
         Value result = parser.parse(new Lexer(test.getInput()));
-        
+
         if (test.getResult() != null) {
             if (result.getValue() == null) {
                 throw new TestException("unexpected result, expected '%s'", test.getResult());

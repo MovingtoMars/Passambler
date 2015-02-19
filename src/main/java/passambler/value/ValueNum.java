@@ -10,21 +10,21 @@ public class ValueNum extends Value {
 
     public ValueNum(Double data) {
         setValue(data);
-        
+
         setProperty("abs", new ProcedureSimple() {
             @Override
             public Value getValue() {
                 return new ValueNum(Math.abs(ValueNum.this.getValue()));
             }
         });
-        
+
         setProperty("floor", new ProcedureSimple() {
             @Override
             public Value getValue() {
                 return new ValueNum(Math.floor(ValueNum.this.getValue()));
             }
         });
-        
+
         setProperty("ceil", new ProcedureSimple() {
             @Override
             public Value getValue() {

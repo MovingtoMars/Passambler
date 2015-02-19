@@ -25,7 +25,7 @@ public class ValueStr extends Value implements IndexedValue {
                 return new ValueStr(getValue() + ((ValueStr) arguments[0]).getValue());
             }
         });
-        
+
         setProperty("split", new Procedure() {
             @Override
             public int getArguments() {
@@ -40,15 +40,15 @@ public class ValueStr extends Value implements IndexedValue {
             @Override
             public Value invoke(Parser parser, Value... arguments) throws ParserException {
                 ValueList list = new ValueList();
-                
+
                 for (String part : getValue().split(((ValueStr) arguments[0]).getValue())) {
                     list.add(new ValueStr(part));
                 }
-                
+
                 return list;
             }
         });
-        
+
         setProperty("replace", new Procedure() {
             @Override
             public int getArguments() {
@@ -65,7 +65,7 @@ public class ValueStr extends Value implements IndexedValue {
                 return new ValueStr(getValue().replace(((ValueStr) arguments[0]).getValue(), ((ValueStr) arguments[1]).getValue()));
             }
         });
-        
+
         setProperty("contains", new Procedure() {
             @Override
             public int getArguments() {
@@ -82,7 +82,7 @@ public class ValueStr extends Value implements IndexedValue {
                 return new ValueBool(getValue().contains(((ValueStr) arguments[0]).getValue()));
             }
         });
-        
+
         setProperty("indexOf", new Procedure() {
             @Override
             public int getArguments() {
@@ -99,7 +99,7 @@ public class ValueStr extends Value implements IndexedValue {
                 return new ValueNum(getValue().indexOf(((ValueStr) arguments[0]).getValue()));
             }
         });
-        
+
         setProperty("lowerCase", new Procedure() {
             @Override
             public int getArguments() {
@@ -116,7 +116,7 @@ public class ValueStr extends Value implements IndexedValue {
                 return new ValueStr(getValue().toLowerCase());
             }
         });
-        
+
         setProperty("upperCase", new Procedure() {
             @Override
             public int getArguments() {
@@ -148,7 +148,7 @@ public class ValueStr extends Value implements IndexedValue {
 
         return super.onOperator(value, tokenType);
     }
-    
+
     @Override
     public Value getIndex(Value key) {
         return new ValueStr(String.valueOf(getValue().charAt(((ValueNum) key).getValueAsInteger())));

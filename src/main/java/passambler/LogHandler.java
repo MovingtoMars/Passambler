@@ -7,11 +7,11 @@ import java.util.logging.LogRecord;
 
 public class LogHandler extends Handler {
     private boolean stacktrace;
-    
+
     public LogHandler(boolean stacktrace) {
         this.stacktrace = stacktrace;
     }
-    
+
     @Override
     public void publish(LogRecord record) {
         PrintStream output = System.out;
@@ -33,7 +33,7 @@ public class LogHandler extends Handler {
         } else {
             output.println(String.format("%s", record.getMessage()));
         }
-        
+
         if (record.getLevel() == Level.SEVERE) {
             System.exit(-1);
         }

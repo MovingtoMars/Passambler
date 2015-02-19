@@ -72,24 +72,24 @@ public class TokenStream {
     public TokenStream copyAtCurrentPosition() {
         return new TokenStream(tokens, position);
     }
-    
+
     public void match(Token.Type... types) throws ParserException {
         StringBuilder typesExpected = new StringBuilder();
-        
+
         for (int i = 0; i < types.length; ++i) {
             typesExpected.append(types[i]);
-            
+
             if (i == types.length - 2) {
                 typesExpected.append(" or ");
             } else if (i != types.length - 1) {
                 typesExpected.append(", ");
             }
-            
+
             if (current().getType() == types[i]) {
                 return;
             }
         }
-        
+
         throw new ParserException(ParserException.Type.INVALID_TOKEN, current().getPosition(), typesExpected.toString(), current().getType());
     }
 }

@@ -16,13 +16,13 @@ public class Token {
         AND, OR,
         PROC, RETURN,
         IF, ELSEIF, ELSE;
-        
+
         public boolean isOperator() {
             return this == PLUS || this == MINUS || this == MULTIPLY || this == DIVIDE || this == POWER || this == MODULO || this == GT || this == LT || this == GTE || this == LTE || this == EQUAL || this == NEQUAL || this == AND || this == OR;
         }
-        
+
         public boolean isAssignmentOperator() {
-            return this == ASSIGN || this == ASSIGN_PLUS || this == ASSIGN_MINUS ||  this == ASSIGN_MULTIPLY ||  this == ASSIGN_DIVIDE || this == ASSIGN_POWER || this == ASSIGN_MODULO;
+            return this == ASSIGN || this == ASSIGN_PLUS || this == ASSIGN_MINUS || this == ASSIGN_MULTIPLY || this == ASSIGN_DIVIDE || this == ASSIGN_POWER || this == ASSIGN_MODULO;
         }
     }
 

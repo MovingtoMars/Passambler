@@ -16,7 +16,7 @@ import passambler.value.ValueNum;
 
 public class Parser {
     private ParserRules rules = ParserRules.RULES_NONE;
-    
+
     private Scope scope;
 
     public Parser() {
@@ -30,11 +30,11 @@ public class Parser {
     public Scope getScope() {
         return scope;
     }
-    
+
     public ParserRules getParserRules() {
         return rules;
     }
-    
+
     public void setParserRules(ParserRules rules) {
         this.rules = rules;
     }
@@ -48,7 +48,7 @@ public class Parser {
             if (!rules.isIfStatementAllowed()) {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
             }
-            
+
             List<Token> tokens = new ArrayList<>();
 
             Map<ValueBool, ValueBlock> cases = new HashMap();
@@ -57,7 +57,7 @@ public class Parser {
             ValueBlock currentConditionBlock = null;
 
             boolean condition = true;
-            
+
             boolean elseCondition = false;
 
             int braces = 0;
@@ -71,11 +71,11 @@ public class Parser {
 
                         if (!elseCondition) {
                             Value value = new ExpressionParser(this, new TokenStream(tokens)).parse();
-                            
+
                             if (!(value instanceof ValueBool)) {
                                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "expected a bool");
                             }
-                            
+
                             currentCondition = (ValueBool) value;
                         } else {
                             currentCondition = new ValueBool(true);
@@ -102,16 +102,16 @@ public class Parser {
                         currentCondition = null;
                         currentConditionBlock = null;
                         condition = true;
-                        
+
                         if (stream.peek() != null) {
                             if (elseCondition == true) {
                                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "else should be the last statement");
                             }
-                            
+
                             stream.next();
-                            
+
                             stream.match(Token.Type.ELSE, Token.Type.ELSEIF);
-                            
+
                             if (stream.current().getType() == Token.Type.ELSE) {
                                 elseCondition = true;
                             }
@@ -139,7 +139,7 @@ public class Parser {
             if (!rules.isVariableAssignmentAllowed()) {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
             }
-            
+
             String key = stream.current().getValue();
 
             stream.next();
@@ -169,7 +169,7 @@ public class Parser {
             if (!rules.isWhileStatementAllowed()) {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
             }
-            
+
             stream.next();
 
             List<Token> tokens = new ArrayList<>();
@@ -211,7 +211,7 @@ public class Parser {
             if (!rules.isForStatementAllowed()) {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
             }
-            
+
             stream.next();
 
             List<Token> tokens = new ArrayList<>();
@@ -279,7 +279,7 @@ public class Parser {
             if (!rules.isReturnStatementAllowed()) {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
             }
-            
+
             if (!stream.hasNext()) {
                 return null;
             }
@@ -291,7 +291,7 @@ public class Parser {
             if (!rules.isProcedureDeclarationAllowed()) {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
             }
-            
+
             stream.next();
 
             stream.match(Token.Type.IDENTIFIER);
@@ -337,7 +337,7 @@ public class Parser {
             if (!rules.isEvaluationAllowed()) {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
             }
-            
+
             return new ExpressionParser(this, stream).parse();
         }
 
@@ -355,7 +355,7 @@ public class Parser {
 
         for (Token token : tokens) {
             Token peekToken = tokens.indexOf(token) == tokens.size() - 1 ? null : tokens.get(tokens.indexOf(token) + 1);
-            
+
             if (token.getType() == Token.Type.LBRACE) {
                 braces++;
             } else if (token.getType() == Token.Type.RBRACE) {
@@ -372,7 +372,7 @@ public class Parser {
                 if (peekToken != null && (peekToken.getType() == Token.Type.ELSE || peekToken.getType() == Token.Type.ELSEIF)) {
                     continue;
                 }
-                
+
                 if (token.getType() == Token.Type.SEMI_COL) {
                     subTokens.remove(subTokens.size() - 1);
                 }
@@ -386,7 +386,7 @@ public class Parser {
                 }
             }
         }
-        
+
         if (!subTokens.isEmpty()) {
             throw new ParserException(ParserException.Type.UNEXPECTED_EOF);
         }

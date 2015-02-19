@@ -19,6 +19,6 @@ public abstract class ProcedureSimple implements Procedure {
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         return getValue();
     }
-    
+
     public abstract Value getValue();
 }

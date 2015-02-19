@@ -25,32 +25,32 @@ public class ValueList extends Value implements IndexedValue {
             @Override
             public Value invoke(Parser parser, Value... arguments) throws ParserException {
                 add(arguments[0]);
-                
+
                 return null;
             }
         });
-        
+
         setProperty("size", new Property() {
             @Override
             public Value getValue() {
                 return new ValueNum(getIndexCount());
             }
         });
-            
+
         setProperty("empty", new ProcedureSimple() {
             @Override
             public Value getValue() {
                 return new ValueBool(getIndexCount() == 0);
             }
         });
-            
+
         setProperty("first", new Property() {
             @Override
             public Value getValue() {
                 return getIndex(new ValueNum(0));
             }
         });
-        
+
         setProperty("last", new Property() {
             @Override
             public Value getValue() {
