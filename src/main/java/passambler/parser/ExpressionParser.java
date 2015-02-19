@@ -175,9 +175,6 @@ public class ExpressionParser {
 
         stream.next();
 
-        Value doubleDotLeft = null;
-        Value doubleDotRight = null;
-
         ValueList inlineDeclaration = new ValueList();
 
         while (stream.hasNext()) {
@@ -207,21 +204,9 @@ public class ExpressionParser {
                 paren++;
             } else if (stream.current().getType() == Token.Type.RPAREN) {
                 paren--;
-            } else if (stream.current().getType() == Token.Type.DOT_DOUBLE && brackets == 1 && paren == 0) {
-                doubleDotLeft = new ExpressionParser(parser, new TokenStream(tokens)).parse();
-
-                tokens.clear();
-
-                stream.next();
-
-                continue;
             }
 
             if (brackets == 0 && paren == 0) {
-                if (doubleDotLeft != null) {
-                    doubleDotRight = new ExpressionParser(parser, new TokenStream(tokens)).parse();
-                }
-
                 break;
             }
 
@@ -230,38 +215,7 @@ public class ExpressionParser {
             stream.next();
         }
 
-        if (doubleDotLeft != null && doubleDotRight != null) {
-            if (!(doubleDotLeft instanceof ValueNum) || !(doubleDotRight instanceof ValueNum)) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "range syntax only supports numbers");
-            }
-
-            int min = ((ValueNum) doubleDotLeft).getValueAsInteger();
-            int max = ((ValueNum) doubleDotRight).getValueAsInteger();
-
-            if (min > max) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), String.format("%d can't be bigger than %d", min, max));
-            }
-
-            ValueList list = new ValueList();
-
-            if (currentValue == null) {
-                for (int current = min; current <= max; ++current) {
-                    list.add(new ValueNum(current));
-                }
-            } else {
-                if (!(currentValue instanceof IndexedValue)) {
-                    throw new ParserException(ParserException.Type.NOT_INDEXED, stream.current().getPosition());
-                }
-
-                IndexedValue indexedValue = (IndexedValue) currentValue;
-
-                for (int current = min; current <= max; ++current) {
-                    list.add(indexedValue.getIndex(new ValueNum(current)));
-                }
-            }
-
-            return list;
-        } else if (currentValue == null && (inlineDeclaration.getIndexCount() > 0 || tokens.isEmpty())) {
+        if (currentValue == null && (inlineDeclaration.getIndexCount() > 0 || tokens.isEmpty())) {
             return inlineDeclaration;
         } else {
             if (!(currentValue instanceof IndexedValue)) {
