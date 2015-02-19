@@ -150,15 +150,15 @@ public class ValueStr extends Value implements IndexedValue {
     }
     
     @Override
-    public Value getIndex(int index) {
-        return new ValueStr(String.valueOf(getValue().charAt(index)));
+    public Value getIndex(Value key) {
+        return new ValueStr(String.valueOf(getValue().charAt(((ValueNum) key).getValueAsInteger())));
     }
 
     @Override
-    public void setIndex(int index, Value value) {
+    public void setIndex(Value key, Value value) {
         char[] array = getValue().toCharArray();
 
-        array[index] = ((ValueStr) value).getValue().charAt(0);
+        array[((ValueNum) key).getValueAsInteger()] = ((ValueStr) value).getValue().charAt(0);
 
         setValue(new String(array));
     }

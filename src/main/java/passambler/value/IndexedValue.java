@@ -1,9 +1,9 @@
 package passambler.value;
 
 public interface IndexedValue {
-    public Value getIndex(int index);
+    public Value getIndex(Value key);
 
-    public void setIndex(int index, Value value);
+    public void setIndex(Value key, Value value);
 
     public int getIndexCount();
 }

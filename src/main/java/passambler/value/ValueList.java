@@ -5,6 +5,7 @@ import java.util.List;
 import passambler.procedure.Procedure;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
+import passambler.procedure.ProcedureSimple;
 
 public class ValueList extends Value implements IndexedValue {
     protected List<Value> list = new ArrayList<>();
@@ -28,16 +29,44 @@ public class ValueList extends Value implements IndexedValue {
                 return null;
             }
         });
+        
+        setProperty("size", new Property() {
+            @Override
+            public Value getValue() {
+                return new ValueNum(getIndexCount());
+            }
+        });
+            
+        setProperty("empty", new ProcedureSimple() {
+            @Override
+            public Value getValue() {
+                return new ValueBool(getIndexCount() == 0);
+            }
+        });
+            
+        setProperty("first", new Property() {
+            @Override
+            public Value getValue() {
+                return getIndex(new ValueNum(0));
+            }
+        });
+        
+        setProperty("last", new Property() {
+            @Override
+            public Value getValue() {
+                return getIndex(new ValueNum(getIndexCount() - 1));
+            }
+        });
     }
 
     @Override
-    public Value getIndex(int index) {
-        return list.get(index);
+    public Value getIndex(Value key) {
+        return list.get(((ValueNum) key).getValueAsInteger());
     }
 
     @Override
-    public void setIndex(int index, Value value) {
-        list.set(index, value);
+    public void setIndex(Value key, Value value) {
+        list.set(((ValueNum) key).getValueAsInteger(), value);
     }
 
     @Override

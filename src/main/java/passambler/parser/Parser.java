@@ -269,7 +269,7 @@ public class Parser {
             }
 
             for (int i = 0; i < indexedValue.getIndexCount(); ++i) {
-                Value result = callback.invoke(this, new Value[] { indexedValue.getIndex(i), new ValueNum(i) });
+                Value result = callback.invoke(this, new Value[] { indexedValue.getIndex(new ValueNum(i)), new ValueNum(i) });
 
                 if (result != null) {
                     return result;

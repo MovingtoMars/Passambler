@@ -32,69 +32,6 @@ public class Value {
                 return new ValueStr(Value.this.toString());
             }
         });
-        
-        if (this instanceof IndexedValue) {
-            IndexedValue indexedValue = (IndexedValue) this;
-            
-            setProperty("size", new Property() {
-                @Override
-                public Value getValue() {
-                    return new ValueNum(indexedValue.getIndexCount());
-                }
-            });
-            
-            setProperty("set", new Procedure() {
-                @Override
-                public int getArguments() {
-                    return 2;
-                }
-
-                @Override
-                public boolean isArgumentValid(Value value, int argument) {
-                    if (argument == 0) {
-                        return value instanceof ValueNum;
-                    } else if (argument == 1) {
-                        return true;
-                    }
-                    
-                    return false;
-                }
-
-                @Override
-                public Value invoke(Parser parser, Value... arguments) throws ParserException {
-                    int index = ((ValueNum) arguments[0]).getValueAsInteger();
-
-                    if (index < 0 || index > indexedValue.getIndexCount() - 1) {
-                        throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, index, indexedValue.getIndexCount());
-                    }
-
-                    indexedValue.setIndex(index, arguments[1]);
-
-                    return Value.this;
-                }
-            });
-            
-            setProperty("empty", new ProcedureSimple() {
-                @Override
-                public Value getValue() {
-                    return new ValueBool(indexedValue.getIndexCount() == 0);
-                }
-            });
-            
-            setProperty("first", new Property() {
-                @Override
-                public Value getValue() {
-                    return indexedValue.getIndex(0);
-                }
-            });
-            
-            setProperty("last", new Property() {
-                @Override
-                public Value getValue() {
-                    return indexedValue.getIndex(indexedValue.getIndexCount() - 1);
-                }
-            });
-        }
     }
     
     public Object getValue() {

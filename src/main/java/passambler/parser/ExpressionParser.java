@@ -271,7 +271,7 @@ public class ExpressionParser {
                 IndexedValue indexedValue = (IndexedValue) currentValue;
 
                 for (int current = min; current <= max; ++current) {
-                    list.add(indexedValue.getIndex(current));
+                    list.add(indexedValue.getIndex(new ValueNum(current)));
                 }
             }
 
@@ -291,16 +291,20 @@ public class ExpressionParser {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "array index should be a number");
             }
 
-            int index = ((ValueNum) indexValue).getValueAsInteger();
+            if (indexValue instanceof ValueNum) {
+                int index = ((ValueNum) indexValue).getValueAsInteger();
+                
+                if (index < -indexedValue.getIndexCount() || index > indexedValue.getIndexCount() - 1) {
+                    throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, stream.current().getPosition(), index, indexedValue.getIndexCount());
+                }
 
-            if (index < -indexedValue.getIndexCount() || index > indexedValue.getIndexCount() - 1) {
-                throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, stream.current().getPosition(), index, indexedValue.getIndexCount());
-            }
-
-            if (index < 0) {
-                return indexedValue.getIndex(indexedValue.getIndexCount() - Math.abs(index));
+                if (index < 0) {
+                    return indexedValue.getIndex(new ValueNum(indexedValue.getIndexCount() - Math.abs(index)));
+                } else {
+                    return indexedValue.getIndex(new ValueNum(index));
+                }
             } else {
-                return indexedValue.getIndex(index);
+                return indexedValue.getIndex(indexValue);
             }
         }
     }
