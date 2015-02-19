@@ -1,1 +1,3 @@
+import std;
+
 writeln('Hello World!');
