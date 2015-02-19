@@ -291,6 +291,10 @@ public class ExpressionParser {
     }
 
     private Value parseProperty(Value currentValue) throws ParserException {
+        if (stream.peek() == null) {
+            throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "missing property name");
+        }
+        
         stream.next();
 
         stream.match(Token.Type.IDENTIFIER);
