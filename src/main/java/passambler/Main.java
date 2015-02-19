@@ -1,5 +1,6 @@
 package passambler;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -17,6 +18,9 @@ import passambler.parser.ParserException;
 import passambler.lexer.Lexer;
 import passambler.lexer.LexerException;
 import passambler.lexer.Token;
+import passambler.tests.Test;
+import passambler.tests.TestParser;
+import passambler.tests.TestRunner;
 import passambler.value.Value;
 
 public class Main {
@@ -31,16 +35,18 @@ public class Main {
             optionParser.accepts("v", "Version number");
             optionParser.accepts("h", "Help");
             optionParser.accepts("a", "Run interactively");
-            optionParser.accepts("s", "Shows the stacktrace of the parser");
             optionParser.accepts("f", "Parse and execute a file").withRequiredArg();
-            optionParser.accepts("t", "Show tokens");
+            optionParser.accepts("t", "Run a test (file or a whole directory)").withRequiredArg();
+            
+            optionParser.accepts("show-stacktrace", "Shows the stacktrace of the parser");
+            optionParser.accepts("show-tokens", "Shows the tokens of a file");
 
             OptionSet options = null;
 
             options = optionParser.parse(args);
 
             LOGGER.setUseParentHandlers(false);
-            LOGGER.addHandler(new LogHandler(options.has("s")));
+            LOGGER.addHandler(new LogHandler(options.has("show-stacktrace")));
 
             if (options.has("v")) {
                 LOGGER.log(Level.INFO, String.format("Passambler %s", VERSION));
@@ -54,7 +60,7 @@ public class Main {
                 try {
                     Lexer lexer = new Lexer(String.join("\n", Files.readAllLines(Paths.get(String.valueOf(options.valueOf("f"))), Charset.forName("UTF-8"))));
 
-                    if (options.has("t")) {
+                    if (options.has("show-tokens")) {
                         for (Token token : lexer.scan()) {
                             LOGGER.log(Level.INFO, token.toString());
                         }
@@ -82,7 +88,7 @@ public class Main {
                 Scanner input = new Scanner(System.in);
 
                 List<Token> tokens = new ArrayList<>();
-                
+
                 while (true) {
                     System.out.print((tokens.isEmpty() ? "~>" : "->") + " ");
 
@@ -90,17 +96,17 @@ public class Main {
 
                     try {
                         Lexer lexer = new Lexer(input.nextLine());
-                        
+
                         tokens.addAll(lexer.scan());
                         tokens.add(new Token(Token.Type.SEMI_COL, null));
-                        
-                        if (options.has("t")) {
+
+                        if (options.has("show-tokens")) {
                             for (Token token : tokens) {
                                 LOGGER.log(Level.INFO, token.toString());
                             }
                         } else {
                             int braces = 0;
-                            
+
                             for (Token token : tokens) {
                                 if (token.getType() == Token.Type.LBRACE) {
                                     braces++;
@@ -108,24 +114,24 @@ public class Main {
                                     braces--;
                                 }
                             }
-                            
-                            if (braces == 0) {                               
+
+                            if (braces == 0) {
                                 result = parser.parse(tokens);
-                                
+
                                 tokens.clear();
                             }
                         }
                     } catch (LexerException e) {
                         LOGGER.log(Level.WARNING, "Lexer exception", e);
-                        
+
                         tokens.clear();
                     } catch (ParserException e) {
                         LOGGER.log(Level.WARNING, "Parser exception", e);
-                        
+
                         tokens.clear();
                     } catch (RuntimeException e) {
                         LOGGER.log(Level.WARNING, "Runtime exception", e);
-                        
+
                         tokens.clear();
                     }
 
@@ -134,10 +140,44 @@ public class Main {
                     }
                 }
             }
+
+            if (options.has("t")) {
+                File file = new File(String.valueOf(options.valueOf("t")));
+
+                if (file.isDirectory()) {
+                    for (File subFile : file.listFiles()) {
+                        parseTestFile(subFile);
+                    }
+                } else {
+                    parseTestFile(file);
+                }
+            }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "I/O exception", e);
         } catch (OptionException e) {
             LOGGER.log(Level.SEVERE, "Option exception", e);
+        }
+    }
+
+    public static void parseTestFile(File file) throws IOException {
+        TestParser parser = new TestParser(file);
+
+        Test test = parser.parse();
+
+        TestRunner runner = new TestRunner(test);
+
+        boolean passed = true;
+
+        try {
+            runner.run();
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Test " + file.getName() + " failed", e);
+
+            passed = false;
+        }
+
+        if (passed) {
+            LOGGER.log(Level.INFO, "Test " + file.getName() + " passed");
         }
     }
 }
