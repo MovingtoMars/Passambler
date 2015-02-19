@@ -14,7 +14,17 @@ import passambler.value.ValueNum;
 import passambler.value.ValueStr;
 
 public class Evaluator {
-    public static Value evaluate(Parser parser, TokenStream stream) throws ParserException {
+    private Parser parser;
+    
+    private TokenStream stream;
+    
+    public Evaluator(Parser parser, TokenStream stream) {
+        this.parser = parser;
+        
+        this.stream = stream;
+    }
+    
+    public Value evaluate() throws ParserException {
         Value value = null;
 
         while (stream.hasNext()) {
@@ -22,25 +32,25 @@ public class Evaluator {
 
             switch (token.getType()) {
                 case LBRACE:
-                    value = parseBrace(parser, stream);
+                    value = parseBrace();
 
                     break;
                 case STRING:
                 case NUMBER:
                 case IDENTIFIER:
-                    value = parseSymbol(parser, stream);
+                    value = parseSymbol();
 
                     break;
                 case DOT:
-                    value = parseProperty(parser, stream, value);
+                    value = parseProperty(value);
 
                     break;
                 case LBRACKET:
-                    value = parseIndex(parser, stream, value);
+                    value = parseIndex(value);
                     
                     break;
                 case LPAREN:
-                    value = parseParen(parser, stream, value);
+                    value = parseParen(value);
 
                     break;
                 default:
@@ -76,7 +86,7 @@ public class Evaluator {
                         }
                     }
 
-                    Value operatorChange = value.onOperator(evaluate(parser, new TokenStream(tokens)), operatorToken.getType());
+                    Value operatorChange = value.onOperator(new Evaluator(parser, new TokenStream(tokens)).evaluate(), operatorToken.getType());
 
                     if (operatorChange == null) {
                         throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, operatorToken.getPosition(), operatorToken.getType());
@@ -94,7 +104,7 @@ public class Evaluator {
         return value;
     }
 
-    public static Value parseParen(Parser parser, TokenStream stream, Value currentValue) throws ParserException {
+    private Value parseParen(Value currentValue) throws ParserException {
         List<Token> tokens = new ArrayList<>();
 
         stream.next();
@@ -145,7 +155,7 @@ public class Evaluator {
                         argumentTokens.remove(argumentTokens.size() - 1);
                     }
 
-                    arguments.add(evaluate(parser, new TokenStream(argumentTokens)));
+                    arguments.add(new Evaluator(parser, new TokenStream(argumentTokens)).evaluate());
 
                     argumentTokens.clear();
                 }
@@ -167,13 +177,13 @@ public class Evaluator {
 
             return currentProcedure.invoke(parser, arguments.toArray(vals));
         } else if (!tokens.isEmpty()) {
-            return evaluate(parser, new TokenStream(tokens));
+            return new Evaluator(parser, new TokenStream(tokens)).evaluate();
         }
 
         return null;
     }
 
-    public static Value parseIndex(Parser parser, TokenStream stream, Value currentValue) throws ParserException {
+    private Value parseIndex(Value currentValue) throws ParserException {
         List<Token> tokens = new ArrayList<>();
 
         int brackets = 1, paren = 0;
@@ -192,7 +202,7 @@ public class Evaluator {
                         throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "no value specified");
                     }
                 } else {
-                    inlineDeclaration.add(evaluate(parser, new TokenStream(tokens)));
+                    inlineDeclaration.add(new Evaluator(parser, new TokenStream(tokens)).evaluate());
                 }
 
                 if (stream.current().getType() == Token.Type.RBRACKET) {
@@ -213,7 +223,7 @@ public class Evaluator {
             } else if (stream.current().getType() == Token.Type.RPAREN) {
                 paren--;
             } else if (stream.current().getType() == Token.Type.DOT_DOUBLE && brackets == 1 && paren == 0) {
-                doubleDotLeft = evaluate(parser, new TokenStream(tokens));
+                doubleDotLeft = new Evaluator(parser, new TokenStream(tokens)).evaluate();
 
                 tokens.clear();
 
@@ -224,7 +234,7 @@ public class Evaluator {
 
             if (brackets == 0 && paren == 0) {
                 if (doubleDotLeft != null) {
-                    doubleDotRight = evaluate(parser, new TokenStream(tokens));
+                    doubleDotRight = new Evaluator(parser, new TokenStream(tokens)).evaluate();
                 }
 
                 break;
@@ -275,7 +285,7 @@ public class Evaluator {
 
             IndexedValue indexedValue = (IndexedValue) currentValue;
 
-            Value indexValue = evaluate(parser, new TokenStream(tokens));
+            Value indexValue = new Evaluator(parser, new TokenStream(tokens)).evaluate();
 
             if (!(indexValue instanceof ValueNum)) {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "array index should be a number");
@@ -295,7 +305,7 @@ public class Evaluator {
         }
     }
 
-    public static Value parseProperty(Parser parser, TokenStream stream, Value currentValue) throws ParserException {
+    private Value parseProperty(Value currentValue) throws ParserException {
         stream.next();
         
         stream.match(Token.Type.IDENTIFIER);
@@ -309,7 +319,7 @@ public class Evaluator {
         return currentValue.getProperty(propertyName).getValue();
     }
 
-    public static Value parseSymbol(Parser parser, TokenStream stream) throws ParserException {
+    private Value parseSymbol() throws ParserException {
         Token token = stream.current();
 
         if (token.getType() == Token.Type.STRING) {
@@ -347,7 +357,7 @@ public class Evaluator {
         return null;
     }
 
-    public static Value parseBrace(Parser parser, TokenStream stream) throws ParserException {
+    private Value parseBrace() throws ParserException {
         int braces = 1;
 
         if (stream.peek() != null && ((stream.peek().getType() == Token.Type.IDENTIFIER && stream.peek(2) != null && stream.peek(2).getType() == Token.Type.COL) || stream.peek().getType() == Token.Type.RBRACE)) {
@@ -389,7 +399,7 @@ public class Evaluator {
                     
                     element.next();
 
-                    value.set(new ValueStr(key), evaluate(parser, new TokenStream(element.rest())));
+                    value.set(new ValueStr(key), new Evaluator(parser, new TokenStream(element.rest())).evaluate());
 
                     tokens.clear();
                 }
