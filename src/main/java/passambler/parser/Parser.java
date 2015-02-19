@@ -50,6 +50,10 @@ public class Parser {
         }
 
         if (stream.first().getType() == Token.Type.IMPORT) {
+            if (!rules.isImportStatementAllowed()) {
+                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
+            }
+
             stream.next();
             
             if (stream.current().getType() == Token.Type.IDENTIFIER) {
