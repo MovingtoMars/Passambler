@@ -25,6 +25,8 @@ public class ExtensionStd implements Extension {
         scope.setSymbol("readdouble", new ProcedureRead(ReadType.DOUBLE));
         scope.setSymbol("exit", new ProcedureExit());
         scope.setSymbol("microtime", new ProcedureMicrotime());
+        scope.setSymbol("fst", new ProcedureFst());
+        scope.setSymbol("lst", new ProcedureLst());
         
         scope.setSymbol("nil", VALUE_NIL);
         scope.setSymbol("true", new ValueBool(true));
