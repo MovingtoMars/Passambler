@@ -28,6 +28,7 @@ public class ExtensionStd implements Extension {
         scope.setSymbol("fst", new ProcedureFst());
         scope.setSymbol("lst", new ProcedureLst());
         scope.setSymbol("size", new ProcedureSize());
+        scope.setSymbol("empty", new ProcedureEmpty());
         
         scope.setSymbol("nil", VALUE_NIL);
         scope.setSymbol("true", new ValueBool(true));
