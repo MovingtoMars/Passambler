@@ -28,6 +28,9 @@ public class Lexer {
 
         tokenMap.put("for", Token.Type.FOR);
 
+        tokenMap.put("<=>", Token.Type.COMPARE);        
+        tokenMap.put("cmp", Token.Type.COMPARE);
+
         tokenMap.put("and", Token.Type.AND);
 
         tokenMap.put("if", Token.Type.IF);

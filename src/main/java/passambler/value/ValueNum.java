@@ -63,6 +63,8 @@ public class ValueNum extends Value {
                     }
                 
                     return list;
+                case COMPARE:
+                    return new ValueNum(getValue().compareTo(((ValueNum) value).getValue()));
             }
         }
 
