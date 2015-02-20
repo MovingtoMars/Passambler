@@ -147,6 +147,14 @@ public class ExpressionParser {
                 }
             }
 
+            if (paren != 0) {
+                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "unmatching parens");
+            }
+
+            if (brackets != 0) {
+                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "unmatching brackets");
+            }
+
             Procedure currentProcedure = (Procedure) currentValue;
 
             if (currentProcedure.getArguments() != -1 && currentProcedure.getArguments() != arguments.size()) {
@@ -215,6 +223,8 @@ public class ExpressionParser {
 
             stream.next();
         }
+        
+        stream.match(Token.Type.RBRACKET);
 
         if (currentValue == null && (inlineDeclaration.getIndexCount() > 0 || tokens.isEmpty())) {
             return inlineDeclaration;
