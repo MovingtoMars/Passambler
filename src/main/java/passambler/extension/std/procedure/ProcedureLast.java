@@ -7,7 +7,7 @@ import passambler.value.IndexedValue;
 import passambler.value.Value;
 import passambler.value.ValueNum;
 
-public class ProcedureFst implements Procedure {
+public class ProcedureLast implements Procedure {
     @Override
     public int getArguments() {
         return 1;
@@ -22,6 +22,6 @@ public class ProcedureFst implements Procedure {
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         IndexedValue value = (IndexedValue) arguments[0];
         
-        return value.getIndex(new ValueNum(0));
+        return value.getIndex(new ValueNum(value.getIndexCount() - 1));
     }
 }
