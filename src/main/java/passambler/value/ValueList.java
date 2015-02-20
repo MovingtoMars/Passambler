@@ -9,27 +9,6 @@ import passambler.parser.ParserException;
 public class ValueList extends Value implements IndexedValue {
     protected List<Value> list = new ArrayList<>();
 
-    public ValueList() {
-        setProperty("add", new Procedure() {
-            @Override
-            public int getArguments() {
-                return 1;
-            }
-
-            @Override
-            public boolean isArgumentValid(Value value, int argument) {
-                return true;
-            }
-
-            @Override
-            public Value invoke(Parser parser, Value... arguments) throws ParserException {
-                add(arguments[0]);
-
-                return null;
-            }
-        });
-    }
-
     @Override
     public Value getIndex(Value key) {
         return list.get(((ValueNum) key).getValueAsInteger());
