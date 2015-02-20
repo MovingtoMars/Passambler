@@ -1,0 +1,19 @@
+--desc--
+Tests str extension.
+
+--input--
+import str;
+
+return [
+    contains("i like cats", "bears"),
+    contains("i like dogs", "dogs"),
+    indexof("hello world", "hello"),
+    lcase("HeLLo WoRLd!"),
+    ucase("HeLLo WoRLd!"),
+    replace("I like bears", "bears", "cats"),
+    replace("I like cats", "cats", "dogs"),
+    split("My name is Raoul", " ")
+];
+
+--result--
+[false, true, 0, hello world!, HELLO WORLD!, I like cats, I like dogs, [My, name, is, Raoul]]
