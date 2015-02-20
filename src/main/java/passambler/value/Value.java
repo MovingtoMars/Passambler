@@ -11,15 +11,6 @@ public class Value {
 
     protected Object value;
 
-    public Value() {
-        setProperty("str", new Property() {
-            @Override
-            public Value getValue() {
-                return new ValueStr(Value.this.toString());
-            }
-        });
-    }
-
     public Object getValue() {
         return value;
     }
