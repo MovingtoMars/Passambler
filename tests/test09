@@ -1,0 +1,13 @@
+--desc--
+Tests "and" and "or" operators.
+
+--input--
+return [
+    (5 == 5) and (3 == 3),
+    (5 == 2) or (3 == 3),
+    (3 == 3) and (1 == 2),
+    (1 == 2) or (2 == 1)
+];
+
+--result--
+[true, true, false, false]
