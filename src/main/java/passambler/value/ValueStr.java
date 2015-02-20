@@ -83,7 +83,7 @@ public class ValueStr extends Value implements IndexedValue {
             }
         });
 
-        setProperty("indexOf", new Procedure() {
+        setProperty("indexof", new Procedure() {
             @Override
             public int getArguments() {
                 return 1;
@@ -100,7 +100,7 @@ public class ValueStr extends Value implements IndexedValue {
             }
         });
 
-        setProperty("lowerCase", new Procedure() {
+        setProperty("lowercase", new Procedure() {
             @Override
             public int getArguments() {
                 return 0;
@@ -117,7 +117,7 @@ public class ValueStr extends Value implements IndexedValue {
             }
         });
 
-        setProperty("upperCase", new Procedure() {
+        setProperty("uppercase", new Procedure() {
             @Override
             public int getArguments() {
                 return 0;
