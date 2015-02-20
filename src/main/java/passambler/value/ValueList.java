@@ -30,13 +30,6 @@ public class ValueList extends Value implements IndexedValue {
             }
         });
 
-        setProperty("size", new Property() {
-            @Override
-            public Value getValue() {
-                return new ValueNum(getIndexCount());
-            }
-        });
-
         setProperty("empty", new ProcedureSimple() {
             @Override
             public Value getValue() {
