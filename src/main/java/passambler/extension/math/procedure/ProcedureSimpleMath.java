@@ -1,5 +1,6 @@
 package passambler.extension.math.procedure;
 
+import java.math.BigDecimal;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.procedure.Procedure;
@@ -19,8 +20,8 @@ public abstract class ProcedureSimpleMath implements Procedure {
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        return new ValueNum(getValue(((ValueNum) arguments[0]).getValue().doubleValue()));
+        return new ValueNum(getValue(((ValueNum) arguments[0]).getValue()));
     }
 
-    public abstract double getValue(double value);
+    public abstract BigDecimal getValue(BigDecimal value);
 }

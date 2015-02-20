@@ -1,8 +1,10 @@
 package passambler.extension.math.procedure;
 
+import java.math.BigDecimal;
+
 public class ProcedureSin extends ProcedureSimpleMath {
     @Override
-    public double getValue(double value) {
-        return Math.sin(value);
+    public BigDecimal getValue(BigDecimal value) {
+        return new BigDecimal(Math.sin(value.doubleValue()));
     }
 }
