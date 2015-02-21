@@ -13,7 +13,6 @@ import joptsimple.OptionSet;
 import passambler.extension.Extension;
 import passambler.extension.math.ExtensionMath;
 import passambler.extension.std.ExtensionStd;
-import passambler.extension.str.ExtensionStr;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.lexer.Lexer;
@@ -52,7 +51,6 @@ public class Main {
         
         EXTENSIONS.add(new ExtensionStd());
         EXTENSIONS.add(new ExtensionMath());
-        EXTENSIONS.add(new ExtensionStr());
 
         if (options.has("v")) {
             LOGGER.log(Level.INFO, String.format("Passambler %s", VERSION));

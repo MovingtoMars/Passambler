@@ -1,15 +1,16 @@
-package passambler.extension.str.procedure;
+package passambler.extension.std.procedure;
 
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.procedure.Procedure;
 import passambler.value.Value;
+import passambler.value.ValueList;
 import passambler.value.ValueStr;
 
-public class ProcedureReplace implements Procedure {
+public class ProcedureSplit implements Procedure {
     @Override
     public int getArguments() {
-        return 3;
+        return 2;
     }
 
     @Override
@@ -19,6 +20,12 @@ public class ProcedureReplace implements Procedure {
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        return new ValueStr(((ValueStr) arguments[0]).getValue().replace(((ValueStr) arguments[1]).getValue(), ((ValueStr) arguments[2]).getValue()));
+        ValueList list = new ValueList();
+
+        for (String part : ((ValueStr) arguments[0]).getValue().split(((ValueStr) arguments[1]).getValue())) {
+            list.add(new ValueStr(part));
+        }
+
+        return list;
     }
 }

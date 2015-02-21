@@ -1,4 +1,4 @@
-package passambler.extension.str.procedure;
+package passambler.extension.std.procedure;
 
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
@@ -6,7 +6,7 @@ import passambler.procedure.Procedure;
 import passambler.value.Value;
 import passambler.value.ValueStr;
 
-public class ProcedureLCase implements Procedure {
+public class ProcedureUCase implements Procedure {
     @Override
     public int getArguments() {
         return 1;
@@ -19,6 +19,6 @@ public class ProcedureLCase implements Procedure {
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        return new ValueStr(((ValueStr) arguments[0]).getValue().toLowerCase());
+        return new ValueStr(((ValueStr) arguments[0]).getValue().toUpperCase());
     }
 }

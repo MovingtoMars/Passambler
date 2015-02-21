@@ -1,15 +1,16 @@
-package passambler.extension.str.procedure;
+package passambler.extension.std.procedure;
 
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.procedure.Procedure;
 import passambler.value.Value;
+import passambler.value.ValueBool;
 import passambler.value.ValueStr;
 
-public class ProcedureUCase implements Procedure {
+public class ProcedureContains implements Procedure {
     @Override
     public int getArguments() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -19,6 +20,6 @@ public class ProcedureUCase implements Procedure {
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        return new ValueStr(((ValueStr) arguments[0]).getValue().toUpperCase());
+        return new ValueBool(((ValueStr) arguments[0]).getValue().contains(((ValueStr) arguments[1]).getValue()));
     }
 }
