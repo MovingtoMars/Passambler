@@ -313,8 +313,37 @@ public class ExpressionParser {
 
     private Value parseBrace() throws ParserException {
         int braces = 1;
+        
+        TokenStream detectionStream = stream.copyAtCurrentPosition();
+        
+        detectionStream.next();
+        
+        boolean block = true;
+        
+        int tokensDetected = 0;
+        
+        while (detectionStream.hasNext()) {
+            if (detectionStream.current().getType() == Token.Type.LBRACE) {
+                braces++;
+            } else if (detectionStream.current().getType() == Token.Type.RBRACE) {
+                braces--;
+            } else if (detectionStream.current().getType() == Token.Type.COL && braces == 1) {
+                block = false;
+                
+                break;
+            }
+            
+            detectionStream.next();
+            tokensDetected++;
+        }
+        
+        if (tokensDetected == 1) {
+            block = false;
+        }
+        
+        braces = 1;
 
-        if (stream.peek() != null && ((stream.peek().getType() == Token.Type.IDENTIFIER && stream.peek(2) != null && stream.peek(2).getType() == Token.Type.COL) || stream.peek().getType() == Token.Type.RBRACE)) {
+        if (!block) {
             stream.next();
 
             ValueDict value = new ValueDict();
@@ -339,13 +368,26 @@ public class ExpressionParser {
 
                     TokenStream element = new TokenStream(tokens);
 
-                    element.match(Token.Type.IDENTIFIER);
+                    int keyBraces = 0;
+                    List<Token> keyTokens = new ArrayList<>();
 
-                    String key = element.current().getValue();
-
-                    element.next();
+                    while (element.hasNext()) {
+                        if (element.current().getType() == Token.Type.LBRACE) {
+                            keyBraces++;
+                        } else if (element.current().getType() == Token.Type.RBRACE) {
+                            keyBraces--;
+                        } else if (element.current().getType() == Token.Type.COL && keyBraces == 0) {
+                            break;
+                        }
+                        
+                        keyTokens.add(element.current());
+                        
+                        element.next();
+                    }
 
                     element.match(Token.Type.COL);
+
+                    Value key = new ExpressionParser(parser, new TokenStream(keyTokens)).parse();
 
                     if (!element.hasNext()) {
                         throw new ParserException(ParserException.Type.BAD_SYNTAX, element.current().getPosition(), "value of property missing");
@@ -353,7 +395,7 @@ public class ExpressionParser {
 
                     element.next();
 
-                    value.setIndex(new ValueStr(key), new ExpressionParser(parser, new TokenStream(element.rest())).parse());
+                    value.setIndex(key, new ExpressionParser(parser, new TokenStream(element.rest())).parse());
 
                     tokens.clear();
                 }
