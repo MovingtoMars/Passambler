@@ -272,14 +272,9 @@ public class Parser {
             IndexedValue indexedValue = (IndexedValue) value;
 
             for (int i = 0; i < indexedValue.getIndexCount(); ++i) {
-                if (arguments.size() >= 1) {
-                    callback.getParser().getScope().setSymbol(arguments.get(0), indexedValue.getIndex(new ValueNum(i)));
-                }
-                
-                if (arguments.size() >= 2) {
-                    callback.getParser().getScope().setSymbol(arguments.get(1), new ValueNum(i));
-                }
-                
+                callback.getParser().getScope().setSymbol(arguments.size() >= 1 ? arguments.get(0) : "_", indexedValue.getIndex(new ValueNum(i)));
+                callback.getParser().getScope().setSymbol(arguments.size() >= 2 ? arguments.get(1) : "__", new ValueNum(i));
+
                 Value result = callback.invoke();
 
                 if (result != null) {

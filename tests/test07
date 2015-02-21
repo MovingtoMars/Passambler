@@ -12,6 +12,14 @@ for 1..3:x {
     a *= x;
 }
 
+for 1..5 {
+    a -= _;
+}
+
+for 10..15 {
+    a += __;
+}
+
 return a;
 
 --result--
