@@ -16,11 +16,9 @@ public class ProcedurePush implements Procedure {
     public boolean isArgumentValid(Value value, int argument) {
         if (argument == 0) {
             return value instanceof ValueList;
-        } else if (argument == 1) {
-            return true;
         }
         
-        return false;
+        return true;
     }
 
     @Override
