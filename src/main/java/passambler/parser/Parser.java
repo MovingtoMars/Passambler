@@ -363,7 +363,7 @@ public class Parser {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
             }
 
-            return new ExpressionParser(this, stream).parse();
+            new ExpressionParser(this, stream).parse();
         }
 
         return null;
