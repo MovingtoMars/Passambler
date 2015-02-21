@@ -7,7 +7,7 @@ import passambler.value.IndexedValue;
 import passambler.value.Value;
 import passambler.value.ValueBool;
 
-public class ProcedureEmpty implements Procedure {
+public class ProcedureEmpty extends Procedure {
     @Override
     public int getArguments() {
         return 1;

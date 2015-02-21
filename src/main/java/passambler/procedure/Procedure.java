@@ -4,10 +4,10 @@ import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 
-public interface Procedure {
-    public int getArguments();
+public abstract class Procedure extends Value {
+    public abstract int getArguments();
 
-    public boolean isArgumentValid(Value value, int argument);
+    public abstract boolean isArgumentValid(Value value, int argument);
 
-    public Value invoke(Parser parser, Value... arguments) throws ParserException;
+    public abstract Value invoke(Parser parser, Value... arguments) throws ParserException;
 }

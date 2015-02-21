@@ -7,7 +7,7 @@ import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueStr;
 
-public class ProcedureContains implements Procedure {
+public class ProcedureContains extends Procedure {
     @Override
     public int getArguments() {
         return 2;

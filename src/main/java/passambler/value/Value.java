@@ -31,10 +31,6 @@ public class Value {
         properties.put(key, new Property(value));
     }
 
-    public void setProperty(String key, Procedure procedure) {
-        properties.put(key, new Property(ValueBlock.transform(procedure)));
-    }
-
     public void setProperty(String key, Property property) {
         properties.put(key, property);
     }

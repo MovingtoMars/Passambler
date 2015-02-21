@@ -9,7 +9,7 @@ import passambler.value.Value;
 import passambler.value.ValueNum;
 import passambler.value.ValueStr;
 
-public class ProcedureRead implements Procedure {
+public class ProcedureRead extends Procedure {
     public enum ReadType {
         STRING, INTEGER, DOUBLE;
 

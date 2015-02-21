@@ -7,7 +7,7 @@ import passambler.value.Value;
 import passambler.value.ValueList;
 import passambler.value.ValueStr;
 
-public class ProcedureSplit implements Procedure {
+public class ProcedureSplit extends Procedure {
     @Override
     public int getArguments() {
         return 2;

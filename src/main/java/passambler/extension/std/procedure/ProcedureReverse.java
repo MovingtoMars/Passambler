@@ -7,7 +7,7 @@ import passambler.value.Value;
 import passambler.value.ValueList;
 import passambler.value.ValueStr;
 
-public class ProcedureReverse implements Procedure {
+public class ProcedureReverse extends Procedure {
     @Override
     public int getArguments() {
         return 1;

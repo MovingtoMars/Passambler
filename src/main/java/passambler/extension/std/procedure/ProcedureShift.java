@@ -6,7 +6,7 @@ import passambler.procedure.Procedure;
 import passambler.value.Value;
 import passambler.value.ValueList;
 
-public class ProcedureShift implements Procedure {
+public class ProcedureShift extends Procedure {
     @Override
     public int getArguments() {
         return 1;

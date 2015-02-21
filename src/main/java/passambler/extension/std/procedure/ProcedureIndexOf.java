@@ -7,7 +7,7 @@ import passambler.value.Value;
 import passambler.value.ValueNum;
 import passambler.value.ValueStr;
 
-public class ProcedureIndexOf implements Procedure {
+public class ProcedureIndexOf extends Procedure {
     @Override
     public int getArguments() {
         return 2;

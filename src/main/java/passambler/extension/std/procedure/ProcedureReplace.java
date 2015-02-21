@@ -6,7 +6,7 @@ import passambler.procedure.Procedure;
 import passambler.value.Value;
 import passambler.value.ValueStr;
 
-public class ProcedureReplace implements Procedure {
+public class ProcedureReplace extends Procedure {
     @Override
     public int getArguments() {
         return 3;

@@ -7,7 +7,7 @@ import passambler.procedure.Procedure;
 import passambler.value.Value;
 import passambler.value.ValueNum;
 
-public abstract class ProcedureSimpleMath implements Procedure {
+public abstract class ProcedureSimpleMath extends Procedure {
     @Override
     public int getArguments() {
         return 1;

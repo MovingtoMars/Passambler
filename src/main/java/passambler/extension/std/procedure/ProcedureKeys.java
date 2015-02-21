@@ -7,7 +7,7 @@ import passambler.value.Value;
 import passambler.value.ValueDict;
 import passambler.value.ValueList;
 
-public class ProcedureKeys implements Procedure {
+public class ProcedureKeys extends Procedure {
     @Override
     public int getArguments() {
         return 1;

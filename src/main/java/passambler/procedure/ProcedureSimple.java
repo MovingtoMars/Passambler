@@ -4,7 +4,7 @@ import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 
-public abstract class ProcedureSimple implements Procedure {
+public abstract class ProcedureSimple extends Procedure {
     @Override
     public int getArguments() {
         return 0;

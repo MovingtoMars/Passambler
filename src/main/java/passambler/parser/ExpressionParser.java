@@ -8,7 +8,6 @@ import passambler.value.Value;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
 import passambler.value.IndexedValue;
-import passambler.value.ValueBlock;
 import passambler.value.ValueDict;
 import passambler.value.ValueList;
 import passambler.value.ValueNum;
@@ -117,7 +116,7 @@ public class ExpressionParser {
             throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "unmatching parens");
         }
 
-        if (currentValue instanceof ValueBlock) {
+        if (currentValue instanceof Procedure) {
             List<Token> argumentTokens = new ArrayList<>();
             List<Value> arguments = new ArrayList<>();
 

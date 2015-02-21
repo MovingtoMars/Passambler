@@ -7,7 +7,7 @@ import passambler.value.Value;
 import passambler.value.ValueList;
 import passambler.value.ValueNum;
 
-public class ProcedureSlice implements Procedure {
+public class ProcedureSlice extends Procedure {
     @Override
     public int getArguments() {
         return 3;

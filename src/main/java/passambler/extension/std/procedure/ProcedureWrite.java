@@ -6,7 +6,7 @@ import passambler.parser.ParserException;
 import passambler.procedure.Procedure;
 import passambler.value.Value;
 
-public class ProcedureWrite implements Procedure {
+public class ProcedureWrite extends Procedure {
     protected boolean newLine;
 
     public ProcedureWrite(boolean newLine) {

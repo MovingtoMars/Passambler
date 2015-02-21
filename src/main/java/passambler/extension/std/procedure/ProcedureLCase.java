@@ -6,7 +6,7 @@ import passambler.procedure.Procedure;
 import passambler.value.Value;
 import passambler.value.ValueStr;
 
-public class ProcedureLCase implements Procedure {
+public class ProcedureLCase extends Procedure {
     @Override
     public int getArguments() {
         return 1;

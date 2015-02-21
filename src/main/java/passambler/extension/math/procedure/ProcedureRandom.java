@@ -7,7 +7,7 @@ import passambler.procedure.Procedure;
 import passambler.value.Value;
 import passambler.value.ValueNum;
 
-public class ProcedureRandom implements Procedure {
+public class ProcedureRandom extends Procedure {
     @Override
     public int getArguments() {
         return 2;
