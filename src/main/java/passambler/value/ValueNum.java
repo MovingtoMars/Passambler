@@ -21,10 +21,6 @@ public class ValueNum extends Value {
         return (BigDecimal) value;
     }
 
-    public int getValueAsInteger() {
-        return getValue().intValue();
-    }
-
     @Override
     public Value onOperator(Value value, Token.Type tokenType) {
         if (value instanceof ValueNum) {
@@ -43,7 +39,7 @@ public class ValueNum extends Value {
                     return new ValueNum(getValue().divide(((ValueNum) value).getValue()));
                 case POWER:
                 case ASSIGN_POWER:
-                    return new ValueNum(getValue().pow(((ValueNum) value).getValueAsInteger()));
+                    return new ValueNum(getValue().pow(((ValueNum) value).getValue().intValue()));
                 case MODULO:
                 case ASSIGN_MODULO:
                     return new ValueNum(getValue().remainder(((ValueNum) value).getValue()));
@@ -58,7 +54,7 @@ public class ValueNum extends Value {
                 case RANGE:
                     ValueList list = new ValueList();
                     
-                    for (int i = getValueAsInteger(); i <= ((ValueNum) value).getValueAsInteger(); ++i) {
+                    for (int i = getValue().intValue(); i <= ((ValueNum) value).getValue().intValue(); ++i) {
                         list.add(new ValueNum(i));
                     }
                 

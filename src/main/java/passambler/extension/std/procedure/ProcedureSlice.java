@@ -28,7 +28,7 @@ public class ProcedureSlice implements Procedure {
 
         ValueList subList = new ValueList();
 
-        for (int i = ((ValueNum) arguments[1]).getValueAsInteger(); i <= ((ValueNum) arguments[2]).getValueAsInteger(); ++i) {
+        for (int i = ((ValueNum) arguments[1]).getValue().intValue(); i <= ((ValueNum) arguments[2]).getValue().intValue(); ++i) {
             subList.add(list.get(i));
         }
 

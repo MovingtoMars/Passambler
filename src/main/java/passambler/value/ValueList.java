@@ -13,12 +13,12 @@ public class ValueList extends Value implements IndexedValue {
     
     @Override
     public Value getIndex(Value key) {
-        return list.get(((ValueNum) key).getValueAsInteger());
+        return list.get(((ValueNum) key).getValue().intValue());
     }
 
     @Override
     public void setIndex(Value key, Value value) {
-        list.set(((ValueNum) key).getValueAsInteger(), value);
+        list.set(((ValueNum) key).getValue().intValue(), value);
     }
 
     @Override

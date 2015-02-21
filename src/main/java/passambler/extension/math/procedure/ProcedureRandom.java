@@ -20,8 +20,8 @@ public class ProcedureRandom implements Procedure {
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        int min = ((ValueNum) arguments[0]).getValueAsInteger();
-        int max = ((ValueNum) arguments[1]).getValueAsInteger();
+        int min = ((ValueNum) arguments[0]).getValue().intValue();
+        int max = ((ValueNum) arguments[1]).getValue().intValue();
 
         if (min > max) {
             throw new ParserException(ParserException.Type.BAD_SYNTAX, String.format("%d can't be bigger than %d", min, max));

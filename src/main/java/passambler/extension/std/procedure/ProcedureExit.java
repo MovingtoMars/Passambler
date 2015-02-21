@@ -19,7 +19,7 @@ public class ProcedureExit implements Procedure {
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        System.exit(((ValueNum) arguments[0]).getValueAsInteger());
+        System.exit(((ValueNum) arguments[0]).getValue().intValue());
 
         return null;
     }

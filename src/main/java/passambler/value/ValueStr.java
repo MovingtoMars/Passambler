@@ -23,14 +23,14 @@ public class ValueStr extends Value implements IndexedValue {
 
     @Override
     public Value getIndex(Value key) {
-        return new ValueStr(String.valueOf(getValue().charAt(((ValueNum) key).getValueAsInteger())));
+        return new ValueStr(String.valueOf(getValue().charAt(((ValueNum) key).getValue().intValue())));
     }
 
     @Override
     public void setIndex(Value key, Value value) {
         char[] array = getValue().toCharArray();
 
-        array[((ValueNum) key).getValueAsInteger()] = ((ValueStr) value).getValue().charAt(0);
+        array[((ValueNum) key).getValue().intValue()] = ((ValueStr) value).getValue().charAt(0);
 
         setValue(new String(array));
     }

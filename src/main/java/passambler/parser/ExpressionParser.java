@@ -238,7 +238,7 @@ public class ExpressionParser {
             Value indexValue = new ExpressionParser(parser, new TokenStream(tokens)).parse();
 
             if (indexValue instanceof ValueNum) {
-                int index = ((ValueNum) indexValue).getValueAsInteger();
+                int index = ((ValueNum) indexValue).getValue().intValue();
 
                 if (index < -indexedValue.getIndexCount() || index > indexedValue.getIndexCount() - 1) {
                     throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, stream.current().getPosition(), index, indexedValue.getIndexCount());
