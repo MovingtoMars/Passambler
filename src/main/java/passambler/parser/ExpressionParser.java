@@ -353,7 +353,7 @@ public class ExpressionParser {
 
                     element.next();
 
-                    value.set(new ValueStr(key), new ExpressionParser(parser, new TokenStream(element.rest())).parse());
+                    value.setIndex(new ValueStr(key), new ExpressionParser(parser, new TokenStream(element.rest())).parse());
 
                     tokens.clear();
                 }

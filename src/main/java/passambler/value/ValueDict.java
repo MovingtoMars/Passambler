@@ -6,46 +6,10 @@ import passambler.procedure.Procedure;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 
-public class ValueDict extends Value {
+public class ValueDict extends Value implements IndexedValue {
     protected Map<Value, Value> dict = new HashMap();
 
     public ValueDict() {
-        setProperty("set", new Procedure() {
-            @Override
-            public int getArguments() {
-                return 2;
-            }
-
-            @Override
-            public boolean isArgumentValid(Value value, int argument) {
-                return true;
-            }
-
-            @Override
-            public Value invoke(Parser parser, Value... arguments) throws ParserException {
-                set(arguments[0], arguments[1]);
-
-                return null;
-            }
-        });
-
-        setProperty("get", new Procedure() {
-            @Override
-            public int getArguments() {
-                return 1;
-            }
-
-            @Override
-            public boolean isArgumentValid(Value value, int argument) {
-                return true;
-            }
-
-            @Override
-            public Value invoke(Parser parser, Value... arguments) throws ParserException {
-                return get(arguments[0]);
-            }
-        });
-
         setProperty("keys", new Procedure() {
             @Override
             public int getArguments() {
@@ -121,12 +85,25 @@ public class ValueDict extends Value {
         });
     }
 
-    public void set(Value key, Value value) {
+    @Override
+    public Value getIndex(Value key) {
+        for (Map.Entry<Value, Value> entry : dict.entrySet()) {
+            if (entry.getKey().getValue().equals(key.getValue())) {
+                return entry.getValue();
+            }
+        }
+        
+        return null;
+    }
+
+    @Override
+    public void setIndex(Value key, Value value) {
         dict.put(key, value);
     }
 
-    public Value get(Value key) {
-        return dict.get(key);
+    @Override
+    public int getIndexCount() {
+        return dict.size();
     }
 
     @Override
