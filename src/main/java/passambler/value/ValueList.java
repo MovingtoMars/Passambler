@@ -7,6 +7,11 @@ public class ValueList extends Value implements IndexedValue {
     protected List<Value> list = new ArrayList<>();
 
     @Override
+    public List<Value> getValue() {
+        return list;
+    }
+    
+    @Override
     public Value getIndex(Value key) {
         return list.get(((ValueNum) key).getValueAsInteger());
     }
