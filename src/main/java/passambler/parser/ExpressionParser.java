@@ -223,7 +223,7 @@ public class ExpressionParser {
 
             stream.next();
         }
-        
+
         stream.match(Token.Type.RBRACKET);
 
         if (currentValue == null && (inlineDeclaration.getIndexCount() > 0 || tokens.isEmpty())) {
@@ -259,7 +259,7 @@ public class ExpressionParser {
         if (stream.peek() == null) {
             throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "missing property name");
         }
-        
+
         stream.next();
 
         stream.match(Token.Type.IDENTIFIER);
@@ -313,119 +313,66 @@ public class ExpressionParser {
 
     private Value parseBrace() throws ParserException {
         int braces = 1;
-        
-        TokenStream detectionStream = stream.copyAtCurrentPosition();
-        
-        detectionStream.next();
-        
-        boolean block = true;
-        
-        int tokensDetected = 0;
-        
-        while (detectionStream.hasNext()) {
-            if (detectionStream.current().getType() == Token.Type.LBRACE) {
+
+        stream.next();
+
+        ValueDict value = new ValueDict();
+
+        List<Token> tokens = new ArrayList<>();
+
+        while (stream.hasNext()) {
+            Token token = stream.current();
+
+            if (token.getType() == Token.Type.LBRACE) {
                 braces++;
-            } else if (detectionStream.current().getType() == Token.Type.RBRACE) {
+            } else if (token.getType() == Token.Type.RBRACE) {
                 braces--;
-            } else if (detectionStream.current().getType() == Token.Type.COL && braces == 1) {
-                block = false;
-                
-                break;
             }
-            
-            detectionStream.next();
-            tokensDetected++;
-        }
-        
-        if (tokensDetected == 1) {
-            block = false;
-        }
-        
-        braces = 1;
 
-        if (!block) {
-            stream.next();
+            tokens.add(token);
 
-            ValueDict value = new ValueDict();
-
-            List<Token> tokens = new ArrayList<>();
-
-            while (stream.hasNext()) {
-                Token token = stream.current();
-
-                if (token.getType() == Token.Type.LBRACE) {
-                    braces++;
-                } else if (token.getType() == Token.Type.RBRACE) {
-                    braces--;
+            if ((token.getType() == Token.Type.COMMA || stream.peek(2) == null) && braces == 1) {
+                if (token.getType() == Token.Type.COMMA) {
+                    tokens.remove(tokens.size() - 1);
                 }
 
-                tokens.add(token);
+                TokenStream element = new TokenStream(tokens);
 
-                if ((token.getType() == Token.Type.COMMA || stream.peek(2) == null) && braces == 1) {
-                    if (token.getType() == Token.Type.COMMA) {
-                        tokens.remove(tokens.size() - 1);
+                int keyBraces = 0;
+                List<Token> keyTokens = new ArrayList<>();
+
+                while (element.hasNext()) {
+                    if (element.current().getType() == Token.Type.LBRACE) {
+                        keyBraces++;
+                    } else if (element.current().getType() == Token.Type.RBRACE) {
+                        keyBraces--;
+                    } else if (element.current().getType() == Token.Type.COL && keyBraces == 0) {
+                        break;
                     }
 
-                    TokenStream element = new TokenStream(tokens);
-
-                    int keyBraces = 0;
-                    List<Token> keyTokens = new ArrayList<>();
-
-                    while (element.hasNext()) {
-                        if (element.current().getType() == Token.Type.LBRACE) {
-                            keyBraces++;
-                        } else if (element.current().getType() == Token.Type.RBRACE) {
-                            keyBraces--;
-                        } else if (element.current().getType() == Token.Type.COL && keyBraces == 0) {
-                            break;
-                        }
-                        
-                        keyTokens.add(element.current());
-                        
-                        element.next();
-                    }
-
-                    element.match(Token.Type.COL);
-
-                    Value key = new ExpressionParser(parser, new TokenStream(keyTokens)).parse();
-
-                    if (!element.hasNext()) {
-                        throw new ParserException(ParserException.Type.BAD_SYNTAX, element.current().getPosition(), "value of property missing");
-                    }
+                    keyTokens.add(element.current());
 
                     element.next();
-
-                    value.setIndex(key, new ExpressionParser(parser, new TokenStream(element.rest())).parse());
-
-                    tokens.clear();
                 }
 
-                stream.next();
-            }
+                element.match(Token.Type.COL);
 
-            return value;
-        } else {
-            ValueBlock value = new ValueBlock(parser.getScope(), new ArrayList());
+                Value key = new ExpressionParser(parser, new TokenStream(keyTokens)).parse();
+
+                if (!element.hasNext()) {
+                    throw new ParserException(ParserException.Type.BAD_SYNTAX, element.current().getPosition(), "value of property missing");
+                }
+
+                element.next();
+
+                value.setIndex(key, new ExpressionParser(parser, new TokenStream(element.rest())).parse());
+
+                tokens.clear();
+            }
 
             stream.next();
-
-            while (stream.hasNext()) {
-                if (stream.current().getType() == Token.Type.LBRACE) {
-                    braces++;
-                } else if (stream.current().getType() == Token.Type.RBRACE) {
-                    braces--;
-                }
-
-                if (braces == 0 && stream.current().getType() == Token.Type.RBRACE) {
-                    break;
-                } else {
-                    value.addToken(stream.current());
-
-                    stream.next();
-                }
-            }
-
-            return value;
         }
+
+        return value;
     }
 }

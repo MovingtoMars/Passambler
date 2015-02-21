@@ -12,9 +12,9 @@ import passambler.lexer.Lexer;
 import passambler.lexer.LexerException;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
+import passambler.procedure.Procedure;
 import passambler.value.IndexedValue;
 import passambler.value.Value;
-import passambler.value.ValueBlock;
 import passambler.value.ValueBool;
 import passambler.value.ValueNum;
 import passambler.value.ValueStr;
@@ -82,10 +82,10 @@ public class Parser {
 
             List<Token> tokens = new ArrayList<>();
 
-            Map<ValueBool, ValueBlock> cases = new HashMap();
+            Map<ValueBool, Block> cases = new HashMap();
 
             ValueBool currentCondition = null;
-            ValueBlock currentConditionBlock = null;
+            Block currentConditionBlock = null;
 
             boolean condition = true;
 
@@ -112,7 +112,7 @@ public class Parser {
                             currentCondition = new ValueBool(true);
                         }
 
-                        currentConditionBlock = new ValueBlock(scope, new ArrayList());
+                        currentConditionBlock = new Block(scope);
 
                         braces = 1;
 
@@ -148,16 +148,16 @@ public class Parser {
                             }
                         }
                     } else {
-                        currentConditionBlock.addToken(stream.current());
+                        currentConditionBlock.getTokens().add(stream.current());
                     }
                 }
 
                 stream.next();
             }
 
-            for (Map.Entry<ValueBool, ValueBlock> entry : cases.entrySet()) {
+            for (Map.Entry<ValueBool, Block> entry : cases.entrySet()) {
                 if (entry.getKey().getValue() == true) {
-                    Value result = entry.getValue().invoke(this, new Value[] {});
+                    Value result = entry.getValue().invoke();
 
                     if (result != null) {
                         return result;
@@ -213,20 +213,10 @@ public class Parser {
 
             Value value = new ExpressionParser(this, new TokenStream(tokens)).parse();
 
-            Value callbackValue = new ExpressionParser(this, new TokenStream(stream.rest())).parse();
-
-            if (!(callbackValue instanceof ValueBlock)) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "callback should be a block");
-            }
-
-            ValueBlock callback = (ValueBlock) callbackValue;
-
-            if (!(value instanceof ValueBool)) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "expecting bool");
-            }
+            Block callback = block(stream);
 
             while (((ValueBool) value).getValue()) {
-                Value result = callback.invoke(this, new Value[] {});
+                Value result = callback.invoke();
 
                 if (result != null) {
                     return result;
@@ -271,17 +261,7 @@ public class Parser {
                 }
             }
 
-            stream.match(Token.Type.LBRACE);
-
-            Value callbackValue = new ExpressionParser(this, new TokenStream(stream.rest())).parse();
-
-            if (!(callbackValue instanceof ValueBlock)) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "callback should be a block");
-            }
-
-            ValueBlock callback = (ValueBlock) callbackValue;
-
-            callback.getArgumentNames().addAll(arguments);
+            Block callback = block(stream);
 
             Value value = new ExpressionParser(this, new TokenStream(tokens)).parse();
 
@@ -291,12 +271,16 @@ public class Parser {
 
             IndexedValue indexedValue = (IndexedValue) value;
 
-            if (callback.getArgumentNames().size() > 2) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "invalid argument count expected");
-            }
-
             for (int i = 0; i < indexedValue.getIndexCount(); ++i) {
-                Value result = callback.invoke(this, new Value[] { indexedValue.getIndex(new ValueNum(i)), new ValueNum(i) });
+                if (arguments.size() >= 1) {
+                    callback.getParser().getScope().setSymbol(arguments.get(0), indexedValue.getIndex(new ValueNum(i)));
+                }
+                
+                if (arguments.size() >= 2) {
+                    callback.getParser().getScope().setSymbol(arguments.get(1), new ValueNum(i));
+                }
+                
+                Value result = callback.invoke();
 
                 if (result != null) {
                     return result;
@@ -316,14 +300,13 @@ public class Parser {
             }
 
             stream.next();
-
+            
             stream.match(Token.Type.IDENTIFIER);
-
             String name = stream.current().getValue();
-
+            
             stream.next();
 
-            List<String> arguments = new ArrayList<>();
+            List<String> argumentIds = new ArrayList<>();
 
             if (stream.current().getType() == Token.Type.COL) {
                 while (stream.hasNext()) {
@@ -334,7 +317,7 @@ public class Parser {
                     } else {
                         stream.match(Token.Type.IDENTIFIER);
 
-                        arguments.add(stream.current().getValue());
+                        argumentIds.add(stream.current().getValue());
 
                         if (stream.peek().getType() != Token.Type.LBRACE) {
                             stream.next();
@@ -345,19 +328,28 @@ public class Parser {
                 }
             }
 
-            stream.match(Token.Type.LBRACE);
+            Block callback = block(stream);
 
-            Value callbackValue = new ExpressionParser(this, new TokenStream(stream.rest())).parse();
+            scope.setSymbol(name, new Procedure() {
+                @Override
+                public int getArguments() {
+                    return argumentIds.size();
+                }
 
-            if (!(callbackValue instanceof ValueBlock)) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "callback should be a block");
-            }
+                @Override
+                public boolean isArgumentValid(Value value, int argument) {
+                    return argument < argumentIds.size();
+                }
 
-            ValueBlock callback = (ValueBlock) callbackValue;
-
-            callback.getArgumentNames().addAll(arguments);
-
-            scope.setSymbol(name, callback);
+                @Override
+                public Value invoke(Parser parser, Value... arguments) throws ParserException {
+                    for (int i = 0; i < argumentIds.size(); ++i) {
+                        callback.getParser().getScope().setSymbol(argumentIds.get(i), arguments[i]);
+                    }
+                    
+                    return callback.invoke();
+                } 
+            });
         } else {
             if (!rules.isEvaluationAllowed()) {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
@@ -417,5 +409,35 @@ public class Parser {
         }
 
         return null;
+    }
+    
+    private Block block(TokenStream stream) throws ParserException {
+        Block block = new Block(scope);
+        
+        stream.match(Token.Type.LBRACE);
+        
+        stream.next();
+        
+        int braces = 1;
+        
+        while (stream.hasNext()) {
+            if (stream.current().getType() == Token.Type.LBRACE) {
+                braces++;
+            } else if (stream.current().getType() == Token.Type.RBRACE) {
+                braces--;
+            
+                if (braces == 0) {
+                    break;
+                }
+            }
+
+            block.getTokens().add(stream.current());
+            
+            stream.next();
+        }
+        
+        stream.match(Token.Type.RBRACE);
+        
+        return block;
     }
 }
