@@ -32,6 +32,7 @@ public class ExtensionStd implements Extension {
         scope.setSymbol("push", new ProcedurePush());
         scope.setSymbol("pop", new ProcedurePop());
         scope.setSymbol("shift", new ProcedureShift());
+        scope.setSymbol("slice", new ProcedureSlice());
 
         scope.setSymbol("nil", VALUE_NIL);
         scope.setSymbol("true", new ValueBool(true));
