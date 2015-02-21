@@ -5,6 +5,7 @@ import passambler.parser.ParserException;
 import passambler.procedure.Procedure;
 import passambler.value.Value;
 import passambler.value.ValueList;
+import passambler.value.ValueStr;
 
 public class ProcedureReverse implements Procedure {
     @Override
@@ -14,11 +15,15 @@ public class ProcedureReverse implements Procedure {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof ValueList;
+        return value instanceof ValueList || value instanceof ValueStr;
     }
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
+        if (arguments[0] instanceof ValueStr) {
+            return new ValueStr(new StringBuilder(((ValueStr) arguments[0]).getValue()).reverse().toString());
+        }
+        
         ValueList value = (ValueList) arguments[0];
         
         ValueList subList = new ValueList();
