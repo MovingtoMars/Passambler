@@ -1,0 +1,9 @@
+proc fact:n {
+    f = 1;
+
+    for 1..n:x {
+        f *= x;
+    }
+
+    return f;
+}
