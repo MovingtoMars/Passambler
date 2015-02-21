@@ -19,11 +19,11 @@ public class ProcedureShift implements Procedure {
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        ValueList value = (ValueList) arguments[0];
+        ValueList list = (ValueList) arguments[0];
         
-        Value first = value.get(0);
+        Value first = list.get(0);
         
-        value.remove(0);
+        list.remove(0);
         
         return first;
     }

@@ -19,11 +19,11 @@ public class ProcedurePop implements Procedure {
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        ValueList value = (ValueList) arguments[0];
+        ValueList list = (ValueList) arguments[0];
         
-        Value last = value.get(value.getIndexCount() - 1);
+        Value last = list.get(list.getIndexCount() - 1);
         
-        value.remove(value.getIndexCount() - 1);
+        list.remove(list.getIndexCount() - 1);
         
         return last;
     }
