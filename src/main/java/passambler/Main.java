@@ -153,6 +153,8 @@ public class Main {
                     for (Token token : tokens) {
                         LOGGER.log(Level.INFO, token.toString());
                     }
+                    
+                    tokens.clear();
                 } else {
                     int braces = 0;
 
