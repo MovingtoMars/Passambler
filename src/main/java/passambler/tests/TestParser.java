@@ -1,9 +1,9 @@
 package passambler.tests;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +13,8 @@ public class TestParser {
 
     private Map<String, StringBuilder> sections = new HashMap();
 
-    public TestParser(File file) throws IOException {
-        this.lines = Files.readAllLines(file.toPath(), Charset.forName("UTF-8"));
+    public TestParser(Path file) throws IOException {
+        this.lines = Files.readAllLines(file, Charset.forName("UTF-8"));
     }
 
     public Test parse() throws TestException {

@@ -1,7 +1,7 @@
 package passambler.parser;
 
-import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,7 +70,7 @@ public class Parser {
                 }
 
                 try {
-                    parse(new Lexer(String.join("\n", Files.readAllLines(new File(((ValueStr) value).getValue()).toPath()))));
+                    parse(new Lexer(String.join("\n", Files.readAllLines(Paths.get(((ValueStr) value).getValue())))));
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

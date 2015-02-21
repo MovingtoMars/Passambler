@@ -1,8 +1,9 @@
 package passambler;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -62,13 +63,13 @@ public class Main {
 
         if (options.has("f")) {
             for (String file : options.valueOf("f").toString().split(",")) {
-                runFile(new File(file));
+                runFile(Paths.get(file));
             }
         }
 
         if (options.has("t")) {
             for (String file : options.valueOf("t").toString().split(",")) {
-                runTestFile(new File(file));
+                runTestFile(Paths.get(file));
             }
         }
 
@@ -77,9 +78,9 @@ public class Main {
         }
     }
 
-    public void runFile(File file) throws IOException {
+    public void runFile(Path file) throws IOException {
         try {
-            Lexer lexer = new Lexer(String.join("\n", Files.readAllLines(file.toPath())));
+            Lexer lexer = new Lexer(String.join("\n", Files.readAllLines(file)));
 
             if (options.has("show-tokens")) {
                 for (Token token : lexer.scan()) {
@@ -99,18 +100,18 @@ public class Main {
         }
     }
 
-    public void runTestFile(File testFile) throws IOException {
-        List<File> files = new ArrayList<>();
+    public void runTestFile(Path testFile) throws IOException {
+        List<Path> files = new ArrayList<>();
 
-        if (testFile.isDirectory()) {
-            for (File file : testFile.listFiles()) {
+        if (Files.isDirectory(testFile)) {
+            for (Path file : Files.newDirectoryStream(testFile)) {
                 files.add(file);
             }
         } else {
             files.add(testFile);
         }
 
-        for (File file : files) {
+        for (Path file : files) {
             boolean passed = true;
 
             try {
@@ -120,13 +121,13 @@ public class Main {
 
                 runner.run();
             } catch (LexerException | ParserException | TestException e) {
-                LOGGER.log(Level.WARNING, String.format("Test %s failed", file.getName()), e);
+                LOGGER.log(Level.WARNING, String.format("Test %s failed", file.getFileName()), e);
 
                 passed = false;
             }
 
             if (passed) {
-                LOGGER.log(Level.INFO, String.format("Test %s passed", file.getName()));
+                LOGGER.log(Level.INFO, String.format("Test %s passed", file.getFileName()));
             }
         }
     }
