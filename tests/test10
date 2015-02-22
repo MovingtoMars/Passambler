@@ -4,11 +4,11 @@ Tests if statements.
 --input--
 a = 1;
 
-if 5 > 10 {
+if (5 > 10) {
     a = 2;
 }
 
-if 5 == 5 {
+if (5 == 5) {
     a = 3;
 }
 

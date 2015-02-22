@@ -90,79 +90,70 @@ public class Parser {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
             }
 
-            List<Token> tokens = new ArrayList<>();
-
-            Map<ValueBool, Block> cases = new HashMap();
-
-            ValueBool currentCondition = null;
-            Block currentConditionBlock = null;
-
-            boolean condition = true;
+            stream.next();
 
             boolean elseCondition = false;
 
-            int braces = 0;
+            Map<ValueBool, Block> cases = new HashMap();
 
-            stream.next();
+            List<Token> tokens = new ArrayList<>();
 
             while (stream.hasNext()) {
-                if (condition) {
-                    if (stream.current().getType() == Token.Type.LBRACE) {
-                        condition = false;
+                if (!elseCondition) {
+                    stream.match(Token.Type.LPAREN);
 
-                        if (!elseCondition) {
-                            Value value = new ExpressionParser(this, new TokenStream(tokens)).parse();
+                    stream.next();
 
-                            if (!(value instanceof ValueBool)) {
-                                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "expected a bool");
+                    int paren = 1;
+
+                    while (stream.hasNext()) {
+                        if (stream.current().getType() == Token.Type.LPAREN) {
+                            paren++;
+                        } else if (stream.current().getType() == Token.Type.RPAREN) {
+                            paren--;
+
+                            if (paren == 0) {
+                                break;
                             }
-
-                            currentCondition = (ValueBool) value;
-                        } else {
-                            currentCondition = new ValueBool(true);
                         }
 
-                        currentConditionBlock = new Block(scope);
-
-                        braces = 1;
-
-                        tokens.clear();
-                    } else {
                         tokens.add(stream.current());
+
+                        stream.next();
                     }
+
+                    stream.match(Token.Type.RPAREN);
+
+                    Value condition = new ExpressionParser(this, new TokenStream(tokens)).parse();
+
+                    if (!(condition instanceof ValueBool)) {
+                        throw new ParserException(ParserException.Type.BAD_SYNTAX, tokens.get(0).getPosition(), "condition should be a bool");
+                    }
+                    
+                    stream.next();
+                    
+                    cases.put((ValueBool) condition, block(stream));
+                
+                    tokens.clear();
                 } else {
-                    if (stream.current().getType() == Token.Type.LBRACE) {
-                        braces++;
-                    } else if (stream.current().getType() == Token.Type.RBRACE) {
-                        braces--;
-                    }
-
-                    if (braces == 0) {
-                        cases.put(currentCondition, currentConditionBlock);
-
-                        currentCondition = null;
-                        currentConditionBlock = null;
-                        condition = true;
-
-                        if (stream.peek() != null) {
-                            if (elseCondition == true) {
-                                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "else should be the last statement");
-                            }
-
-                            stream.next();
-
-                            stream.match(Token.Type.ELSE, Token.Type.ELSEIF);
-
-                            if (stream.current().getType() == Token.Type.ELSE) {
-                                elseCondition = true;
-                            }
-                        }
-                    } else {
-                        currentConditionBlock.getTokens().add(stream.current());
-                    }
+                    cases.put(new ValueBool(true), block(stream));
                 }
-
+                
                 stream.next();
+
+                if (stream.current() != null) {
+                    if (elseCondition) {
+                        throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "else should be the last statement");
+                    }
+                    
+                    stream.match(Token.Type.ELSE, Token.Type.ELSEIF);
+
+                    if (stream.current().getType() == Token.Type.ELSE) {
+                        elseCondition = true;
+                    }
+                    
+                    stream.next();
+                }
             }
 
             for (Map.Entry<ValueBool, Block> entry : cases.entrySet()) {
@@ -339,7 +330,7 @@ public class Parser {
             stream.match(Token.Type.LPAREN);
 
             stream.next();
-            
+
             List<String> argumentIds = new ArrayList<>();
 
             while (stream.hasNext()) {
@@ -355,15 +346,15 @@ public class Parser {
 
                         stream.match(Token.Type.COMMA);
                     }
-                    
+
                     stream.next();
                 }
             }
-            
+
             stream.match(Token.Type.RPAREN);
 
             stream.next();
-            
+
             Block callback = block(stream);
 
             scope.setSymbol(name, new Function() {
