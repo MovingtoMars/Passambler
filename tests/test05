@@ -1,5 +1,5 @@
 --desc--
-Tests math extension.
+Tests math package.
 
 --input--
 import math;

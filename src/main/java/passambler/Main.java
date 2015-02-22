@@ -11,10 +11,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import passambler.extension.Extension;
-import passambler.extension.file.ExtensionFile;
-import passambler.extension.math.ExtensionMath;
-import passambler.extension.std.ExtensionStd;
+import passambler.pkg.Package;
+import passambler.pkg.file.PackageFile;
+import passambler.pkg.math.PackageMath;
+import passambler.pkg.std.PackageStd;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.lexer.Lexer;
@@ -30,7 +30,7 @@ public class Main {
 
     public static final Logger LOGGER = Logger.getLogger("Passambler");
     
-    public static List<Extension> EXTENSIONS = new ArrayList<>();
+    public static List<Package> PACKAGES = new ArrayList<>();
     
     private OptionSet options;
 
@@ -51,9 +51,9 @@ public class Main {
         LOGGER.setUseParentHandlers(false);
         LOGGER.addHandler(new LogHandler(options.has("show-stacktrace")));
         
-        EXTENSIONS.add(new ExtensionStd());
-        EXTENSIONS.add(new ExtensionMath());
-        EXTENSIONS.add(new ExtensionFile());
+        PACKAGES.add(new PackageStd());
+        PACKAGES.add(new PackageMath());
+        PACKAGES.add(new PackageFile());
 
         if (options.has("v")) {
             LOGGER.log(Level.INFO, String.format("Passambler %s", VERSION));

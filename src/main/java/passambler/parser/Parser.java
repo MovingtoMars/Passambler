@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import passambler.Main;
-import passambler.extension.Extension;
+import passambler.pkg.Package;
 import passambler.lexer.Lexer;
 import passambler.lexer.LexerException;
 import passambler.lexer.Token;
@@ -59,19 +59,19 @@ public class Parser {
             if (stream.current().getType() == Token.Type.IDENTIFIER) {
                 String name = stream.current().getValue();
 
-                Extension extension = Main.EXTENSIONS.stream().filter(ext -> ext.getId().equals(name)).findFirst().orElseThrow(() -> new ParserException(ParserException.Type.UNDEFINED_EXTENSION, stream.current().getPosition(), name));
+                Package pkg = Main.PACKAGES.stream().filter(p -> p.getId().equals(name)).findFirst().orElseThrow(() -> new ParserException(ParserException.Type.UNDEFINED_PACKAGE, stream.current().getPosition(), name));
 
                 Map<String, Value> symbols = new HashMap();
 
-                extension.addSymbols(scope, symbols);
+                pkg.addSymbols(scope, symbols);
 
-                Value extensionValue = new Value();
+                Value pkgValue = new Value();
 
                 for (Map.Entry<String, Value> symbol : symbols.entrySet()) {
-                    extensionValue.setProperty(symbol.getKey(), symbol.getValue());
+                    pkgValue.setProperty(symbol.getKey(), symbol.getValue());
                 }
 
-                scope.setSymbol(name, extensionValue);
+                scope.setSymbol(name, pkgValue);
             } else {
                 Value value = new ExpressionParser(this, new TokenStream(stream.rest())).parse();
 

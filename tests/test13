@@ -1,5 +1,5 @@
 --desc--
-Tests std extension.
+Tests std package.
 
 --input--
 import std;
