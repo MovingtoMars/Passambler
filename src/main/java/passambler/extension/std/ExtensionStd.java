@@ -1,9 +1,9 @@
 package passambler.extension.std;
 
 import java.util.Map;
+import passambler.extension.std.function.*;
 import passambler.extension.Extension;
-import passambler.extension.std.procedure.*;
-import passambler.extension.std.procedure.ProcedureRead.ReadType;
+import passambler.extension.std.function.FunctionRead.ReadType;
 import passambler.extension.std.value.*;
 import passambler.parser.Scope;
 import passambler.value.Value;
@@ -20,32 +20,32 @@ public class ExtensionStd implements Extension {
     
     @Override
     public void addSymbols(Scope scope, Map<String, Value> symbols) {
-        scope.setSymbol("write", new ProcedureWrite(false));
-        scope.setSymbol("writeln", new ProcedureWrite(true));
-        scope.setSymbol("readstr", new ProcedureRead(ReadType.STRING));
-        scope.setSymbol("readint", new ProcedureRead(ReadType.INTEGER));
-        scope.setSymbol("readdouble", new ProcedureRead(ReadType.DOUBLE));
-        scope.setSymbol("exit", new ProcedureExit());
-        scope.setSymbol("microtime", new ProcedureMicrotime());
-        scope.setSymbol("str", new ProcedureStr());
-        scope.setSymbol("lcase", new ProcedureLCase());
-        scope.setSymbol("ucase", new ProcedureUCase());
-        scope.setSymbol("contains", new ProcedureContains());
-        scope.setSymbol("indexof", new ProcedureIndexOf());
-        scope.setSymbol("replace", new ProcedureReplace());
-        scope.setSymbol("split", new ProcedureSplit());
-        scope.setSymbol("first", new ProcedureFirst());
-        scope.setSymbol("last", new ProcedureLast());
-        scope.setSymbol("size", new ProcedureSize());
-        scope.setSymbol("empty", new ProcedureEmpty());
-        scope.setSymbol("push", new ProcedurePush());
-        scope.setSymbol("pop", new ProcedurePop());
-        scope.setSymbol("shift", new ProcedureShift());
-        scope.setSymbol("slice", new ProcedureSlice());
-        scope.setSymbol("reverse", new ProcedureReverse());
-        scope.setSymbol("keys", new ProcedureKeys());
-        scope.setSymbol("values", new ProcedureValues());
-        scope.setSymbol("entries", new ProcedureEntries());
+        scope.setSymbol("write", new FunctionWrite(false));
+        scope.setSymbol("writeln", new FunctionWrite(true));
+        scope.setSymbol("readstr", new FunctionRead(ReadType.STRING));
+        scope.setSymbol("readint", new FunctionRead(ReadType.INTEGER));
+        scope.setSymbol("readdouble", new FunctionRead(ReadType.DOUBLE));
+        scope.setSymbol("exit", new FunctionExit());
+        scope.setSymbol("microtime", new FunctionMicrotime());
+        scope.setSymbol("str", new FunctionStr());
+        scope.setSymbol("lcase", new FunctionLCase());
+        scope.setSymbol("ucase", new FunctionUCase());
+        scope.setSymbol("contains", new FunctionContains());
+        scope.setSymbol("indexof", new FunctionIndexOf());
+        scope.setSymbol("replace", new FunctionReplace());
+        scope.setSymbol("split", new FunctionSplit());
+        scope.setSymbol("first", new FunctionFirst());
+        scope.setSymbol("last", new FunctionLast());
+        scope.setSymbol("size", new FunctionSize());
+        scope.setSymbol("empty", new FunctionEmpty());
+        scope.setSymbol("push", new FunctionPush());
+        scope.setSymbol("pop", new FunctionPop());
+        scope.setSymbol("shift", new FunctionShift());
+        scope.setSymbol("slice", new FunctionSlice());
+        scope.setSymbol("reverse", new FunctionReverse());
+        scope.setSymbol("keys", new FunctionKeys());
+        scope.setSymbol("values", new FunctionValues());
+        scope.setSymbol("entries", new FunctionEntries());
 
         scope.setSymbol("nil", VALUE_NIL);
         scope.setSymbol("true", new ValueBool(true));

@@ -1,0 +1,37 @@
+package passambler.extension.file.function;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import passambler.parser.Parser;
+import passambler.parser.ParserException;
+import passambler.function.Function;
+import passambler.value.Value;
+import passambler.value.ValueBool;
+import passambler.value.ValueStr;
+
+public class FunctionCopy extends Function {
+    @Override
+    public int getArguments() {
+        return 2;
+    }
+
+    @Override
+    public boolean isArgumentValid(Value value, int argument) {
+        return value instanceof ValueStr;
+    }
+
+    @Override
+    public Value invoke(Parser parser, Value... arguments) throws ParserException {
+        try {
+            Path file = Paths.get(((ValueStr) arguments[0]).getValue());
+            Path destination = Paths.get(((ValueStr) arguments[1]).getValue());
+            
+            Files.copy(file, destination);
+        } catch (Exception e) {
+            return new ValueBool(false);
+        }
+        
+        return new ValueBool(true);
+    }
+}

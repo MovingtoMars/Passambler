@@ -23,7 +23,6 @@ public class Lexer {
 
         tokenMap.put("while", Token.Type.WHILE);
 
-        tokenMap.put("proc", Token.Type.PROC);
         tokenMap.put("else", Token.Type.ELSE);
 
         tokenMap.put("for", Token.Type.FOR);
@@ -33,6 +32,7 @@ public class Lexer {
 
         tokenMap.put("and", Token.Type.AND);
 
+        tokenMap.put("fn", Token.Type.FN);
         tokenMap.put("if", Token.Type.IF);
 
         tokenMap.put("==", Token.Type.EQUAL);

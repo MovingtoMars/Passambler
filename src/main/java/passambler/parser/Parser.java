@@ -12,7 +12,7 @@ import passambler.lexer.Lexer;
 import passambler.lexer.LexerException;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
-import passambler.procedure.Procedure;
+import passambler.function.Function;
 import passambler.value.IndexedValue;
 import passambler.value.Value;
 import passambler.value.ValueBool;
@@ -299,8 +299,8 @@ public class Parser {
             stream.next();
 
             return new ExpressionParser(this, new TokenStream(stream.rest())).parse();
-        } else if (stream.first().getType() == Token.Type.PROC) {
-            if (!rules.isProcedureDeclarationAllowed()) {
+        } else if (stream.first().getType() == Token.Type.FN) {
+            if (!rules.isFunctionDeclarationAllowed()) {
                 throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
             }
 
@@ -335,7 +335,7 @@ public class Parser {
 
             Block callback = block(stream);
 
-            scope.setSymbol(name, new Procedure() {
+            scope.setSymbol(name, new Function() {
                 @Override
                 public int getArguments() {
                     return argumentIds.size();

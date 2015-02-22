@@ -3,7 +3,7 @@ package passambler.value;
 import java.util.HashMap;
 import java.util.Map;
 import passambler.extension.std.ExtensionStd;
-import passambler.procedure.Procedure;
+import passambler.function.Function;
 import passambler.lexer.Token;
 
 public class Value {

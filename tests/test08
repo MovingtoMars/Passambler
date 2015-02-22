@@ -1,16 +1,16 @@
 --desc--
-Tests procedure declaration.
+Tests function declaration.
 
 --input--
-proc a {
+fn a {
     return;
 }
 
-proc b:x {
+fn b:x {
     return x + 2;
 }
 
-proc c:x, y {
+fn c:x, y {
     return x + y;
 }
 

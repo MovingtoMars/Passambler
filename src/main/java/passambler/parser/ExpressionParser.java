@@ -3,7 +3,7 @@ package passambler.parser;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import passambler.procedure.Procedure;
+import passambler.function.Function;
 import passambler.value.Value;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
@@ -116,7 +116,7 @@ public class ExpressionParser {
             throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "unmatching parens");
         }
 
-        if (currentValue instanceof Procedure) {
+        if (currentValue instanceof Function) {
             List<Token> argumentTokens = new ArrayList<>();
             List<Value> arguments = new ArrayList<>();
 
@@ -154,21 +154,21 @@ public class ExpressionParser {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "unmatching brackets");
             }
 
-            Procedure currentProcedure = (Procedure) currentValue;
+            Function currentFunction = (Function) currentValue;
 
-            if (currentProcedure.getArguments() != -1 && currentProcedure.getArguments() != arguments.size()) {
-                throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), currentProcedure.getArguments(), arguments.size());
+            if (currentFunction.getArguments() != -1 && currentFunction.getArguments() != arguments.size()) {
+                throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), currentFunction.getArguments(), arguments.size());
             }
 
             for (int argument = 0; argument < arguments.size(); ++argument) {
-                if (!currentProcedure.isArgumentValid(arguments.get(argument), argument)) {
+                if (!currentFunction.isArgumentValid(arguments.get(argument), argument)) {
                     throw new ParserException(ParserException.Type.INVALID_ARGUMENT, stream.first().getPosition(), argument + 1);
                 }
             }
 
             Value[] vals = new Value[arguments.size()];
 
-            return currentProcedure.invoke(parser, arguments.toArray(vals));
+            return currentFunction.invoke(parser, arguments.toArray(vals));
         } else if (!tokens.isEmpty()) {
             return new ExpressionParser(parser, new TokenStream(tokens)).parse();
         }
@@ -305,7 +305,7 @@ public class ExpressionParser {
             return new ValueNum(new BigDecimal(number.toString()));
         } else if (token.getType() == Token.Type.IDENTIFIER) {
             if (!parser.getScope().hasSymbol(token.getValue())) {
-                throw new ParserException(stream.peek() != null && stream.peek().getType() == Token.Type.LPAREN ? ParserException.Type.UNDEFINED_PROCEDURE : ParserException.Type.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());
+                throw new ParserException(stream.peek() != null && stream.peek().getType() == Token.Type.LPAREN ? ParserException.Type.UNDEFINED_FUNCTION : ParserException.Type.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());
             }
 
             return parser.getScope().getSymbol(token.getValue());

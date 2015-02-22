@@ -1,4 +1,4 @@
-proc fact:n {
+fn fact:n {
     f = 1;
 
     for 1..n:x {

@@ -14,7 +14,7 @@ public class Token {
         LBRACE, RBRACE,
         EQUAL, NEQUAL, GT, LT, GTE, LTE,
         AND, OR,
-        PROC, RETURN, IMPORT,
+        FN, RETURN, IMPORT,
         IF, ELSEIF, ELSE;
 
         public boolean isOperator() {
