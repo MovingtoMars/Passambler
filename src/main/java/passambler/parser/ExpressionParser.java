@@ -179,14 +179,14 @@ public class ExpressionParser {
     private Value parseIndexed(Value currentValue) throws ParserException {
         List<Token> tokens = new ArrayList<>();
 
-        int brackets = 1, paren = 0;
+        int brackets = 1, paren = 0, braces = 0;
 
         stream.next();
 
         ValueList inlineDeclaration = new ValueList();
 
         while (stream.hasNext()) {
-            if ((stream.current().getType() == Token.Type.COMMA || stream.current().getType() == Token.Type.RBRACKET) && brackets == 1 && paren == 0) {
+            if ((stream.current().getType() == Token.Type.COMMA || stream.current().getType() == Token.Type.RBRACKET) && brackets == 1 && paren == 0 && braces == 0) {
                 if (tokens.isEmpty()) {
                     if (stream.back(2) != null) {
                         throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "no value specified");
@@ -212,9 +212,13 @@ public class ExpressionParser {
                 paren++;
             } else if (stream.current().getType() == Token.Type.RPAREN) {
                 paren--;
+            }else if (stream.current().getType() == Token.Type.LBRACE) {
+                braces++;
+            } else if (stream.current().getType() == Token.Type.RBRACE) {
+                braces--;
             }
 
-            if (brackets == 0 && paren == 0) {
+            if (brackets == 0 && paren == 0 && braces == 0) {
                 break;
             }
 
@@ -311,7 +315,7 @@ public class ExpressionParser {
     }
 
     private Value parseBrace() throws ParserException {
-        int braces = 1;
+        int braces = 1, paren = 0, brackets = 0;
 
         stream.next();
 
@@ -319,6 +323,7 @@ public class ExpressionParser {
 
         List<Token> tokens = new ArrayList<>();
 
+        // TODO: wrap this stuff in a helper
         while (stream.hasNext()) {
             Token token = stream.current();
 
@@ -326,14 +331,27 @@ public class ExpressionParser {
                 braces++;
             } else if (token.getType() == Token.Type.RBRACE) {
                 braces--;
+            } else if (token.getType() == Token.Type.LPAREN) {
+                paren++;
+            } else if (token.getType() == Token.Type.RPAREN) {
+                paren--;
+            } else if (token.getType() == Token.Type.LBRACKET) {
+                brackets++;
+            } else if (token.getType() == Token.Type.RBRACKET) {
+                brackets--;
             }
 
             tokens.add(token);
 
-            if ((token.getType() == Token.Type.COMMA || stream.peek(2) == null) && braces == 1) {
+            if ((token.getType() == Token.Type.COMMA || stream.peek(2) == null) && braces == 1 && paren == 0 && brackets == 0) {
                 if (token.getType() == Token.Type.COMMA) {
                     tokens.remove(tokens.size() - 1);
                 }
+                
+                for (Token tt: tokens) {
+                    System.out.println("Elem token: " + tt);
+                }
+                System.out.println("---");
 
                 TokenStream element = new TokenStream(tokens);
 
