@@ -25,9 +25,7 @@ public class ProcedureFExists extends Procedure {
         try {
             return new ValueBool(Files.exists(Paths.get(((ValueStr) arguments[0]).getValue())));
         } catch (Exception e) {
-            
+            return new ValueBool(false);
         }
-        
-        return null;
     }
 }

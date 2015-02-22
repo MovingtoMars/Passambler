@@ -6,6 +6,7 @@ import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.procedure.Procedure;
 import passambler.value.Value;
+import passambler.value.ValueBool;
 import passambler.value.ValueStr;
 
 public class ProcedureFRead extends Procedure {
@@ -24,7 +25,7 @@ public class ProcedureFRead extends Procedure {
         try {
             return new ValueStr(String.join("\n", Files.readAllLines(Paths.get(((ValueStr) arguments[0]).getValue()))));
         } catch (Exception e) {
-            return null;
+            return new ValueBool(false);
         }
     }
 }

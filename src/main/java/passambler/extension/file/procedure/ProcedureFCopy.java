@@ -7,6 +7,7 @@ import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.procedure.Procedure;
 import passambler.value.Value;
+import passambler.value.ValueBool;
 import passambler.value.ValueStr;
 
 public class ProcedureFCopy extends Procedure {
@@ -28,9 +29,9 @@ public class ProcedureFCopy extends Procedure {
             
             Files.copy(file, destination);
         } catch (Exception e) {
-            return null;
+            return new ValueBool(false);
         }
         
-        return null;
+        return new ValueBool(true);
     }
 }

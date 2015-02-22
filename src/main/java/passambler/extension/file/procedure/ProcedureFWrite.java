@@ -7,6 +7,7 @@ import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.procedure.Procedure;
 import passambler.value.Value;
+import passambler.value.ValueBool;
 import passambler.value.ValueStr;
 
 public class ProcedureFWrite extends Procedure {
@@ -29,9 +30,9 @@ public class ProcedureFWrite extends Procedure {
                 Files.write(Paths.get(fileName), ((ValueStr) arguments[i]).getValue().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             }
         } catch (Exception e) {
-            
+            return new ValueBool(false);
         }
         
-        return null;
+        return new ValueBool(true);
     }
 }

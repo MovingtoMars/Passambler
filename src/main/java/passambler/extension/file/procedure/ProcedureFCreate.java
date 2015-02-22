@@ -6,6 +6,7 @@ import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.procedure.Procedure;
 import passambler.value.Value;
+import passambler.value.ValueBool;
 import passambler.value.ValueStr;
 
 public class ProcedureFCreate extends Procedure {
@@ -24,9 +25,9 @@ public class ProcedureFCreate extends Procedure {
         try {
             Files.createFile(Paths.get(((ValueStr) arguments[0]).getValue()));
         } catch (Exception e) {
-            
+            return new ValueBool(false);
         }
         
-        return null;
+        return new ValueBool(true);
     }
 }

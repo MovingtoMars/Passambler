@@ -25,9 +25,7 @@ public class ProcedureIsDir extends Procedure {
         try {
             return new ValueBool(Files.isDirectory(Paths.get(((ValueStr) arguments[0]).getValue())));
         } catch (Exception e) {
-            
+            return new ValueBool(false);
         }
-        
-        return null;
     }
 }
