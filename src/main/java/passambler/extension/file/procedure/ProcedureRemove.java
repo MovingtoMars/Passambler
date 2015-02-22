@@ -9,7 +9,7 @@ import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueStr;
 
-public class ProcedureFRead extends Procedure {
+public class ProcedureRemove extends Procedure {
     @Override
     public int getArguments() {
         return 1;
@@ -23,9 +23,11 @@ public class ProcedureFRead extends Procedure {
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         try {
-            return new ValueStr(String.join("\n", Files.readAllLines(Paths.get(((ValueStr) arguments[0]).getValue()))));
+            Files.delete(Paths.get(((ValueStr) arguments[0]).getValue()));
         } catch (Exception e) {
             return new ValueBool(false);
         }
+        
+        return new ValueBool(true);
     }
 }

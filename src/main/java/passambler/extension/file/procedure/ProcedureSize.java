@@ -1,19 +1,18 @@
 package passambler.extension.file.procedure;
 
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.procedure.Procedure;
 import passambler.value.Value;
-import passambler.value.ValueBool;
+import passambler.value.ValueNum;
 import passambler.value.ValueStr;
 
-public class ProcedureFCopy extends Procedure {
+public class ProcedureSize extends Procedure {
     @Override
     public int getArguments() {
-        return 2;
+        return 1;
     }
 
     @Override
@@ -24,14 +23,9 @@ public class ProcedureFCopy extends Procedure {
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         try {
-            Path file = Paths.get(((ValueStr) arguments[0]).getValue());
-            Path destination = Paths.get(((ValueStr) arguments[1]).getValue());
-            
-            Files.copy(file, destination);
+            return new ValueNum(Files.size(Paths.get(((ValueStr) arguments[0]).getValue())));
         } catch (Exception e) {
-            return new ValueBool(false);
+            return null;
         }
-        
-        return new ValueBool(true);
     }
 }

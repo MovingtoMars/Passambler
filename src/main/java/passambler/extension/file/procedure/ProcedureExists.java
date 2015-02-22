@@ -9,7 +9,7 @@ import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueStr;
 
-public class ProcedureFCreate extends Procedure {
+public class ProcedureExists extends Procedure {
     @Override
     public int getArguments() {
         return 1;
@@ -23,11 +23,9 @@ public class ProcedureFCreate extends Procedure {
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         try {
-            Files.createFile(Paths.get(((ValueStr) arguments[0]).getValue()));
+            return new ValueBool(Files.exists(Paths.get(((ValueStr) arguments[0]).getValue())));
         } catch (Exception e) {
             return new ValueBool(false);
         }
-        
-        return new ValueBool(true);
     }
 }

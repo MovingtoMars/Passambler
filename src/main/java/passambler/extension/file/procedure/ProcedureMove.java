@@ -10,7 +10,7 @@ import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueStr;
 
-public class ProcedureFMove extends Procedure {
+public class ProcedureMove extends Procedure {
     @Override
     public int getArguments() {
         return 2;

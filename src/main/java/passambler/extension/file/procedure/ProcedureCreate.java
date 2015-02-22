@@ -2,7 +2,6 @@ package passambler.extension.file.procedure;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.procedure.Procedure;
@@ -10,10 +9,10 @@ import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueStr;
 
-public class ProcedureFWrite extends Procedure {
+public class ProcedureCreate extends Procedure {
     @Override
     public int getArguments() {
-        return -1;
+        return 1;
     }
 
     @Override
@@ -24,11 +23,7 @@ public class ProcedureFWrite extends Procedure {
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         try {
-            String fileName = ((ValueStr) arguments[0]).getValue();
-        
-            for (int i = 1; i < arguments.length; ++i) {
-                Files.write(Paths.get(fileName), ((ValueStr) arguments[i]).getValue().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-            }
+            Files.createFile(Paths.get(((ValueStr) arguments[0]).getValue()));
         } catch (Exception e) {
             return new ValueBool(false);
         }
