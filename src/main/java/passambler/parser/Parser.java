@@ -61,7 +61,17 @@ public class Parser {
                 
                 Extension extension = Main.EXTENSIONS.stream().filter(ext -> ext.getId().equals(name)).findFirst().orElseThrow(() -> new ParserException(ParserException.Type.UNDEFINED_EXTENSION, stream.current().getPosition(), name));
                 
-                extension.applySymbols(scope);
+                Map<String, Value> symbols = new HashMap();
+                
+                extension.addSymbols(scope, symbols);
+                
+                Value extensionValue = new Value();
+                
+                for (Map.Entry<String, Value> symbol : symbols.entrySet()) {
+                    extensionValue.setProperty(symbol.getKey(), symbol.getValue());
+                }
+                
+                scope.setSymbol(name, extensionValue);
             } else {
                 Value value = new ExpressionParser(this, new TokenStream(stream.rest())).parse();
 

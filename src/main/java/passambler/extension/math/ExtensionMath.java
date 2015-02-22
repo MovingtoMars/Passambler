@@ -1,8 +1,10 @@
 package passambler.extension.math;
 
+import java.util.Map;
 import passambler.extension.Extension;
 import passambler.extension.math.procedure.*;
 import passambler.parser.Scope;
+import passambler.value.Value;
 import passambler.value.ValueNum;
 
 public class ExtensionMath implements Extension {
@@ -12,18 +14,18 @@ public class ExtensionMath implements Extension {
     }
     
     @Override
-    public void applySymbols(Scope scope) {
-        scope.setSymbol("sin", new ProcedureSin());
-        scope.setSymbol("cos", new ProcedureCos());
-        scope.setSymbol("tan", new ProcedureTan());
-        scope.setSymbol("abs", new ProcedureAbs());
-        scope.setSymbol("ceil", new ProcedureCeil());
-        scope.setSymbol("floor", new ProcedureFloor());
-        scope.setSymbol("sqrt", new ProcedureSqrt());
-        scope.setSymbol("log", new ProcedureLog());
-        scope.setSymbol("log10", new ProcedureLog10());
-        scope.setSymbol("random", new ProcedureRandom());
+    public void addSymbols(Scope scope, Map<String, Value> symbols) {
+        symbols.put("sin", new ProcedureSin());
+        symbols.put("cos", new ProcedureCos());
+        symbols.put("tan", new ProcedureTan());
+        symbols.put("abs", new ProcedureAbs());
+        symbols.put("ceil", new ProcedureCeil());
+        symbols.put("floor", new ProcedureFloor());
+        symbols.put("sqrt", new ProcedureSqrt());
+        symbols.put("log", new ProcedureLog());
+        symbols.put("log10", new ProcedureLog10());
+        symbols.put("random", new ProcedureRandom());
         
-        scope.setSymbol("pi", new ValueNum(Math.PI));
+        symbols.put("pi", new ValueNum(Math.PI));
     }
 }

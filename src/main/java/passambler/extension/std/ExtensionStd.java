@@ -1,10 +1,12 @@
 package passambler.extension.std;
 
+import java.util.Map;
 import passambler.extension.Extension;
 import passambler.extension.std.procedure.*;
 import passambler.extension.std.procedure.ProcedureRead.ReadType;
 import passambler.extension.std.value.*;
 import passambler.parser.Scope;
+import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueNil;
 
@@ -17,7 +19,7 @@ public class ExtensionStd implements Extension {
     }
     
     @Override
-    public void applySymbols(Scope scope) {
+    public void addSymbols(Scope scope, Map<String, Value> symbols) {
         scope.setSymbol("write", new ProcedureWrite(false));
         scope.setSymbol("writeln", new ProcedureWrite(true));
         scope.setSymbol("readstr", new ProcedureRead(ReadType.STRING));
