@@ -18,6 +18,8 @@ public class ExtensionFile implements Extension {
         scope.setSymbol("fwrite", new ProcedureFWrite());
         scope.setSymbol("fread", new ProcedureFRead());
         scope.setSymbol("fsize", new ProcedureFSize());
+        scope.setSymbol("fcopy", new ProcedureFCopy());
+        scope.setSymbol("fmove", new ProcedureFMove());
         scope.setSymbol("isdir", new ProcedureIsDir());
         scope.setSymbol("createdir", new ProcedureCreateDir());
     }
