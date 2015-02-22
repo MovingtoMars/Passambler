@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import passambler.extension.Extension;
+import passambler.extension.file.ExtensionFile;
 import passambler.extension.math.ExtensionMath;
 import passambler.extension.std.ExtensionStd;
 import passambler.parser.Parser;
@@ -52,6 +53,7 @@ public class Main {
         
         EXTENSIONS.add(new ExtensionStd());
         EXTENSIONS.add(new ExtensionMath());
+        EXTENSIONS.add(new ExtensionFile());
 
         if (options.has("v")) {
             LOGGER.log(Level.INFO, String.format("Passambler %s", VERSION));
