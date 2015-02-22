@@ -55,22 +55,22 @@ public class Parser {
             }
 
             stream.next();
-            
+
             if (stream.current().getType() == Token.Type.IDENTIFIER) {
                 String name = stream.current().getValue();
-                
+
                 Extension extension = Main.EXTENSIONS.stream().filter(ext -> ext.getId().equals(name)).findFirst().orElseThrow(() -> new ParserException(ParserException.Type.UNDEFINED_EXTENSION, stream.current().getPosition(), name));
-                
+
                 Map<String, Value> symbols = new HashMap();
-                
+
                 extension.addSymbols(scope, symbols);
-                
+
                 Value extensionValue = new Value();
-                
+
                 for (Map.Entry<String, Value> symbol : symbols.entrySet()) {
                     extensionValue.setProperty(symbol.getKey(), symbol.getValue());
                 }
-                
+
                 scope.setSymbol(name, extensionValue);
             } else {
                 Value value = new ExpressionParser(this, new TokenStream(stream.rest())).parse();
@@ -208,21 +208,21 @@ public class Parser {
             }
 
             stream.next();
-            
+
             stream.match(Token.Type.LPAREN);
-            
+
             int paren = 1;
-            
+
             stream.next();
 
             List<Token> tokens = new ArrayList<>();
-            
+
             while (stream.hasNext()) {
                 if (stream.current().getType() == Token.Type.LPAREN) {
                     paren++;
                 } else if (stream.current().getType() == Token.Type.RPAREN) {
                     paren--;
-                    
+
                     if (paren == 0) {
                         break;
                     }
@@ -232,9 +232,9 @@ public class Parser {
 
                 stream.next();
             }
-            
+
             stream.match(Token.Type.RPAREN);
-            
+
             stream.next();
 
             Value value = new ExpressionParser(this, new TokenStream(tokens)).parse();
@@ -258,40 +258,40 @@ public class Parser {
             stream.next();
 
             stream.match(Token.Type.LPAREN);
-            
+
             int paren = 1;
-            
+
             stream.next();
-            
+
             List<Token> tokens = new ArrayList<>();
 
             String variableName = null;
-            
+
             while (stream.hasNext()) {
                 if (stream.current().getType() == Token.Type.IDENTIFIER && stream.peek().getType() == Token.Type.COL) {
-                   variableName = stream.current().getValue();
-                   
-                   stream.next();
-                   stream.next();
-                   
-                   continue;
+                    variableName = stream.current().getValue();
+
+                    stream.next();
+                    stream.next();
+
+                    continue;
                 } else if (stream.current().getType() == Token.Type.LPAREN) {
                     paren++;
                 } else if (stream.current().getType() == Token.Type.RPAREN) {
                     paren--;
-                    
+
                     if (paren == 0) {
                         break;
                     }
                 }
-               
+
                 tokens.add(stream.current());
-                
+
                 stream.next();
             }
-            
+
             stream.match(Token.Type.RPAREN);
-            
+
             stream.next();
 
             Value value = new ExpressionParser(this, new TokenStream(tokens)).parse();
@@ -329,34 +329,41 @@ public class Parser {
             }
 
             stream.next();
-            
+
             stream.match(Token.Type.IDENTIFIER);
+
             String name = stream.current().getValue();
-            
+
             stream.next();
 
+            stream.match(Token.Type.LPAREN);
+
+            stream.next();
+            
             List<String> argumentIds = new ArrayList<>();
 
-            if (stream.current().getType() == Token.Type.COL) {
-                while (stream.hasNext()) {
-                    stream.next();
+            while (stream.hasNext()) {
+                if (stream.current().getType() == Token.Type.RPAREN) {
+                    break;
+                } else {
+                    stream.match(Token.Type.IDENTIFIER);
 
-                    if (stream.current().getType() == Token.Type.LBRACE) {
-                        break;
-                    } else {
-                        stream.match(Token.Type.IDENTIFIER);
+                    argumentIds.add(stream.current().getValue());
 
-                        argumentIds.add(stream.current().getValue());
+                    if (stream.peek().getType() != Token.Type.RPAREN) {
+                        stream.next();
 
-                        if (stream.peek().getType() != Token.Type.LBRACE) {
-                            stream.next();
-
-                            stream.match(Token.Type.COMMA);
-                        }
+                        stream.match(Token.Type.COMMA);
                     }
+                    
+                    stream.next();
                 }
             }
+            
+            stream.match(Token.Type.RPAREN);
 
+            stream.next();
+            
             Block callback = block(stream);
 
             scope.setSymbol(name, new Function() {
@@ -375,9 +382,9 @@ public class Parser {
                     for (int i = 0; i < argumentIds.size(); ++i) {
                         callback.getParser().getScope().setSymbol(argumentIds.get(i), arguments[i]);
                     }
-                    
+
                     return callback.invoke();
-                } 
+                }
             });
         } else {
             if (!rules.isEvaluationAllowed()) {
@@ -439,34 +446,34 @@ public class Parser {
 
         return null;
     }
-    
+
     private Block block(TokenStream stream) throws ParserException {
         Block block = new Block(scope);
-        
+
         stream.match(Token.Type.LBRACE);
-        
+
         stream.next();
-        
+
         int braces = 1;
-        
+
         while (stream.hasNext()) {
             if (stream.current().getType() == Token.Type.LBRACE) {
                 braces++;
             } else if (stream.current().getType() == Token.Type.RBRACE) {
                 braces--;
-            
+
                 if (braces == 0) {
                     break;
                 }
             }
 
             block.getTokens().add(stream.current());
-            
+
             stream.next();
         }
-        
+
         stream.match(Token.Type.RBRACE);
-        
+
         return block;
     }
 }

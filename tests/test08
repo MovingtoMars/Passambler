@@ -2,15 +2,15 @@
 Tests function declaration.
 
 --input--
-fn a {
+fn a() {
     return;
 }
 
-fn b:x {
+fn b(x) {
     return x + 2;
 }
 
-fn c:x, y {
+fn c(x, y) {
     return x + y;
 }
 
