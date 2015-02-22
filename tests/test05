@@ -5,12 +5,12 @@ Tests math extension.
 import math;
 
 return [
-    abs(-100),
-    abs(100),
-    ceil(0.5),
-    floor(0.5),
-    log10(100),
-    sqrt(25)
+    math.abs(-100),
+    math.abs(100),
+    math.ceil(0.5),
+    math.floor(0.5),
+    math.log10(100),
+    math.sqrt(25)
 ];
 
 --result--
