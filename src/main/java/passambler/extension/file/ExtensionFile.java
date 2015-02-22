@@ -1,13 +1,6 @@
 package passambler.extension.file;
 
-import passambler.extension.file.procedure.ProcedureIsDir;
-import passambler.extension.file.procedure.ProcedureFSize;
-import passambler.extension.file.procedure.ProcedureFRead;
-import passambler.extension.file.procedure.ProcedureCreateDir;
-import passambler.extension.file.procedure.ProcedureFWrite;
-import passambler.extension.file.procedure.ProcedureFExists;
-import passambler.extension.file.procedure.ProcedureFRemove;
-import passambler.extension.file.procedure.ProcedureFCreate;
+import passambler.extension.file.procedure.*;
 import passambler.extension.Extension;
 import passambler.parser.Scope;
 
