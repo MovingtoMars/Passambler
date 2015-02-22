@@ -16,7 +16,7 @@ A FizzBuzz program is written like this:
 ```
 import std;
 
-for 0..100:x {
+for (x : 0..100) {
     if (x % 15) == 0 {
         writeln('FizzBuzz');
     } elseif (x % 3) == 0 {

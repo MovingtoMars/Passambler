@@ -233,6 +233,8 @@ public class Parser {
                 stream.next();
             }
             
+            stream.match(Token.Type.RPAREN);
+            
             stream.next();
 
             Value value = new ExpressionParser(this, new TokenStream(tokens)).parse();
@@ -255,39 +257,46 @@ public class Parser {
 
             stream.next();
 
+            stream.match(Token.Type.LPAREN);
+            
+            int paren = 1;
+            
+            stream.next();
+            
             List<Token> tokens = new ArrayList<>();
 
-            List<String> arguments = new ArrayList<>();
-
+            String variableName = null;
+            
             while (stream.hasNext()) {
-                if (stream.current().getType() == Token.Type.LBRACE) {
-                    break;
-                } else if (stream.current().getType() == Token.Type.COL) {
-                    stream.next();
-
-                    while (stream.current().getType() != Token.Type.LBRACE) {
-                        stream.match(Token.Type.IDENTIFIER);
-
-                        arguments.add(stream.current().getValue());
-
-                        if (stream.peek().getType() != Token.Type.LBRACE) {
-                            stream.next();
-
-                            stream.match(Token.Type.COMMA);
-                        }
-
-                        stream.next();
+                if (stream.current().getType() == Token.Type.IDENTIFIER && stream.peek().getType() == Token.Type.COL) {
+                   variableName = stream.current().getValue();
+                   
+                   stream.next();
+                   stream.next();
+                   
+                   continue;
+                } else if (stream.current().getType() == Token.Type.LPAREN) {
+                    paren++;
+                } else if (stream.current().getType() == Token.Type.RPAREN) {
+                    paren--;
+                    
+                    if (paren == 0) {
+                        break;
                     }
-                } else {
-                    tokens.add(stream.current());
-
-                    stream.next();
                 }
+               
+                tokens.add(stream.current());
+                
+                stream.next();
             }
-
-            Block callback = block(stream);
+            
+            stream.match(Token.Type.RPAREN);
+            
+            stream.next();
 
             Value value = new ExpressionParser(this, new TokenStream(tokens)).parse();
+
+            Block callback = block(stream);
 
             if (!(value instanceof IndexedValue)) {
                 throw new ParserException(ParserException.Type.NOT_INDEXED, stream.current().getPosition());
@@ -296,8 +305,9 @@ public class Parser {
             IndexedValue indexedValue = (IndexedValue) value;
 
             for (int i = 0; i < indexedValue.getIndexCount(); ++i) {
-                callback.getParser().getScope().setSymbol(arguments.size() >= 1 ? arguments.get(0) : "_", indexedValue.getIndex(new ValueNum(i)));
-                callback.getParser().getScope().setSymbol(arguments.size() >= 2 ? arguments.get(1) : "__", new ValueNum(i));
+                if (variableName != null) {
+                    callback.getParser().getScope().setSymbol(variableName, indexedValue.getIndex(new ValueNum(i)));
+                }
 
                 Value result = callback.invoke();
 

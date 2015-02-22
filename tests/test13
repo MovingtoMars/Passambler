@@ -15,7 +15,7 @@ shift(a);
 c = 10..20;
 d = [];
 
-for 0..5 {
+for (0..5) {
     push(d, pop(c));
 }
 

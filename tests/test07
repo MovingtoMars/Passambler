@@ -4,20 +4,12 @@ Tests for statement.
 --input--
 a = 0;
 
-for 1..10 {
+for (1..10) {
     a += 5;
 }
 
-for 1..3:x {
+for (x : 1..3) {
     a *= x;
-}
-
-for 1..5 {
-    a -= _;
-}
-
-for 10..15 {
-    a += __;
 }
 
 return a;
