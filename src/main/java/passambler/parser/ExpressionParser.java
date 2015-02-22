@@ -347,11 +347,6 @@ public class ExpressionParser {
                 if (token.getType() == Token.Type.COMMA) {
                     tokens.remove(tokens.size() - 1);
                 }
-                
-                for (Token tt: tokens) {
-                    System.out.println("Elem token: " + tt);
-                }
-                System.out.println("---");
 
                 TokenStream element = new TokenStream(tokens);
 
