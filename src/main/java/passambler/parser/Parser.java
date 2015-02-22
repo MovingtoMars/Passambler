@@ -208,18 +208,32 @@ public class Parser {
             }
 
             stream.next();
+            
+            stream.match(Token.Type.LPAREN);
+            
+            int paren = 1;
+            
+            stream.next();
 
             List<Token> tokens = new ArrayList<>();
-
+            
             while (stream.hasNext()) {
-                if (stream.current().getType() == Token.Type.LBRACE) {
-                    break;
+                if (stream.current().getType() == Token.Type.LPAREN) {
+                    paren++;
+                } else if (stream.current().getType() == Token.Type.RPAREN) {
+                    paren--;
+                    
+                    if (paren == 0) {
+                        break;
+                    }
                 }
 
                 tokens.add(stream.current());
 
                 stream.next();
             }
+            
+            stream.next();
 
             Value value = new ExpressionParser(this, new TokenStream(tokens)).parse();
 
