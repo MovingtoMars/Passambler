@@ -10,7 +10,7 @@ public class ValueList extends Value implements IndexedValue {
     public List<Value> getValue() {
         return list;
     }
-    
+
     @Override
     public Value getIndex(Value key) {
         return list.get(((ValueNum) key).getValue().intValue());
@@ -29,11 +29,11 @@ public class ValueList extends Value implements IndexedValue {
     public void add(Value value) {
         list.add(value);
     }
-    
+
     public void remove(int index) {
         list.remove(index);
     }
-    
+
     public Value get(int index) {
         return list.get(index);
     }

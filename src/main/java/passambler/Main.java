@@ -29,9 +29,9 @@ public class Main {
     public static final String VERSION = "0.1.0-SNAPSHOT";
 
     public static final Logger LOGGER = Logger.getLogger("Passambler");
-    
+
     public static List<Package> PACKAGES = new ArrayList<>();
-    
+
     private OptionSet options;
 
     public Main(String[] args) throws IOException {
@@ -50,7 +50,7 @@ public class Main {
 
         LOGGER.setUseParentHandlers(false);
         LOGGER.addHandler(new LogHandler(options.has("show-stacktrace")));
-        
+
         PACKAGES.add(new PackageStd());
         PACKAGES.add(new PackageMath());
         PACKAGES.add(new PackageFile());
@@ -90,7 +90,7 @@ public class Main {
                 }
             } else {
                 Parser parser = new Parser();
-                
+
                 parser.parse(lexer);
             }
         } catch (LexerException e) {
@@ -156,7 +156,7 @@ public class Main {
                     for (Token token : tokens) {
                         LOGGER.log(Level.INFO, token.toString());
                     }
-                    
+
                     tokens.clear();
                 } else {
                     int braces = 0;

@@ -23,15 +23,15 @@ public class FunctionReverse extends Function {
         if (arguments[0] instanceof ValueStr) {
             return new ValueStr(new StringBuilder(((ValueStr) arguments[0]).getValue()).reverse().toString());
         }
-        
+
         ValueList value = (ValueList) arguments[0];
-        
+
         ValueList subList = new ValueList();
-        
+
         for (int i = value.getIndexCount() - 1; i >= 0; --i) {
             subList.add(value.get(i));
         }
-        
+
         return subList;
     }
 }

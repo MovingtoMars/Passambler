@@ -25,14 +25,14 @@ public class FunctionWrite extends Function {
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         try {
             String fileName = ((ValueStr) arguments[0]).getValue();
-        
+
             for (int i = 1; i < arguments.length; ++i) {
                 Files.write(Paths.get(fileName), ((ValueStr) arguments[i]).getValue().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             }
         } catch (Exception e) {
             return new ValueBool(false);
         }
-        
+
         return new ValueBool(true);
     }
 }

@@ -129,29 +129,29 @@ public class Parser {
                     if (!(condition instanceof ValueBool)) {
                         throw new ParserException(ParserException.Type.BAD_SYNTAX, tokens.get(0).getPosition(), "condition should be a bool");
                     }
-                    
+
                     stream.next();
-                    
+
                     cases.put((ValueBool) condition, block(stream));
-                
+
                     tokens.clear();
                 } else {
                     cases.put(new ValueBool(true), block(stream));
                 }
-                
+
                 stream.next();
 
                 if (stream.current() != null) {
                     if (elseCondition) {
                         throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "else should be the last statement");
                     }
-                    
+
                     stream.match(Token.Type.ELSE, Token.Type.ELSEIF);
 
                     if (stream.current().getType() == Token.Type.ELSE) {
                         elseCondition = true;
                     }
-                    
+
                     stream.next();
                 }
             }

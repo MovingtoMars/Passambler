@@ -20,7 +20,7 @@ public class ParserRules {
     private boolean returnStatementAllowed = true;
 
     private boolean importStatementAllowed = true;
-    
+
     public ParserRules setEvaluationAllowed(boolean allowed) {
         evaluationAllowed = allowed;
 
@@ -68,7 +68,7 @@ public class ParserRules {
 
         return this;
     }
-    
+
     public ParserRules setImportStatementAllowed(boolean allowed) {
         importStatementAllowed = allowed;
 
@@ -106,7 +106,7 @@ public class ParserRules {
     public boolean isReturnStatementAllowed() {
         return returnStatementAllowed;
     }
-    
+
     public boolean isImportStatementAllowed() {
         return importStatementAllowed;
     }

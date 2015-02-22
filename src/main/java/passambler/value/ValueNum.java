@@ -7,7 +7,7 @@ public class ValueNum extends Value {
     public ValueNum(double data) {
         this(new BigDecimal(data));
     }
-    
+
     public ValueNum(int data) {
         this(new BigDecimal(data));
     }
@@ -53,11 +53,11 @@ public class ValueNum extends Value {
                     return new ValueBool(getValue().compareTo(((ValueNum) value).getValue()) <= 0);
                 case RANGE:
                     ValueList list = new ValueList();
-                    
+
                     for (int i = getValue().intValue(); i <= ((ValueNum) value).getValue().intValue(); ++i) {
                         list.add(new ValueNum(i));
                     }
-                
+
                     return list;
                 case COMPARE:
                     return new ValueNum(getValue().compareTo(((ValueNum) value).getValue()));

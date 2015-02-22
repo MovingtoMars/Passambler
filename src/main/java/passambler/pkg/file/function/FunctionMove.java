@@ -26,12 +26,12 @@ public class FunctionMove extends Function {
         try {
             Path file = Paths.get(((ValueStr) arguments[0]).getValue());
             Path destination = Paths.get(((ValueStr) arguments[1]).getValue());
-            
+
             Files.move(file, destination);
         } catch (Exception e) {
             return new ValueBool(false);
         }
-        
+
         return new ValueBool(true);
     }
 }

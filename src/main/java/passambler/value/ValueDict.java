@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class ValueDict extends Value implements IndexedValue {
     protected Map<Value, Value> dict = new HashMap();
-    
+
     @Override
     public Map<Value, Value> getValue() {
         return dict;
@@ -18,7 +18,7 @@ public class ValueDict extends Value implements IndexedValue {
                 return entry.getValue();
             }
         }
-        
+
         return null;
     }
 

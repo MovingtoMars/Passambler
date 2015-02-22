@@ -33,7 +33,7 @@ public class TestParser {
                 }
             }
         }
-        
+
         for (String requiredSection : new String[] { "desc", "input", "result" }) {
             if (!sections.containsKey(requiredSection)) {
                 throw new TestException("missing section '%s'", requiredSection);

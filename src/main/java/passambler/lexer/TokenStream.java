@@ -89,7 +89,7 @@ public class TokenStream {
                 return;
             }
         }
-        
+
         throw new ParserException(ParserException.Type.INVALID_TOKEN, current() == null ? first().getPosition() : current().getPosition(), typesExpected.toString(), current() == null ? "nothing" : current().getType());
     }
 }

@@ -19,7 +19,7 @@ public class FunctionEmpty extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {    
+    public Value invoke(Parser parser, Value... arguments) throws ParserException {
         return new ValueBool(((IndexedValue) arguments[0]).getIndexCount() == 0);
     }
 }

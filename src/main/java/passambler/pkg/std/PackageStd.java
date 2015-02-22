@@ -12,12 +12,12 @@ import passambler.value.ValueNil;
 
 public class PackageStd implements Package {
     public static final ValueNil VALUE_NIL = new ValueNil();
-    
+
     @Override
     public String getId() {
         return "std";
     }
-    
+
     @Override
     public void addSymbols(Scope scope, Map<String, Value> symbols) {
         scope.setSymbol("write", new FunctionWrite(false));

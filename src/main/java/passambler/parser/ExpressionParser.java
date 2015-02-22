@@ -212,7 +212,7 @@ public class ExpressionParser {
                 paren++;
             } else if (stream.current().getType() == Token.Type.RPAREN) {
                 paren--;
-            }else if (stream.current().getType() == Token.Type.LBRACE) {
+            } else if (stream.current().getType() == Token.Type.LBRACE) {
                 braces++;
             } else if (stream.current().getType() == Token.Type.RBRACE) {
                 braces--;

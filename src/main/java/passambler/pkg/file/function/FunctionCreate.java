@@ -27,7 +27,7 @@ public class FunctionCreate extends Function {
         } catch (Exception e) {
             return new ValueBool(false);
         }
-        
+
         return new ValueBool(true);
     }
 }

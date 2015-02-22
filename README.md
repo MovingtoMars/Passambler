@@ -1,5 +1,5 @@
 # Passambler
-Passambler is a simple scripting language that is able to perform simple actions.
+Passambler is a simple scripting language.
 
 The language isn't finished yet, so stay tuned.
 

@@ -20,11 +20,11 @@ public class FunctionPop extends Function {
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         ValueList list = (ValueList) arguments[0];
-        
+
         Value last = list.get(list.getIndexCount() - 1);
-        
+
         list.remove(list.getIndexCount() - 1);
-        
+
         return last;
     }
 }

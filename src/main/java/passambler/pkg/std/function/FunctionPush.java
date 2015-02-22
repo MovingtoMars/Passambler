@@ -17,14 +17,14 @@ public class FunctionPush extends Function {
         if (argument == 0) {
             return value instanceof ValueList;
         }
-        
+
         return true;
     }
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         ((ValueList) arguments[0]).add(arguments[1]);
-        
+
         return null;
     }
 }

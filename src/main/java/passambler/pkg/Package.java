@@ -6,6 +6,6 @@ import passambler.value.Value;
 
 public interface Package {
     public String getId();
-    
+
     public void addSymbols(Scope scope, Map<String, Value> symbols);
 }

@@ -21,7 +21,7 @@ public class FunctionLast extends Function {
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         IndexedValue value = (IndexedValue) arguments[0];
-        
+
         return value.getIndex(new ValueNum(value.getIndexCount() - 1));
     }
 }
