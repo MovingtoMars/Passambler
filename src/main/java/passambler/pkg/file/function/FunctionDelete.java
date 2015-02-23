@@ -3,15 +3,17 @@ package passambler.pkg.file.function;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import passambler.value.Value;
-import passambler.value.ValueNum;
+import passambler.value.ValueBool;
 
-public class FunctionSize extends FunctionSimpleFile {
+public class FunctionDelete extends FunctionSimpleFile {
     @Override
     public Value getValue(Path file) {
         try {
-            return new ValueNum(Files.size(file));
+            Files.delete(file);
         } catch (Exception e) {
-            return new ValueNum(0);
+            return new ValueBool(false);
         }
+        
+        return new ValueBool(true);
     }
 }

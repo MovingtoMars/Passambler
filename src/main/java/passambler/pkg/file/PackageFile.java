@@ -16,7 +16,7 @@ public class PackageFile implements Package {
     public void addSymbols(Scope scope, Map<String, Value> symbols) {
         symbols.put("create", new FunctionCreate());
         symbols.put("exists", new FunctionExists());
-        symbols.put("remove", new FunctionRemove());
+        symbols.put("delete", new FunctionDelete());
         symbols.put("write", new FunctionWrite());
         symbols.put("read", new FunctionRead());
         symbols.put("size", new FunctionSize());
