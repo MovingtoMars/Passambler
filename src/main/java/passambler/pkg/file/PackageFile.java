@@ -26,5 +26,6 @@ public class PackageFile implements Package {
         symbols.put("createdir", new FunctionCreateDir());
         symbols.put("type", new FunctionType());
         symbols.put("modified", new FunctionModified());
+        symbols.put("touch", new FunctionTouch());
     }
 }
