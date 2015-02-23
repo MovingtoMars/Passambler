@@ -54,8 +54,17 @@ public class ValueNum extends Value {
                 case RANGE:
                     ValueList list = new ValueList();
 
-                    for (int i = getValue().intValue(); i <= ((ValueNum) value).getValue().intValue(); ++i) {
-                        list.add(new ValueNum(i));
+                    int min = getValue().intValue();
+                    int max = ((ValueNum) value).getValue().intValue();
+
+                    if (max > min) {
+                        for (int i = min; i <= max; ++i) {
+                            list.add(new ValueNum(i));
+                        }
+                    } else {
+                        for (int i = min; i >= max; --i) {
+                            list.add(new ValueNum(i));
+                        }
                     }
 
                     return list;
