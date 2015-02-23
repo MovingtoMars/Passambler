@@ -23,6 +23,6 @@ public abstract class FunctionSimpleFile extends Function {
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         return getValue(Paths.get(((ValueStr) arguments[0]).getValue()));
     }
-    
+
     public abstract Value getValue(Path file);
 }

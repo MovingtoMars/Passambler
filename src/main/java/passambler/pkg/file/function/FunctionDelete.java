@@ -13,7 +13,7 @@ public class FunctionDelete extends FunctionSimpleFile {
         } catch (Exception e) {
             return new ValueBool(false);
         }
-        
+
         return new ValueBool(true);
     }
 }
