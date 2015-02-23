@@ -17,7 +17,7 @@ public class TestParser {
         this.lines = Files.readAllLines(file, Charset.forName("UTF-8"));
     }
 
-    public Test parse() throws TestException {
+    public Test parse(String[] requiredSections) throws TestException {
         String section = null;
 
         for (String line : lines) {
@@ -34,7 +34,7 @@ public class TestParser {
             }
         }
 
-        for (String requiredSection : new String[]{"desc", "input", "result"}) {
+        for (String requiredSection : requiredSections) {
             if (!sections.containsKey(requiredSection)) {
                 throw new TestException("missing section '%s'", requiredSection);
             }
