@@ -304,6 +304,14 @@ public class ExpressionParser {
 
             return new ValueNum(new BigDecimal(number.toString()));
         } else if (token.getType() == Token.Type.IDENTIFIER) {
+            if (token.getValue().equals("true")) {
+                return Value.VALUE_TRUE;
+            } else if (token.getValue().equals("false")) {
+                return Value.VALUE_FALSE;
+            } else if (token.getValue().equals("nil")) {
+                return Value.VALUE_NIL;
+            }
+
             if (!parser.getScope().hasSymbol(token.getValue())) {
                 throw new ParserException(stream.peek() != null && stream.peek().getType() == Token.Type.LPAREN ? ParserException.Type.UNDEFINED_FUNCTION : ParserException.Type.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());
             }

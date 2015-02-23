@@ -7,12 +7,8 @@ import passambler.pkg.std.function.FunctionRead.ReadType;
 import passambler.parser.Scope;
 import passambler.pkg.std.value.*;
 import passambler.value.Value;
-import passambler.value.ValueBool;
-import passambler.value.ValueNil;
 
 public class PackageStd implements Package {
-    public static final ValueNil VALUE_NIL = new ValueNil();
-
     @Override
     public String getId() {
         return "std";
@@ -47,9 +43,6 @@ public class PackageStd implements Package {
         scope.setSymbol("values", new FunctionValues());
         scope.setSymbol("entries", new FunctionEntries());
 
-        scope.setSymbol("nil", VALUE_NIL);
-        scope.setSymbol("true", new ValueBool(true));
-        scope.setSymbol("false", new ValueBool(false));
         scope.setSymbol("stdout", new ValueOutStream(System.out));
         scope.setSymbol("stderr", new ValueOutStream(System.err));
         scope.setSymbol("stdin", new ValueInStream(System.in));

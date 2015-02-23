@@ -2,11 +2,13 @@ package passambler.value;
 
 import java.util.HashMap;
 import java.util.Map;
-import passambler.pkg.std.PackageStd;
-import passambler.function.Function;
 import passambler.lexer.Token;
 
 public class Value {
+    public static ValueBool VALUE_TRUE = new ValueBool(true);
+    public static ValueBool VALUE_FALSE = new ValueBool(false);
+    public static ValueNil VALUE_NIL = new ValueNil();
+
     protected Map<String, Property> properties = new HashMap();
 
     protected Object value;
@@ -50,6 +52,6 @@ public class Value {
 
     @Override
     public String toString() {
-        return value == null ? PackageStd.VALUE_NIL.toString() : value.toString();
+        return value == null ? VALUE_NIL.toString() : value.toString();
     }
 }
