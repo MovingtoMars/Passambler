@@ -3,19 +3,15 @@ package passambler.pkg.std;
 import java.util.Map;
 import passambler.pkg.Package;
 import passambler.pkg.std.function.*;
-import passambler.pkg.std.function.FunctionRead.ReadType;
-import passambler.parser.Scope;
 import passambler.pkg.std.value.*;
+import passambler.parser.Scope;
 import passambler.value.Value;
 
 public class PackageStd implements Package {
     @Override
     public void addSymbols(Scope scope, Map<String, Value> symbols) {
-        scope.setSymbol("write", new FunctionWrite(false));
-        scope.setSymbol("writeln", new FunctionWrite(true));
-        scope.setSymbol("readstr", new FunctionRead(ReadType.STRING));
-        scope.setSymbol("readint", new FunctionRead(ReadType.INTEGER));
-        scope.setSymbol("readdouble", new FunctionRead(ReadType.DOUBLE));
+        scope.setSymbol("write", new FunctionWrite(new ValueStdOut(), false));
+        scope.setSymbol("writeln", new FunctionWrite(new ValueStdOut(), true));
         scope.setSymbol("exit", new FunctionExit());
         scope.setSymbol("microtime", new FunctionMicrotime());
         scope.setSymbol("str", new FunctionStr());
@@ -38,8 +34,7 @@ public class PackageStd implements Package {
         scope.setSymbol("values", new FunctionValues());
         scope.setSymbol("entries", new FunctionEntries());
 
-        scope.setSymbol("stdout", new ValueOutStream(System.out));
-        scope.setSymbol("stderr", new ValueOutStream(System.err));
-        scope.setSymbol("stdin", new ValueInStream(System.in));
+        scope.setSymbol("stdout", new ValueStdOut());
+        scope.setSymbol("stderr", new ValueStdErr());
     }
 }
