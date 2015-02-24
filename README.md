@@ -7,14 +7,14 @@ The language isn't finished yet, so stay tuned.
 A simple Hello World program looks like this:
 
 ```
-import std;
+import 'std';
 
 writeln('Hello World!');
 ```
 
 A FizzBuzz program is written like this:
 ```
-import std;
+import 'std';
 
 for (x : 0..100) {
     if ((x % 15) == 0) {
