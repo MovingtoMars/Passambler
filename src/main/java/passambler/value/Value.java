@@ -40,8 +40,24 @@ public class Value {
     public Value onOperator(Value value, Token.Type tokenType) {
         switch (tokenType) {
             case EQUAL:
+                if (this instanceof ValueNil && value instanceof ValueNil) {
+                    return new ValueBool(true);
+                }
+                
+                if ((this instanceof ValueNil && !(value instanceof ValueNil)) || (value instanceof ValueNil && !(this instanceof ValueNil))) {
+                    return new ValueBool(false);
+                }
+
                 return new ValueBool(getValue().equals(value.getValue()));
             case NEQUAL:
+                if (this instanceof ValueNil && value instanceof ValueNil) {
+                    return new ValueBool(false);
+                }
+                
+                if ((this instanceof ValueNil && !(value instanceof ValueNil)) || (value instanceof ValueNil && !(this instanceof ValueNil))) {
+                    return new ValueBool(true);
+                }
+
                 return new ValueBool(!getValue().equals(value.getValue()));
             case ASSIGN:
                 return value;
