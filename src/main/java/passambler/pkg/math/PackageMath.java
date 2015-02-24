@@ -9,11 +9,6 @@ import passambler.value.ValueNum;
 
 public class PackageMath implements Package {
     @Override
-    public String getId() {
-        return "math";
-    }
-
-    @Override
     public void addSymbols(Scope scope, Map<String, Value> symbols) {
         symbols.put("sin", new FunctionSin());
         symbols.put("cos", new FunctionCos());

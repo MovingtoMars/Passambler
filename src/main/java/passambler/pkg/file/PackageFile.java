@@ -8,11 +8,6 @@ import passambler.value.Value;
 
 public class PackageFile implements Package {
     @Override
-    public String getId() {
-        return "file";
-    }
-
-    @Override
     public void addSymbols(Scope scope, Map<String, Value> symbols) {
         symbols.put("create", new FunctionCreate());
         symbols.put("exists", new FunctionExists());

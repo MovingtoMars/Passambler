@@ -10,11 +10,6 @@ import passambler.value.Value;
 
 public class PackageStd implements Package {
     @Override
-    public String getId() {
-        return "std";
-    }
-
-    @Override
     public void addSymbols(Scope scope, Map<String, Value> symbols) {
         scope.setSymbol("write", new FunctionWrite(false));
         scope.setSymbol("writeln", new FunctionWrite(true));

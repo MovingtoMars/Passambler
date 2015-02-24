@@ -1,18 +1,20 @@
 package passambler.parser;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import passambler.Main;
-import passambler.pkg.Package;
 import passambler.lexer.Lexer;
 import passambler.lexer.LexerException;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
 import passambler.function.Function;
+import passambler.pkg.file.PackageFile;
+import passambler.pkg.math.PackageMath;
+import passambler.pkg.std.PackageStd;
 import passambler.value.IndexedValue;
 import passambler.value.Value;
 import passambler.value.ValueBool;
@@ -20,6 +22,10 @@ import passambler.value.ValueNum;
 import passambler.value.ValueStr;
 
 public class Parser {
+    private Map<String, passambler.pkg.Package> internalPackages = new HashMap<>();
+
+    private String packageName;
+
     private Scope scope;
 
     public Parser() {
@@ -28,10 +34,18 @@ public class Parser {
 
     public Parser(Scope scope) {
         this.scope = scope;
+
+        internalPackages.put("std", new PackageStd());
+        internalPackages.put("math", new PackageMath());
+        internalPackages.put("file", new PackageFile());
     }
 
     public Scope getScope() {
         return scope;
+    }
+
+    public String getPackageName() {
+        return packageName;
     }
 
     public Value parse(TokenStream stream) throws ParserException {
@@ -39,38 +53,46 @@ public class Parser {
             return null;
         }
 
-        if (stream.first().getType() == Token.Type.IMPORT) {
+        if (stream.first().getType() == Token.Type.PACKAGE && stream.peek().getType() == Token.Type.IDENTIFIER) {
+            packageName = stream.peek().getValue();
+        } else if (stream.first().getType() == Token.Type.IMPORT) {
             stream.next();
 
-            if (stream.current().getType() == Token.Type.IDENTIFIER) {
-                String name = stream.current().getValue();
+            Value value = new ExpressionParser(this, new TokenStream(stream.rest())).parse();
 
-                Package pkg = Main.PACKAGES.stream().filter(p -> p.getId().equals(name)).findFirst().orElseThrow(() -> new ParserException(ParserException.Type.UNDEFINED_PACKAGE, stream.current().getPosition(), name));
+            if (!(value instanceof ValueStr)) {
+                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "expected a string");
+            }
 
+            String name = ((ValueStr) value).getValue();
+
+            Value packageValue = new Value();
+
+            if (internalPackages.containsKey(name)) {
                 Map<String, Value> symbols = new HashMap();
 
-                pkg.addSymbols(scope, symbols);
+                internalPackages.get(name).addSymbols(scope, symbols);
 
-                Value pkgValue = new Value();
-
-                for (Map.Entry<String, Value> symbol : symbols.entrySet()) {
-                    pkgValue.setProperty(symbol.getKey(), symbol.getValue());
-                }
-
-                scope.setSymbol(name, pkgValue);
+                symbols.entrySet().stream().forEach((symbol) -> {
+                    packageValue.setProperty(symbol.getKey(), symbol.getValue());
+                });
             } else {
-                Value value = new ExpressionParser(this, new TokenStream(stream.rest())).parse();
-
-                if (!(value instanceof ValueStr)) {
-                    throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "expected string");
-                }
+                Parser parser = new Parser();
 
                 try {
-                    parse(new Lexer(String.join("\n", Files.readAllLines(Paths.get(((ValueStr) value).getValue())))));
-                } catch (Exception e) {
+                    parser.parse(new Lexer(String.join("\n", Files.readAllLines(Paths.get(name)))));
+                } catch (IOException | LexerException | ParserException e) {
                     throw new RuntimeException(e);
                 }
+
+                name = parser.getPackageName();
+
+                parser.getScope().getSymbols().entrySet().stream().forEach((symbol) -> {
+                    packageValue.setProperty(symbol.getKey(), symbol.getValue());
+                });
             }
+
+            scope.setSymbol(name, packageValue);
         } else if (stream.first().getType() == Token.Type.IF) {
             stream.next();
 
