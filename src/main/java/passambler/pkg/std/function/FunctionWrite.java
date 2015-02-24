@@ -33,6 +33,10 @@ public class FunctionWrite extends Function {
             }
 
             out.getStream().print(argument);
+            
+            if (argument != arguments[arguments.length - 1]) {
+                out.getStream().print(" ");
+            }
         }
 
         if (newLine) {
