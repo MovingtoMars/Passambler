@@ -49,10 +49,6 @@ public class Parser {
     }
 
     public Value parse(TokenStream stream) throws ParserException {
-        if (stream.size() == 0) {
-            return null;
-        }
-
         if (stream.first().getType() == Token.Type.PACKAGE && stream.peek().getType() == Token.Type.IDENTIFIER) {
             packageName = stream.peek().getValue();
         } else if (stream.first().getType() == Token.Type.IMPORT) {
