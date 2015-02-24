@@ -20,8 +20,6 @@ import passambler.value.ValueNum;
 import passambler.value.ValueStr;
 
 public class Parser {
-    private ParserRules rules = ParserRules.RULES_NONE;
-
     private Scope scope;
 
     public Parser() {
@@ -36,24 +34,12 @@ public class Parser {
         return scope;
     }
 
-    public ParserRules getParserRules() {
-        return rules;
-    }
-
-    public void setParserRules(ParserRules rules) {
-        this.rules = rules;
-    }
-
     public Value parse(TokenStream stream) throws ParserException {
         if (stream.size() == 0) {
             return null;
         }
 
         if (stream.first().getType() == Token.Type.IMPORT) {
-            if (!rules.isImportStatementAllowed()) {
-                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
-            }
-
             stream.next();
 
             if (stream.current().getType() == Token.Type.IDENTIFIER) {
@@ -86,10 +72,6 @@ public class Parser {
                 }
             }
         } else if (stream.first().getType() == Token.Type.IF) {
-            if (!rules.isIfStatementAllowed()) {
-                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
-            }
-
             stream.next();
 
             boolean elseCondition = false;
@@ -168,10 +150,6 @@ public class Parser {
                 }
             }
         } else if (stream.first().getType() == Token.Type.IDENTIFIER && stream.peek() != null && stream.peek().getType().isAssignmentOperator()) {
-            if (!rules.isVariableAssignmentAllowed()) {
-                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
-            }
-
             String key = stream.current().getValue();
 
             stream.next();
@@ -194,10 +172,6 @@ public class Parser {
 
             scope.setSymbol(key, value);
         } else if (stream.first().getType() == Token.Type.WHILE) {
-            if (!rules.isWhileStatementAllowed()) {
-                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
-            }
-
             stream.next();
 
             stream.match(Token.Type.LPAREN);
@@ -242,10 +216,6 @@ public class Parser {
                 value = new ExpressionParser(this, new TokenStream(tokens)).parse();
             }
         } else if (stream.first().getType() == Token.Type.FOR) {
-            if (!rules.isForStatementAllowed()) {
-                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
-            }
-
             stream.next();
 
             stream.match(Token.Type.LPAREN);
@@ -307,18 +277,10 @@ public class Parser {
                 }
             }
         } else if (stream.first().getType() == Token.Type.RETURN) {
-            if (!rules.isReturnStatementAllowed()) {
-                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
-            }
-
             stream.next();
 
             return new ExpressionParser(this, new TokenStream(stream.rest())).parse();
         } else if (stream.first().getType() == Token.Type.FN) {
-            if (!rules.isFunctionDeclarationAllowed()) {
-                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
-            }
-
             stream.next();
 
             stream.match(Token.Type.IDENTIFIER);
@@ -378,10 +340,6 @@ public class Parser {
                 }
             });
         } else {
-            if (!rules.isEvaluationAllowed()) {
-                throw new ParserException(ParserException.Type.NOT_ALLOWED, stream.first().getPosition());
-            }
-
             new ExpressionParser(this, stream).parse();
         }
 
