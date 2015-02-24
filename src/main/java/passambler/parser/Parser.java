@@ -397,12 +397,14 @@ public class Parser {
                     subTokens.remove(subTokens.size() - 1);
                 }
 
-                Value result = parse(new TokenStream(subTokens));
+                if (subTokens.size() > 0) {
+                    Value result = parse(new TokenStream(subTokens));
 
-                subTokens.clear();
+                    subTokens.clear();
 
-                if (result != null) {
-                    return result;
+                    if (result != null) {
+                        return result;
+                    }
                 }
             }
         }
