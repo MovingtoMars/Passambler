@@ -19,8 +19,12 @@ return [
     100 gt 50,
     50 lt 100,
     10 ge 9,
-    10 le 10
+    10 le 10,
+    [1, 2, 3, 4, 5] == [1, 2, 3, 4, 5],
+    [] == [],
+    [0] == [1],
+    [1] == [1]
 ];
 
 --result--
-[true, false, true, true, true, true, 0, 1, -1, -1, 1, false, true, true, true, true, true]
+[true, false, true, true, true, true, 0, 1, -1, -1, 1, false, true, true, true, true, true, true, true, false, true]

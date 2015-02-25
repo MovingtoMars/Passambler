@@ -25,17 +25,29 @@ public class ValueList extends Value implements IndexedValue {
     public int getIndexCount() {
         return list.size();
     }
-
-    public void add(Value value) {
-        list.add(value);
-    }
-
-    public void remove(int index) {
-        list.remove(index);
-    }
-
-    public Value get(int index) {
-        return list.get(index);
+    
+    @Override
+    public boolean equals(Value value) {
+        if (value instanceof ValueList) {
+            ValueList givenList = (ValueList) value;
+            
+            if (givenList.getIndexCount() != getIndexCount()) {
+                return false;
+            }
+            
+            for (int i = 0; i < getIndexCount(); ++i) {
+                Value valueInCurrentList = list.get(i);
+                Value valueInList = givenList.getValue().get(i);
+                
+                if (!valueInCurrentList.equals(valueInList)) {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        return super.equals(value);
     }
 
     @Override

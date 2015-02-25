@@ -31,6 +31,31 @@ public class ValueDict extends Value implements IndexedValue {
     public int getIndexCount() {
         return dict.size();
     }
+    
+    @Override
+    public boolean equals(Value value) {
+        if (value instanceof ValueDict) {
+            ValueDict givenDict = (ValueDict) value;
+            
+            if (givenDict.getValue().size() != getValue().size()) {
+                return false;
+            }
+            
+            for (Map.Entry<Value, Value> entry : getValue().entrySet()) {
+                if (givenDict.getValue().containsKey(entry.getKey())) {
+                    if (!givenDict.getValue().get(entry.getKey()).equals(entry.getValue())) {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+        
+        return super.equals(value);
+    }
 
     @Override
     public String toString() {

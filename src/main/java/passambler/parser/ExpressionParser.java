@@ -192,7 +192,7 @@ public class ExpressionParser {
                         throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "no value specified");
                     }
                 } else {
-                    inlineDeclaration.add(new ExpressionParser(parser, new TokenStream(tokens)).parse());
+                    inlineDeclaration.getValue().add(new ExpressionParser(parser, new TokenStream(tokens)).parse());
                 }
 
                 if (stream.current().getType() == Token.Type.RBRACKET) {
@@ -226,8 +226,6 @@ public class ExpressionParser {
 
             stream.next();
         }
-
-        stream.match(Token.Type.RBRACKET);
 
         if (currentValue == null && (inlineDeclaration.getIndexCount() > 0 || tokens.isEmpty())) {
             return inlineDeclaration;

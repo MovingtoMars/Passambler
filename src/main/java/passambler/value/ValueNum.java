@@ -59,11 +59,11 @@ public class ValueNum extends Value {
 
                     if (max > min) {
                         for (int i = min; i <= max; ++i) {
-                            list.add(new ValueNum(i));
+                            list.getValue().add(new ValueNum(i));
                         }
                     } else {
                         for (int i = min; i >= max; --i) {
-                            list.add(new ValueNum(i));
+                            list.getValue().add(new ValueNum(i));
                         }
                     }
 

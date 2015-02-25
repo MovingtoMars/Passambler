@@ -23,7 +23,7 @@ public class FunctionValues extends Function {
         ValueList list = new ValueList();
 
         ((ValueDict) arguments[0]).getValue().values().stream().forEach((value) -> {
-            list.add(value);
+            list.getValue().add(value);
         });
 
         return list;

@@ -28,7 +28,7 @@ public class FunctionEntries extends Function {
             value.setProperty("key", set.getKey());
             value.setProperty("value", set.getValue());
 
-            list.add(value);
+            list.getValue().add(value);
         });
 
         return list;

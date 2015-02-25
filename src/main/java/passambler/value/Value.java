@@ -40,30 +40,26 @@ public class Value {
     public Value onOperator(Value value, Token.Type tokenType) {
         switch (tokenType) {
             case EQUAL:
-                if (this instanceof ValueNil && value instanceof ValueNil) {
-                    return new ValueBool(true);
-                }
-                
-                if ((this instanceof ValueNil && !(value instanceof ValueNil)) || (value instanceof ValueNil && !(this instanceof ValueNil))) {
-                    return new ValueBool(false);
-                }
-
-                return new ValueBool(getValue().equals(value.getValue()));
+                return new ValueBool(equals(value));
             case NEQUAL:
-                if (this instanceof ValueNil && value instanceof ValueNil) {
-                    return new ValueBool(false);
-                }
-                
-                if ((this instanceof ValueNil && !(value instanceof ValueNil)) || (value instanceof ValueNil && !(this instanceof ValueNil))) {
-                    return new ValueBool(true);
-                }
-
-                return new ValueBool(!getValue().equals(value.getValue()));
+                return new ValueBool(!equals(value));
             case ASSIGN:
                 return value;
         }
 
         return null;
+    }
+    
+    public boolean equals(Value value) {
+        if (getValue() == null && value.getValue() == null) {
+            return true;
+        }
+        
+        if ((getValue() != null && value.getValue() == null) || (getValue() == null && value.getValue() != null)) {
+            return false;
+        }
+        
+        return getValue().equals(value.getValue());
     }
 
     @Override

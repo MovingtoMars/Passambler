@@ -23,7 +23,7 @@ public class FunctionSplit extends Function {
         ValueList list = new ValueList();
 
         for (String part : ((ValueStr) arguments[0]).getValue().split(((ValueStr) arguments[1]).getValue())) {
-            list.add(new ValueStr(part));
+            list.getValue().add(new ValueStr(part));
         }
 
         return list;

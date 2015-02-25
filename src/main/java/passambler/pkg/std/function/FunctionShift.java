@@ -21,9 +21,9 @@ public class FunctionShift extends Function {
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         ValueList list = (ValueList) arguments[0];
 
-        Value first = list.get(0);
+        Value first = list.getValue().get(0);
 
-        list.remove(0);
+        list.getValue().remove(0);
 
         return first;
     }

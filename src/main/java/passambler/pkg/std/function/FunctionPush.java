@@ -23,7 +23,7 @@ public class FunctionPush extends Function {
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        ((ValueList) arguments[0]).add(arguments[1]);
+        ((ValueList) arguments[0]).getValue().add(arguments[1]);
 
         return null;
     }

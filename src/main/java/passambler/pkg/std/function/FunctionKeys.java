@@ -23,7 +23,7 @@ public class FunctionKeys extends Function {
         ValueList list = new ValueList();
 
         ((ValueDict) arguments[0]).getValue().keySet().stream().forEach((key) -> {
-            list.add(key);
+            list.getValue().add(key);
         });
 
         return list;
