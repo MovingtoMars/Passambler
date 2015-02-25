@@ -33,6 +33,7 @@ public class PackageStd implements Package {
         scope.setSymbol("Keys", new FunctionKeys());
         scope.setSymbol("Values", new FunctionValues());
         scope.setSymbol("Entries", new FunctionEntries());
+        scope.setSymbol("Eval", new FunctionEval());
 
         scope.setSymbol("Stdout", new ValueStdOut());
         scope.setSymbol("Stderr", new ValueStdErr());
