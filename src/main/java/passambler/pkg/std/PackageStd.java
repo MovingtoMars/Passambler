@@ -13,7 +13,7 @@ public class PackageStd implements Package {
         scope.setSymbol("Write", new FunctionWrite(new ValueStdOut(), false));
         scope.setSymbol("Writeln", new FunctionWrite(new ValueStdOut(), true));
         scope.setSymbol("Exit", new FunctionExit());
-        scope.setSymbol("Time", new FunctionMicrotime());
+        scope.setSymbol("Time", new FunctionTime());
         scope.setSymbol("Str", new FunctionStr());
         scope.setSymbol("Lcase", new FunctionLCase());
         scope.setSymbol("Ucase", new FunctionUCase());
