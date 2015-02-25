@@ -9,7 +9,7 @@ import passambler.value.ValueWriteHandler;
 
 public class FunctionWrite extends Function {
     private ValueWriteHandler handler;
-    
+
     private boolean newLine;
 
     public FunctionWrite(ValueWriteHandler handler, boolean newLine) {
@@ -30,18 +30,18 @@ public class FunctionWrite extends Function {
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         ValueWriteHandler handler = this.handler;
-        
+
         if (arguments.length > 0 && arguments[0] instanceof ValueWriteHandler) {
             handler = (ValueWriteHandler) arguments[0];
         }
-        
+
         for (Value argument : arguments) {
             if (argument == arguments[0] && argument instanceof ValueWriteHandler) {
                 continue;
             }
 
             handler.write(argument);
-            
+
             if (argument != arguments[arguments.length - 1]) {
                 handler.write(new ValueStr(" "));
             }

@@ -49,16 +49,16 @@ public class Value {
 
         return null;
     }
-    
+
     public boolean equals(Value value) {
         if (getValue() == null && value.getValue() == null) {
             return true;
         }
-        
+
         if ((getValue() != null && value.getValue() == null) || (getValue() == null && value.getValue() != null)) {
             return false;
         }
-        
+
         return getValue().equals(value.getValue());
     }
 
