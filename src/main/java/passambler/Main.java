@@ -109,7 +109,7 @@ public class Main {
             try {
                 TestParser parser = new TestParser(file);
 
-                TestRunner runner = new TestRunner(parser.parse(new String[]{"desc", "input", "result"}));
+                TestRunner runner = new TestRunner(parser.parse(new String[] { "desc", "input", "result" }));
 
                 runner.run();
             } catch (LexerException | ParserException | TestException e) {

@@ -1,5 +1,6 @@
 package passambler.pkg.os.function;
 
+import java.time.Instant;
 import passambler.function.FunctionSimple;
 import passambler.value.Value;
 import passambler.value.ValueNum;
@@ -7,6 +8,6 @@ import passambler.value.ValueNum;
 public class FunctionTime extends FunctionSimple {
     @Override
     public Value getValue() {
-        return new ValueNum((int) (System.currentTimeMillis() / 1000L));
+        return new ValueNum(Instant.now().getEpochSecond());
     }
 }
