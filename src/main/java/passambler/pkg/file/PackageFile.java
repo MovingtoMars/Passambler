@@ -9,18 +9,18 @@ import passambler.value.Value;
 public class PackageFile implements Package {
     @Override
     public void addSymbols(Scope scope, Map<String, Value> symbols) {
-        symbols.put("create", new FunctionCreate());
-        symbols.put("exists", new FunctionExists());
-        symbols.put("delete", new FunctionDelete());
-        symbols.put("write", new FunctionWrite());
-        symbols.put("read", new FunctionRead());
-        symbols.put("size", new FunctionSize());
-        symbols.put("copy", new FunctionCopy());
-        symbols.put("move", new FunctionMove());
-        symbols.put("isdir", new FunctionIsDir());
-        symbols.put("createdir", new FunctionCreateDir());
-        symbols.put("type", new FunctionType());
-        symbols.put("modified", new FunctionModified());
-        symbols.put("touch", new FunctionTouch());
+        symbols.put("Create", new FunctionCreate());
+        symbols.put("Exists", new FunctionExists());
+        symbols.put("Delete", new FunctionDelete());
+        symbols.put("Write", new FunctionWrite());
+        symbols.put("Read", new FunctionRead());
+        symbols.put("Size", new FunctionSize());
+        symbols.put("Copy", new FunctionCopy());
+        symbols.put("Move", new FunctionMove());
+        symbols.put("IsDir", new FunctionIsDir());
+        symbols.put("CreateDir", new FunctionCreateDir());
+        symbols.put("Type", new FunctionType());
+        symbols.put("Modified", new FunctionModified());
+        symbols.put("Touch", new FunctionTouch());
     }
 }

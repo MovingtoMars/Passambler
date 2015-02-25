@@ -10,31 +10,31 @@ import passambler.value.Value;
 public class PackageStd implements Package {
     @Override
     public void addSymbols(Scope scope, Map<String, Value> symbols) {
-        scope.setSymbol("write", new FunctionWrite(new ValueStdOut(), false));
-        scope.setSymbol("writeln", new FunctionWrite(new ValueStdOut(), true));
-        scope.setSymbol("exit", new FunctionExit());
-        scope.setSymbol("microtime", new FunctionMicrotime());
-        scope.setSymbol("str", new FunctionStr());
-        scope.setSymbol("lcase", new FunctionLCase());
-        scope.setSymbol("ucase", new FunctionUCase());
-        scope.setSymbol("contains", new FunctionContains());
-        scope.setSymbol("indexof", new FunctionIndexOf());
-        scope.setSymbol("replace", new FunctionReplace());
-        scope.setSymbol("split", new FunctionSplit());
-        scope.setSymbol("first", new FunctionFirst());
-        scope.setSymbol("last", new FunctionLast());
-        scope.setSymbol("size", new FunctionSize());
-        scope.setSymbol("empty", new FunctionEmpty());
-        scope.setSymbol("push", new FunctionPush());
-        scope.setSymbol("pop", new FunctionPop());
-        scope.setSymbol("shift", new FunctionShift());
-        scope.setSymbol("slice", new FunctionSlice());
-        scope.setSymbol("reverse", new FunctionReverse());
-        scope.setSymbol("keys", new FunctionKeys());
-        scope.setSymbol("values", new FunctionValues());
-        scope.setSymbol("entries", new FunctionEntries());
+        scope.setSymbol("Write", new FunctionWrite(new ValueStdOut(), false));
+        scope.setSymbol("Writeln", new FunctionWrite(new ValueStdOut(), true));
+        scope.setSymbol("Exit", new FunctionExit());
+        scope.setSymbol("Time", new FunctionMicrotime());
+        scope.setSymbol("Str", new FunctionStr());
+        scope.setSymbol("Lcase", new FunctionLCase());
+        scope.setSymbol("Ucase", new FunctionUCase());
+        scope.setSymbol("Contains", new FunctionContains());
+        scope.setSymbol("IndexOf", new FunctionIndexOf());
+        scope.setSymbol("Replace", new FunctionReplace());
+        scope.setSymbol("Split", new FunctionSplit());
+        scope.setSymbol("First", new FunctionFirst());
+        scope.setSymbol("Last", new FunctionLast());
+        scope.setSymbol("Size", new FunctionSize());
+        scope.setSymbol("Empty", new FunctionEmpty());
+        scope.setSymbol("Push", new FunctionPush());
+        scope.setSymbol("Pop", new FunctionPop());
+        scope.setSymbol("Shift", new FunctionShift());
+        scope.setSymbol("Slice", new FunctionSlice());
+        scope.setSymbol("Reverse", new FunctionReverse());
+        scope.setSymbol("Keys", new FunctionKeys());
+        scope.setSymbol("Values", new FunctionValues());
+        scope.setSymbol("Entries", new FunctionEntries());
 
-        scope.setSymbol("stdout", new ValueStdOut());
-        scope.setSymbol("stderr", new ValueStdErr());
+        scope.setSymbol("Stdout", new ValueStdOut());
+        scope.setSymbol("Stderr", new ValueStdErr());
     }
 }

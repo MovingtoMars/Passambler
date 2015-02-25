@@ -70,7 +70,9 @@ public class Parser {
                 internalPackages.get(name).addSymbols(scope, symbols);
 
                 symbols.entrySet().stream().forEach((symbol) -> {
-                    packageValue.setProperty(symbol.getKey(), symbol.getValue());
+                    if (Character.isUpperCase(symbol.getKey().charAt(0))) {
+                        packageValue.setProperty(symbol.getKey(), symbol.getValue());
+                    }
                 });
             } else {
                 Parser parser = new Parser();
@@ -84,7 +86,9 @@ public class Parser {
                 name = parser.getPackageName();
 
                 parser.getScope().getSymbols().entrySet().stream().forEach((symbol) -> {
-                    packageValue.setProperty(symbol.getKey(), symbol.getValue());
+                    if (Character.isUpperCase(symbol.getKey().charAt(0))) {
+                        packageValue.setProperty(symbol.getKey(), symbol.getValue());
+                    }
                 });
             }
 

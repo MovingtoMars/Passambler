@@ -5,12 +5,12 @@ Tests math package.
 import "math";
 
 return [
-    math.abs(-100),
-    math.abs(100),
-    math.ceil(0.5),
-    math.floor(0.5),
-    math.log10(100),
-    math.sqrt(25)
+    math.Abs(-100),
+    math.Abs(100),
+    math.Ceil(0.5),
+    math.Floor(0.5),
+    math.Log10(100),
+    math.Sqrt(25)
 ];
 
 --result--

@@ -10,17 +10,17 @@ import passambler.value.ValueNum;
 public class PackageMath implements Package {
     @Override
     public void addSymbols(Scope scope, Map<String, Value> symbols) {
-        symbols.put("sin", new FunctionSin());
-        symbols.put("cos", new FunctionCos());
-        symbols.put("tan", new FunctionTan());
-        symbols.put("abs", new FunctionAbs());
-        symbols.put("ceil", new FunctionCeil());
-        symbols.put("floor", new FunctionFloor());
-        symbols.put("sqrt", new FunctionSqrt());
-        symbols.put("log", new FunctionLog());
-        symbols.put("log10", new FunctionLog10());
-        symbols.put("random", new FunctionRandom());
+        symbols.put("Sin", new FunctionSin());
+        symbols.put("Cos", new FunctionCos());
+        symbols.put("Tan", new FunctionTan());
+        symbols.put("Abs", new FunctionAbs());
+        symbols.put("Ceil", new FunctionCeil());
+        symbols.put("Floor", new FunctionFloor());
+        symbols.put("Sqrt", new FunctionSqrt());
+        symbols.put("Log", new FunctionLog());
+        symbols.put("Log10", new FunctionLog10());
+        symbols.put("Random", new FunctionRandom());
 
-        symbols.put("pi", new ValueNum(Math.PI));
+        symbols.put("Pi", new ValueNum(Math.PI));
     }
 }
