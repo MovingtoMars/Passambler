@@ -7,7 +7,7 @@ import passambler.function.Function;
 import passambler.value.Value;
 import passambler.value.ValueNum;
 
-public class FunctionRandom extends Function {
+public class FunctionRand extends Function {
     @Override
     public int getArguments() {
         return 2;

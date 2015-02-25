@@ -19,7 +19,7 @@ public class PackageMath implements Package {
         symbols.put("Sqrt", new FunctionSqrt());
         symbols.put("Log", new FunctionLog());
         symbols.put("Log10", new FunctionLog10());
-        symbols.put("Random", new FunctionRandom());
+        symbols.put("Rand", new FunctionRand());
 
         symbols.put("Pi", new ValueNum(Math.PI));
     }
