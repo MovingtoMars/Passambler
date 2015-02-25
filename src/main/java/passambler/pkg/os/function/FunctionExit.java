@@ -1,4 +1,4 @@
-package passambler.pkg.std.function;
+package passambler.pkg.os.function;
 
 import passambler.parser.Parser;
 import passambler.parser.ParserException;

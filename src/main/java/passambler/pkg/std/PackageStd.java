@@ -1,5 +1,6 @@
 package passambler.pkg.std;
 
+import passambler.pkg.os.function.FunctionTime;
 import java.util.Map;
 import passambler.pkg.Package;
 import passambler.pkg.std.function.*;
@@ -12,7 +13,6 @@ public class PackageStd implements Package {
     public void addSymbols(Scope scope, Map<String, Value> symbols) {
         scope.setSymbol("Write", new FunctionWrite(new ValueStdOut(), false));
         scope.setSymbol("Writeln", new FunctionWrite(new ValueStdOut(), true));
-        scope.setSymbol("Exit", new FunctionExit());
         scope.setSymbol("Time", new FunctionTime());
         scope.setSymbol("Str", new FunctionStr());
         scope.setSymbol("Lcase", new FunctionLCase());
