@@ -30,11 +30,18 @@ public class FunctionExec extends Function {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-            String line = "";
             StringBuilder output = new StringBuilder();
 
-            while ((line = reader.readLine()) != null) {
-                output.append(line).append("\n");
+            String line = reader.readLine();
+
+            while (line != null) {
+                output.append(line);
+
+                line = reader.readLine();
+
+                if (line != null) {
+                    output.append("\n");
+                }
             }
 
             return new ValueStr(output.toString());
