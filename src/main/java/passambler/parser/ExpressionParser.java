@@ -330,7 +330,26 @@ public class ExpressionParser {
         List<Token> tokens = new ArrayList<>();
 
         while (stream.hasNext()) {
-            if ((stream.current().getType() == Token.Type.COMMA || stream.current().getType() == Token.Type.RBRACE) && braces == 1 && paren == 0 && brackets == 0) {
+            if (stream.current().getType() == Token.Type.LBRACKET) {
+                brackets++;
+            } else if (stream.current().getType() == Token.Type.RBRACKET) {
+                brackets--;
+            } else if (stream.current().getType() == Token.Type.LPAREN) {
+                paren++;
+            } else if (stream.current().getType() == Token.Type.RPAREN) {
+                paren--;
+            } else if (stream.current().getType() == Token.Type.LBRACE) {
+                braces++;
+            } else if (stream.current().getType() == Token.Type.RBRACE) {
+                braces--;
+            }
+
+            if ((stream.current().getType() == Token.Type.COMMA || stream.current().getType() == Token.Type.RBRACE) && braces <= 1 && paren == 0 && brackets == 0) {
+                // Ugly hack...
+                if (tokens.isEmpty()) {
+                    break;
+                }
+
                 TokenStream element = new TokenStream(tokens);
 
                 List<Token> valueTokens = new ArrayList<>();
@@ -359,22 +378,6 @@ public class ExpressionParser {
                 } else {
                     break;
                 }
-            } else if (stream.current().getType() == Token.Type.LBRACKET) {
-                brackets++;
-            } else if (stream.current().getType() == Token.Type.RBRACKET) {
-                brackets--;
-            } else if (stream.current().getType() == Token.Type.LPAREN) {
-                paren++;
-            } else if (stream.current().getType() == Token.Type.RPAREN) {
-                paren--;
-            } else if (stream.current().getType() == Token.Type.LBRACE) {
-                braces++;
-            } else if (stream.current().getType() == Token.Type.RBRACE) {
-                braces--;
-            }
-
-            if (brackets == 0 && paren == 0 && braces == 0) {
-                break;
             }
 
             tokens.add(stream.current());
