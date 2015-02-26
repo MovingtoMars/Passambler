@@ -48,7 +48,7 @@ public class ExpressionParser {
                 int paren = 0;
 
                 Token operatorToken = stream.peek();
-                
+
                 if (operatorToken.getType().isOperator()) {
                     stream.next();
                     stream.next();
@@ -70,7 +70,7 @@ public class ExpressionParser {
                             stream.next();
                         }
                     }
-                    
+
                     Value operatorChange = value.onOperator(new ExpressionParser(parser, new TokenStream(tokens)).parse(), operatorToken.getType());
 
                     if (operatorChange == null) {
@@ -332,25 +332,33 @@ public class ExpressionParser {
         while (stream.hasNext()) {
             if ((stream.current().getType() == Token.Type.COMMA || stream.current().getType() == Token.Type.RBRACE) && braces == 1 && paren == 0 && brackets == 0) {
                 TokenStream element = new TokenStream(tokens);
-                
+
                 List<Token> valueTokens = new ArrayList<>();
-                
+
                 while (element.hasNext()) {
                     if (element.current().getType() == Token.Type.COL) {
                         break;
                     }
-                    
+
                     valueTokens.add(element.current());
-                    
+
                     element.next();
                 }
-                
+
                 element.match(Token.Type.COL);
                 element.next();
-                
+
                 value.setIndex(new ExpressionParser(parser, new TokenStream(valueTokens)).parse(), new ExpressionParser(parser, new TokenStream(element.rest())).parse());
 
                 tokens.clear();
+
+                if (stream.current().getType() == Token.Type.COMMA) {
+                    stream.next();
+
+                    continue;
+                } else {
+                    break;
+                }
             } else if (stream.current().getType() == Token.Type.LBRACKET) {
                 brackets++;
             } else if (stream.current().getType() == Token.Type.RBRACKET) {
