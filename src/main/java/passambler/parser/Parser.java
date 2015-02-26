@@ -20,7 +20,6 @@ import passambler.value.IndexedValue;
 import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueNum;
-import passambler.value.ValueStr;
 
 public class Parser {
     private Map<String, passambler.pkg.Package> internalPackages = new HashMap<>();
@@ -56,26 +55,50 @@ public class Parser {
         } else if (stream.first().getType() == Token.Type.IMPORT) {
             stream.next();
 
-            Value value = new ExpressionParser(this, new TokenStream(stream.rest())).parse();
+            stream.match(Token.Type.IDENTIFIER);
 
-            if (!(value instanceof ValueStr)) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "expected a string");
+            String name = stream.current().getValue();
+
+            String symbolName = null, symbolRename = null;
+
+            boolean importAll = false;
+
+            if (stream.peek() != null && stream.peek().getType() == Token.Type.PERIOD) {
+                stream.next();
+                stream.next();
+
+                stream.match(Token.Type.IDENTIFIER, Token.Type.MULTIPLY);
+
+                if (stream.current().getType() == Token.Type.MULTIPLY) {
+                    importAll = true;
+                } else {
+                    symbolName = stream.current().getValue();
+                }
             }
 
-            String name = ((ValueStr) value).getValue();
+            if (stream.peek() != null && stream.peek().getType() == Token.Type.ASSIGN) {
+                if (importAll) {
+                    throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "cannot rename symbol when importing the whole package");
+                }
+
+                stream.next();
+                stream.next();
+
+                stream.match(Token.Type.IDENTIFIER);
+
+                symbolRename = stream.current().getValue();
+            }
+
+            if (stream.peek() != null) {
+                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "end of statement expected");
+            }
 
             Value packageValue = new Value();
 
+            Map<String, Value> symbols = new HashMap();
+
             if (internalPackages.containsKey(name)) {
-                Map<String, Value> symbols = new HashMap();
-
                 internalPackages.get(name).addSymbols(symbols);
-
-                symbols.entrySet().stream().forEach((symbol) -> {
-                    if (Character.isUpperCase(symbol.getKey().charAt(0))) {
-                        packageValue.setProperty(symbol.getKey(), symbol.getValue());
-                    }
-                });
             } else {
                 Parser parser = new Parser();
 
@@ -85,16 +108,26 @@ public class Parser {
                     throw new RuntimeException(e);
                 }
 
-                name = parser.getPackageName();
+                symbols = parser.getScope().getSymbols();
 
-                parser.getScope().getSymbols().entrySet().stream().forEach((symbol) -> {
-                    if (Character.isUpperCase(symbol.getKey().charAt(0))) {
-                        packageValue.setProperty(symbol.getKey(), symbol.getValue());
-                    }
-                });
+                name = parser.getPackageName();
             }
 
-            scope.setSymbol(name, packageValue);
+            for (Map.Entry<String, Value> symbol : symbols.entrySet()) {
+                if (Character.isUpperCase(symbol.getKey().charAt(0))) {
+                    if (symbolName != null) {
+                        if (symbol.getKey().equals(symbolName)) {
+                            scope.setSymbol(symbolRename != null ? symbolRename : symbol.getKey(), symbol.getValue());
+                        }
+                    } else if (importAll) {
+                        scope.setSymbol(symbol.getKey(), symbol.getValue());
+                    } else {
+                        packageValue.setProperty(symbol.getKey(), symbol.getValue());
+                    }
+                }
+            }
+
+            scope.setSymbol(symbolName == null && symbolRename != null ? symbolRename : name, packageValue);
         } else if (stream.first().getType() == Token.Type.IF) {
             stream.next();
 
