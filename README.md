@@ -7,22 +7,22 @@ The language isn't finished yet, so stay tuned.
 A simple Hello World program looks like this:
 
 ```
-import 'std';
+import std.Writeln;
 
-writeln('Hello World!');
+Writeln('Hello World!');
 ```
 
 A FizzBuzz program is written like this:
 ```
-import 'std';
+import std.Writeln;
 
 for (x : 0..100) {
     if ((x % 15) == 0) {
-        writeln('FizzBuzz');
+        Writeln('FizzBuzz');
     } elseif ((x % 3) == 0) {
-        writeln('Fizz');
+        Writeln('Fizz');
     } elseif ((x % 5) == 0) {
-        writeln('Buzz');
+        Writeln('Buzz');
     }
 }
 ```
