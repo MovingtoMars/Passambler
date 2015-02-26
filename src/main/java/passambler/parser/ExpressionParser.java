@@ -48,7 +48,7 @@ public class ExpressionParser {
                 int paren = 0;
 
                 Token operatorToken = stream.peek();
-
+                
                 if (operatorToken.getType().isOperator()) {
                     stream.next();
                     stream.next();
@@ -70,7 +70,7 @@ public class ExpressionParser {
                             stream.next();
                         }
                     }
-
+                    
                     Value operatorChange = value.onOperator(new ExpressionParser(parser, new TokenStream(tokens)).parse(), operatorToken.getType());
 
                     if (operatorChange == null) {
@@ -329,64 +329,47 @@ public class ExpressionParser {
 
         List<Token> tokens = new ArrayList<>();
 
-        // TODO: wrap this stuff in a helper
         while (stream.hasNext()) {
-            Token token = stream.current();
-
-            if (token.getType() == Token.Type.LBRACE) {
-                braces++;
-            } else if (token.getType() == Token.Type.RBRACE) {
-                braces--;
-            } else if (token.getType() == Token.Type.LPAREN) {
-                paren++;
-            } else if (token.getType() == Token.Type.RPAREN) {
-                paren--;
-            } else if (token.getType() == Token.Type.LBRACKET) {
-                brackets++;
-            } else if (token.getType() == Token.Type.RBRACKET) {
-                brackets--;
-            }
-
-            tokens.add(token);
-
-            if ((token.getType() == Token.Type.COMMA || stream.peek(2) == null) && braces == 1 && paren == 0 && brackets == 0) {
-                if (token.getType() == Token.Type.COMMA) {
-                    tokens.remove(tokens.size() - 1);
-                }
-
+            if ((stream.current().getType() == Token.Type.COMMA || stream.current().getType() == Token.Type.RBRACE) && braces == 1 && paren == 0 && brackets == 0) {
                 TokenStream element = new TokenStream(tokens);
-
-                int keyBraces = 0;
-                List<Token> keyTokens = new ArrayList<>();
-
+                
+                List<Token> valueTokens = new ArrayList<>();
+                
                 while (element.hasNext()) {
-                    if (element.current().getType() == Token.Type.LBRACE) {
-                        keyBraces++;
-                    } else if (element.current().getType() == Token.Type.RBRACE) {
-                        keyBraces--;
-                    } else if (element.current().getType() == Token.Type.COL && keyBraces == 0) {
+                    if (element.current().getType() == Token.Type.COL) {
                         break;
                     }
-
-                    keyTokens.add(element.current());
-
+                    
+                    valueTokens.add(element.current());
+                    
                     element.next();
                 }
-
+                
                 element.match(Token.Type.COL);
-
-                Value key = new ExpressionParser(parser, new TokenStream(keyTokens)).parse();
-
-                if (!element.hasNext()) {
-                    throw new ParserException(ParserException.Type.BAD_SYNTAX, element.current().getPosition(), "value of property missing");
-                }
-
                 element.next();
-
-                value.setIndex(key, new ExpressionParser(parser, new TokenStream(element.rest())).parse());
+                
+                value.setIndex(new ExpressionParser(parser, new TokenStream(valueTokens)).parse(), new ExpressionParser(parser, new TokenStream(element.rest())).parse());
 
                 tokens.clear();
+            } else if (stream.current().getType() == Token.Type.LBRACKET) {
+                brackets++;
+            } else if (stream.current().getType() == Token.Type.RBRACKET) {
+                brackets--;
+            } else if (stream.current().getType() == Token.Type.LPAREN) {
+                paren++;
+            } else if (stream.current().getType() == Token.Type.RPAREN) {
+                paren--;
+            } else if (stream.current().getType() == Token.Type.LBRACE) {
+                braces++;
+            } else if (stream.current().getType() == Token.Type.RBRACE) {
+                braces--;
             }
+
+            if (brackets == 0 && paren == 0 && braces == 0) {
+                break;
+            }
+
+            tokens.add(stream.current());
 
             stream.next();
         }
