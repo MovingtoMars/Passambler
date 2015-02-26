@@ -121,6 +121,18 @@ public class Lexer {
 
                 next();
             } else if ((current() == '\'' || current() == '"') && (!inString || current() == stringChar)) {
+                if (current() == stringChar) {
+                    Token value = tokens.get(tokens.size() - 1);
+
+                    if (value.getValue().charAt(value.getValue().length() - 1) == '\\') {
+                        value.setValue(value.getValue().substring(0, value.getValue().length() - 1) + current());
+
+                        next();
+
+                        continue;
+                    }
+                }
+
                 inString = !inString;
 
                 if (inString) {
