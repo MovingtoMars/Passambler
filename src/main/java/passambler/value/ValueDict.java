@@ -1,10 +1,12 @@
 package passambler.value;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ValueDict extends Value implements IndexedValue {
-    protected Map<Value, Value> dict = new HashMap();
+    protected Map<Value, Value> dict = new LinkedHashMap();
 
     @Override
     public Map<Value, Value> getValue() {
@@ -35,23 +37,17 @@ public class ValueDict extends Value implements IndexedValue {
     @Override
     public boolean equals(Value value) {
         if (value instanceof ValueDict) {
-            ValueDict givenDict = (ValueDict) value;
+            List valuesLeft = new ArrayList<>(getValue().values());
+            List valuesRight = new ArrayList<>(((ValueDict) value).getValue().values());
 
-            if (givenDict.getValue().size() != getValue().size()) {
+            if (!valuesLeft.equals(valuesRight)) {
                 return false;
-            }
+            } else {
+                List keysLeft = new ArrayList<>(getValue().keySet());
+                List keysRight = new ArrayList<>(((ValueDict) value).getValue().keySet());
 
-            for (Map.Entry<Value, Value> entry : getValue().entrySet()) {
-                if (givenDict.getValue().containsKey(entry.getKey())) {
-                    if (!givenDict.getValue().get(entry.getKey()).equals(entry.getValue())) {
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
+                return keysLeft.equals(keysRight);
             }
-
-            return true;
         }
 
         return super.equals(value);

@@ -63,6 +63,15 @@ public class Value {
     }
 
     @Override
+    public boolean equals(Object object) {
+        if (object instanceof Value) {
+            return equals((Value) object);
+        }
+
+        return super.equals(object);
+    }
+
+    @Override
     public String toString() {
         return value == null ? VALUE_NIL.toString() : value.toString();
     }
