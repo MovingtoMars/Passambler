@@ -105,13 +105,13 @@ public class Lexer {
                 line++;
                 column = 0;
 
-                if (!multiLineComment) {
+                if (inComment && !multiLineComment) {
                     inComment = false;
                 }
 
                 next();
             } else if (inComment) {
-                if (current() == '-' && peek() != null && peek() == '-' && peek(2) != null && peek(2) == '-') {
+                if (current() == '*' && peek() != null && peek() == '/') {
                     inComment = false;
                     multiLineComment = false;
 
@@ -152,15 +152,15 @@ public class Lexer {
                 next();
             } else if (current() == ' ' || current() == '\t') {
                 next();
-            } else if (current() == '-' && peek() != null && peek() == '-') {
+            } else if (current() == '/' && peek() != null && (peek() == '/' || peek() == '*')) {
                 inComment = true;
-                multiLineComment = peek(2) != null && peek(2) == '-';
-
-                if (multiLineComment) {
-                    next();
-                }
 
                 next();
+
+                if (current() == '*') {
+                    multiLineComment = true;
+                }
+
                 next();
             } else {
                 boolean matched = false;
