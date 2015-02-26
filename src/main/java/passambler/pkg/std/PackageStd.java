@@ -1,41 +1,38 @@
 package passambler.pkg.std;
 
-import passambler.pkg.os.function.FunctionTime;
 import java.util.Map;
 import passambler.pkg.Package;
 import passambler.pkg.std.function.*;
 import passambler.pkg.std.value.*;
-import passambler.parser.Scope;
 import passambler.value.Value;
 
 public class PackageStd implements Package {
     @Override
-    public void addSymbols(Scope scope, Map<String, Value> symbols) {
-        scope.setSymbol("Write", new FunctionWrite(new ValueStdOut(), false));
-        scope.setSymbol("Writeln", new FunctionWrite(new ValueStdOut(), true));
-        scope.setSymbol("Time", new FunctionTime());
-        scope.setSymbol("Str", new FunctionStr());
-        scope.setSymbol("Lcase", new FunctionLCase());
-        scope.setSymbol("Ucase", new FunctionUCase());
-        scope.setSymbol("Contains", new FunctionContains());
-        scope.setSymbol("IndexOf", new FunctionIndexOf());
-        scope.setSymbol("Replace", new FunctionReplace());
-        scope.setSymbol("Split", new FunctionSplit());
-        scope.setSymbol("First", new FunctionFirst());
-        scope.setSymbol("Last", new FunctionLast());
-        scope.setSymbol("Size", new FunctionSize());
-        scope.setSymbol("Empty", new FunctionEmpty());
-        scope.setSymbol("Push", new FunctionPush());
-        scope.setSymbol("Pop", new FunctionPop());
-        scope.setSymbol("Shift", new FunctionShift());
-        scope.setSymbol("Slice", new FunctionSlice());
-        scope.setSymbol("Reverse", new FunctionReverse());
-        scope.setSymbol("Keys", new FunctionKeys());
-        scope.setSymbol("Values", new FunctionValues());
-        scope.setSymbol("Entries", new FunctionEntries());
-        scope.setSymbol("Eval", new FunctionEval());
+    public void addSymbols(Map<String, Value> symbols) {
+        symbols.put("Write", new FunctionWrite(new ValueStdOut(), false));
+        symbols.put("Writeln", new FunctionWrite(new ValueStdOut(), true));
+        symbols.put("Str", new FunctionStr());
+        symbols.put("Lcase", new FunctionLCase());
+        symbols.put("Ucase", new FunctionUCase());
+        symbols.put("Contains", new FunctionContains());
+        symbols.put("IndexOf", new FunctionIndexOf());
+        symbols.put("Replace", new FunctionReplace());
+        symbols.put("Split", new FunctionSplit());
+        symbols.put("First", new FunctionFirst());
+        symbols.put("Last", new FunctionLast());
+        symbols.put("Size", new FunctionSize());
+        symbols.put("Empty", new FunctionEmpty());
+        symbols.put("Push", new FunctionPush());
+        symbols.put("Pop", new FunctionPop());
+        symbols.put("Shift", new FunctionShift());
+        symbols.put("Slice", new FunctionSlice());
+        symbols.put("Reverse", new FunctionReverse());
+        symbols.put("Keys", new FunctionKeys());
+        symbols.put("Values", new FunctionValues());
+        symbols.put("Entries", new FunctionEntries());
+        symbols.put("Eval", new FunctionEval());
 
-        scope.setSymbol("Stdout", new ValueStdOut());
-        scope.setSymbol("Stderr", new ValueStdErr());
+        symbols.put("Stdout", new ValueStdOut());
+        symbols.put("Stderr", new ValueStdErr());
     }
 }

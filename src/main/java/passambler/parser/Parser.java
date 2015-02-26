@@ -69,7 +69,7 @@ public class Parser {
             if (internalPackages.containsKey(name)) {
                 Map<String, Value> symbols = new HashMap();
 
-                internalPackages.get(name).addSymbols(scope, symbols);
+                internalPackages.get(name).addSymbols(symbols);
 
                 symbols.entrySet().stream().forEach((symbol) -> {
                     if (Character.isUpperCase(symbol.getKey().charAt(0))) {

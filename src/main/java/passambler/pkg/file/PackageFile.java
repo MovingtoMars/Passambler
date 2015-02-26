@@ -2,13 +2,12 @@ package passambler.pkg.file;
 
 import java.util.Map;
 import passambler.pkg.Package;
-import passambler.parser.Scope;
 import passambler.pkg.file.function.*;
 import passambler.value.Value;
 
 public class PackageFile implements Package {
     @Override
-    public void addSymbols(Scope scope, Map<String, Value> symbols) {
+    public void addSymbols(Map<String, Value> symbols) {
         symbols.put("Create", new FunctionCreate());
         symbols.put("Exists", new FunctionExists());
         symbols.put("Delete", new FunctionDelete());

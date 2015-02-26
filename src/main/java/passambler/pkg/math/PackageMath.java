@@ -2,14 +2,13 @@ package passambler.pkg.math;
 
 import java.util.Map;
 import passambler.pkg.Package;
-import passambler.parser.Scope;
 import passambler.pkg.math.function.*;
 import passambler.value.Value;
 import passambler.value.ValueNum;
 
 public class PackageMath implements Package {
     @Override
-    public void addSymbols(Scope scope, Map<String, Value> symbols) {
+    public void addSymbols(Map<String, Value> symbols) {
         symbols.put("Sin", new FunctionSin());
         symbols.put("Cos", new FunctionCos());
         symbols.put("Tan", new FunctionTan());

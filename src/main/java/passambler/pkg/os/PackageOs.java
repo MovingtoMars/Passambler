@@ -1,7 +1,6 @@
 package passambler.pkg.os;
 
 import java.util.Map;
-import passambler.parser.Scope;
 import passambler.pkg.Package;
 import passambler.pkg.os.function.*;
 import passambler.value.Value;
@@ -9,7 +8,7 @@ import passambler.value.ValueStr;
 
 public class PackageOs implements Package {
     @Override
-    public void addSymbols(Scope scope, Map<String, Value> symbols) {
+    public void addSymbols(Map<String, Value> symbols) {
         symbols.put("Exit", new FunctionExit());
         symbols.put("Time", new FunctionTime());
         symbols.put("Exec", new FunctionExec());
