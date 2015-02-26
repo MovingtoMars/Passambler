@@ -2,7 +2,7 @@
 Tests math package.
 
 --input--
-import "math";
+import math;
 
 return [
     math.Abs(-100),
