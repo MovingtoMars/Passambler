@@ -41,6 +41,8 @@ return [
     Reverse("Raoul"),
     user["name"],
     user["age"],
+    Keys(user),
+    Values(user),
     Contains("i like cats", "bears"),
     Contains("i like dogs", "dogs"),
     IndexOf("hello world", "hello"),
@@ -52,4 +54,4 @@ return [
 ];
 
 --result--
-[true, false, true, false, R, 1, 3, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30], 51, 5, [3, 4], 1, [10, 11, 12, 13, 14], [20, 19, 18, 17, 16, 15], [5, 6, 7], [3, 2, 1], luoaR, Raoul, 16, false, true, 0, hello world!, HELLO WORLD!, I like cats, I like dogs, [My, name, is, Raoul]]
+[true, false, true, false, R, 1, 3, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30], 51, 5, [3, 4], 1, [10, 11, 12, 13, 14], [20, 19, 18, 17, 16, 15], [5, 6, 7], [3, 2, 1], luoaR, Raoul, 16, [name, age], [Raoul, 16], false, true, 0, hello world!, HELLO WORLD!, I like cats, I like dogs, [My, name, is, Raoul]]
