@@ -94,31 +94,7 @@ public class ExpressionParser {
     private Value parseFunction() throws ParserException {
         stream.next();
 
-        stream.match(Token.Type.LPAREN);
-
-        stream.next();
-
-        List<String> argumentIds = new ArrayList<>();
-
-        while (stream.hasNext()) {
-            if (stream.current().getType() == Token.Type.RPAREN) {
-                break;
-            } else {
-                stream.match(Token.Type.IDENTIFIER);
-
-                argumentIds.add(stream.current().getValue());
-
-                if (stream.peek().getType() != Token.Type.RPAREN) {
-                    stream.next();
-
-                    stream.match(Token.Type.COMMA);
-                }
-
-                stream.next();
-            }
-        }
-
-        stream.match(Token.Type.RPAREN);
+        List<String> argumentIds = parser.argumentNames(stream);
 
         stream.next();
 
