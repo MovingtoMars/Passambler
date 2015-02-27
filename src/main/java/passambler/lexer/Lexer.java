@@ -145,21 +145,7 @@ public class Lexer {
             } else if (inString) {
                 Token token = tokens.get(tokens.size() - 1);
 
-                if (stringChar == '"' && current() == '\\' && peek() != null && (peek() == 'n' || peek() == 'r' || peek() == 't')) {
-                    switch (peek()) {
-                        case 'n':
-                        case 'r':
-                            token.setValue(tokens.get(tokens.size() - 1).getValue() + System.getProperty("line.separator"));
-                            break;
-                        case 't':
-                            token.setValue(tokens.get(tokens.size() - 1).getValue() + "\t");
-                            break;
-                    }
-
-                    next();
-                } else {
-                    token.setValue(tokens.get(tokens.size() - 1).getValue() + current());
-                }
+                token.setValue(tokens.get(tokens.size() - 1).getValue() + current());
 
                 next();
             } else if (current() == ' ' || current() == '\t') {
