@@ -121,10 +121,10 @@ public class Lexer {
 
                 next();
             } else if ((current() == '\'' || current() == '"') && (!inString || current() == stringChar)) {
-                if (current() == stringChar) {
+                if (current() == stringChar && tokens.size() > 1) {
                     Token value = tokens.get(tokens.size() - 1);
-
-                    if (value.getValue().charAt(value.getValue().length() - 1) == '\\') {
+                    
+                    if (value.getValue().length() > 0 && value.getValue().charAt(value.getValue().length() - 1) == '\\') {
                         value.setValue(value.getValue().substring(0, value.getValue().length() - 1) + current());
 
                         next();
@@ -176,13 +176,23 @@ public class Lexer {
                 next();
             } else {
                 boolean matched = false;
+                
+                StringBuilder identifierFound = new StringBuilder();
+                
+                while (hasNext() && isIdentifier(current())) {
+                    identifierFound.append(current());
 
+                    next();
+                }
+                
+                position -= identifierFound.length();
+                
                 for (Map.Entry<String, Token.Type> match : tokenMap.entrySet()) {
                     for (int i = 0; i < match.getKey().length(); ++i) {
                         char current = match.getKey().charAt(i);
 
                         if (peek(i) != null && peek(i) == current) {
-                            if (i == match.getKey().length() - 1) {
+                            if (i == match.getKey().length() - 1 && match.getKey().length() >= identifierFound.length()) {
                                 position += match.getKey().length();
 
                                 tokens.add(createToken(match.getValue(), match.getKey()));
@@ -197,25 +207,10 @@ public class Lexer {
                     }
                 }
 
-                if (!matched && isIdentifier(current())) {
-                    tokens.add(createToken(Token.Type.IDENTIFIER, String.valueOf(current())));
+                if (!matched && identifierFound.length() > 0) {
+                    tokens.add(createToken(Lexer.isNumber(identifierFound.toString()) ? Token.Type.NUMBER : Token.Type.IDENTIFIER, identifierFound.toString()));
 
-                    next();
-
-                    while (hasNext() && isIdentifier(current())) {
-                        Token token = tokens.get(tokens.size() - 1);
-
-                        token.setValue(token.getValue() + current());
-
-                        next();
-                    }
-
-                    Token identifier = tokens.get(tokens.size() - 1);
-
-                    if (Lexer.isNumber(identifier.getValue())) {
-                        identifier.setType(Token.Type.NUMBER);
-                        identifier.setValue(identifier.getValue());
-                    }
+                    position += identifierFound.length();
                 } else if (!matched) {
                     throw new LexerException(String.format("unexpected character %c", current()), line, column);
                 }
