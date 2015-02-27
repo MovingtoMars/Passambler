@@ -28,7 +28,7 @@ public class FunctionClose extends Function {
             } else if (arguments[0] instanceof ValueServerSocket) {
                 ((ValueServerSocket) arguments[0]).getValue().close();
             }
-            
+
             return new ValueBool(true);
         } catch (IOException e) {
             return new ValueBool(false);

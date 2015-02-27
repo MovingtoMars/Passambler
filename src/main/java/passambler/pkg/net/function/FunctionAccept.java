@@ -23,7 +23,7 @@ public class FunctionAccept extends Function {
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         ValueServerSocket socket = (ValueServerSocket) arguments[0];
-        
+
         try {
             return new ValueSocket(socket.getValue().accept());
         } catch (IOException e) {

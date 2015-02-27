@@ -14,11 +14,11 @@ public class ValueSocket extends Value implements WriteHandler, ReadHandler {
 
     public ValueSocket(Socket socket) {
         this.socket = socket;
-        
+
         this.setProperty("HostAddr", new ValueStr(socket.getInetAddress().getHostAddress()));
         this.setProperty("HostName", new ValueStr(socket.getInetAddress().getHostName()));
     }
-    
+
     @Override
     public Socket getValue() {
         return socket;

@@ -123,7 +123,7 @@ public class Lexer {
             } else if ((current() == '\'' || current() == '"') && (!inString || current() == stringChar)) {
                 if (current() == stringChar && tokens.size() > 1) {
                     Token value = tokens.get(tokens.size() - 1);
-                    
+
                     if (value.getValue().length() > 0 && value.getValue().charAt(value.getValue().length() - 1) == '\\') {
                         value.setValue(value.getValue().substring(0, value.getValue().length() - 1) + current());
 
@@ -162,17 +162,17 @@ public class Lexer {
                 next();
             } else {
                 boolean matched = false;
-                
+
                 StringBuilder identifierFound = new StringBuilder();
-                
+
                 while (hasNext() && isIdentifier(current())) {
                     identifierFound.append(current());
 
                     next();
                 }
-                
+
                 position -= identifierFound.length();
-                
+
                 for (Map.Entry<String, Token.Type> match : tokenMap.entrySet()) {
                     for (int i = 0; i < match.getKey().length(); ++i) {
                         char current = match.getKey().charAt(i);
