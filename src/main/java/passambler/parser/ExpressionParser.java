@@ -94,7 +94,7 @@ public class ExpressionParser {
     private Value parseFunction() throws ParserException {
         stream.next();
 
-        List<String> argumentIds = parser.argumentNames(stream);
+        List<String> argumentNames = parser.argumentNames(stream);
 
         stream.next();
 
@@ -103,18 +103,18 @@ public class ExpressionParser {
         return new Function() {
             @Override
             public int getArguments() {
-                return argumentIds.size();
+                return argumentNames.size();
             }
 
             @Override
             public boolean isArgumentValid(Value value, int argument) {
-                return argument < argumentIds.size();
+                return argument < argumentNames.size();
             }
 
             @Override
             public Value invoke(Parser parser, Value... arguments) throws ParserException {
-                for (int i = 0; i < argumentIds.size(); ++i) {
-                    callback.getParser().getScope().setSymbol(argumentIds.get(i), arguments[i]);
+                for (int i = 0; i < argumentNames.size(); ++i) {
+                    callback.getParser().getScope().setSymbol(argumentNames.get(i), arguments[i]);
                 }
 
                 return callback.invoke();
