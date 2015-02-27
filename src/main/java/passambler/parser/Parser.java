@@ -17,6 +17,7 @@ import passambler.pkg.math.PackageMath;
 import passambler.pkg.net.PackageNet;
 import passambler.pkg.os.PackageOs;
 import passambler.pkg.std.PackageStd;
+import passambler.pkg.thread.PackageThread;
 import passambler.value.IndexedValue;
 import passambler.value.Value;
 import passambler.value.ValueBool;
@@ -41,6 +42,7 @@ public class Parser {
         internalPackages.put("file", new PackageFile());
         internalPackages.put("os", new PackageOs());
         internalPackages.put("net", new PackageNet());
+        internalPackages.put("thread", new PackageThread());
     }
 
     public Scope getScope() {
