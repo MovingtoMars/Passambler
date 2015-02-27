@@ -192,6 +192,9 @@ public class Lexer {
                         char current = match.getKey().charAt(i);
 
                         if (peek(i) != null && peek(i) == current) {
+                            // If we are on the last index from this match, first check if the
+                            // math's length is bigger or equal then the currently found identifier.
+                            // This is so that identifier "net" doesn't get identified as token "ne" + identifier "t".
                             if (i == match.getKey().length() - 1 && match.getKey().length() >= identifierFound.length()) {
                                 position += match.getKey().length();
 
