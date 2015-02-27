@@ -14,6 +14,7 @@ import passambler.lexer.TokenStream;
 import passambler.function.Function;
 import passambler.pkg.file.PackageFile;
 import passambler.pkg.math.PackageMath;
+import passambler.pkg.net.PackageNet;
 import passambler.pkg.os.PackageOs;
 import passambler.pkg.std.PackageStd;
 import passambler.value.IndexedValue;
@@ -39,6 +40,7 @@ public class Parser {
         internalPackages.put("math", new PackageMath());
         internalPackages.put("file", new PackageFile());
         internalPackages.put("os", new PackageOs());
+        internalPackages.put("net", new PackageNet());
     }
 
     public Scope getScope() {
