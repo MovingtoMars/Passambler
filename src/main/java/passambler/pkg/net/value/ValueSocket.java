@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.net.Socket;
 import passambler.value.Value;
 import passambler.value.ValueStr;
-import passambler.value.ValueWriteHandler;
+import passambler.value.WriteHandler;
 
-public class ValueSocket extends ValueWriteHandler {
+public class ValueSocket extends Value implements WriteHandler {
     private Socket socket;
 
     public ValueSocket(Socket socket) {

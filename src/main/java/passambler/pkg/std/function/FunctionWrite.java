@@ -5,14 +5,14 @@ import passambler.parser.ParserException;
 import passambler.function.Function;
 import passambler.value.Value;
 import passambler.value.ValueStr;
-import passambler.value.ValueWriteHandler;
+import passambler.value.WriteHandler;
 
 public class FunctionWrite extends Function {
-    private ValueWriteHandler handler;
+    private WriteHandler handler;
 
     private boolean newLine;
 
-    public FunctionWrite(ValueWriteHandler handler, boolean newLine) {
+    public FunctionWrite(WriteHandler handler, boolean newLine) {
         this.handler = handler;
         this.newLine = newLine;
     }
@@ -29,14 +29,14 @@ public class FunctionWrite extends Function {
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        ValueWriteHandler handler = this.handler;
+        WriteHandler handler = this.handler;
 
-        if (arguments.length > 0 && arguments[0] instanceof ValueWriteHandler) {
-            handler = (ValueWriteHandler) arguments[0];
+        if (arguments.length > 0 && arguments[0] instanceof WriteHandler) {
+            handler = (WriteHandler) arguments[0];
         }
 
         for (Value argument : arguments) {
-            if (argument == arguments[0] && argument instanceof ValueWriteHandler) {
+            if (argument == arguments[0] && argument instanceof WriteHandler) {
                 continue;
             }
 

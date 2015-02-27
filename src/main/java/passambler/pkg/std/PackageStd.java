@@ -11,6 +11,7 @@ public class PackageStd implements Package {
     public void addSymbols(Map<String, Value> symbols) {
         symbols.put("Write", new FunctionWrite(new ValueStdOut(), false));
         symbols.put("Writeln", new FunctionWrite(new ValueStdOut(), true));
+        symbols.put("Read", new FunctionRead());
         symbols.put("Str", new FunctionStr());
         symbols.put("Lcase", new FunctionLCase());
         symbols.put("Ucase", new FunctionUCase());
