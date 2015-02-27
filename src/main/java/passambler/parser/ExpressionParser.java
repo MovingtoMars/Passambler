@@ -40,6 +40,8 @@ public class ExpressionParser {
                 value = parseIndexed(value);
             } else if (token.getType() == Token.Type.LPAREN) {
                 value = parseParen(value);
+            } else if (token.getType() == Token.Type.FN) {
+                value = parseFunction();
             } else if (!token.getType().isOperator()) {
                 throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
             }
@@ -87,6 +89,61 @@ public class ExpressionParser {
         }
 
         return value;
+    }
+
+    private Value parseFunction() throws ParserException {
+        stream.next();
+
+        stream.match(Token.Type.LPAREN);
+
+        stream.next();
+
+        List<String> argumentIds = new ArrayList<>();
+
+        while (stream.hasNext()) {
+            if (stream.current().getType() == Token.Type.RPAREN) {
+                break;
+            } else {
+                stream.match(Token.Type.IDENTIFIER);
+
+                argumentIds.add(stream.current().getValue());
+
+                if (stream.peek().getType() != Token.Type.RPAREN) {
+                    stream.next();
+
+                    stream.match(Token.Type.COMMA);
+                }
+
+                stream.next();
+            }
+        }
+
+        stream.match(Token.Type.RPAREN);
+
+        stream.next();
+
+        Block callback = parser.block(stream);
+
+        return new Function() {
+            @Override
+            public int getArguments() {
+                return argumentIds.size();
+            }
+
+            @Override
+            public boolean isArgumentValid(Value value, int argument) {
+                return argument < argumentIds.size();
+            }
+
+            @Override
+            public Value invoke(Parser parser, Value... arguments) throws ParserException {
+                for (int i = 0; i < argumentIds.size(); ++i) {
+                    callback.getParser().getScope().setSymbol(argumentIds.get(i), arguments[i]);
+                }
+
+                return callback.invoke();
+            }
+        };
     }
 
     private Value parseParen(Value currentValue) throws ParserException {

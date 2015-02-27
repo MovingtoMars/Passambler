@@ -457,7 +457,7 @@ public class Parser {
         return null;
     }
 
-    private Block block(TokenStream stream) throws ParserException {
+    public Block block(TokenStream stream) throws ParserException {
         Block block = new Block(scope);
 
         stream.match(Token.Type.LBRACE);
