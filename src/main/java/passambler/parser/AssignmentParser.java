@@ -49,7 +49,7 @@ public class AssignmentParser {
             if (token.getType() == Token.Type.IDENTIFIER) {
                 if (leftStream.peek() == null) {
                     if (!parser.getScope().hasSymbol(token.getValue())) {
-                        if (Lexer.isStringUppercase(token.getValue())) {
+                        if (Lexer.isConstant(token.getValue())) {
                             rightValue.setConstant(true);
                         }
                         

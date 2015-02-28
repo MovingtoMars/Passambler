@@ -236,9 +236,9 @@ public class Lexer {
         return Character.isLetterOrDigit(c) || c == '_';
     }
     
-    public static boolean isStringUppercase(String string) {
+    public static boolean isConstant(String string) {
         for (char c : string.toCharArray()) {
-            if (!Character.isUpperCase(c) && c != '_') {
+            if (!Character.isUpperCase(c) && !Character.isDigit(c) && c != '_') {
                 return false;
             }
         }
