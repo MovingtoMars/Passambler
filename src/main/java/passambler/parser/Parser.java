@@ -357,7 +357,7 @@ public class Parser {
             stream.next();
 
             return new ExpressionParser(this, new TokenStream(stream.rest())).parse();
-        } else if (stream.first().getType() == Token.Type.FN) {
+        } else if (stream.first().getType() == Token.Type.FN && stream.peek() != null && stream.peek().getType() == Token.Type.IDENTIFIER) {
             stream.next();
 
             stream.match(Token.Type.IDENTIFIER);
