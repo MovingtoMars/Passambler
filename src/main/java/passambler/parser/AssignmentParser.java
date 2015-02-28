@@ -2,6 +2,7 @@ package passambler.parser;
 
 import java.util.ArrayList;
 import java.util.List;
+import passambler.lexer.Lexer;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
 import passambler.value.Value;
@@ -48,6 +49,10 @@ public class AssignmentParser {
             if (token.getType() == Token.Type.IDENTIFIER) {
                 if (leftStream.peek() == null) {
                     if (!parser.getScope().hasSymbol(token.getValue())) {
+                        if (Lexer.isStringUppercase(token.getValue())) {
+                            rightValue.setConstant(true);
+                        }
+                        
                         parser.getScope().setSymbol(token.getValue(), rightValue);
                     } else {
                         parser.getScope().setSymbol(token.getValue(), parser.getScope().getSymbol(token.getValue()).onOperator(rightValue, operator.getType()));

@@ -232,13 +232,23 @@ public class Lexer {
         return position + amount > input.length() - 1 ? null : input.charAt(position + amount);
     }
 
-    public boolean isIdentifier(char c) {
+    public static boolean isIdentifier(char c) {
         return Character.isLetterOrDigit(c) || c == '_';
+    }
+    
+    public static boolean isStringUppercase(String string) {
+        for (char c : string.toCharArray()) {
+            if (!Character.isUpperCase(c) && c != '_') {
+                return false;
+            }
+        }
+        
+        return true;
     }
 
     public static boolean isNumber(String data) {
-        for (int character : data.chars().toArray()) {
-            if (!Character.isDigit(character)) {
+        for (int c : data.chars().toArray()) {
+            if (!Character.isDigit(c)) {
                 return false;
             }
         }

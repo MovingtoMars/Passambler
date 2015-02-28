@@ -21,6 +21,10 @@ public class Scope {
         if (parent != null && parent.hasSymbol(key)) {
             parent.setSymbol(key, value);
         } else {
+            if (symbols.containsKey(key) && symbols.get(key).isConstant()) {
+                throw new RuntimeException(String.format("cannot modify constant %s", key));
+            }
+
             symbols.put(key, value);
         }
     }

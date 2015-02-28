@@ -9,10 +9,20 @@ public class Value {
     public static ValueBool VALUE_FALSE = new ValueBool(false);
     public static ValueNil VALUE_NIL = new ValueNil();
 
+    protected boolean constant = false;
+    
     protected Map<String, Property> properties = new HashMap();
 
     protected Object value;
+    
+    public void setConstant(boolean constant) {
+        this.constant = constant;
+    }
 
+    public boolean isConstant() {
+        return constant;
+    }
+    
     public Object getValue() {
         return value;
     }
