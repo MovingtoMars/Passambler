@@ -20,7 +20,7 @@ b = {1: 5, 2: 6, 3: 7};
 
 for (b) {
     a += 1;
-} 
+}
 
 for (value : b) {
     a -= value;
