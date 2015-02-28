@@ -21,7 +21,8 @@ public class ParserException extends Exception {
         ZERO_DIVISION("cannot divide by 0"),
         NOT_ALLOWED("not allowed here"),
         NOT_A_LIST("value is not a list"),
-        NOT_A_DICT("value is not a dictionary");
+        NOT_A_DICT("value is not a dictionary"),
+        EXPECTED_A_BOOL("expected a boolean");
 
         String message;
 

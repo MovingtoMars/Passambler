@@ -173,7 +173,7 @@ public class Parser {
                     Value condition = new ExpressionParser(this, new TokenStream(tokens)).parse();
 
                     if (!(condition instanceof ValueBool)) {
-                        throw new ParserException(ParserException.Type.BAD_SYNTAX, tokens.get(0).getPosition(), "condition should be a bool");
+                        throw new ParserException(ParserException.Type.EXPECTED_A_BOOL, tokens.get(0).getPosition());
                     }
 
                     stream.next();

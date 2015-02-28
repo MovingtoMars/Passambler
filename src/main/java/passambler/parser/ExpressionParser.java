@@ -7,6 +7,7 @@ import passambler.function.Function;
 import passambler.value.Value;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
+import passambler.value.ValueBool;
 import passambler.value.ValueDict;
 import passambler.value.ValueList;
 import passambler.value.ValueNum;
@@ -26,10 +27,14 @@ public class ExpressionParser {
     public Value parse() throws ParserException {
         Value value = null;
 
+        boolean not = false;
+
         while (stream.hasNext()) {
             Token token = stream.current();
 
-            if (token.getType() == Token.Type.LBRACE) {
+            if (token.getType() == Token.Type.EXCL) {
+                not = true;
+            } else if (token.getType() == Token.Type.LBRACE) {
                 value = parseBrace();
             } else if (token.getType() == Token.Type.STRING || token.getType() == Token.Type.NUMBER || token.getType() == Token.Type.IDENTIFIER) {
                 value = parseSymbol();
@@ -85,6 +90,14 @@ public class ExpressionParser {
             }
 
             stream.next();
+        }
+
+        if (not) {
+            if (!(value instanceof ValueBool)) {
+                throw new ParserException(ParserException.Type.EXPECTED_A_BOOL, stream.first().getPosition());
+            }
+
+            value = new ValueBool(!((ValueBool) value).getValue());
         }
 
         return value;
@@ -270,7 +283,7 @@ public class ExpressionParser {
                 }
 
                 ValueList list = (ValueList) currentValue;
-                
+
                 int index = ((ValueNum) indexValue).getValue().intValue();
 
                 if (index < -list.getValue().size() || index > list.getValue().size() - 1) {
@@ -286,13 +299,13 @@ public class ExpressionParser {
                 if (!(currentValue instanceof ValueDict)) {
                     throw new ParserException(ParserException.Type.NOT_A_DICT, stream.current().getPosition());
                 }
-                
+
                 ValueDict dict = (ValueDict) currentValue;
-                
+
                 if (dict.getEntry(indexValue) == null) {
                     throw new ParserException(ParserException.Type.UNDEFINED_DICT_ENTRY, stream.current().getPosition(), indexValue.toString());
                 }
-                
+
                 return dict.getEntry(indexValue);
             }
         }

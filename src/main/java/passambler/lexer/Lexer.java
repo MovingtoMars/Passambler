@@ -74,6 +74,7 @@ public class Lexer {
         tokenMap.put(")", Token.Type.RPAREN);
         tokenMap.put("{", Token.Type.LBRACE);
         tokenMap.put("}", Token.Type.RBRACE);
+        tokenMap.put("!", Token.Type.EXCL);
         tokenMap.put(",", Token.Type.COMMA);
         tokenMap.put(".", Token.Type.PERIOD);
         tokenMap.put("+", Token.Type.PLUS);
