@@ -21,7 +21,6 @@ import passambler.pkg.std.PackageStd;
 import passambler.pkg.thread.PackageThread;
 import passambler.value.Value;
 import passambler.value.ValueBool;
-import passambler.value.ValueDict;
 import passambler.value.ValueList;
 import passambler.value.ValueNum;
 
@@ -268,14 +267,25 @@ public class Parser {
 
             List<Token> tokens = new ArrayList<>();
 
-            String variableName = null;
+            List<String> arguments = new ArrayList<>();
 
             while (stream.hasNext()) {
-                if (stream.current().getType() == Token.Type.IDENTIFIER && stream.peek().getType() == Token.Type.COL) {
-                    variableName = stream.current().getValue();
-
-                    stream.next();
-                    stream.next();
+                if (stream.current().getType() == Token.Type.IDENTIFIER) {
+                    while (stream.hasNext()) {
+                        arguments.add(stream.current().getValue());
+                        
+                        stream.next();
+                        
+                        if (stream.current().getType() == Token.Type.COL) {
+                            stream.next();
+                            
+                            break;
+                        } else {
+                            stream.match(Token.Type.COMMA);
+                            
+                            stream.next();
+                        }
+                    }
 
                     continue;
                 } else if (stream.current().getType() == Token.Type.LPAREN) {
@@ -308,8 +318,13 @@ public class Parser {
             ValueList list = (ValueList) value;
 
             for (int i = 0; i < list.getValue().size(); ++i) {
-                if (variableName != null) {
-                    callback.getParser().getScope().setSymbol(variableName, list.getValue().get(i));
+                if (arguments.size() == 1) {
+                    callback.getParser().getScope().setSymbol(arguments.get(0), list.getValue().get(i));
+                } else if (arguments.size() == 2) {
+                    callback.getParser().getScope().setSymbol(arguments.get(0), new ValueNum(i));
+                    callback.getParser().getScope().setSymbol(arguments.get(1), list.getValue().get(i));
+                } else if (arguments.size() > 2) {
+                    throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), 2, arguments.size());
                 }
 
                 Value result = callback.invoke();
