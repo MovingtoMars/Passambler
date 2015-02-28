@@ -32,7 +32,7 @@ public class ExpressionParser {
         while (stream.hasNext()) {
             Token token = stream.current();
 
-            if (token.getType() == Token.Type.EXCL) {
+            if (token.getType() == Token.Type.NOT) {
                 not = true;
             } else if (token.getType() == Token.Type.LBRACE) {
                 value = parseBrace();
