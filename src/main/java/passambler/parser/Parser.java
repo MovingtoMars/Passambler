@@ -212,28 +212,6 @@ public class Parser {
                     break;
                 }
             }
-        } else if (stream.first().getType() == Token.Type.IDENTIFIER && stream.peek() != null && stream.peek().getType().isAssignmentOperator()) {
-            String key = stream.current().getValue();
-
-            stream.next();
-
-            Token operatorToken = stream.current();
-
-            stream.next();
-
-            Value baseValue = new Value();
-
-            if (scope.hasSymbol(key)) {
-                baseValue = scope.getSymbol(key);
-            }
-
-            Value value = baseValue.onOperator(new ExpressionParser(this, new TokenStream(stream.rest())).parse(), operatorToken.getType());
-
-            if (value == null) {
-                throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, operatorToken.getPosition(), operatorToken.getType());
-            }
-
-            scope.setSymbol(key, value);
         } else if (stream.first().getType() == Token.Type.WHILE) {
             stream.next();
 
@@ -378,6 +356,10 @@ public class Parser {
                     return callback.invoke();
                 }
             });
+        } else if (stream.rest().stream().anyMatch(t -> t.getType().isAssignmentOperator())) {
+            AssignmentParser assignmentParser = new AssignmentParser(this, stream);
+            
+            assignmentParser.parse();
         } else {
             new ExpressionParser(this, stream).parse();
         }
