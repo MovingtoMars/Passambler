@@ -140,7 +140,14 @@ public class Main {
                 Lexer lexer = new Lexer(input.nextLine());
 
                 tokens.addAll(lexer.scan());
-                tokens.add(new Token(Token.Type.SEMI_COL, null));
+                
+                if (tokens.size() > 0) {
+                    Token.Type type = tokens.get(tokens.size() - 1).getType();
+                    
+                    if (type != Token.Type.SEMI_COL && type != Token.Type.LBRACE) {
+                        tokens.add(new Token(Token.Type.SEMI_COL, null));
+                    }
+                }
 
                 if (options.has("show-tokens")) {
                     for (Token token : tokens) {
