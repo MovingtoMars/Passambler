@@ -6,6 +6,7 @@ import org.apache.http.protocol.HttpContext;
 import passambler.value.Property;
 import passambler.value.Value;
 import passambler.value.ValueDict;
+import passambler.value.ValueNum;
 import passambler.value.ValueStr;
 import passambler.value.WriteHandler;
 
@@ -25,6 +26,8 @@ public class ValueResponse extends Value implements WriteHandler {
                 return headers;
             }
         });
+        
+        setProperty("Status", new ValueNum(200));
     }
     
     @Override
