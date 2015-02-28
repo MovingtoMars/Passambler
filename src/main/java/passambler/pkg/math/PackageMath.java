@@ -21,5 +21,6 @@ public class PackageMath implements Package {
         symbols.put("Rand", new FunctionRand());
 
         symbols.put("Pi", new ValueNum(Math.PI));
+        symbols.put("E", new ValueNum(Math.E));
     }
 }
