@@ -18,7 +18,6 @@ public class ValueResponse extends Value implements WriteHandler {
 
     public ValueResponse(HttpContext context, HttpResponse response) {
         setProperty("Headers", new ValueDict());
-
         setProperty("Status", new ValueNum(200));
     }
 
