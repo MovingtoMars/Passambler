@@ -124,7 +124,7 @@ public class AssignmentParser {
                     ValueDict dict = (ValueDict) leftValue;
                     
                     if (leftStream.peek() == null) {
-                        if (!dict.getValue().containsKey(value)) {
+                        if (dict.getEntry(value) == null) {
                             dict.getValue().put(value, rightValue);
                         } else {
                             dict.getValue().put(value, dict.getValue().get(value).onOperator(rightValue, operator.getType()));
