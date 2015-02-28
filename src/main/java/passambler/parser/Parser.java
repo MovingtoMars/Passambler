@@ -21,6 +21,7 @@ import passambler.pkg.std.PackageStd;
 import passambler.pkg.thread.PackageThread;
 import passambler.value.Value;
 import passambler.value.ValueBool;
+import passambler.value.ValueDict;
 import passambler.value.ValueList;
 import passambler.value.ValueNum;
 
@@ -270,19 +271,19 @@ public class Parser {
             List<String> arguments = new ArrayList<>();
 
             while (stream.hasNext()) {
-                if (stream.current().getType() == Token.Type.IDENTIFIER) {
+                if (stream.current().getType() == Token.Type.IDENTIFIER && stream.peek().getType() != Token.Type.RPAREN) {
                     while (stream.hasNext()) {
                         arguments.add(stream.current().getValue());
-                        
+
                         stream.next();
-                        
+
                         if (stream.current().getType() == Token.Type.COL) {
                             stream.next();
-                            
+
                             break;
                         } else {
                             stream.match(Token.Type.COMMA);
-                            
+
                             stream.next();
                         }
                     }
@@ -311,27 +312,46 @@ public class Parser {
 
             Block callback = block(stream);
 
-            if (!(value instanceof ValueList)) {
+            if (value instanceof ValueList) {
+                ValueList list = (ValueList) value;
+
+                for (int i = 0; i < list.getValue().size(); ++i) {
+                    if (arguments.size() == 1) {
+                        callback.getParser().getScope().setSymbol(arguments.get(0), list.getValue().get(i));
+                    } else if (arguments.size() == 2) {
+                        callback.getParser().getScope().setSymbol(arguments.get(0), new ValueNum(i));
+                        callback.getParser().getScope().setSymbol(arguments.get(1), list.getValue().get(i));
+                    } else if (arguments.size() > 2) {
+                        throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), 2, arguments.size());
+                    }
+
+                    Value result = callback.invoke();
+
+                    if (result != null) {
+                        return result;
+                    }
+                }
+            } else if (value instanceof ValueDict) {
+                ValueDict dict = (ValueDict) value;
+
+                for (Map.Entry<Value, Value> entry : dict.getValue().entrySet()) {
+                    if (arguments.size() == 1) {
+                        callback.getParser().getScope().setSymbol(arguments.get(0), entry.getValue());
+                    } else if (arguments.size() == 2) {
+                        callback.getParser().getScope().setSymbol(arguments.get(0), entry.getKey());
+                        callback.getParser().getScope().setSymbol(arguments.get(1), entry.getValue());
+                    } else if (arguments.size() > 2) {
+                        throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), 2, arguments.size());
+                    }
+
+                    Value result = callback.invoke();
+
+                    if (result != null) {
+                        return result;
+                    }
+                }
+            } else {
                 throw new ParserException(ParserException.Type.CANNOT_ITERATE, stream.first().getPosition());
-            }
-
-            ValueList list = (ValueList) value;
-
-            for (int i = 0; i < list.getValue().size(); ++i) {
-                if (arguments.size() == 1) {
-                    callback.getParser().getScope().setSymbol(arguments.get(0), list.getValue().get(i));
-                } else if (arguments.size() == 2) {
-                    callback.getParser().getScope().setSymbol(arguments.get(0), new ValueNum(i));
-                    callback.getParser().getScope().setSymbol(arguments.get(1), list.getValue().get(i));
-                } else if (arguments.size() > 2) {
-                    throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), 2, arguments.size());
-                }
-
-                Value result = callback.invoke();
-
-                if (result != null) {
-                    return result;
-                }
             }
         } else if (stream.first().getType() == Token.Type.RETURN) {
             stream.next();
