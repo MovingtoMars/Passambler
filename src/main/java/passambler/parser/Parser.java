@@ -392,7 +392,7 @@ public class Parser {
                     return callback.invoke();
                 }
             });
-        } else if (stream.rest().stream().anyMatch(t -> t.getType().isAssignmentOperator())) {
+        } else if (AssignmentParser.isAssignment(stream.copyAtCurrentPosition())) {
             AssignmentParser assignmentParser = new AssignmentParser(this, stream);
 
             assignmentParser.parse();
