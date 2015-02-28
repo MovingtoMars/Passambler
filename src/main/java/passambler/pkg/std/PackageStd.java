@@ -9,8 +9,8 @@ import passambler.value.Value;
 public class PackageStd implements Package {
     @Override
     public void addSymbols(Map<String, Value> symbols) {
-        symbols.put("Write", new FunctionWrite(new ValueStdOut(), false));
-        symbols.put("Writeln", new FunctionWrite(new ValueStdOut(), true));
+        symbols.put("Write", new FunctionWrite(new ValueOut(), false));
+        symbols.put("Writeln", new FunctionWrite(new ValueOut(), true));
         symbols.put("Read", new FunctionRead());
         symbols.put("Str", new FunctionStr());
         symbols.put("Lcase", new FunctionLCase());
@@ -34,7 +34,7 @@ public class PackageStd implements Package {
         symbols.put("Eval", new FunctionEval());
         symbols.put("List", new FunctionList());
 
-        symbols.put("Stdout", new ValueStdOut());
-        symbols.put("Stderr", new ValueStdErr());
+        symbols.put("Out", new ValueOut());
+        symbols.put("Err", new ValueErr());
     }
 }
