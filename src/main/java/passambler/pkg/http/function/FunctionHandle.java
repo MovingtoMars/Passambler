@@ -13,7 +13,6 @@ import passambler.pkg.http.PackageHttp;
 import passambler.pkg.http.value.ValueRequest;
 import passambler.pkg.http.value.ValueResponse;
 import passambler.value.Value;
-import passambler.value.ValueNum;
 import passambler.value.ValueStr;
 
 public class FunctionHandle extends Function {
@@ -45,8 +44,9 @@ public class FunctionHandle extends Function {
                 ValueResponse responseValue = new ValueResponse(context, response);
                 
                 function.invoke(parser, new Value[] { requestValue, responseValue });
-                
-                response.setStatusCode(((ValueNum) responseValue.getProperty("Status").getValue()).getValue().intValue());
+
+                response.setHeaders(responseValue.getHeaders());
+                response.setStatusCode(responseValue.getStatus());
                 response.setEntity(new StringEntity(responseValue.getResponseData(), ContentType.create("text/html", "UTF-8")));
             } catch (ParserException e) {
                 throw new RuntimeException(e);
