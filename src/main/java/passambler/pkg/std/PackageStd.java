@@ -12,6 +12,8 @@ public class PackageStd implements Package {
         symbols.put("Write", new FunctionWrite(new ValueOut(), false));
         symbols.put("Writeln", new FunctionWrite(new ValueOut(), true));
         symbols.put("Read", new FunctionRead());
+        symbols.put("ReadNum", new FunctionReadNum());
+        symbols.put("ReadStr", new FunctionReadStr());
         symbols.put("Str", new FunctionStr());
         symbols.put("Lcase", new FunctionLCase());
         symbols.put("Ucase", new FunctionUCase());
