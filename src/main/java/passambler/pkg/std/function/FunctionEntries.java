@@ -25,8 +25,8 @@ public class FunctionEntries extends Function {
         ((ValueDict) arguments[0]).getValue().entrySet().stream().forEach((set) -> {
             Value value = new Value();
 
-            value.setProperty("key", set.getKey());
-            value.setProperty("value", set.getValue());
+            value.setProperty("Key", set.getKey());
+            value.setProperty("Value", set.getValue());
 
             list.getValue().add(value);
         });
