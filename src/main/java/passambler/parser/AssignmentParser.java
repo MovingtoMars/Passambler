@@ -132,10 +132,10 @@ public class AssignmentParser {
                         if (dict.getEntry(value) == null) {
                             dict.getValue().put(value, rightValue);
                         } else {
-                            dict.getValue().put(value, dict.getValue().get(value).onOperator(rightValue, operator.getType()));
+                            dict.getValue().put(value, dict.getEntry(value).onOperator(rightValue, operator.getType()));
                         }
                     } else {
-                        leftValue = dict.getValue().get(value);
+                        leftValue = dict.getEntry(value);
                     }
                 }
             }
