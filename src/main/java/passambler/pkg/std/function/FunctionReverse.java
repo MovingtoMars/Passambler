@@ -28,7 +28,7 @@ public class FunctionReverse extends Function {
 
         ValueList subList = new ValueList();
 
-        for (int i = value.getIndexCount() - 1; i >= 0; --i) {
+        for (int i = value.getValue().size() - 1; i >= 0; --i) {
             subList.getValue().add(value.getValue().get(i));
         }
 

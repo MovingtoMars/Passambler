@@ -7,7 +7,6 @@ import passambler.function.Function;
 import passambler.value.Value;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
-import passambler.value.IndexedValue;
 import passambler.value.ValueDict;
 import passambler.value.ValueList;
 import passambler.value.ValueNum;
@@ -260,31 +259,41 @@ public class ExpressionParser {
             stream.next();
         }
 
-        if (currentValue == null && (inlineDeclaration.getIndexCount() > 0 || tokens.isEmpty())) {
+        if (currentValue == null && (inlineDeclaration.getValue().size() > 0 || tokens.isEmpty())) {
             return inlineDeclaration;
         } else {
-            if (!(currentValue instanceof IndexedValue)) {
-                throw new ParserException(ParserException.Type.NOT_INDEXED, stream.current().getPosition());
-            }
-
-            IndexedValue indexedValue = (IndexedValue) currentValue;
-
             Value indexValue = new ExpressionParser(parser, new TokenStream(tokens)).parse();
 
             if (indexValue instanceof ValueNum) {
+                if (!(currentValue instanceof ValueList)) {
+                    throw new ParserException(ParserException.Type.NOT_A_LIST, stream.current().getPosition());
+                }
+
+                ValueList list = (ValueList) currentValue;
+                
                 int index = ((ValueNum) indexValue).getValue().intValue();
 
-                if (index < -indexedValue.getIndexCount() || index > indexedValue.getIndexCount() - 1) {
-                    throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, stream.current().getPosition(), index, indexedValue.getIndexCount());
+                if (index < -list.getValue().size() || index > list.getValue().size() - 1) {
+                    throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, stream.current().getPosition(), index, list.getValue().size());
                 }
 
                 if (index < 0) {
-                    return indexedValue.getIndex(new ValueNum(indexedValue.getIndexCount() - Math.abs(index)));
+                    return list.getValue().get(list.getValue().size() - Math.abs(index));
                 } else {
-                    return indexedValue.getIndex(new ValueNum(index));
+                    return list.getValue().get(index);
                 }
             } else {
-                return indexedValue.getIndex(indexValue);
+                if (!(currentValue instanceof ValueDict)) {
+                    throw new ParserException(ParserException.Type.NOT_A_DICT, stream.current().getPosition());
+                }
+                
+                ValueDict dict = (ValueDict) currentValue;
+                
+                if (dict.getEntry(indexValue) == null) {
+                    throw new ParserException(ParserException.Type.UNDEFINED_DICT_ENTRY, stream.current().getPosition(), indexValue.toString());
+                }
+                
+                return dict.getEntry(indexValue);
             }
         }
     }
@@ -400,7 +409,7 @@ public class ExpressionParser {
                 element.match(Token.Type.COL);
                 element.next();
 
-                value.setIndex(new ExpressionParser(parser, new TokenStream(valueTokens)).parse(), new ExpressionParser(parser, new TokenStream(element.rest())).parse());
+                value.getValue().put(new ExpressionParser(parser, new TokenStream(valueTokens)).parse(), new ExpressionParser(parser, new TokenStream(element.rest())).parse());
 
                 tokens.clear();
 

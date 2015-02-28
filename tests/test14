@@ -1,5 +1,5 @@
 --desc--
-Tests complicated dicts and lists.
+Tests dict access and comparison.
 
 --input--
 user = {"name": "Raoul", "age": 16, "friends": [{"name": "Olegna", "age": 15}, {"name": "Nibor", "age": 17, "friends": [{"name": "Reivilo", "age": 16}]}]};

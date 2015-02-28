@@ -6,19 +6,22 @@ public class ParserException extends Exception {
     public enum Type {
         BAD_SYNTAX("bad syntax: %s"),
         INDEX_OUT_OF_RANGE("index %d out of range (size: %d)"),
-        NOT_INDEXED("value not indexed"),
         INVALID_ARGUMENT("invalid argument %d"),
         INVALID_ARGUMENT_COUNT("%d arguments expected, %d given"),
         INVALID_TOKEN("token %s expected, %s found"),
         UNDEFINED_FUNCTION("undefined function %s"),
         UNDEFINED_VARIABLE("undefined variable %s"),
         UNDEFINED_PROPERTY("undefined property %s"),
+        UNDEFINED_DICT_ENTRY("undefined dictionary entry %s"),
         UNDEFINED_PACKAGE("undefined package %s"),
         UNEXPECTED_EOF("unexpected end of file"),
         UNEXPECTED_TOKEN("unexpected token %s"),
         UNSUPPORTED_OPERATOR("unsupported operator %s"),
+        CANNOT_ITERATE("cannot iterate over this value"),
         ZERO_DIVISION("cannot divide by 0"),
-        NOT_ALLOWED("not allowed here");
+        NOT_ALLOWED("not allowed here"),
+        NOT_A_LIST("value is not a list"),
+        NOT_A_DICT("value is not a dictionary");
 
         String message;
 

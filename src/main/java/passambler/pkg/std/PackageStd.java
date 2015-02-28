@@ -32,6 +32,7 @@ public class PackageStd implements Package {
         symbols.put("Values", new FunctionValues());
         symbols.put("Entries", new FunctionEntries());
         symbols.put("Eval", new FunctionEval());
+        symbols.put("List", new FunctionList());
 
         symbols.put("Stdout", new ValueStdOut());
         symbols.put("Stderr", new ValueStdErr());

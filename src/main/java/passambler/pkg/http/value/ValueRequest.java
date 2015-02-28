@@ -19,7 +19,7 @@ public class ValueRequest extends Value {
                 ValueDict headers = new ValueDict();
                 
                 for (Header header : request.getAllHeaders()) {
-                    headers.setIndex(new ValueStr(header.getName()), new ValueStr(header.getValue()));
+                    headers.getValue().put(new ValueStr(header.getName()), new ValueStr(header.getValue()));
                 }
                 
                 return headers;

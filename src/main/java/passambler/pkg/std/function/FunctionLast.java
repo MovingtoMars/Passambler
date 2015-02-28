@@ -3,9 +3,8 @@ package passambler.pkg.std.function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.function.Function;
-import passambler.value.IndexedValue;
 import passambler.value.Value;
-import passambler.value.ValueNum;
+import passambler.value.ValueList;
 
 public class FunctionLast extends Function {
     @Override
@@ -15,13 +14,11 @@ public class FunctionLast extends Function {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof IndexedValue;
+        return value instanceof ValueList;
     }
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        IndexedValue value = (IndexedValue) arguments[0];
-
-        return value.getIndex(new ValueNum(value.getIndexCount() - 1));
+        return ((ValueList) arguments[0]).getValue().get(((ValueList) arguments[0]).getValue().size() - 1);
     }
 }

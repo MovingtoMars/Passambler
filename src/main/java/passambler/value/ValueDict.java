@@ -5,16 +5,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ValueDict extends Value implements IndexedValue {
+public class ValueDict extends Value {
     protected Map<Value, Value> dict = new LinkedHashMap();
 
     @Override
     public Map<Value, Value> getValue() {
         return dict;
     }
-
-    @Override
-    public Value getIndex(Value key) {
+    
+    // This helper method exists because by default, Map.get() doesn't compare with
+    // the data of the value, it compares the value instance instead.
+    // Therefore, in most cases it isn't possible to retrieve a value with Map.get().
+    public Value getEntry(Value key) {
         for (Map.Entry<Value, Value> entry : dict.entrySet()) {
             if (entry.getKey().getValue().equals(key.getValue())) {
                 return entry.getValue();
@@ -22,16 +24,6 @@ public class ValueDict extends Value implements IndexedValue {
         }
 
         return null;
-    }
-
-    @Override
-    public void setIndex(Value key, Value value) {
-        dict.put(key, value);
-    }
-
-    @Override
-    public int getIndexCount() {
-        return dict.size();
     }
 
     @Override

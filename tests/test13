@@ -24,14 +24,14 @@ user = {"name" : "Raoul", "age" : 16};
 return [
     Empty([]),
     Empty([1, 2, 3]),
-    Empty(""),
-    Empty("Raoul"),
-    First("Raoul"),
+    Empty(List("")),
+    Empty(List("Raoul")),
+    First(List("Raoul")),
     First(1..3),
     Last(1..3),
     n,
     Size(50..100),
-    Size("Raoul"),
+    Size(List("Raoul")),
     a,
     b,
     c,
@@ -39,8 +39,6 @@ return [
     Slice(4..10, 1, 3),
     Reverse(1..3),
     Reverse("Raoul"),
-    user["name"],
-    user["age"],
     Keys(user),
     Values(user),
     Contains("i like cats", "bears"),
@@ -50,8 +48,9 @@ return [
     Ucase("HeLLo WoRLd!"),
     Replace("I like bears", "bears", "cats"),
     Replace("I like cats", "cats", "dogs"),
-    Split("My name is Raoul", " ")
+    Split("My name is Raoul", " "),
+    List("Raoul")
 ];
 
 --result--
-[true, false, true, false, R, 1, 3, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30], 51, 5, [3, 4], 1, [10, 11, 12, 13, 14], [20, 19, 18, 17, 16, 15], [5, 6, 7], [3, 2, 1], luoaR, Raoul, 16, [name, age], [Raoul, 16], false, true, 0, hello world!, HELLO WORLD!, I like cats, I like dogs, [My, name, is, Raoul]]
+[true, false, true, false, R, 1, 3, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30], 51, 5, [3, 4], 1, [10, 11, 12, 13, 14], [20, 19, 18, 17, 16, 15], [5, 6, 7], [3, 2, 1], luoaR, [name, age], [Raoul, 16], false, true, 0, hello world!, HELLO WORLD!, I like cats, I like dogs, [My, name, is, Raoul], [R, a, o, u, l]]

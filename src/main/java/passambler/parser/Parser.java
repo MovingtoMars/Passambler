@@ -19,9 +19,10 @@ import passambler.pkg.net.PackageNet;
 import passambler.pkg.os.PackageOs;
 import passambler.pkg.std.PackageStd;
 import passambler.pkg.thread.PackageThread;
-import passambler.value.IndexedValue;
 import passambler.value.Value;
 import passambler.value.ValueBool;
+import passambler.value.ValueDict;
+import passambler.value.ValueList;
 import passambler.value.ValueNum;
 
 public class Parser {
@@ -300,15 +301,15 @@ public class Parser {
 
             Block callback = block(stream);
 
-            if (!(value instanceof IndexedValue)) {
-                throw new ParserException(ParserException.Type.NOT_INDEXED, stream.current().getPosition());
+            if (!(value instanceof ValueList)) {
+                throw new ParserException(ParserException.Type.CANNOT_ITERATE, stream.first().getPosition());
             }
 
-            IndexedValue indexedValue = (IndexedValue) value;
+            ValueList list = (ValueList) value;
 
-            for (int i = 0; i < indexedValue.getIndexCount(); ++i) {
+            for (int i = 0; i < list.getValue().size(); ++i) {
                 if (variableName != null) {
-                    callback.getParser().getScope().setSymbol(variableName, indexedValue.getIndex(new ValueNum(i)));
+                    callback.getParser().getScope().setSymbol(variableName, list.getValue().get(i));
                 }
 
                 Value result = callback.invoke();
@@ -358,7 +359,7 @@ public class Parser {
             });
         } else if (stream.rest().stream().anyMatch(t -> t.getType().isAssignmentOperator())) {
             AssignmentParser assignmentParser = new AssignmentParser(this, stream);
-            
+
             assignmentParser.parse();
         } else {
             new ExpressionParser(this, stream).parse();

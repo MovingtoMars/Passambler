@@ -3,7 +3,7 @@ package passambler.value;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ValueList extends Value implements IndexedValue {
+public class ValueList extends Value {
     protected List<Value> list = new ArrayList<>();
 
     @Override
@@ -12,30 +12,15 @@ public class ValueList extends Value implements IndexedValue {
     }
 
     @Override
-    public Value getIndex(Value key) {
-        return list.get(((ValueNum) key).getValue().intValue());
-    }
-
-    @Override
-    public void setIndex(Value key, Value value) {
-        list.set(((ValueNum) key).getValue().intValue(), value);
-    }
-
-    @Override
-    public int getIndexCount() {
-        return list.size();
-    }
-
-    @Override
     public boolean equals(Value value) {
         if (value instanceof ValueList) {
             ValueList givenList = (ValueList) value;
 
-            if (givenList.getIndexCount() != getIndexCount()) {
+            if (givenList.getValue().size() != list.size()) {
                 return false;
             }
 
-            for (int i = 0; i < getIndexCount(); ++i) {
+            for (int i = 0; i < list.size(); ++i) {
                 Value valueInCurrentList = list.get(i);
                 Value valueInList = givenList.getValue().get(i);
 

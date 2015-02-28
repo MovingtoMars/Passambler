@@ -21,9 +21,9 @@ public class FunctionPop extends Function {
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         ValueList list = (ValueList) arguments[0];
 
-        Value last = list.getValue().get(list.getIndexCount() - 1);
+        Value last = list.getValue().get(list.getValue().size() - 1);
 
-        list.getValue().remove(list.getIndexCount() - 1);
+        list.getValue().remove(list.getValue().size() - 1);
 
         return last;
     }
