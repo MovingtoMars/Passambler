@@ -1,22 +1,8 @@
-import net;
 import std.Writeln;
-import os.Time;
+import http;
 
-sock = net.Listen(8080);
+http.Handle('/', fn(request, response) {
+    Writeln(response, 'Hello World!');
+});
 
-Writeln('Server running on http://localhost:8080');
-
-while (true) {
-    client = net.Accept(sock);
-
-    Writeln(client, 'HTTP/1.1 200 OK');
-    Writeln(client, 'Content-Type: text/html');
-    Writeln(client, 'Connection: close');
-    Writeln(client);
-    Writeln(client, '<h1>Hello World!</h1>');
-    Writeln(client, 'Server time:', Time());
-
-    net.Close(client);
-}
-
-net.Close(sock);
+http.Serve(8080);

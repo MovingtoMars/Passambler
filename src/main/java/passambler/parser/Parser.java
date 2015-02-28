@@ -13,6 +13,7 @@ import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
 import passambler.function.Function;
 import passambler.pkg.file.PackageFile;
+import passambler.pkg.http.PackageHttp;
 import passambler.pkg.math.PackageMath;
 import passambler.pkg.net.PackageNet;
 import passambler.pkg.os.PackageOs;
@@ -43,6 +44,7 @@ public class Parser {
         internalPackages.put("os", new PackageOs());
         internalPackages.put("net", new PackageNet());
         internalPackages.put("thread", new PackageThread());
+        internalPackages.put("http", new PackageHttp());
     }
 
     public Scope getScope() {
