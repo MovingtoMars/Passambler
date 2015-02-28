@@ -17,18 +17,18 @@ public class ValueRequest extends Value {
             @Override
             public Value getValue() {
                 ValueDict headers = new ValueDict();
-                
+
                 for (Header header : request.getAllHeaders()) {
                     headers.getValue().put(new ValueStr(header.getName()), new ValueStr(header.getValue()));
                 }
-                
+
                 return headers;
             }
         });
-        
+
         setProperty("Method", new ValueStr(request.getRequestLine().getMethod().toUpperCase(Locale.ENGLISH)));
         setProperty("Uri", new ValueStr(request.getRequestLine().getUri()));
-        
+
         setProperty("HostAddr", new ValueStr(((HttpInetConnection) context.getAttribute(ExecutionContext.HTTP_CONNECTION)).getRemoteAddress().getHostAddress()));
         setProperty("HostName", new ValueStr(((HttpInetConnection) context.getAttribute(ExecutionContext.HTTP_CONNECTION)).getRemoteAddress().getHostName()));
     }

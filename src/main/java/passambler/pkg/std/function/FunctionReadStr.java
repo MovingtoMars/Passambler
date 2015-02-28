@@ -21,7 +21,7 @@ public class FunctionReadStr extends Function {
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         Scanner scanner = new Scanner(System.in);
-        
+
         return new ValueStr(scanner.nextLine());
     }
 }

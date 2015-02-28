@@ -26,24 +26,24 @@ public class FunctionHandle extends Function {
         if (argument == 0) {
             return value instanceof ValueStr;
         }
-        
+
         return value instanceof Function || value instanceof HttpRequestHandler;
     }
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         PackageHttp.REQUEST_HANDLER.register(((ValueStr) arguments[0]).getValue(), arguments[1] instanceof HttpRequestHandler ? (HttpRequestHandler) arguments[1] : createHandlerFromFunction(parser, (Function) arguments[1]));
-        
+
         return null;
     }
-    
+
     private HttpRequestHandler createHandlerFromFunction(Parser parser, Function function) {
         return (HttpRequest request, HttpResponse response, HttpContext context) -> {
             try {
                 ValueRequest requestValue = new ValueRequest(context, request);
                 ValueResponse responseValue = new ValueResponse(context, response);
-                
-                function.invoke(parser, new Value[] { requestValue, responseValue });
+
+                function.invoke(parser, new Value[]{requestValue, responseValue});
 
                 response.setHeaders(responseValue.getHeaders());
                 response.setStatusCode(responseValue.getStatus());

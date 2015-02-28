@@ -235,14 +235,14 @@ public class Lexer {
     public static boolean isIdentifier(char c) {
         return Character.isLetterOrDigit(c) || c == '_';
     }
-    
+
     public static boolean isConstant(String string) {
         for (char c : string.toCharArray()) {
             if (!Character.isUpperCase(c) && !Character.isDigit(c) && c != '_') {
                 return false;
             }
         }
-        
+
         return true;
     }
 

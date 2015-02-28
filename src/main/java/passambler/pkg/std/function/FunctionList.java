@@ -21,11 +21,11 @@ public class FunctionList extends Function {
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
         ValueList list = new ValueList();
-        
+
         for (char c : ((ValueStr) arguments[0]).getValue().toCharArray()) {
             list.getValue().add(new ValueStr(String.valueOf(c)));
         }
-        
+
         return list;
     }
 }

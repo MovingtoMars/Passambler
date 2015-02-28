@@ -12,7 +12,7 @@ public class ValueDict extends Value {
     public Map<Value, Value> getValue() {
         return dict;
     }
-    
+
     // This helper method exists because by default, Map.get() doesn't compare with
     // the data of the value, it compares the value instance instead.
     // Therefore, in most cases it isn't possible to retrieve a value with Map.get().

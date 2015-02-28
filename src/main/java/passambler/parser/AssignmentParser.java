@@ -52,7 +52,7 @@ public class AssignmentParser {
                         if (Lexer.isConstant(token.getValue())) {
                             rightValue.setConstant(true);
                         }
-                        
+
                         parser.getScope().setSymbol(token.getValue(), rightValue);
                     } else {
                         parser.getScope().setSymbol(token.getValue(), parser.getScope().getSymbol(token.getValue()).onOperator(rightValue, operator.getType()));
@@ -127,7 +127,7 @@ public class AssignmentParser {
                     }
                 } else if (leftValue instanceof ValueDict) {
                     ValueDict dict = (ValueDict) leftValue;
-                    
+
                     if (leftStream.peek() == null) {
                         if (dict.getEntry(value) == null) {
                             dict.getValue().put(value, rightValue);
@@ -143,7 +143,7 @@ public class AssignmentParser {
             leftStream.next();
         }
     }
-    
+
     public static boolean isAssignment(TokenStream stream) {
         while (stream.hasNext()) {
             if (stream.current().getType() == Token.Type.LBRACE) {
@@ -151,10 +151,10 @@ public class AssignmentParser {
             } else if (stream.current().getType().isAssignmentOperator()) {
                 return true;
             }
-            
+
             stream.next();
         }
-        
+
         return false;
     }
 }

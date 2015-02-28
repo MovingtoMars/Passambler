@@ -6,7 +6,7 @@ public class ValueStr extends Value {
     public ValueStr(String data) {
         setValue(data);
     }
-    
+
     @Override
     public String getValue() {
         return (String) value;

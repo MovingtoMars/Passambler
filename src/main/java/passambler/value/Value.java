@@ -10,11 +10,11 @@ public class Value {
     public static ValueNil VALUE_NIL = new ValueNil();
 
     protected boolean constant = false;
-    
+
     protected Map<String, Property> properties = new HashMap();
 
     protected Object value;
-    
+
     public void setConstant(boolean constant) {
         this.constant = constant;
     }
@@ -22,7 +22,7 @@ public class Value {
     public boolean isConstant() {
         return constant;
     }
-    
+
     public Object getValue() {
         return value;
     }
