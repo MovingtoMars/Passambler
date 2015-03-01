@@ -422,7 +422,7 @@ public class ExpressionParser {
                 element.match(Token.Type.COL);
                 element.next();
 
-                value.getValue().put(new ExpressionParser(parser, new TokenStream(valueTokens)).parse(), new ExpressionParser(parser, new TokenStream(element.rest())).parse());
+                value.setEntry(new ExpressionParser(parser, new TokenStream(valueTokens)).parse(), new ExpressionParser(parser, new TokenStream(element.rest())).parse());
 
                 tokens.clear();
 

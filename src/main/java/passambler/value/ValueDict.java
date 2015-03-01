@@ -25,6 +25,10 @@ public class ValueDict extends Value {
 
         return null;
     }
+    
+    public void setEntry(Value key, Value value) {
+        dict.put(key, value);
+    }
 
     @Override
     public boolean equals(Value value) {

@@ -130,9 +130,9 @@ public class AssignmentParser {
 
                     if (leftStream.peek() == null) {
                         if (dict.getEntry(value) == null) {
-                            dict.getValue().put(value, rightValue);
+                            dict.setEntry(value, rightValue);
                         } else {
-                            dict.getValue().put(value, dict.getEntry(value).onOperator(rightValue, operator.getType()));
+                            dict.setEntry(value, dict.getEntry(value).onOperator(rightValue, operator.getType()));
                         }
                     } else {
                         leftValue = dict.getEntry(value);
