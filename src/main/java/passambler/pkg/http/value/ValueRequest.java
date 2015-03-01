@@ -1,14 +1,13 @@
 package passambler.pkg.http.value;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.Locale;
 import org.apache.http.Header;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpInetConnection;
 import org.apache.http.HttpRequest;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
 import passambler.value.Property;
@@ -32,49 +31,24 @@ public class ValueRequest extends Value {
         });
 
         ValueDict form = new ValueDict();
-
-        try {
-            if (request instanceof HttpEntityEnclosingRequest) {
-                HttpEntityEnclosingRequest enclosingRequest = (HttpEntityEnclosingRequest) request;
-
-                for (String element : new BufferedReader(new InputStreamReader(enclosingRequest.getEntity().getContent())).readLine().split("&")) {
-                    String[] keyAndValue = element.split("=");
-
-                    if (keyAndValue.length > 0) {
-                        Value key = new ValueStr(URLDecoder.decode(keyAndValue[0], "UTF-8"));
-                        Value value = keyAndValue.length > 1 ? new ValueStr(URLDecoder.decode(keyAndValue[1], "UTF-8")) : Value.VALUE_NIL;
-
-                        form.getValue().put(key, value);
-                    }
-                }
-            }
-        } catch (IOException | IllegalStateException e) {
-        }
-
-        setProperty("Form", form);
-
         ValueDict query = new ValueDict();
 
-        try {
-            String[] queryParts = request.getRequestLine().getUri().split("\\?");
+        if (request instanceof HttpEntityEnclosingRequest) {
+            HttpEntityEnclosingRequest enclosingRequest = (HttpEntityEnclosingRequest) request;
 
-            if (queryParts.length > 1) {
-                String queryData = queryParts[1];
-
-                for (String element : queryData.split("&")) {
-                    String[] keyAndValue = element.split("=");
-
-                    if (keyAndValue.length > 0) {
-                        Value key = new ValueStr(URLDecoder.decode(keyAndValue[0], "UTF-8"));
-                        Value value = keyAndValue.length > 1 ? new ValueStr(URLDecoder.decode(keyAndValue[1], "UTF-8")) : Value.VALUE_NIL;
-
-                        query.getValue().put(key, value);
-                    }
-                }
+            try {
+                URLEncodedUtils.parse(enclosingRequest.getEntity()).stream().forEach((pair) -> {
+                    form.setEntry(new ValueStr(pair.getName()), new ValueStr(pair.getName()));
+                });
+            } catch (IOException e) {
             }
-        } catch (Exception e) {
         }
-        
+
+        URLEncodedUtils.parse(request.getRequestLine().getUri(), Charset.forName("UTF-8")).stream().forEach((pair) -> {
+            query.setEntry(new ValueStr(pair.getName()), new ValueStr(pair.getName()));
+        });
+
+        setProperty("Form", form);
         setProperty("Query", query);
 
         setProperty("Method", new ValueStr(request.getRequestLine().getMethod().toUpperCase(Locale.ENGLISH)));
