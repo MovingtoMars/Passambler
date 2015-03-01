@@ -103,6 +103,8 @@ public class Main {
             files.add(testFile);
         }
 
+        int passed = files.size();
+
         for (Path file : files) {
             try {
                 TestParser parser = new TestParser(file);
@@ -110,12 +112,16 @@ public class Main {
                 TestRunner runner = new TestRunner(parser.parse(new String[]{"desc", "input", "result"}));
 
                 runner.run();
-                
+
                 LOGGER.log(Level.INFO, String.format("Test %s passed", file.getFileName()));
             } catch (LexerException | ParserException | TestException e) {
                 LOGGER.log(Level.WARNING, String.format("Test %s failed", file.getFileName()), e);
+
+                passed--;
             }
         }
+
+        LOGGER.log(Level.INFO, String.format("Tests passed: %d/%d (%d%%)", passed, files.size(), (int) ((float) passed / (float) files.size() * 100F)));
     }
 
     public void runInteractiveMode() {
