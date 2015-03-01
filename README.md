@@ -27,7 +27,7 @@ for (x : 0..100) {
 }
 ```
 
-For more examples, see the `examples` directory.
+For more examples, see the [examples directory](https://github.com/raoulvdberge/Passambler/tree/master/examples).
 
 ## Wiki
 The wiki contains all the documentation and the [getting started guide](https://github.com/raoulvdberge/Passambler/wiki/Getting-Started).
