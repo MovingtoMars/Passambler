@@ -1,8 +1,5 @@
 package passambler.pkg.http.function;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;

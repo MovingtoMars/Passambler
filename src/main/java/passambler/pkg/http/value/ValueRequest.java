@@ -38,11 +38,11 @@ public class ValueRequest extends Value {
                 HttpEntityEnclosingRequest enclosingRequest = (HttpEntityEnclosingRequest) request;
 
                 for (String element : new BufferedReader(new InputStreamReader(enclosingRequest.getEntity().getContent())).readLine().split("&")) {
-                    String[] parts = element.split("=");
+                    String[] keyAndValue = element.split("=");
 
-                    if (parts.length > 0) {
-                        Value key = new ValueStr(URLDecoder.decode(parts[0], "UTF-8"));
-                        Value value = parts.length > 1 ? new ValueStr(URLDecoder.decode(parts[1], "UTF-8")) : Value.VALUE_NIL;
+                    if (keyAndValue.length > 0) {
+                        Value key = new ValueStr(URLDecoder.decode(keyAndValue[0], "UTF-8"));
+                        Value value = keyAndValue.length > 1 ? new ValueStr(URLDecoder.decode(keyAndValue[1], "UTF-8")) : Value.VALUE_NIL;
 
                         form.getValue().put(key, value);
                     }
@@ -52,6 +52,30 @@ public class ValueRequest extends Value {
         }
 
         setProperty("Form", form);
+
+        ValueDict query = new ValueDict();
+
+        try {
+            String[] queryParts = request.getRequestLine().getUri().split("\\?");
+
+            if (queryParts.length > 1) {
+                String queryData = queryParts[1];
+
+                for (String element : queryData.split("&")) {
+                    String[] keyAndValue = element.split("=");
+
+                    if (keyAndValue.length > 0) {
+                        Value key = new ValueStr(URLDecoder.decode(keyAndValue[0], "UTF-8"));
+                        Value value = keyAndValue.length > 1 ? new ValueStr(URLDecoder.decode(keyAndValue[1], "UTF-8")) : Value.VALUE_NIL;
+
+                        query.getValue().put(key, value);
+                    }
+                }
+            }
+        } catch (Exception e) {
+        }
+        
+        setProperty("Query", query);
 
         setProperty("Method", new ValueStr(request.getRequestLine().getMethod().toUpperCase(Locale.ENGLISH)));
         setProperty("Uri", new ValueStr(request.getRequestLine().getUri()));
