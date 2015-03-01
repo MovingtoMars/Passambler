@@ -1,0 +1,8 @@
+import std.Writeln;
+import http;
+
+http.Handle('/', fn(request, response) {
+    Writeln(response, 'Hello World!');
+});
+
+http.Serve(8080);

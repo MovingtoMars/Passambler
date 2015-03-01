@@ -1,0 +1,14 @@
+import net;
+import std.Writeln;
+import std.Read;
+
+sock = net.Listen(8080);
+
+client = net.Accept(sock);
+
+while (true) {
+    Writeln(client, Read(client));
+}
+
+net.Close(client);
+net.Close(sock);

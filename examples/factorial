@@ -1,0 +1,9 @@
+fn fact(n) {
+    f = 1;
+
+    for (x : 1..n) {
+        f *= x;
+    }
+
+    return f;
+}

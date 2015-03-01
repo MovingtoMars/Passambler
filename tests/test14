@@ -1,0 +1,17 @@
+--desc--
+Tests dict access and comparison.
+
+--input--
+user = {"name": "Raoul", "age": 16, "friends": [{"name": "Olegna", "age": 15}, {"name": "Nibor", "age": 17, "friends": [{"name": "Reivilo", "age": 16}]}]};
+user2 = {"name": "Raoul", "age": 16, "friends": [{"name": "Olegna", "age": 15}, {"name": "Nibor", "age": 17, "friends": [{"name": "Reivilo", "age": 16}]}]};
+user3 = {"name": "Raoul", "age": 16, "friends": [{"name": "Olegna", "age": 15}, {"name": "Nibor", "age": 17, "friends": [{"name": "Reivilo", "age": 17}]}]};
+
+return [
+    user["friends"][1]["friends"][0]["name"],
+    user3["test"],
+    user == user2,
+    user2 == user3
+];
+
+--result--
+[Reivilo, nil, true, false]

@@ -1,0 +1,17 @@
+--desc--
+Tests math package.
+
+--input--
+import math;
+
+return [
+    math.Abs(-100),
+    math.Abs(100),
+    math.Ceil(0.5),
+    math.Floor(0.5),
+    math.Log10(100),
+    math.Sqrt(25)
+];
+
+--result--
+[100, 100, 1, 0, 2, 5]

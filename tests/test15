@@ -1,0 +1,18 @@
+--desc--
+Tests list access.
+
+--input--
+a = 0..5;
+
+return [
+    a[0],
+    a[1],
+    a[4],
+    a[-1],
+    a[-2],
+    a[-4],
+    a[-6]
+];
+
+--result--
+[0, 1, 4, 5, 4, 2, 0]

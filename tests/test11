@@ -1,0 +1,16 @@
+--desc--
+Tests else if statements.
+
+--input--
+if (5 > 10) {
+    return 1;
+} elseif (10 < 5) {
+    return 2;
+} elseif (10 == 10) {
+    return 3;
+}
+
+return 4;
+
+--result--
+3
