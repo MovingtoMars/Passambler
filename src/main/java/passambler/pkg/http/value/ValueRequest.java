@@ -1,7 +1,8 @@
 package passambler.pkg.http.value;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Locale;
 import org.apache.http.Header;
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -33,20 +34,20 @@ public class ValueRequest extends Value {
         ValueDict form = new ValueDict();
         ValueDict query = new ValueDict();
 
-        if (request instanceof HttpEntityEnclosingRequest) {
-            HttpEntityEnclosingRequest enclosingRequest = (HttpEntityEnclosingRequest) request;
-
-            try {
+        try {
+            if (request instanceof HttpEntityEnclosingRequest) {
+                HttpEntityEnclosingRequest enclosingRequest = (HttpEntityEnclosingRequest) request;
                 URLEncodedUtils.parse(enclosingRequest.getEntity()).stream().forEach((pair) -> {
-                    form.setEntry(new ValueStr(pair.getName()), new ValueStr(pair.getName()));
+                    form.setEntry(new ValueStr(pair.getName()), pair.getValue().trim().isEmpty() ? Value.VALUE_NIL : new ValueStr(pair.getValue()));
                 });
-            } catch (IOException e) {
             }
-        }
 
-        URLEncodedUtils.parse(request.getRequestLine().getUri(), Charset.forName("UTF-8")).stream().forEach((pair) -> {
-            query.setEntry(new ValueStr(pair.getName()), new ValueStr(pair.getName()));
-        });
+            URLEncodedUtils.parse(new URI(request.getRequestLine().getUri()), "UTF-8").stream().forEach((pair) -> {
+                query.setEntry(new ValueStr(pair.getName()), new ValueStr(pair.getValue()));
+            });
+        } catch (IOException | URISyntaxException e) {
+
+        }
 
         setProperty("Form", form);
         setProperty("Query", query);
