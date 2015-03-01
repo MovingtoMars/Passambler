@@ -3,7 +3,6 @@ package passambler.pkg.thread.function;
 import java.util.ArrayList;
 import java.util.List;
 import passambler.function.Function;
-import passambler.lexer.SourcePosition;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.value.Value;
@@ -32,7 +31,7 @@ public class FunctionStart extends Function {
                     Function function = (Function) arguments[0];
 
                     if (function.getArguments() != arguments.length - 1) {
-                        throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, new SourcePosition(0, 0), function.getArguments(), arguments.length);
+                        throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, null, function.getArguments(), arguments.length - 1);
                     }
 
                     List<Value> values = new ArrayList<>();

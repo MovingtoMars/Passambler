@@ -44,6 +44,6 @@ public class ParserException extends Exception {
     }
 
     public ParserException(Type type, SourcePosition position, Object... args) {
-        this(type.message + " at line " + position.getLine() + ", column " + position.getColumn(), args);
+        this(type.message + (position != null ? " at line " + position.getLine() + ", column " + position.getColumn() : ""), args);
     }
 }

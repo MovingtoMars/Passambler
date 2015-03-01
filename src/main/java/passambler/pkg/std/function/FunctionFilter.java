@@ -1,7 +1,6 @@
 package passambler.pkg.std.function;
 
 import passambler.function.Function;
-import passambler.lexer.SourcePosition;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.value.Value;
@@ -35,7 +34,7 @@ public class FunctionFilter extends Function {
             Value result = callback.invoke(parser, new Value[]{list.getValue().get(i)});
 
             if (!(result instanceof ValueBool)) {
-                throw new ParserException(ParserException.Type.EXPECTED_A_BOOL, new SourcePosition(0, 0));
+                throw new ParserException(ParserException.Type.EXPECTED_A_BOOL);
             }
 
             if (((ValueBool) result).getValue() == true) {
