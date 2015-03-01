@@ -279,7 +279,7 @@ public class ExpressionParser {
 
             if (indexValue instanceof ValueNum) {
                 if (!(currentValue instanceof ValueList)) {
-                    throw new ParserException(ParserException.Type.NOT_A_LIST, stream.current().getPosition());
+                    throw new ParserException(ParserException.Type.NOT_A_LIST);
                 }
 
                 ValueList list = (ValueList) currentValue;
@@ -287,7 +287,7 @@ public class ExpressionParser {
                 int index = ((ValueNum) indexValue).getValue().intValue();
 
                 if (index < -list.getValue().size() || index > list.getValue().size() - 1) {
-                    throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, stream.current().getPosition(), index, list.getValue().size());
+                    throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, null, index, list.getValue().size());
                 }
 
                 if (index < 0) {
@@ -297,7 +297,7 @@ public class ExpressionParser {
                 }
             } else {
                 if (!(currentValue instanceof ValueDict)) {
-                    throw new ParserException(ParserException.Type.NOT_A_DICT, stream.current().getPosition());
+                    throw new ParserException(ParserException.Type.NOT_A_DICT);
                 }
 
                 ValueDict dict = (ValueDict) currentValue;

@@ -21,6 +21,8 @@ for (0..5) {
 
 user = {"name" : "Raoul", "age" : 16};
 
+multipleUsers = [user, {"name":"Sonja","age":18}, {"name":"Geert","age":20}, {"name":"Monja", "age":5}];
+
 return [
     Empty([]),
     Empty([1, 2, 3]),
@@ -55,7 +57,10 @@ return [
     Bool("true") == Bool(false),
     Num("dog"),
     Bool("cat"),
-    Join(["I", "like", "cats", "and", "dogs"], "-")
+    Join(["I", "like", "cats", "and", "dogs"], "-"),
+    Filter(multipleUsers, fn(a) {
+        return a['age'] >= 18;
+    }
 ];
 
 --result--
