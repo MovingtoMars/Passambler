@@ -104,22 +104,16 @@ public class Main {
         }
 
         for (Path file : files) {
-            boolean passed = true;
-
             try {
                 TestParser parser = new TestParser(file);
 
                 TestRunner runner = new TestRunner(parser.parse(new String[]{"desc", "input", "result"}));
 
                 runner.run();
+                
+                LOGGER.log(Level.INFO, String.format("Test %s passed", file.getFileName()));
             } catch (LexerException | ParserException | TestException e) {
                 LOGGER.log(Level.WARNING, String.format("Test %s failed", file.getFileName()), e);
-
-                passed = false;
-            }
-
-            if (passed) {
-                LOGGER.log(Level.INFO, String.format("Test %s passed", file.getFileName()));
             }
         }
     }
