@@ -410,7 +410,7 @@ public class Parser {
     public Value parse(List<Token> tokens) throws ParserException {
         List<Token> subTokens = new ArrayList<>();
 
-        int braces = 0, paren = 0;
+        int braces = 0, paren = 0, brackets = 0;
 
         for (Token token : tokens) {
             Token peekToken = tokens.indexOf(token) == tokens.size() - 1 ? null : tokens.get(tokens.indexOf(token) + 1);
@@ -423,11 +423,15 @@ public class Parser {
                 paren++;
             } else if (token.getType() == Token.Type.RPAREN) {
                 paren--;
+            } else if (token.getType() == Token.Type.LBRACKET) {
+                brackets++;
+            } else if (token.getType() == Token.Type.RBRACKET) {
+                brackets--;
             }
 
             subTokens.add(token);
 
-            if (braces == 0 && paren == 0 && (token.getType() == Token.Type.SEMI_COL || token.getType() == Token.Type.RBRACE)) {
+            if (braces == 0 && paren == 0 && brackets == 0 && (token.getType() == Token.Type.SEMI_COL || token.getType() == Token.Type.RBRACE)) {
                 if (peekToken != null && (peekToken.getType() == Token.Type.ELSE || peekToken.getType() == Token.Type.ELSEIF || peekToken.getType().isOperator())) {
                     continue;
                 }
