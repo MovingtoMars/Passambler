@@ -30,7 +30,6 @@ public class Lexer {
         tokenMap.put("for", Token.Type.FOR);
 
         tokenMap.put("<=>", Token.Type.COMPARE);
-        tokenMap.put("cmp", Token.Type.COMPARE);
 
         tokenMap.put("and", Token.Type.AND);
 
@@ -38,19 +37,9 @@ public class Lexer {
         tokenMap.put("if", Token.Type.IF);
 
         tokenMap.put("==", Token.Type.EQUAL);
-        tokenMap.put("eq", Token.Type.EQUAL);
-
         tokenMap.put("!=", Token.Type.NEQUAL);
-        tokenMap.put("ne", Token.Type.NEQUAL);
-
         tokenMap.put(">=", Token.Type.GTE);
-        tokenMap.put("ge", Token.Type.GTE);
-
         tokenMap.put("<=", Token.Type.LTE);
-        tokenMap.put("le", Token.Type.LTE);
-
-        tokenMap.put("gt", Token.Type.GT);
-        tokenMap.put("lt", Token.Type.LT);
 
         tokenMap.put("&&", Token.Type.AND);
 
