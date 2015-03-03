@@ -1,7 +1,7 @@
---desc--
+--DESC--
 Tests math package.
 
---input--
+--INPUT--
 import math;
 
 return [
@@ -13,5 +13,5 @@ return [
     math.Sqrt(25)
 ];
 
---result--
+--RESULT--
 [100, 100, 1, 0, 2, 5]

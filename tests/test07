@@ -1,7 +1,7 @@
---desc--
+--DESC--
 Tests for statement.
 
---input--
+--INPUT--
 a = 0;
 
 for (1..10) {
@@ -32,5 +32,5 @@ for (key, value : b) {
 
 return a;
 
---result--
+--RESULT--
 306

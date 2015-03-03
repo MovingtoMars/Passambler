@@ -16,6 +16,7 @@ import passambler.parser.ParserException;
 import passambler.lexer.Lexer;
 import passambler.lexer.LexerException;
 import passambler.lexer.Token;
+import passambler.tests.OutputRecorder;
 import passambler.tests.TestException;
 import passambler.tests.TestParser;
 import passambler.tests.TestRunner;
@@ -107,12 +108,18 @@ public class Main {
             try {
                 TestParser parser = new TestParser(file);
 
-                TestRunner runner = new TestRunner(parser.parse(new String[]{"desc", "input", "result"}));
+                TestRunner runner = new TestRunner(parser.parse());
+
+                OutputRecorder.record();
 
                 runner.run();
 
+                OutputRecorder.stop();
+
                 LOGGER.log(Level.INFO, String.format("Test %s passed", file.getFileName()));
             } catch (LexerException | ParserException | TestException e) {
+                OutputRecorder.stop();
+
                 LOGGER.log(Level.WARNING, String.format("Test %s failed", file.getFileName()), e);
             }
         }

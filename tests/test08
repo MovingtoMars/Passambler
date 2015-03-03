@@ -1,7 +1,7 @@
---desc--
-Tests function declaration.
+--DESC--
+Tests function and anonymous function declaration.
 
---input--
+--INPUT--
 fn a() {
     return;
 }
@@ -28,5 +28,5 @@ cc = fn(x, y) {
 
 return [a(), b(5), c(4, 3), aa(), bb(10), cc(5, 10)];
 
---result--
+--RESULT--
 [null, 7, 7, null, 12, 15]

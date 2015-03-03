@@ -16,7 +16,15 @@ public class TestRunner {
     public void run() throws LexerException, ParserException, TestException {
         Parser parser = new Parser();
 
+        if (test.getInput() == null) {
+            throw new TestException("missing input section");
+        }
+
         Value result = parser.parse(new Lexer(test.getInput()));
+
+        if (test.getOutput() != null && !test.getOutput().equals(OutputRecorder.getOutput())) {
+            throw new TestException("unexpected output, expected '%s' but got '%s'", test.getOutput(), OutputRecorder.getOutput());
+        }
 
         if (test.getResult() != null) {
             if (result == null) {

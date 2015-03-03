@@ -5,7 +5,6 @@ import passambler.parser.ParserException;
 import passambler.function.Function;
 import passambler.value.Value;
 import passambler.value.ValueList;
-import passambler.value.ValueStr;
 
 public class FunctionReverse extends Function {
     @Override

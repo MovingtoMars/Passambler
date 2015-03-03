@@ -1,7 +1,7 @@
---desc--
+--DESC--
 Tests list comparison.
 
---input--
+--INPUT--
 return [
     [1, 2, 3, 4, 5] == [1, 2, 3, 4, 5],
     [] == [],
@@ -9,5 +9,5 @@ return [
     [1] == [1]
 ];
 
---result--
+--RESULT--
 [true, true, false, true]

@@ -1,7 +1,7 @@
---desc--
+--DESC--
 Tests assignment parser.
 
---input--
+--INPUT--
 names = ['Raoul', 'Niels', 'Kyron'];
 names[1] = 'Sander';
 names[2] = [0, 1, 2, 3];
@@ -18,5 +18,5 @@ return [
     user
 ];
 
---result--
+--RESULT--
 [[Raoul, Sander, [0, 1, 2, 100]], {name=Raoul, friends=[Poes, Hond, Robin, 15]}]

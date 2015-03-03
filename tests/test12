@@ -1,7 +1,7 @@
---desc--
+--DESC--
 Tests else statements.
 
---input--
+--INPUT--
 if (5 > 10) {
     return 1;
 } elseif (10 < 5) {
@@ -14,5 +14,5 @@ if (5 > 10) {
 
 return 5;
 
---result--
+--RESULT--
 4

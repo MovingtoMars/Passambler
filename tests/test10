@@ -1,7 +1,7 @@
---desc--
+--DESC--
 Tests if statements.
 
---input--
+--INPUT--
 a = 1;
 
 if (5 > 10) {
@@ -14,5 +14,5 @@ if (5 == 5) {
 
 return a;
 
---result--
+--RESULT--
 3

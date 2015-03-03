@@ -1,7 +1,7 @@
---desc--
+--DESC--
 Tests list access.
 
---input--
+--INPUT--
 a = 0..5;
 
 return [
@@ -14,5 +14,5 @@ return [
     a[-6]
 ];
 
---result--
+--RESULT--
 [0, 1, 4, 5, 4, 2, 0]

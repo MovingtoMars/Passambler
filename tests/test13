@@ -1,7 +1,7 @@
---desc--
+--DESC--
 Tests std package.
 
---input--
+--INPUT--
 import std.*;
 
 n = 1..10;
@@ -21,47 +21,96 @@ for (0..5) {
 
 user = {"name" : "Raoul", "age" : 16};
 
-multipleUsers = [user, {"name":"Sonja","age":18}, {"name":"Geert","age":20}, {"name":"Monja", "age":5}];
+multipleUsers = [user, {"name": "Sonja", "age": 18}, {"name": "Geert", "age": 20}, {"name": "Monja", "age": 5}];
 
-return [
-    Empty([]),
-    Empty([1, 2, 3]),
-    Empty(List("")),
-    Empty(List("Raoul")),
-    First(List("Raoul")),
-    First(1..3),
-    Last(1..3),
-    n,
-    Size(50..100),
-    Size(List("Raoul")),
-    a,
-    b,
-    c,
-    d,
-    Slice(4..10, 1, 3),
-    Reverse(1..3),
-    Reverse("Raoul"),
-    Keys(user),
-    Values(user),
-    Contains("i like cats", "bears"),
-    Contains("i like dogs", "dogs"),
-    IndexOf("hello world", "hello"),
-    Lcase("HeLLo WoRLd!"),
-    Ucase("HeLLo WoRLd!"),
-    Replace("I like bears", "bears", "cats"),
-    Replace("I like cats", "cats", "dogs"),
-    Split("My name is Raoul", " "),
-    List("Raoul"),
-    Num("1") + Num(1),
-    Bool(true) == Bool("true"),
-    Bool("true") == Bool(false),
-    Num("dog"),
-    Bool("cat"),
-    Join(["I", "like", "cats", "and", "dogs"], "-"),
-    Filter(multipleUsers, fn(a) {
-        return a['age'] >= 18;
-    })
-];
+Writeln(Empty([]));
+Writeln(Empty([1, 2, 3]));
+Writeln(Empty(List("")));
+Writeln(Empty(List("Raoul")));
 
---result--
-[true, false, true, false, R, 1, 3, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30], 51, 5, [3, 4], 1, [10, 11, 12, 13, 14], [20, 19, 18, 17, 16, 15], [5, 6, 7], [3, 2, 1], luoaR, [name, age], [Raoul, 16], false, true, 0, hello world!, HELLO WORLD!, I like cats, I like dogs, [My, name, is, Raoul], [R, a, o, u, l], 2, true, false, false, false, I-like-cats-and-dogs, [{name=Sonja, age=18}, {name=Geert, age=20}]]
+Writeln(First(List("Raoul")));
+Writeln(First(1..3));
+
+Writeln(Last(1..3));
+
+Writeln(n);
+
+Writeln(Size(50..100));
+Writeln(Size(List("Raoul")));
+
+Writeln(a);
+Writeln(b);
+Writeln(c);
+Writeln(d);
+
+Writeln(Slice(4..10, 1, 3));
+
+Writeln(Reverse(1..3));
+Writeln(Reverse(List("Raoul")));
+
+Writeln(Keys(user));
+Writeln(Values(user));
+
+Writeln(Contains("i like cats", "bears"));
+Writeln(Contains("i like dogs", "dogs"));
+
+Writeln(IndexOf("hello world", "hello"));
+
+Writeln(Lcase("HeLLo WoRLd!"));
+Writeln(Ucase("HeLLo WoRLd!"));
+
+Writeln(Replace("I like bears", "bears", "cats"));
+Writeln(Replace("I like cats", "cats", "dogs"));
+
+Writeln(Split("My name is Raoul", " "));
+
+Writeln(List("Raoul"));
+
+Writeln(Num("1") + Num(1));
+Writeln(Bool(true) == Bool("true"));
+Writeln(Bool("true") == Bool(false));
+Writeln(Num("dog"));
+Writeln(Bool("cat"));
+
+Writeln(Join(["I", "like", "cats", "and", "dogs"], "-"));
+
+Writeln(Filter(multipleUsers, fn(a) {
+    return a['age'] >= 18;
+}));
+
+--OUTPUT--
+true
+false
+true
+false
+R
+1
+3
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30]
+51
+5
+[3, 4]
+1
+[10, 11, 12, 13, 14]
+[20, 19, 18, 17, 16, 15]
+[5, 6, 7]
+[3, 2, 1]
+[l, u, o, a, R]
+[name, age]
+[Raoul, 16]
+false
+true
+0
+hello world!
+HELLO WORLD!
+I like cats
+I like dogs
+[My, name, is, Raoul]
+[R, a, o, u, l]
+2
+true
+false
+false
+false
+I-like-cats-and-dogs
+[{name=Sonja, age=18}, {name=Geert, age=20}]

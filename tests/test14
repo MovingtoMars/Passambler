@@ -1,7 +1,7 @@
---desc--
+--DESC--
 Tests dict access and comparison.
 
---input--
+--INPUT--
 user = {"name": "Raoul", "age": 16, "friends": [{"name": "Olegna", "age": 15}, {"name": "Nibor", "age": 17, "friends": [{"name": "Reivilo", "age": 16}]}]};
 user2 = {"name": "Raoul", "age": 16, "friends": [{"name": "Olegna", "age": 15}, {"name": "Nibor", "age": 17, "friends": [{"name": "Reivilo", "age": 16}]}]};
 user3 = {"name": "Raoul", "age": 16, "friends": [{"name": "Olegna", "age": 15}, {"name": "Nibor", "age": 17, "friends": [{"name": "Reivilo", "age": 17}]}]};
@@ -13,5 +13,5 @@ return [
     user2 == user3
 ];
 
---result--
+--RESULT--
 [Reivilo, nil, true, false]

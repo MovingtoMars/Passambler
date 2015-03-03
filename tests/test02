@@ -1,7 +1,7 @@
---desc--
+--DESC--
 Tests assignment operators.
 
---input--
+--INPUT--
 a = 10;
 a += 10;
 a -= 5;
@@ -11,5 +11,5 @@ a ^= 2;
 
 return a;
 
---result--
+--RESULT--
 81

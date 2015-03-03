@@ -1,7 +1,7 @@
---desc--
+--DESC--
 Tests comparison operators.
 
---input--
+--INPUT--
 return [
     10 == 10,
     10 != 10,
@@ -16,5 +16,5 @@ return [
     7 <=> 5
 ];
 
---result--
+--RESULT--
 [true, false, true, true, true, true, 0, 1, -1, -1, 1]

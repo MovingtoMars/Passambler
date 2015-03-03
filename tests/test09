@@ -1,7 +1,7 @@
---desc--
+--DESC--
 Tests "and" and "or" operators.
 
---input--
+--INPUT--
 return [
     (5 == 5) && (3 == 3),
     (5 == 2) || (3 == 3),
@@ -13,5 +13,5 @@ return [
     (1 == 2) or (2 == 1)
 ];
 
---result--
+--RESULT--
 [true, true, false, false, true, true, false, false]

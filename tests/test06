@@ -1,7 +1,7 @@
---desc--
+--DESC--
 Tests while statement.
 
---input--
+--INPUT--
 a = 5;
 b = 0;
 
@@ -12,5 +12,5 @@ while (a < 10) {
 
 return [a, b];
 
---result--
+--RESULT--
 [10, 5]
