@@ -20,10 +20,6 @@ public class FunctionReverse extends Function {
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        if (arguments[0] instanceof ValueStr) {
-            return new ValueStr(new StringBuilder(((ValueStr) arguments[0]).getValue()).reverse().toString());
-        }
-
         ValueList value = (ValueList) arguments[0];
 
         ValueList subList = new ValueList();
