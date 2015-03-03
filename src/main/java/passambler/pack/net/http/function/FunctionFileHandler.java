@@ -1,9 +1,9 @@
-package passambler.pack.http.function;
+package passambler.pack.net.http.function;
 
 import passambler.function.Function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
-import passambler.pack.http.value.ValueFileHandler;
+import passambler.pack.net.http.value.ValueFileHandler;
 import passambler.value.Value;
 import passambler.value.ValueStr;
 

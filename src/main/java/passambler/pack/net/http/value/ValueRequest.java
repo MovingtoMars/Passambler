@@ -1,4 +1,4 @@
-package passambler.pack.http.value;
+package passambler.pack.net.http.value;
 
 import java.io.IOException;
 import java.net.URI;

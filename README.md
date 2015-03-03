@@ -7,14 +7,14 @@ Some packages aren't finished yet, but the language is usable.
 A simple Hello World program looks like this:
 
 ```
-import std.Writeln;
+import('std.Writeln');
 
 Writeln('Hello World!');
 ```
 
 A FizzBuzz program is written like this:
 ```
-import std.Writeln;
+import('std.Writeln');
 
 for (x : 0..100) {
     if ((x % 15) == 0) {

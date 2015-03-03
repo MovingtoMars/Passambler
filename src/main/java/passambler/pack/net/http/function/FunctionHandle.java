@@ -1,4 +1,4 @@
-package passambler.pack.http.function;
+package passambler.pack.net.http.function;
 
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -6,16 +6,23 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
+import org.apache.http.protocol.UriHttpRequestHandlerMapper;
 import passambler.function.Function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
-import passambler.pack.http.PackageHttp;
-import passambler.pack.http.value.ValueRequest;
-import passambler.pack.http.value.ValueResponse;
+import passambler.pack.net.http.PackageHttp;
+import passambler.pack.net.http.value.ValueRequest;
+import passambler.pack.net.http.value.ValueResponse;
 import passambler.value.Value;
 import passambler.value.ValueStr;
 
 public class FunctionHandle extends Function {
+    private UriHttpRequestHandlerMapper mapper;
+    
+    public FunctionHandle(UriHttpRequestHandlerMapper mapper) {
+        this.mapper = mapper;
+    }
+    
     @Override
     public int getArguments() {
         return 2;
@@ -32,7 +39,7 @@ public class FunctionHandle extends Function {
 
     @Override
     public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        PackageHttp.REQUEST_HANDLER.register(((ValueStr) arguments[0]).getValue(), arguments[1] instanceof HttpRequestHandler ? (HttpRequestHandler) arguments[1] : createHandlerFromFunction(parser, (Function) arguments[1]));
+        mapper.register(((ValueStr) arguments[0]).getValue(), arguments[1] instanceof HttpRequestHandler ? (HttpRequestHandler) arguments[1] : createHandlerFromFunction(parser, (Function) arguments[1]));
 
         return null;
     }

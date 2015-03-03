@@ -8,7 +8,17 @@ import passambler.value.ValueStr;
 
 public class PackageOs implements Package {
     @Override
-    public void addSymbols(Map<String, Value> symbols) {
+    public String getId() {
+        return "os";
+    }
+
+    @Override
+    public Package[] getChildren() {
+        return null;
+    }
+    
+    @Override
+    public void apply(Map<String, Value> symbols) {
         symbols.put("Exit", new FunctionExit());
         symbols.put("Time", new FunctionTime());
         symbols.put("Exec", new FunctionExec());

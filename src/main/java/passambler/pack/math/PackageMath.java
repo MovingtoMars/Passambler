@@ -8,7 +8,17 @@ import passambler.value.ValueNum;
 
 public class PackageMath implements Package {
     @Override
-    public void addSymbols(Map<String, Value> symbols) {
+    public String getId() {
+        return "math";
+    }
+
+    @Override
+    public Package[] getChildren() {
+        return null;
+    }
+    
+    @Override
+    public void apply(Map<String, Value> symbols) {
         symbols.put("Sin", new FunctionSin());
         symbols.put("Cos", new FunctionCos());
         symbols.put("Tan", new FunctionTan());

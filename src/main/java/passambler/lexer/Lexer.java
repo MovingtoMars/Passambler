@@ -17,10 +17,7 @@ public class Lexer {
     public Lexer(String input) {
         this.input = input;
 
-        tokenMap.put("package", Token.Type.PACKAGE);
-
         tokenMap.put("return", Token.Type.RETURN);
-        tokenMap.put("import", Token.Type.IMPORT);
         tokenMap.put("elseif", Token.Type.ELSEIF);
 
         tokenMap.put("while", Token.Type.WHILE);

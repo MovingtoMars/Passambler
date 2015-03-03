@@ -2,8 +2,6 @@
 Tests arithmetic operators.
 
 --INPUT--
-import std.Writeln;
-
 return [
     5 + 5,
     5 - 5,

@@ -1,8 +1,5 @@
 package passambler.parser;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +9,9 @@ import passambler.lexer.LexerException;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
 import passambler.function.Function;
+import passambler.pack.Package;
 import passambler.pack.file.PackageFile;
-import passambler.pack.http.PackageHttp;
+import passambler.pack.net.http.PackageHttp;
 import passambler.pack.math.PackageMath;
 import passambler.pack.net.PackageNet;
 import passambler.pack.os.PackageOs;
@@ -26,9 +24,7 @@ import passambler.value.ValueList;
 import passambler.value.ValueNum;
 
 public class Parser {
-    private Map<String, passambler.pack.Package> internalPackages = new HashMap<>();
-
-    private String packageName;
+    private List<Package> defaultPackages = new ArrayList<>();
 
     private Scope scope;
 
@@ -39,103 +35,25 @@ public class Parser {
     public Parser(Scope scope) {
         this.scope = scope;
 
-        internalPackages.put("std", new PackageStd());
-        internalPackages.put("math", new PackageMath());
-        internalPackages.put("file", new PackageFile());
-        internalPackages.put("os", new PackageOs());
-        internalPackages.put("net", new PackageNet());
-        internalPackages.put("thread", new PackageThread());
-        internalPackages.put("http", new PackageHttp());
+        defaultPackages.add(new PackageStd());
+        defaultPackages.add(new PackageMath());
+        defaultPackages.add(new PackageFile());
+        defaultPackages.add(new PackageOs());
+        defaultPackages.add(new PackageNet());
+        defaultPackages.add(new PackageThread());
+        defaultPackages.add(new PackageHttp());
+    }
+
+    public List<Package> getDefaultPackages() {
+        return defaultPackages;
     }
 
     public Scope getScope() {
         return scope;
     }
 
-    public String getPackageName() {
-        return packageName;
-    }
-
     public Value parse(TokenStream stream) throws ParserException {
-        if (stream.first().getType() == Token.Type.PACKAGE && stream.peek().getType() == Token.Type.IDENTIFIER) {
-            packageName = stream.peek().getValue();
-        } else if (stream.first().getType() == Token.Type.IMPORT) {
-            stream.next();
-
-            stream.match(Token.Type.IDENTIFIER);
-
-            String name = stream.current().getValue();
-
-            String symbolName = null, symbolRename = null;
-
-            boolean importAll = false;
-
-            if (stream.peek() != null && stream.peek().getType() == Token.Type.PERIOD) {
-                stream.next();
-                stream.next();
-
-                stream.match(Token.Type.IDENTIFIER, Token.Type.MULTIPLY);
-
-                if (stream.current().getType() == Token.Type.MULTIPLY) {
-                    importAll = true;
-                } else {
-                    symbolName = stream.current().getValue();
-                }
-            }
-
-            if (stream.peek() != null && stream.peek().getType() == Token.Type.ASSIGN) {
-                if (importAll) {
-                    throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "cannot rename symbol when importing the whole package");
-                }
-
-                stream.next();
-                stream.next();
-
-                stream.match(Token.Type.IDENTIFIER);
-
-                symbolRename = stream.current().getValue();
-            }
-
-            if (stream.peek() != null) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "end of statement expected");
-            }
-
-            Value packageValue = new Value();
-
-            Map<String, Value> symbols = new HashMap();
-
-            if (internalPackages.containsKey(name)) {
-                internalPackages.get(name).addSymbols(symbols);
-            } else {
-                Parser parser = new Parser();
-
-                try {
-                    parser.parse(new Lexer(String.join("\n", Files.readAllLines(Paths.get(name)))));
-                } catch (IOException | LexerException | ParserException e) {
-                    throw new RuntimeException(e);
-                }
-
-                symbols = parser.getScope().getSymbols();
-
-                name = parser.getPackageName();
-            }
-
-            for (Map.Entry<String, Value> symbol : symbols.entrySet()) {
-                if (Character.isUpperCase(symbol.getKey().charAt(0))) {
-                    if (symbolName != null) {
-                        if (symbol.getKey().equals(symbolName)) {
-                            scope.setSymbol(symbolRename != null ? symbolRename : symbol.getKey(), symbol.getValue());
-                        }
-                    } else if (importAll) {
-                        scope.setSymbol(symbol.getKey(), symbol.getValue());
-                    } else {
-                        packageValue.setProperty(symbol.getKey(), symbol.getValue());
-                    }
-                }
-            }
-
-            scope.setSymbol(symbolName == null && symbolRename != null ? symbolRename : name, packageValue);
-        } else if (stream.first().getType() == Token.Type.IF) {
+        if (stream.first().getType() == Token.Type.IF) {
             stream.next();
 
             boolean elseCondition = false;

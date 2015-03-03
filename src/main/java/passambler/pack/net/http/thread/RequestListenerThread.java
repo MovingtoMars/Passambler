@@ -1,4 +1,4 @@
-package passambler.pack.http;
+package passambler.pack.net.http.thread;
 
 import java.io.IOException;
 import java.net.ServerSocket;

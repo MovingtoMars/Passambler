@@ -1,4 +1,4 @@
-package passambler.pack.http.function;
+package passambler.pack.net.http.function;
 
 import org.apache.http.protocol.HttpProcessor;
 import org.apache.http.protocol.HttpProcessorBuilder;
@@ -7,16 +7,22 @@ import org.apache.http.protocol.ResponseConnControl;
 import org.apache.http.protocol.ResponseContent;
 import org.apache.http.protocol.ResponseDate;
 import org.apache.http.protocol.ResponseServer;
+import org.apache.http.protocol.UriHttpRequestHandlerMapper;
 import passambler.function.Function;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
-import passambler.pack.http.PackageHttp;
-import passambler.pack.http.RequestListenerThread;
+import passambler.pack.net.http.thread.RequestListenerThread;
 import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueNum;
 
 public class FunctionServe extends Function {
+    private UriHttpRequestHandlerMapper mapper;
+
+    public FunctionServe(UriHttpRequestHandlerMapper mapper) {
+        this.mapper = mapper;
+    }
+
     @Override
     public int getArguments() {
         return 1;
@@ -36,7 +42,7 @@ public class FunctionServe extends Function {
                 .add(new ResponseContent())
                 .add(new ResponseConnControl()).build();
 
-            HttpService httpService = new HttpService(httpProcessor, PackageHttp.REQUEST_HANDLER);
+            HttpService httpService = new HttpService(httpProcessor, mapper);
 
             Thread requestListener = new RequestListenerThread(((ValueNum) arguments[0]).getValue().intValue(), httpService);
             requestListener.setDaemon(false);

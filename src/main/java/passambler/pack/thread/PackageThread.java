@@ -7,7 +7,17 @@ import passambler.value.Value;
 
 public class PackageThread implements Package {
     @Override
-    public void addSymbols(Map<String, Value> symbols) {
+    public String getId() {
+        return "thread";
+    }
+
+    @Override
+    public Package[] getChildren() {
+        return null;
+    }
+
+    @Override
+    public void apply(Map<String, Value> symbols) {
         symbols.put("Start", new FunctionStart());
         symbols.put("Sleep", new FunctionSleep());
     }

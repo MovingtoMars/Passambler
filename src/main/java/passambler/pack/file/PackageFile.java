@@ -7,7 +7,17 @@ import passambler.value.Value;
 
 public class PackageFile implements Package {
     @Override
-    public void addSymbols(Map<String, Value> symbols) {
+    public String getId() {
+        return "file";
+    }
+
+    @Override
+    public Package[] getChildren() {
+        return null;
+    }
+    
+    @Override
+    public void apply(Map<String, Value> symbols) {
         symbols.put("Create", new FunctionCreate());
         symbols.put("Exists", new FunctionExists());
         symbols.put("Delete", new FunctionDelete());

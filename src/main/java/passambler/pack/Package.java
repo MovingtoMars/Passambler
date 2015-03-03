@@ -4,5 +4,9 @@ import java.util.Map;
 import passambler.value.Value;
 
 public interface Package {
-    public void addSymbols(Map<String, Value> symbols);
+    public String getId();
+
+    public Package[] getChildren();
+
+    public void apply(Map<String, Value> symbols);
 }

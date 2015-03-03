@@ -8,7 +8,17 @@ import passambler.value.Value;
 
 public class PackageStd implements Package {
     @Override
-    public void addSymbols(Map<String, Value> symbols) {
+    public String getId() {
+        return "std";
+    }
+
+    @Override
+    public Package[] getChildren() {
+        return null;
+    }
+    
+    @Override
+    public void apply(Map<String, Value> symbols) {
         symbols.put("Write", new FunctionWrite(new ValueOut(), false));
         symbols.put("Writeln", new FunctionWrite(new ValueOut(), true));
         symbols.put("Read", new FunctionRead());
