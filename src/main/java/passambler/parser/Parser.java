@@ -12,13 +12,13 @@ import passambler.lexer.LexerException;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
 import passambler.function.Function;
-import passambler.pkg.file.PackageFile;
-import passambler.pkg.http.PackageHttp;
-import passambler.pkg.math.PackageMath;
-import passambler.pkg.net.PackageNet;
-import passambler.pkg.os.PackageOs;
-import passambler.pkg.std.PackageStd;
-import passambler.pkg.thread.PackageThread;
+import passambler.pack.file.PackageFile;
+import passambler.pack.http.PackageHttp;
+import passambler.pack.math.PackageMath;
+import passambler.pack.net.PackageNet;
+import passambler.pack.os.PackageOs;
+import passambler.pack.std.PackageStd;
+import passambler.pack.thread.PackageThread;
 import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueDict;
@@ -26,7 +26,7 @@ import passambler.value.ValueList;
 import passambler.value.ValueNum;
 
 public class Parser {
-    private Map<String, passambler.pkg.Package> internalPackages = new HashMap<>();
+    private Map<String, passambler.pack.Package> internalPackages = new HashMap<>();
 
     private String packageName;
 
