@@ -15,7 +15,7 @@ public class FunctionReverse extends Function {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof ValueList || value instanceof ValueStr;
+        return value instanceof ValueList;
     }
 
     @Override
