@@ -37,6 +37,7 @@ public class ValueRequest extends Value {
         try {
             if (request instanceof HttpEntityEnclosingRequest) {
                 HttpEntityEnclosingRequest enclosingRequest = (HttpEntityEnclosingRequest) request;
+
                 URLEncodedUtils.parse(enclosingRequest.getEntity()).stream().forEach((pair) -> {
                     form.setEntry(new ValueStr(pair.getName()), pair.getValue().trim().isEmpty() ? Value.VALUE_NIL : new ValueStr(pair.getValue()));
                 });
