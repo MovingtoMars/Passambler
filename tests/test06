@@ -1,4 +1,4 @@
---DESC--
+--TEST--
 Tests while statement.
 
 --INPUT--

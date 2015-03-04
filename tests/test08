@@ -1,4 +1,4 @@
---DESC--
+--TEST--
 Tests function and anonymous function declaration.
 
 --INPUT--

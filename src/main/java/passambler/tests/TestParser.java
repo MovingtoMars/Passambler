@@ -34,7 +34,7 @@ public class TestParser {
             }
         }
 
-        return new Test(getSection("DESC"), getSection("INPUT"), getSection("OUTPUT"), getSection("RESULT"));
+        return new Test(getSection("TEST"), getSection("INPUT"), getSection("OUTPUT"), getSection("RESULT"));
     }
 
     public String getSection(String name) {
