@@ -1,8 +1,8 @@
 package passambler.pack.std.function;
 
-import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.function.Function;
+import passambler.function.FunctionContext;
 import passambler.value.Value;
 import passambler.value.ValueDict;
 import passambler.value.ValueList;
@@ -19,10 +19,10 @@ public class FunctionEntries extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
+    public Value invoke(FunctionContext context) throws ParserException {
         ValueList list = new ValueList();
 
-        ((ValueDict) arguments[0]).getValue().entrySet().stream().forEach((set) -> {
+        ((ValueDict) context.getArgument(0)).getValue().entrySet().stream().forEach((set) -> {
             Value value = new Value();
 
             value.setProperty("Key", set.getKey());

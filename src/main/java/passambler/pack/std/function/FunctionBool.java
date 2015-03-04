@@ -1,8 +1,8 @@
 package passambler.pack.std.function;
 
-import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.function.Function;
+import passambler.function.FunctionContext;
 import passambler.value.Value;
 import passambler.value.ValueBool;
 
@@ -18,9 +18,9 @@ public class FunctionBool extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
+    public Value invoke(FunctionContext context) throws ParserException {
         try {
-            return new ValueBool(Boolean.valueOf(arguments[0].toString()));
+            return new ValueBool(Boolean.valueOf(context.getArgument(0).toString()));
         } catch (Exception e) {
             return new ValueBool(false);
         }

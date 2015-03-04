@@ -1,7 +1,7 @@
 package passambler.pack.std.function;
 
 import passambler.function.Function;
-import passambler.parser.Parser;
+import passambler.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueList;
@@ -23,16 +23,16 @@ public class FunctionJoin extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
+    public Value invoke(FunctionContext context) throws ParserException {
         StringBuilder builder = new StringBuilder();
 
-        ValueList list = (ValueList) arguments[0];
+        ValueList list = (ValueList) context.getArgument(0);
 
         for (Value value : list.getValue()) {
             builder.append(value.toString());
 
             if (value != list.getValue().get(list.getValue().size() - 1)) {
-                builder.append(((ValueStr) arguments[1]).getValue());
+                builder.append(((ValueStr) context.getArgument(1)).getValue());
             }
         }
 

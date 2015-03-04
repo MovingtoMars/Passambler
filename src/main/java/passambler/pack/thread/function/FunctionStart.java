@@ -3,7 +3,7 @@ package passambler.pack.thread.function;
 import java.util.ArrayList;
 import java.util.List;
 import passambler.function.Function;
-import passambler.parser.Parser;
+import passambler.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 
@@ -23,24 +23,24 @@ public class FunctionStart extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
+    public Value invoke(FunctionContext context) throws ParserException {
         new Runnable() {
             @Override
             public void run() {
                 try {
-                    Function function = (Function) arguments[0];
+                    Function function = (Function) context.getArgument(0);
 
-                    if (function.getArguments() != arguments.length - 1) {
-                        throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, null, function.getArguments(), arguments.length - 1);
+                    if (function.getArguments() != context.getArguments().length - 1) {
+                        throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, null, function.getArguments(), context.getArguments().length - 1);
                     }
 
                     List<Value> values = new ArrayList<>();
 
-                    for (int i = 1; i < arguments.length; ++i) {
-                        values.add(arguments[i]);
+                    for (int i = 1; i < context.getArguments().length; ++i) {
+                        values.add(context.getArgument(i));
                     }
 
-                    function.invoke(parser, values.toArray(new Value[values.size()]));
+                    function.invoke(new FunctionContext(context.getParser(), values.toArray(new Value[values.size()])));
                 } catch (ParserException e) {
                     throw new RuntimeException(e);
                 }

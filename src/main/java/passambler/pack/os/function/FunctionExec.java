@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import passambler.function.Function;
+import passambler.function.FunctionContext;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.value.Value;
@@ -21,11 +22,11 @@ public class FunctionExec extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
+    public Value invoke(FunctionContext context) throws ParserException {
         Process process;
 
         try {
-            process = Runtime.getRuntime().exec(((ValueStr) arguments[0]).getValue());
+            process = Runtime.getRuntime().exec(((ValueStr) context.getArgument(0)).getValue());
             process.waitFor();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));

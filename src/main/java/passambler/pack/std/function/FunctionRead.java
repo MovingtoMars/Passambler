@@ -1,8 +1,8 @@
 package passambler.pack.std.function;
 
-import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.function.Function;
+import passambler.function.FunctionContext;
 import passambler.value.Value;
 import passambler.value.ReadHandler;
 
@@ -18,7 +18,7 @@ public class FunctionRead extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        return ((ReadHandler) arguments[0]).read();
+    public Value invoke(FunctionContext context) throws ParserException {
+        return ((ReadHandler) context.getArgument(0)).read();
     }
 }

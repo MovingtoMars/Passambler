@@ -9,7 +9,7 @@ import org.apache.http.protocol.ResponseDate;
 import org.apache.http.protocol.ResponseServer;
 import org.apache.http.protocol.UriHttpRequestHandlerMapper;
 import passambler.function.Function;
-import passambler.parser.Parser;
+import passambler.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.pack.net.http.thread.RequestListenerThread;
 import passambler.value.Value;
@@ -34,17 +34,17 @@ public class FunctionServe extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
+    public Value invoke(FunctionContext context) throws ParserException {
         try {
             HttpProcessor httpProcessor = HttpProcessorBuilder.create()
                 .add(new ResponseDate())
-                .add(new ResponseServer("PassamblerHTTP/1.1"))
+                .add(new ResponseServer("Passambler/1.1"))
                 .add(new ResponseContent())
                 .add(new ResponseConnControl()).build();
 
             HttpService httpService = new HttpService(httpProcessor, mapper);
 
-            Thread requestListener = new RequestListenerThread(((ValueNum) arguments[0]).getValue().intValue(), httpService);
+            Thread requestListener = new RequestListenerThread(((ValueNum) context.getArgument(0)).getValue().intValue(), httpService);
             requestListener.setDaemon(false);
             requestListener.start();
 

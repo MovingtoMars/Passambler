@@ -1,8 +1,8 @@
 package passambler.pack.std.function;
 
-import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.function.Function;
+import passambler.function.FunctionContext;
 import passambler.value.Value;
 import passambler.value.ValueStr;
 import passambler.value.WriteHandler;
@@ -28,21 +28,21 @@ public class FunctionWrite extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
+    public Value invoke(FunctionContext context) throws ParserException {
         WriteHandler handler = this.handler;
 
-        if (arguments.length > 0 && arguments[0] instanceof WriteHandler) {
-            handler = (WriteHandler) arguments[0];
+        if (context.getArguments().length > 0 && context.getArgument(0) instanceof WriteHandler) {
+            handler = (WriteHandler) context.getArgument(0);
         }
 
-        for (Value argument : arguments) {
-            if (argument == arguments[0] && argument instanceof WriteHandler) {
+        for (Value argument : context.getArguments()) {
+            if (argument == context.getArgument(0) && argument instanceof WriteHandler) {
                 continue;
             }
 
             handler.write(argument);
 
-            if (argument != arguments[arguments.length - 1]) {
+            if (argument != context.getArgument(context.getArguments().length - 1)) {
                 handler.write(new ValueStr(" "));
             }
         }

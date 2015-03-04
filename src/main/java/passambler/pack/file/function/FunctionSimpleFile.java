@@ -3,7 +3,7 @@ package passambler.pack.file.function;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import passambler.function.Function;
-import passambler.parser.Parser;
+import passambler.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueStr;
@@ -20,8 +20,8 @@ public abstract class FunctionSimpleFile extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        return getValue(Paths.get(((ValueStr) arguments[0]).getValue()));
+    public Value invoke(FunctionContext context) throws ParserException {
+        return getValue(Paths.get(((ValueStr) context.getArgument(0)).getValue()));
     }
 
     public abstract Value getValue(Path file);

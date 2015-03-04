@@ -1,8 +1,8 @@
 package passambler.pack.std.function;
 
-import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.function.Function;
+import passambler.function.FunctionContext;
 import passambler.value.Value;
 import passambler.value.ValueList;
 import passambler.value.ValueNum;
@@ -19,7 +19,7 @@ public class FunctionSize extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        return new ValueNum(((ValueList) arguments[0]).getValue().size());
+    public Value invoke(FunctionContext context) throws ParserException {
+        return new ValueNum(((ValueList) context.getArgument(0)).getValue().size());
     }
 }

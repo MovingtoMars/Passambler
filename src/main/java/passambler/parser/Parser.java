@@ -9,6 +9,7 @@ import passambler.lexer.LexerException;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
 import passambler.function.Function;
+import passambler.function.FunctionContext;
 import passambler.pack.Package;
 import passambler.pack.file.PackageFile;
 import passambler.pack.net.http.PackageHttp;
@@ -302,9 +303,9 @@ public class Parser {
                 }
 
                 @Override
-                public Value invoke(Parser parser, Value... arguments) throws ParserException {
+                public Value invoke(FunctionContext context) throws ParserException {
                     for (int i = 0; i < argumentNames.size(); ++i) {
-                        callback.getParser().getScope().setSymbol(argumentNames.get(i), arguments[i]);
+                        callback.getParser().getScope().setSymbol(argumentNames.get(i), context.getArgument(i));
                     }
 
                     return callback.invoke();

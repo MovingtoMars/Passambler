@@ -1,7 +1,7 @@
 package passambler.pack.std.function;
 
 import passambler.function.Function;
-import passambler.parser.Parser;
+import passambler.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueBool;
@@ -23,15 +23,15 @@ public class FunctionFilter extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        ValueList list = (ValueList) arguments[0];
+    public Value invoke(FunctionContext context) throws ParserException {
+        ValueList list = (ValueList) context.getArgument(0);
 
+        Function callback = (Function) context.getArgument(1);
+        
         ValueList filteredList = new ValueList();
 
-        Function callback = (Function) arguments[1];
-
         for (int i = 0; i < list.getValue().size(); ++i) {
-            Value result = callback.invoke(parser, new Value[]{list.getValue().get(i)});
+            Value result = callback.invoke(new FunctionContext(context.getParser(), new Value[] { list.getValue().get(i) }));
 
             if (!(result instanceof ValueBool)) {
                 throw new ParserException(ParserException.Type.EXPECTED_A_BOOL);

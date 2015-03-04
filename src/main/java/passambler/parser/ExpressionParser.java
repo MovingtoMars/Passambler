@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import passambler.function.Function;
+import passambler.function.FunctionContext;
 import passambler.value.Value;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
@@ -14,14 +15,22 @@ import passambler.value.ValueNum;
 import passambler.value.ValueStr;
 
 public class ExpressionParser {
+    private boolean assignment;
+    
     private Parser parser;
 
     private TokenStream stream;
 
     public ExpressionParser(Parser parser, TokenStream stream) {
+        this(parser, stream, false);
+    }
+    
+    public ExpressionParser(Parser parser, TokenStream stream, boolean assignment) {
         this.parser = parser;
 
         this.stream = stream;
+        
+        this.assignment = assignment;
     }
 
     public Value parse() throws ParserException {
@@ -124,9 +133,9 @@ public class ExpressionParser {
             }
 
             @Override
-            public Value invoke(Parser parser, Value... arguments) throws ParserException {
+            public Value invoke(FunctionContext context) throws ParserException {
                 for (int i = 0; i < argumentNames.size(); ++i) {
-                    callback.getParser().getScope().setSymbol(argumentNames.get(i), arguments[i]);
+                    callback.getParser().getScope().setSymbol(argumentNames.get(i), context.getArgument(i));
                 }
 
                 return callback.invoke();
@@ -213,7 +222,7 @@ public class ExpressionParser {
 
             Value[] vals = new Value[arguments.size()];
 
-            return currentFunction.invoke(parser, arguments.toArray(vals));
+            return currentFunction.invoke(new FunctionContext(parser, arguments.toArray(vals), assignment));
         } else if (!tokens.isEmpty()) {
             return new ExpressionParser(parser, new TokenStream(tokens)).parse();
         }

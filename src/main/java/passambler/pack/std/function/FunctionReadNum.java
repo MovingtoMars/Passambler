@@ -2,7 +2,7 @@ package passambler.pack.std.function;
 
 import java.util.Scanner;
 import passambler.function.Function;
-import passambler.parser.Parser;
+import passambler.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueBool;
@@ -20,8 +20,8 @@ public class FunctionReadNum extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        boolean floating = arguments.length == 0 ? false : ((ValueBool) arguments[0]).getValue();
+    public Value invoke(FunctionContext context) throws ParserException {
+        boolean floating = context.getArguments().length == 0 ? false : ((ValueBool) context.getArgument(0)).getValue();
 
         Scanner scanner = new Scanner(System.in);
 

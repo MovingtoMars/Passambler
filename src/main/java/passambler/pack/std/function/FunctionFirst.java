@@ -1,8 +1,8 @@
 package passambler.pack.std.function;
 
-import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.function.Function;
+import passambler.function.FunctionContext;
 import passambler.value.ValueList;
 import passambler.value.Value;
 
@@ -18,7 +18,7 @@ public class FunctionFirst extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        return ((ValueList) arguments[0]).getValue().get(0);
+    public Value invoke(FunctionContext context) throws ParserException {
+        return ((ValueList) context.getArgument(0)).getValue().get(0);
     }
 }

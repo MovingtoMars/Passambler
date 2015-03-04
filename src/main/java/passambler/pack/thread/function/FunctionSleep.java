@@ -1,7 +1,7 @@
 package passambler.pack.thread.function;
 
 import passambler.function.Function;
-import passambler.parser.Parser;
+import passambler.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueBool;
@@ -19,9 +19,9 @@ public class FunctionSleep extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
+    public Value invoke(FunctionContext context) throws ParserException {
         try {
-            Thread.sleep(((ValueNum) arguments[0]).getValue().intValue());
+            Thread.sleep(((ValueNum) context.getArgument(0)).getValue().intValue());
 
             return new ValueBool(true);
         } catch (InterruptedException e) {

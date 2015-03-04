@@ -2,7 +2,7 @@ package passambler.pack.net.function;
 
 import java.io.IOException;
 import passambler.function.Function;
-import passambler.parser.Parser;
+import passambler.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.pack.net.value.ValueServerSocket;
 import passambler.value.Value;
@@ -21,9 +21,9 @@ public class FunctionListen extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
+    public Value invoke(FunctionContext context) throws ParserException {
         try {
-            return new ValueServerSocket(((ValueNum) arguments[0]).getValue().intValue());
+            return new ValueServerSocket(((ValueNum) context.getArgument(0)).getValue().intValue());
         } catch (IOException e) {
             return new ValueBool(false);
         }

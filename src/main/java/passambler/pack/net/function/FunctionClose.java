@@ -2,7 +2,7 @@ package passambler.pack.net.function;
 
 import java.io.IOException;
 import passambler.function.Function;
-import passambler.parser.Parser;
+import passambler.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.pack.net.value.ValueServerSocket;
 import passambler.pack.net.value.ValueSocket;
@@ -21,12 +21,12 @@ public class FunctionClose extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
+    public Value invoke(FunctionContext context) throws ParserException {
         try {
-            if (arguments[0] instanceof ValueSocket) {
-                ((ValueSocket) arguments[0]).getValue().close();
-            } else if (arguments[0] instanceof ValueServerSocket) {
-                ((ValueServerSocket) arguments[0]).getValue().close();
+            if (context.getArgument(0) instanceof ValueSocket) {
+                ((ValueSocket) context.getArgument(0)).getValue().close();
+            } else if (context.getArgument(1) instanceof ValueServerSocket) {
+                ((ValueServerSocket) context.getArgument(1)).getValue().close();
             }
 
             return new ValueBool(true);

@@ -38,7 +38,7 @@ public class AssignmentParser {
 
         stream.next();
 
-        Value rightValue = new ExpressionParser(parser, new TokenStream(stream.rest())).parse();
+        Value rightValue = new ExpressionParser(parser, new TokenStream(stream.rest()), true).parse();
         Value leftValue = new Value();
 
         TokenStream leftStream = new TokenStream(tokens);

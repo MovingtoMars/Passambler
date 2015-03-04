@@ -1,6 +1,5 @@
 package passambler.function;
 
-import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 
@@ -9,5 +8,5 @@ public abstract class Function extends Value {
 
     public abstract boolean isArgumentValid(Value value, int argument);
 
-    public abstract Value invoke(Parser parser, Value... arguments) throws ParserException;
+    public abstract Value invoke(FunctionContext context) throws ParserException;
 }

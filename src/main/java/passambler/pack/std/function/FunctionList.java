@@ -1,7 +1,7 @@
 package passambler.pack.std.function;
 
 import passambler.function.Function;
-import passambler.parser.Parser;
+import passambler.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueList;
@@ -19,10 +19,10 @@ public class FunctionList extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
+    public Value invoke(FunctionContext context) throws ParserException {
         ValueList list = new ValueList();
 
-        for (char c : ((ValueStr) arguments[0]).getValue().toCharArray()) {
+        for (char c : ((ValueStr) context.getArgument(0)).getValue().toCharArray()) {
             list.getValue().add(new ValueStr(String.valueOf(c)));
         }
 

@@ -1,8 +1,8 @@
 package passambler.pack.std.function;
 
-import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.function.Function;
+import passambler.function.FunctionContext;
 import passambler.value.Value;
 import passambler.value.ValueStr;
 
@@ -18,7 +18,7 @@ public class FunctionReplace extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        return new ValueStr(((ValueStr) arguments[0]).getValue().replace(((ValueStr) arguments[1]).getValue(), ((ValueStr) arguments[2]).getValue()));
+    public Value invoke(FunctionContext context) throws ParserException {
+        return new ValueStr(((ValueStr) context.getArgument(0)).getValue().replace(((ValueStr) context.getArgument(1)).getValue(), ((ValueStr) context.getArgument(2)).getValue()));
     }
 }

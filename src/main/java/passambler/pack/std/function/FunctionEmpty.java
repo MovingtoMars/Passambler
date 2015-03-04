@@ -1,8 +1,8 @@
 package passambler.pack.std.function;
 
-import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.function.Function;
+import passambler.function.FunctionContext;
 import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueList;
@@ -19,7 +19,7 @@ public class FunctionEmpty extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        return new ValueBool(((ValueList) arguments[0]).getValue().isEmpty());
+    public Value invoke(FunctionContext context) throws ParserException {
+        return new ValueBool(((ValueList) context.getArgument(0)).getValue().isEmpty());
     }
 }

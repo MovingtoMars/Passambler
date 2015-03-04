@@ -8,9 +8,9 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.apache.http.protocol.UriHttpRequestHandlerMapper;
 import passambler.function.Function;
+import passambler.function.FunctionContext;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
-import passambler.pack.net.http.PackageHttp;
 import passambler.pack.net.http.value.ValueRequest;
 import passambler.pack.net.http.value.ValueResponse;
 import passambler.value.Value;
@@ -38,8 +38,8 @@ public class FunctionHandle extends Function {
     }
 
     @Override
-    public Value invoke(Parser parser, Value... arguments) throws ParserException {
-        mapper.register(((ValueStr) arguments[0]).getValue(), arguments[1] instanceof HttpRequestHandler ? (HttpRequestHandler) arguments[1] : createHandlerFromFunction(parser, (Function) arguments[1]));
+    public Value invoke(FunctionContext context) throws ParserException {
+        mapper.register(((ValueStr) context.getArgument(0)).getValue(), context.getArgument(1) instanceof HttpRequestHandler ? (HttpRequestHandler) context.getArgument(1) : createHandlerFromFunction(context.getParser(), (Function) context.getArgument(1)));
 
         return null;
     }
@@ -50,7 +50,7 @@ public class FunctionHandle extends Function {
                 ValueRequest request = new ValueRequest(httpContext, httpRequest);
                 ValueResponse response = new ValueResponse(httpContext, httpResponse);
 
-                function.invoke(parser, new Value[]{request, response});
+                function.invoke(new FunctionContext(parser, new Value[] { request, response }));
 
                 httpResponse.setHeaders(response.getHeaders());
                 httpResponse.setStatusCode(response.getStatus());
