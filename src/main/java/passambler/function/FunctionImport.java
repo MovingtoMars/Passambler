@@ -23,6 +23,10 @@ public class FunctionImport extends Function {
 
     @Override
     public Value invoke(FunctionContext context) throws ParserException {
+        if (context.isAssignment() && context.getArguments().length > 1) {
+            throw new ParserException(ParserException.Type.BAD_SYNTAX, null, "can only import one value when assigning");
+        }
+
         for (int i = 0; i < context.getArguments().length; ++i) {
             String specificValue = null;
 
@@ -61,12 +65,22 @@ public class FunctionImport extends Function {
                 currentPackage.apply(symbols);
 
                 if (specificValue != null) {
-                    final String value = specificValue;
+                    final String key = specificValue;
 
-                    if (value.equals("*")) {
+                    if (key.equals("*")) {
+                        if (context.isAssignment()) {
+                            throw new ParserException(ParserException.Type.BAD_SYNTAX, null, "can't import with * when assigning");
+                        }
+
                         context.getParser().getScope().getSymbols().putAll(symbols);
                     } else {
-                        context.getParser().getScope().setSymbol(value, symbols.entrySet().stream().filter(s -> s.getKey().equals(value)).findFirst().get().getValue());
+                        Value value = symbols.entrySet().stream().filter(s -> s.getKey().equals(key)).findFirst().get().getValue();
+
+                        if (context.isAssignment()) {
+                            return value;
+                        } else {
+                            context.getParser().getScope().setSymbol(key, value);
+                        }
                     }
                 } else {
                     Value value = new Value();
@@ -75,7 +89,11 @@ public class FunctionImport extends Function {
                         value.setProperty(symbol.getKey(), symbol.getValue());
                     }
 
-                    context.getParser().getScope().setSymbol(currentPackageName, value);
+                    if (context.isAssignment()) {
+                        return value;
+                    } else {
+                        context.getParser().getScope().setSymbol(currentPackageName, value);
+                    }
                 }
             }
         }
