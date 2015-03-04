@@ -28,8 +28,6 @@ public class Lexer {
 
         tokenMap.put("<=>", Token.Type.COMPARE);
 
-        tokenMap.put("and", Token.Type.AND);
-
         tokenMap.put("fn", Token.Type.FN);
         tokenMap.put("if", Token.Type.IF);
 
@@ -39,9 +37,7 @@ public class Lexer {
         tokenMap.put("<=", Token.Type.LTE);
 
         tokenMap.put("&&", Token.Type.AND);
-
         tokenMap.put("||", Token.Type.OR);
-        tokenMap.put("or", Token.Type.OR);
 
         tokenMap.put("..", Token.Type.RANGE);
         tokenMap.put("+=", Token.Type.ASSIGN_PLUS);
