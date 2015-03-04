@@ -8,6 +8,7 @@ import org.apache.http.protocol.ResponseContent;
 import org.apache.http.protocol.ResponseDate;
 import org.apache.http.protocol.ResponseServer;
 import org.apache.http.protocol.UriHttpRequestHandlerMapper;
+import passambler.Main;
 import passambler.function.Function;
 import passambler.function.FunctionContext;
 import passambler.parser.ParserException;
@@ -38,7 +39,7 @@ public class FunctionServe extends Function {
         try {
             HttpProcessor httpProcessor = HttpProcessorBuilder.create()
                 .add(new ResponseDate())
-                .add(new ResponseServer("Passambler/1.1"))
+                .add(new ResponseServer("Passambler/" + Main.VERSION))
                 .add(new ResponseContent())
                 .add(new ResponseConnControl()).build();
 
