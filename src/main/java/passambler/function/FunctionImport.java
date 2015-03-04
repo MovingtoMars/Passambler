@@ -24,7 +24,7 @@ public class FunctionImport extends Function {
     @Override
     public Value invoke(FunctionContext context) throws ParserException {
         if (context.isAssignment() && context.getArguments().length > 1) {
-            throw new ParserException(ParserException.Type.BAD_SYNTAX, null, "can only import one value when assigning");
+            throw new ParserException(ParserException.Type.BAD_SYNTAX, null, "can only import 1 value when assigning");
         }
 
         for (int i = 0; i < context.getArguments().length; ++i) {
@@ -48,12 +48,18 @@ public class FunctionImport extends Function {
 
                 if (currentPackage == null) {
                     if (context.getParser().getDefaultPackages().stream().anyMatch(p -> p.getId().equals(child))) {
-                        currentPackage = context.getParser().getDefaultPackages().stream().filter(p -> p.getId().equals(child)).findFirst().get();
+                        currentPackage = context.getParser().getDefaultPackages().stream()
+                            .filter(p -> p.getId().equals(child))
+                            .findFirst()
+                            .get();
                     } else {
                         currentPackage = new PackageFileSystem(Paths.get(child));
                     }
                 } else {
-                    currentPackage = Arrays.asList(currentPackage.getChildren()).stream().filter(p -> p.getId().equals(child)).findFirst().get();
+                    currentPackage = Arrays.asList(currentPackage.getChildren()).stream()
+                        .filter(p -> p.getId().equals(child))
+                        .findFirst()
+                        .orElseThrow(() -> new ParserException(ParserException.Type.UNDEFINED_PACKAGE, null, child));
                 }
 
                 currentPackageName = child;
@@ -74,7 +80,11 @@ public class FunctionImport extends Function {
 
                         context.getParser().getScope().getSymbols().putAll(symbols);
                     } else {
-                        Value value = symbols.entrySet().stream().filter(s -> s.getKey().equals(key)).findFirst().get().getValue();
+                        Value value = symbols.entrySet().stream()
+                            .filter(s -> s.getKey().equals(key))
+                            .findFirst()
+                            .orElseThrow(() -> new ParserException(ParserException.Type.UNDEFINED_PROPERTY, null, key))
+                            .getValue();
 
                         if (context.isAssignment()) {
                             return value;
