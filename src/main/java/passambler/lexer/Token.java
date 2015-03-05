@@ -13,7 +13,7 @@ public class Token {
         SEMI_COL, COL,
         LBRACE, RBRACE,
         EQUAL, NEQUAL, GT, LT, GTE, LTE, NOT,
-        AND, OR,
+        AND, OR, TERNARY,
         FN, RETURN,
         IF, ELSEIF, ELSE;
 

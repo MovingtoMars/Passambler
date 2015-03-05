@@ -16,7 +16,7 @@ import passambler.value.ValueStr;
 
 public class ExpressionParser {
     private boolean assignment;
-    
+
     private Parser parser;
 
     private TokenStream stream;
@@ -24,12 +24,12 @@ public class ExpressionParser {
     public ExpressionParser(Parser parser, TokenStream stream) {
         this(parser, stream, false);
     }
-    
+
     public ExpressionParser(Parser parser, TokenStream stream, boolean assignment) {
         this.parser = parser;
 
         this.stream = stream;
-        
+
         this.assignment = assignment;
     }
 
@@ -55,6 +55,8 @@ public class ExpressionParser {
                 value = parseParen(value);
             } else if (token.getType() == Token.Type.FN) {
                 value = parseFunction();
+            } else if (token.getType() == Token.Type.TERNARY) {
+                value = parseTernary(value);
             } else if (!token.getType().isOperator()) {
                 throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
             }
@@ -86,7 +88,7 @@ public class ExpressionParser {
                         }
                     }
 
-                    Value operatorChange = value.onOperator(new ExpressionParser(parser, new TokenStream(tokens)).parse(), operatorToken.getType());
+                    Value operatorChange = value.onOperator(new ExpressionParser(parser, new TokenStream(tokens), assignment).parse(), operatorToken.getType());
 
                     if (operatorChange == null) {
                         throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, operatorToken.getPosition(), operatorToken.getType());
@@ -110,6 +112,50 @@ public class ExpressionParser {
         }
 
         return value;
+    }
+
+    private Value parseTernary(Value currentValue) throws ParserException {
+        if (!(currentValue instanceof ValueBool)) {
+            throw new ParserException(ParserException.Type.EXPECTED_A_BOOL, stream.current().getPosition());
+        }
+
+        stream.next();
+
+        List<Token> tokens = new ArrayList<>();
+
+        int brackets = 0, paren = 0, braces = 0;
+
+        while (stream.hasNext()) {
+            if (stream.current().getType() == Token.Type.LBRACKET) {
+                brackets++;
+            } else if (stream.current().getType() == Token.Type.RBRACKET) {
+                brackets--;
+            } else if (stream.current().getType() == Token.Type.LPAREN) {
+                paren++;
+            } else if (stream.current().getType() == Token.Type.RPAREN) {
+                paren--;
+            } else if (stream.current().getType() == Token.Type.LBRACE) {
+                braces++;
+            } else if (stream.current().getType() == Token.Type.RBRACE) {
+                braces--;
+            }
+
+            if (brackets == 0 && paren == 0 && braces == 0 && stream.current().getType() == Token.Type.COL) {
+                break;
+            } else {
+                tokens.add(stream.current());
+
+                stream.next();
+            }
+        }
+
+        stream.match(Token.Type.COL);
+        stream.next();
+
+        Value ifTrue = new ExpressionParser(parser, new TokenStream(tokens), assignment).parse();
+        Value ifFalse = new ExpressionParser(parser, new TokenStream(stream.rest()), assignment).parse();
+
+        return ((ValueBool) currentValue).getValue() == true ? ifTrue : ifFalse;
     }
 
     private Value parseFunction() throws ParserException {
@@ -194,7 +240,7 @@ public class ExpressionParser {
                         argumentTokens.remove(argumentTokens.size() - 1);
                     }
 
-                    arguments.add(new ExpressionParser(parser, new TokenStream(argumentTokens)).parse());
+                    arguments.add(new ExpressionParser(parser, new TokenStream(argumentTokens), assignment).parse());
 
                     argumentTokens.clear();
                 }
@@ -224,7 +270,7 @@ public class ExpressionParser {
 
             return currentFunction.invoke(new FunctionContext(parser, arguments.toArray(vals), assignment));
         } else if (!tokens.isEmpty()) {
-            return new ExpressionParser(parser, new TokenStream(tokens)).parse();
+            return new ExpressionParser(parser, new TokenStream(tokens), assignment).parse();
         }
 
         return null;
@@ -246,7 +292,7 @@ public class ExpressionParser {
                         throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "no value specified");
                     }
                 } else {
-                    inlineDeclaration.getValue().add(new ExpressionParser(parser, new TokenStream(tokens)).parse());
+                    inlineDeclaration.getValue().add(new ExpressionParser(parser, new TokenStream(tokens), assignment).parse());
                 }
 
                 if (stream.current().getType() == Token.Type.RBRACKET) {
@@ -284,7 +330,7 @@ public class ExpressionParser {
         if (currentValue == null && (inlineDeclaration.getValue().size() > 0 || tokens.isEmpty())) {
             return inlineDeclaration;
         } else {
-            Value indexValue = new ExpressionParser(parser, new TokenStream(tokens)).parse();
+            Value indexValue = new ExpressionParser(parser, new TokenStream(tokens), assignment).parse();
 
             if (indexValue instanceof ValueNum) {
                 if (!(currentValue instanceof ValueList)) {
@@ -431,7 +477,7 @@ public class ExpressionParser {
                 element.match(Token.Type.COL);
                 element.next();
 
-                value.setEntry(new ExpressionParser(parser, new TokenStream(valueTokens)).parse(), new ExpressionParser(parser, new TokenStream(element.rest())).parse());
+                value.setEntry(new ExpressionParser(parser, new TokenStream(valueTokens), assignment).parse(), new ExpressionParser(parser, new TokenStream(element.rest()), assignment).parse());
 
                 tokens.clear();
 
