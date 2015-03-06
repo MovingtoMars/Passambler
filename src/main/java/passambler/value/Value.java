@@ -3,6 +3,7 @@ package passambler.value;
 import java.util.HashMap;
 import java.util.Map;
 import passambler.lexer.Token;
+import passambler.parser.ParserException;
 
 public class Value {
     public static ValueBool VALUE_TRUE = new ValueBool(true);
@@ -47,8 +48,8 @@ public class Value {
         properties.put(key, property);
     }
 
-    public Value onOperator(Value value, Token.Type tokenType) {
-        switch (tokenType) {
+    public Value onOperator(Value value, Token operatorToken) throws ParserException {
+        switch (operatorToken.getType()) {
             case EQUAL:
                 return new ValueBool(equals(value));
             case NEQUAL:

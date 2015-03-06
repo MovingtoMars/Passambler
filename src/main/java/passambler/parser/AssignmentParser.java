@@ -55,7 +55,7 @@ public class AssignmentParser {
 
                         parser.getScope().setSymbol(token.getValue(), rightValue);
                     } else {
-                        parser.getScope().setSymbol(token.getValue(), parser.getScope().getSymbol(token.getValue()).onOperator(rightValue, operator.getType()));
+                        parser.getScope().setSymbol(token.getValue(), parser.getScope().getSymbol(token.getValue()).onOperator(rightValue, operator));
                     }
                 } else {
                     if (!parser.getScope().hasSymbol(token.getValue())) {
@@ -76,7 +76,7 @@ public class AssignmentParser {
                 }
 
                 if (leftStream.peek() == null) {
-                    leftValue.setProperty(name, leftValue.getProperty(name).getValue().onOperator(rightValue, operator.getType()));
+                    leftValue.setProperty(name, leftValue.getProperty(name).getValue().onOperator(rightValue, operator));
                 } else {
                     leftValue = leftValue.getProperty(name).getValue();
                 }
@@ -121,7 +121,7 @@ public class AssignmentParser {
                     }
 
                     if (leftStream.peek() == null) {
-                        list.getValue().set(index, list.getValue().get(index).onOperator(rightValue, operator.getType()));
+                        list.getValue().set(index, list.getValue().get(index).onOperator(rightValue, operator));
                     } else {
                         leftValue = list.getValue().get(index);
                     }
@@ -132,7 +132,7 @@ public class AssignmentParser {
                         if (dict.getEntry(value) == null) {
                             dict.setEntry(value, rightValue);
                         } else {
-                            dict.setEntry(value, dict.getEntry(value).onOperator(rightValue, operator.getType()));
+                            dict.setEntry(value, dict.getEntry(value).onOperator(rightValue, operator));
                         }
                     } else {
                         leftValue = dict.getEntry(value);

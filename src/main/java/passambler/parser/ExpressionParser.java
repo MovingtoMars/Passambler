@@ -88,7 +88,7 @@ public class ExpressionParser {
                         }
                     }
 
-                    Value operatorChange = value.onOperator(new ExpressionParser(parser, new TokenStream(tokens), assignment).parse(), operatorToken.getType());
+                    Value operatorChange = value.onOperator(new ExpressionParser(parser, new TokenStream(tokens), assignment).parse(), operatorToken);
 
                     if (operatorChange == null) {
                         throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, operatorToken.getPosition(), operatorToken.getType());
@@ -391,10 +391,6 @@ public class ExpressionParser {
             return new ValueStr(token.getValue());
         } else if (token.getType() == Token.Type.NUMBER) {
             StringBuilder number = new StringBuilder();
-
-            if (stream.back() != null && stream.back().getType() == Token.Type.DIVIDE && token.getValueAsInteger() == 0) {
-                throw new ParserException(ParserException.Type.ZERO_DIVISION, token.getPosition());
-            }
 
             if (stream.current() != stream.first() && stream.back().getType() == Token.Type.MINUS) {
                 number.append("-");

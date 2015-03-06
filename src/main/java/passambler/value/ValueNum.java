@@ -2,6 +2,7 @@ package passambler.value;
 
 import java.math.BigDecimal;
 import passambler.lexer.Token;
+import passambler.parser.ParserException;
 
 public class ValueNum extends Value {
     public ValueNum(double data) {
@@ -22,9 +23,9 @@ public class ValueNum extends Value {
     }
 
     @Override
-    public Value onOperator(Value value, Token.Type tokenType) {
+    public Value onOperator(Value value, Token operatorToken) throws ParserException {
         if (value instanceof ValueNum) {
-            switch (tokenType) {
+            switch (operatorToken.getType()) {
                 case PLUS:
                 case ASSIGN_PLUS:
                     return new ValueNum(getValue().add(((ValueNum) value).getValue()));
@@ -36,6 +37,10 @@ public class ValueNum extends Value {
                     return new ValueNum(getValue().multiply(((ValueNum) value).getValue()));
                 case DIVIDE:
                 case ASSIGN_DIVIDE:
+                    if (((ValueNum) value).getValue().intValue() == 0) {
+                        throw new ParserException(ParserException.Type.ZERO_DIVISION, operatorToken.getPosition());
+                    }
+                    
                     return new ValueNum(getValue().divide(((ValueNum) value).getValue()));
                 case POWER:
                 case ASSIGN_POWER:
@@ -73,7 +78,7 @@ public class ValueNum extends Value {
             }
         }
 
-        return super.onOperator(value, tokenType);
+        return super.onOperator(value, operatorToken);
     }
 
     @Override

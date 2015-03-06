@@ -1,6 +1,7 @@
 package passambler.value;
 
 import passambler.lexer.Token;
+import passambler.parser.ParserException;
 
 public class ValueStr extends Value {
     public ValueStr(String data) {
@@ -13,11 +14,11 @@ public class ValueStr extends Value {
     }
 
     @Override
-    public Value onOperator(Value value, Token.Type tokenType) {
-        if (value instanceof ValueStr && (tokenType == Token.Type.PLUS || tokenType == Token.Type.ASSIGN_PLUS)) {
+    public Value onOperator(Value value, Token operatorToken) throws ParserException {
+        if (value instanceof ValueStr && (operatorToken.getType() == Token.Type.PLUS || operatorToken.getType() == Token.Type.ASSIGN_PLUS)) {
             return new ValueStr(getValue() + value.toString());
         }
 
-        return super.onOperator(value, tokenType);
+        return super.onOperator(value, operatorToken);
     }
 }

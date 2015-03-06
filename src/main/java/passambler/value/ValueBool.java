@@ -1,6 +1,7 @@
 package passambler.value;
 
 import passambler.lexer.Token;
+import passambler.parser.ParserException;
 
 public class ValueBool extends Value {
     public ValueBool(Boolean value) {
@@ -13,9 +14,9 @@ public class ValueBool extends Value {
     }
 
     @Override
-    public Value onOperator(Value value, Token.Type tokenType) {
+    public Value onOperator(Value value, Token operatorToken) throws ParserException {
         if (value instanceof ValueBool) {
-            switch (tokenType) {
+            switch (operatorToken.getType()) {
                 case AND:
                     return new ValueBool(getValue() == ((ValueBool) value).getValue());
                 case OR:
@@ -23,6 +24,6 @@ public class ValueBool extends Value {
             }
         }
 
-        return super.onOperator(value, tokenType);
+        return super.onOperator(value, operatorToken);
     }
 }
