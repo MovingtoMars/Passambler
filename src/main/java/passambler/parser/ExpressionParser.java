@@ -121,7 +121,8 @@ public class ExpressionParser {
 
         stream.next();
 
-        List<Token> tokens = new ArrayList<>();
+        List<Token> left = new ArrayList<>();
+        List<Token> right = new ArrayList<>();
 
         int brackets = 0, paren = 0, braces = 0;
 
@@ -143,17 +144,23 @@ public class ExpressionParser {
             if (brackets == 0 && paren == 0 && braces == 0 && stream.current().getType() == Token.Type.COL) {
                 break;
             } else {
-                tokens.add(stream.current());
+                left.add(stream.current());
 
                 stream.next();
             }
         }
-
+        
         stream.match(Token.Type.COL);
         stream.next();
 
-        Value ifTrue = new ExpressionParser(parser, new TokenStream(tokens), assignment).parse();
-        Value ifFalse = new ExpressionParser(parser, new TokenStream(stream.rest()), assignment).parse();
+        while (stream.hasNext()) {
+            right.add(stream.current());
+            
+            stream.next();
+        }
+        
+        Value ifTrue = new ExpressionParser(parser, new TokenStream(left), assignment).parse();
+        Value ifFalse = new ExpressionParser(parser, new TokenStream(right), assignment).parse();
 
         return ((ValueBool) currentValue).getValue() == true ? ifTrue : ifFalse;
     }
