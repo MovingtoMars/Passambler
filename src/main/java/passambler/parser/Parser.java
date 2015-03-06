@@ -2,6 +2,7 @@ package passambler.parser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import passambler.lexer.Lexer;
@@ -57,7 +58,7 @@ public class Parser {
 
             boolean elseCondition = false;
 
-            Map<ValueBool, Block> cases = new HashMap();
+            Map<ValueBool, Block> cases = new LinkedHashMap();
 
             List<Token> tokens = new ArrayList<>();
 
