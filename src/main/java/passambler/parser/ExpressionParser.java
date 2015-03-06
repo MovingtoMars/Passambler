@@ -64,12 +64,9 @@ public class ExpressionParser {
             if (value != null && stream.peek() != null) {
                 int paren = 0;
 
-                // This is the peek token, so the token after the current one.
                 Token operatorToken = stream.peek();
 
                 if (operatorToken.getType().isOperator()) {
-                    // Move to times, one time away from the current value,
-                    // and then away from the operator.
                     stream.next();
                     stream.next();
 
@@ -82,7 +79,7 @@ public class ExpressionParser {
                             paren--;
                         }
 
-                        if ((stream.current().getType().isOperator() || stream.current().getType() == Token.Type.TERNARY) && paren == 0) {
+                        if ((stream.current().getType() == Token.Type.AND || stream.current().getType() == Token.Type.OR) && paren == 0) {
                             break;
                         } else {
                             tokens.add(stream.current());
