@@ -79,7 +79,7 @@ public class ExpressionParser {
                             paren--;
                         }
 
-                        if ((stream.current().getType() == Token.Type.AND || stream.current().getType() == Token.Type.OR) && paren == 0) {
+                        if ((stream.current().getType() == Token.Type.AND || stream.current().getType() == Token.Type.OR || stream.current().getType() == Token.Type.TERNARY) && paren == 0) {
                             break;
                         } else {
                             tokens.add(stream.current());
