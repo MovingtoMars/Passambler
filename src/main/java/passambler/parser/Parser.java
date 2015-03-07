@@ -13,6 +13,7 @@ import passambler.function.Function;
 import passambler.function.FunctionContext;
 import passambler.pack.Package;
 import passambler.pack.file.PackageFile;
+import passambler.pack.json.PackageJson;
 import passambler.pack.math.PackageMath;
 import passambler.pack.net.PackageNet;
 import passambler.pack.os.PackageOs;
@@ -42,6 +43,7 @@ public class Parser {
         defaultPackages.add(new PackageOs());
         defaultPackages.add(new PackageNet());
         defaultPackages.add(new PackageThread());
+        defaultPackages.add(new PackageJson());
     }
 
     public List<Package> getDefaultPackages() {
