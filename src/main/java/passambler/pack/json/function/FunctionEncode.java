@@ -51,6 +51,6 @@ public class FunctionEncode extends Function {
             return object;
         }
 
-        return null;
+        return Value.VALUE_NIL;
     }
 }
