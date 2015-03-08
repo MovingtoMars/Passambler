@@ -7,6 +7,7 @@ import passambler.function.Function;
 import passambler.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.value.Value;
+import passambler.value.ValueBool;
 import passambler.value.ValueDict;
 import passambler.value.ValueList;
 import passambler.value.ValueNum;
@@ -33,6 +34,8 @@ public class FunctionEncode extends Function {
             return ((ValueStr) value).getValue();
         } else if (value instanceof ValueNum) {
             return ((ValueNum) value).getValue();
+        } else if (value instanceof ValueBool) {
+            return ((ValueBool) value).getValue();
         } else if (value instanceof ValueList) {
             JSONArray list = new JSONArray();
 

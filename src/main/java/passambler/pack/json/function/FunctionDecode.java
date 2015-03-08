@@ -8,6 +8,7 @@ import passambler.function.Function;
 import passambler.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.value.Value;
+import passambler.value.ValueBool;
 import passambler.value.ValueDict;
 import passambler.value.ValueList;
 import passambler.value.ValueNum;
@@ -54,6 +55,8 @@ public class FunctionDecode extends Function {
             return new ValueNum((Long) object);
         } else if (object instanceof Double) {
             return new ValueNum((Double) object);
+        } else if (object instanceof Boolean) {
+            return new ValueBool((Boolean) object);
         }
         
         return Value.VALUE_NIL;
