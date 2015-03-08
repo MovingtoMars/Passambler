@@ -41,24 +41,45 @@ public class ExpressionParser {
         while (stream.hasNext()) {
             Token token = stream.current();
 
-            if (token.getType() == Token.Type.NOT) {
-                not = true;
-            } else if (token.getType() == Token.Type.LBRACE) {
-                value = parseBrace();
-            } else if (token.getType() == Token.Type.STRING || token.getType() == Token.Type.NUMBER || token.getType() == Token.Type.IDENTIFIER) {
-                value = parseSymbol();
-            } else if (token.getType() == Token.Type.PERIOD) {
-                value = parseProperty(value);
-            } else if (token.getType() == Token.Type.LBRACKET) {
-                value = parseIndexed(value);
-            } else if (token.getType() == Token.Type.LPAREN) {
-                value = parseParen(value);
-            } else if (token.getType() == Token.Type.FN) {
-                value = parseFunction();
-            } else if (token.getType() == Token.Type.TERNARY) {
-                value = parseTernary(value);
-            } else if (!token.getType().isOperator()) {
-                throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
+            switch (token.getType()) {
+                case NOT:
+                    not = true;
+
+                    break;
+                case LPAREN:
+                    value = parseParen(value);
+
+                    break;
+                case LBRACE:
+                    value = parseBrace();
+
+                    break;
+                case LBRACKET:
+                    value = parseIndexed(value);
+
+                    break;
+                case STRING:
+                case NUMBER:
+                case IDENTIFIER:
+                    value = parseSymbol();
+
+                    break;
+                case PERIOD:
+                    value = parseProperty(value);
+
+                    break;
+                case FN:
+                    value = parseFunction();
+
+                    break;
+                case TERNARY:
+                    value = parseTernary(value);
+
+                    break;
+                default:
+                    if (!token.getType().isOperator()) {
+                        throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
+                    }
             }
 
             if (value != null && stream.peek() != null) {
@@ -88,7 +109,7 @@ public class ExpressionParser {
                         }
                     }
 
-                    Value operatorChange = value.onOperator(new ExpressionParser(parser, new TokenStream(tokens), assignment).parse(), operatorToken);
+                    Value operatorChange = value.onOperator(createParser(new TokenStream(tokens)).parse(), operatorToken);
 
                     if (operatorChange == null) {
                         throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, operatorToken.getPosition(), operatorToken.getType());
@@ -149,18 +170,18 @@ public class ExpressionParser {
                 stream.next();
             }
         }
-        
+
         stream.match(Token.Type.COL);
         stream.next();
 
         while (stream.hasNext()) {
             right.add(stream.current());
-            
+
             stream.next();
         }
-        
-        Value ifTrue = new ExpressionParser(parser, new TokenStream(left), assignment).parse();
-        Value ifFalse = new ExpressionParser(parser, new TokenStream(right), assignment).parse();
+
+        Value ifTrue = createParser(new TokenStream(left)).parse();
+        Value ifFalse = createParser(new TokenStream(right)).parse();
 
         return ((ValueBool) currentValue).getValue() == true ? ifTrue : ifFalse;
     }
@@ -247,7 +268,7 @@ public class ExpressionParser {
                         argumentTokens.remove(argumentTokens.size() - 1);
                     }
 
-                    arguments.add(new ExpressionParser(parser, new TokenStream(argumentTokens), assignment).parse());
+                    arguments.add(createParser(new TokenStream(argumentTokens)).parse());
 
                     argumentTokens.clear();
                 }
@@ -277,7 +298,7 @@ public class ExpressionParser {
 
             return currentFunction.invoke(new FunctionContext(parser, arguments.toArray(vals), assignment));
         } else if (!tokens.isEmpty()) {
-            return new ExpressionParser(parser, new TokenStream(tokens), assignment).parse();
+            return createParser(new TokenStream(tokens)).parse();
         }
 
         return null;
@@ -299,7 +320,7 @@ public class ExpressionParser {
                         throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "no value specified");
                     }
                 } else {
-                    inlineDeclaration.getValue().add(new ExpressionParser(parser, new TokenStream(tokens), assignment).parse());
+                    inlineDeclaration.getValue().add(createParser(new TokenStream(tokens)).parse());
                 }
 
                 if (stream.current().getType() == Token.Type.RBRACKET) {
@@ -337,7 +358,7 @@ public class ExpressionParser {
         if (currentValue == null && (inlineDeclaration.getValue().size() > 0 || tokens.isEmpty())) {
             return inlineDeclaration;
         } else {
-            Value indexValue = new ExpressionParser(parser, new TokenStream(tokens), assignment).parse();
+            Value indexValue = createParser(new TokenStream(tokens)).parse();
 
             if (indexValue instanceof ValueNum) {
                 if (!(currentValue instanceof ValueList)) {
@@ -480,7 +501,7 @@ public class ExpressionParser {
                 element.match(Token.Type.COL);
                 element.next();
 
-                value.setEntry(new ExpressionParser(parser, new TokenStream(valueTokens), assignment).parse(), new ExpressionParser(parser, new TokenStream(element.rest()), assignment).parse());
+                value.setEntry(createParser(new TokenStream(valueTokens)).parse(), createParser(new TokenStream(element.rest())).parse());
 
                 tokens.clear();
 
@@ -499,5 +520,9 @@ public class ExpressionParser {
         }
 
         return value;
+    }
+
+    private ExpressionParser createParser(TokenStream stream) {
+        return new ExpressionParser(parser, stream, assignment);
     }
 }
