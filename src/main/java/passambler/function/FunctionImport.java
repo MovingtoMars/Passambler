@@ -86,11 +86,9 @@ public class FunctionImport extends Function {
                             .orElseThrow(() -> new ParserException(ParserException.Type.UNDEFINED_PROPERTY, null, key))
                             .getValue();
 
-                        if (context.isAssignment()) {
-                            return value;
-                        } else {
-                            context.getParser().getScope().setSymbol(key, value);
-                        }
+                        context.getParser().getScope().setSymbol(key, value);
+
+                        return value;
                     }
                 } else {
                     Value value = new Value();
@@ -99,11 +97,9 @@ public class FunctionImport extends Function {
                         value.setProperty(symbol.getKey(), symbol.getValue());
                     }
 
-                    if (context.isAssignment()) {
-                        return value;
-                    } else {
-                        context.getParser().getScope().setSymbol(currentPackageName, value);
-                    }
+                    context.getParser().getScope().setSymbol(currentPackageName, value);
+
+                    return value;
                 }
             }
         }
