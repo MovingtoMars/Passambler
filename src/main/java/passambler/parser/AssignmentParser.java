@@ -49,10 +49,6 @@ public class AssignmentParser {
             if (token.getType() == Token.Type.IDENTIFIER) {
                 if (leftStream.peek() == null) {
                     if (!parser.getScope().hasSymbol(token.getValue())) {
-                        if (Lexer.isConstant(token.getValue())) {
-                            rightValue.setConstant(true);
-                        }
-
                         parser.getScope().setSymbol(token.getValue(), rightValue);
                     } else {
                         parser.getScope().setSymbol(token.getValue(), parser.getScope().getSymbol(token.getValue()).onOperator(rightValue, operator));

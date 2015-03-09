@@ -3,6 +3,7 @@ package passambler.parser;
 import java.util.HashMap;
 import java.util.Map;
 import passambler.function.FunctionImport;
+import passambler.lexer.Lexer;
 import passambler.value.Value;
 
 public class Scope {
@@ -26,6 +27,10 @@ public class Scope {
         } else {
             if (symbols.containsKey(key) && symbols.get(key).isConstant()) {
                 throw new RuntimeException(String.format("cannot modify constant %s", key));
+            }
+
+            if (Lexer.isConstant(key)) {
+                value.setConstant(true);
             }
 
             symbols.put(key, value);
