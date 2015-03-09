@@ -189,14 +189,18 @@ public class Parser {
 
             List<String> arguments = new ArrayList<>();
 
+            boolean passedArguments = false;
+
             while (stream.hasNext()) {
-                if (stream.current().getType() == Token.Type.IDENTIFIER && stream.peek().getType() != Token.Type.RPAREN) {
+                if (stream.current().getType() == Token.Type.IDENTIFIER && !passedArguments) {
                     while (stream.hasNext()) {
                         arguments.add(stream.current().getValue());
 
                         stream.next();
 
                         if (stream.current().getType() == Token.Type.COL) {
+                            passedArguments = true;
+
                             stream.next();
 
                             break;
