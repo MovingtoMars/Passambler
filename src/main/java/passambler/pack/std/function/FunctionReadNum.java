@@ -26,11 +26,7 @@ public class FunctionReadNum extends Function {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            if (floating) {
-                return new ValueNum(scanner.nextDouble());
-            } else {
-                return new ValueNum(scanner.nextInt());
-            }
+            return new ValueNum(floating ? scanner.nextDouble() : scanner.nextInt());
         } catch (Exception e) {
             return new ValueBool(false);
         }
