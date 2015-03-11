@@ -1,0 +1,18 @@
+--TEST--
+Tests named arguments.
+
+--INPUT--
+import('std.Writeln');
+
+fn s(a, b) {
+    Writeln(a - b);
+}
+
+s(1, 1);
+s(10, b=5);
+s(b=10, a=5);
+
+--OUTPUT--
+0
+5
+-5

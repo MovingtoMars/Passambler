@@ -2,9 +2,13 @@ package passambler.parser;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import passambler.function.Function;
 import passambler.function.FunctionContext;
+import passambler.function.FunctionUser;
 import passambler.value.Value;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
@@ -67,19 +71,19 @@ public class ExpressionParser {
                         stream.match(Token.Type.MINUS, Token.Type.PLUS);
 
                         boolean negate = stream.current().getType() == Token.Type.MINUS;
-                        
+
                         stream.next();
 
                         stream.match(Token.Type.NUMBER);
 
                         BigDecimal number = new BigDecimal(stream.current().getValue());
-                        
+
                         if (negate) {
                             number = number.negate();
                         } else {
                             number = number.plus();
                         }
-                        
+
                         tokens.add(new Token(Token.Type.NUMBER, number.toString(), stream.current().getPosition()));
 
                         stream.next();
@@ -228,6 +232,8 @@ public class ExpressionParser {
             List<Token> argumentTokens = new ArrayList<>();
             List<Value> arguments = new ArrayList<>();
 
+            boolean usedNamedArguments = false;
+
             int brackets = 0;
 
             for (Token token : tokens) {
@@ -248,18 +254,47 @@ public class ExpressionParser {
                         argumentTokens.remove(argumentTokens.size() - 1);
                     }
 
-                    arguments.add(createParser(new TokenStream(argumentTokens)).parse());
+                    TokenStream argumentTokenStream = new TokenStream(argumentTokens);
+
+                    if (argumentTokenStream.current().getType() == Token.Type.IDENTIFIER && argumentTokenStream.peek() != null && argumentTokenStream.peek().getType() == Token.Type.ASSIGN) {
+                        if (currentValue instanceof FunctionUser) {
+                            usedNamedArguments = true;
+
+                            String name = argumentTokenStream.current().getValue();
+
+                            argumentTokenStream.next();
+                            argumentTokenStream.next();
+
+                            int index = ((FunctionUser) currentValue).getArgumentNames().indexOf(name);
+
+                            if (index == -1) {
+                                throw new ParserException(ParserException.Type.UNDEFINED_ARGUMENT, token.getPosition(), name);
+                            }
+
+                            if (index >= arguments.size()) {
+                                do {
+                                    arguments.add(null);
+                                } while (index != arguments.size() - 1);
+                            }
+
+                            arguments.set(index, createParser(argumentTokenStream.copyAtCurrentPosition()).parse());
+                        } else {
+                            throw new ParserException(ParserException.Type.CANNOT_USE_NAMED_ARGUMENTS, token.getPosition());
+                        }
+                    } else {
+                        if (usedNamedArguments) {
+                            throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition(), "cannot specify a normal argument after a specifying a named argument");
+                        }
+
+                        arguments.add(createParser(argumentTokenStream).parse());
+                    }
 
                     argumentTokens.clear();
                 }
             }
 
-            if (paren != 0) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "unmatching parens");
-            }
-
-            if (brackets != 0) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "unmatching brackets");
+            if (paren != 0 || brackets != 0) {
+                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "unmatching " + (paren != 0 ? "parens" : "brackets"));
             }
 
             Function currentFunction = (Function) currentValue;
@@ -268,15 +303,17 @@ public class ExpressionParser {
                 throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), currentFunction.getArguments(), arguments.size());
             }
 
+            if (arguments.stream().anyMatch(v -> v == null)) {
+                throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), currentFunction.getArguments(), arguments.size() - arguments.stream().filter(v -> v == null).count());
+            }
+
             for (int argument = 0; argument < arguments.size(); ++argument) {
                 if (!currentFunction.isArgumentValid(arguments.get(argument), argument)) {
                     throw new ParserException(ParserException.Type.INVALID_ARGUMENT, stream.first().getPosition(), argument + 1);
                 }
             }
 
-            Value[] vals = new Value[arguments.size()];
-
-            return currentFunction.invoke(new FunctionContext(parser, arguments.toArray(vals), assignment));
+            return currentFunction.invoke(new FunctionContext(parser, arguments.toArray(new Value[arguments.size()]), assignment));
         } else if (!tokens.isEmpty()) {
             return createParser(new TokenStream(tokens)).parse();
         }

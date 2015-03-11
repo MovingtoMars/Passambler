@@ -142,7 +142,7 @@ public class AssignmentParser {
 
     public static boolean isAssignment(TokenStream stream) {
         while (stream.hasNext()) {
-            if (stream.current().getType() == Token.Type.LBRACE) {
+            if (stream.current().getType() == Token.Type.LBRACE || stream.current().getType() == Token.Type.LPAREN) {
                 return false;
             } else if (stream.current().getType().isAssignmentOperator()) {
                 return true;

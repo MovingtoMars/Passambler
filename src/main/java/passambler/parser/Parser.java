@@ -10,6 +10,7 @@ import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
 import passambler.function.Function;
 import passambler.function.FunctionContext;
+import passambler.function.FunctionUser;
 import passambler.pack.Package;
 import passambler.pack.file.PackageFile;
 import passambler.pack.json.PackageJson;
@@ -276,7 +277,7 @@ public class Parser {
             stream.next();
 
             return new ExpressionParser(this, new TokenStream(stream.rest())).parse();
-        } else if (stream.first().getType() == Token.Type.FN && stream.peek() != null && stream.peek().getType() == Token.Type.IDENTIFIER) {
+        } else if (stream.first().getType() == Token.Type.FN) {
             stream.next();
 
             stream.match(Token.Type.IDENTIFIER);
@@ -291,26 +292,7 @@ public class Parser {
 
             Block callback = block(stream);
 
-            scope.setSymbol(name, new Function() {
-                @Override
-                public int getArguments() {
-                    return argumentNames.size();
-                }
-
-                @Override
-                public boolean isArgumentValid(Value value, int argument) {
-                    return argument < argumentNames.size();
-                }
-
-                @Override
-                public Value invoke(FunctionContext context) throws ParserException {
-                    for (int i = 0; i < argumentNames.size(); ++i) {
-                        callback.getParser().getScope().setSymbol(argumentNames.get(i), context.getArgument(i));
-                    }
-
-                    return callback.invoke();
-                }
-            });
+            scope.setSymbol(name, new FunctionUser(callback, argumentNames));
         } else if (AssignmentParser.isAssignment(stream.copyAtCurrentPosition())) {
             AssignmentParser assignmentParser = new AssignmentParser(this, stream);
 
