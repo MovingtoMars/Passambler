@@ -8,7 +8,6 @@ public class Token {
         PLUS, MINUS, MULTIPLY, DIVIDE, POWER, MODULO, COMPARE,
         EQUAL, NEQUAL, GT, LT, GTE, LTE, NOT,
         AND, OR,
-        TERNARY,
         WHILE, FOR, FN, RETURN, IF, ELSEIF, ELSE,
         RANGE,
         PERIOD, COMMA, SEMI_COL, COL;

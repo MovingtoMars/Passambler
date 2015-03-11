@@ -35,7 +35,7 @@ public class Value {
     public Property getProperty(String key) {
         return properties.get(key);
     }
-
+    
     public boolean hasProperty(String key) {
         return getProperty(key) != null;
     }

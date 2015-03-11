@@ -36,6 +36,82 @@ public class ExpressionParser {
     public Value parse() throws ParserException {
         Value value = null;
 
+        List<Token> tokens = new ArrayList<>();
+
+        int paren = 0, brackets = 0, braces = 0;
+
+        Token lastOperator = null;
+
+        while (stream.hasNext()) {
+            if (stream.current().getType() == Token.Type.LPAREN) {
+                paren++;
+            } else if (stream.current().getType() == Token.Type.RPAREN) {
+                paren--;
+            } else if (stream.current().getType() == Token.Type.LBRACE) {
+                braces++;
+            } else if (stream.current().getType() == Token.Type.RBRACE) {
+                braces--;
+            } else if (stream.current().getType() == Token.Type.LBRACKET) {
+                brackets++;
+            } else if (stream.current().getType() == Token.Type.RBRACKET) {
+                brackets--;
+            }
+
+            tokens.add(stream.current());
+
+            if ((stream.current().getType().isOperator() && paren == 0 && brackets == 0 && braces == 0) || (stream.peek() == null)) {
+                if (stream.current().getType().isOperator()) {
+                    tokens.remove(tokens.size() - 1);
+
+                    if (tokens.isEmpty()) {
+                        stream.match(Token.Type.MINUS, Token.Type.PLUS);
+
+                        boolean negate = stream.current().getType() == Token.Type.MINUS;
+                        
+                        stream.next();
+
+                        stream.match(Token.Type.NUMBER);
+
+                        BigDecimal number = new BigDecimal(stream.current().getValue());
+                        
+                        if (negate) {
+                            number = number.negate();
+                        } else {
+                            number = number.plus();
+                        }
+                        
+                        tokens.add(new Token(Token.Type.NUMBER, number.toString(), stream.current().getPosition()));
+
+                        stream.next();
+                    } else {
+                        lastOperator = stream.current();
+                    }
+                }
+
+                Value op = createParser(new TokenStream(tokens)).parseSpecialized();
+
+                if (value == null) {
+                    value = op;
+                } else if (lastOperator != null) {
+                    value = value.onOperator(op, lastOperator);
+
+                    if (value == null) {
+                        throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, lastOperator.getPosition(), lastOperator.getType());
+                    }
+                }
+
+                tokens.clear();
+            }
+
+            stream.next();
+        }
+
+        return value;
+    }
+
+    public Value parseSpecialized() throws ParserException {
+        Value value = null;
+
         boolean not = false;
 
         while (stream.hasNext()) {
@@ -72,53 +148,8 @@ public class ExpressionParser {
                     value = parseFunction();
 
                     break;
-                case TERNARY:
-                    value = parseTernary(value);
-
-                    break;
                 default:
-                    if (!token.getType().isOperator()) {
-                        throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
-                    }
-            }
-
-            if (value != null && stream.peek() != null) {
-                int paren = 0;
-
-                Token operatorToken = stream.peek();
-
-                if (operatorToken.getType().isOperator()) {
-                    stream.next();
-                    stream.next();
-
-                    List<Token> tokens = new ArrayList<>();
-
-                    while (stream.hasNext()) {
-                        if (stream.current().getType() == Token.Type.LPAREN) {
-                            paren++;
-                        } else if (stream.current().getType() == Token.Type.RPAREN) {
-                            paren--;
-                        }
-
-                        if ((stream.current().getType() == Token.Type.AND || stream.current().getType() == Token.Type.OR || stream.current().getType() == Token.Type.TERNARY) && paren == 0) {
-                            break;
-                        } else {
-                            tokens.add(stream.current());
-
-                            stream.next();
-                        }
-                    }
-
-                    Value operatorChange = value.onOperator(createParser(new TokenStream(tokens)).parse(), operatorToken);
-
-                    if (operatorChange == null) {
-                        throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, operatorToken.getPosition(), operatorToken.getType());
-                    }
-
-                    value = operatorChange;
-
-                    continue;
-                }
+                    throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
             }
 
             stream.next();
@@ -133,57 +164,6 @@ public class ExpressionParser {
         }
 
         return value;
-    }
-
-    private Value parseTernary(Value currentValue) throws ParserException {
-        if (!(currentValue instanceof ValueBool)) {
-            throw new ParserException(ParserException.Type.EXPECTED_A_BOOL, stream.current().getPosition());
-        }
-
-        stream.next();
-
-        List<Token> left = new ArrayList<>();
-        List<Token> right = new ArrayList<>();
-
-        int brackets = 0, paren = 0, braces = 0;
-
-        while (stream.hasNext()) {
-            if (stream.current().getType() == Token.Type.LBRACKET) {
-                brackets++;
-            } else if (stream.current().getType() == Token.Type.RBRACKET) {
-                brackets--;
-            } else if (stream.current().getType() == Token.Type.LPAREN) {
-                paren++;
-            } else if (stream.current().getType() == Token.Type.RPAREN) {
-                paren--;
-            } else if (stream.current().getType() == Token.Type.LBRACE) {
-                braces++;
-            } else if (stream.current().getType() == Token.Type.RBRACE) {
-                braces--;
-            }
-
-            if (brackets == 0 && paren == 0 && braces == 0 && stream.current().getType() == Token.Type.COL) {
-                break;
-            } else {
-                left.add(stream.current());
-
-                stream.next();
-            }
-        }
-
-        stream.match(Token.Type.COL);
-        stream.next();
-
-        while (stream.hasNext()) {
-            right.add(stream.current());
-
-            stream.next();
-        }
-
-        Value ifTrue = createParser(new TokenStream(left)).parse();
-        Value ifFalse = createParser(new TokenStream(right)).parse();
-
-        return ((ValueBool) currentValue).getValue() == true ? ifTrue : ifFalse;
     }
 
     private Value parseFunction() throws ParserException {
@@ -420,15 +400,13 @@ public class ExpressionParser {
         } else if (token.getType() == Token.Type.NUMBER) {
             StringBuilder number = new StringBuilder();
 
-            if (stream.current() != stream.first() && stream.back().getType() == Token.Type.MINUS) {
-                number.append("-");
-            }
-
             number.append(token.getValue());
 
-            if (stream.peek() != null && stream.peek().getType() == Token.Type.PERIOD && stream.peek(2) != null && stream.peek(2).getType() == Token.Type.NUMBER) {
+            if (stream.peek() != null && stream.peek().getType() == Token.Type.PERIOD) {
                 stream.next();
                 stream.next();
+
+                stream.match(Token.Type.NUMBER);
 
                 number.append(".");
                 number.append(stream.current().getValue());
