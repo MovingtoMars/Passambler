@@ -2,10 +2,7 @@ package passambler.parser;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import passambler.function.Function;
 import passambler.function.FunctionContext;
 import passambler.function.FunctionUser;
