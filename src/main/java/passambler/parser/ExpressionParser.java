@@ -62,49 +62,44 @@ public class ExpressionParser {
             } else if (stream.current().getType() == Token.Type.RBRACKET) {
                 brackets--;
             }
-
+            
             tokens.add(stream.current());
 
-            if ((stream.current().getType().isOperator() && paren == 0 && brackets == 0 && braces == 0) || (stream.peek() == null)) {
-                boolean modifiedEmpty = false;
-
+            if ((stream.current().getType().isOperator() || stream.peek() == null) && paren == 0 && brackets == 0 && braces == 0) {
                 if (stream.current().getType().isOperator()) {
                     tokens.remove(tokens.size() - 1);
+                }
 
-                    lastOperator = stream.current();
+                if (tokens.isEmpty()) {
+                    stream.match(Token.Type.MINUS, Token.Type.PLUS);
 
-                    if (tokens.isEmpty()) {
-                        modifiedEmpty = true;
+                    boolean negate = stream.current().getType() == Token.Type.MINUS;
 
-                        stream.match(Token.Type.MINUS, Token.Type.PLUS);
+                    stream.next();
 
-                        boolean negate = stream.current().getType() == Token.Type.MINUS;
+                    stream.match(Token.Type.NUMBER);
 
-                        stream.next();
+                    BigDecimal number = new BigDecimal(stream.current().getValue());
 
-                        stream.match(Token.Type.NUMBER);
-
-                        BigDecimal number = new BigDecimal(stream.current().getValue());
-
-                        if (negate) {
-                            number = number.negate();
-                        } else {
-                            number = number.plus();
-                        }
-
-                        tokens.add(new Token(Token.Type.NUMBER, number.toString(), stream.current().getPosition()));
+                    if (negate) {
+                        number = number.negate();
+                    } else {
+                        number = number.plus();
                     }
+
+                    tokens.add(new Token(Token.Type.NUMBER, number.toString(), stream.current().getPosition()));
                 }
 
-                if (!modifiedEmpty || stream.peek() == null) {
-                    ExpressionValue newValue = new ExpressionValue();
-                    newValue.operator = lastOperator;
-                    newValue.value = createParser(new TokenStream(tokens)).parseSpecialized();
+                ExpressionValue newValue = new ExpressionValue();
 
-                    values.add(newValue);
+                newValue.operator = lastOperator;
+                newValue.value = createParser(new TokenStream(tokens)).parseSpecialized();
 
-                    tokens.clear();
-                }
+                values.add(newValue);
+
+                tokens.clear();
+
+                lastOperator = stream.current();
             }
 
             stream.next();
@@ -119,7 +114,7 @@ public class ExpressionParser {
                 value = value.onOperator(exprValue.value, exprValue.operator);
 
                 if (value == null) {
-                    throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, lastOperator.getPosition(), lastOperator.getType());
+                    throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, exprValue.operator.getPosition(), exprValue.operator.getType());
                 }
             }
         }
