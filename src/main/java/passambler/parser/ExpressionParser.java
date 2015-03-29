@@ -16,6 +16,12 @@ import passambler.value.ValueNum;
 import passambler.value.ValueStr;
 
 public class ExpressionParser {
+    class ExpressionValue {
+        public Token operator;
+
+        public Value value;
+    }
+
     private boolean assignment;
 
     private Parser parser;
@@ -35,13 +41,12 @@ public class ExpressionParser {
     }
 
     public Value parse() throws ParserException {
-        Value value = null;
-
         List<Token> tokens = new ArrayList<>();
-
-        int paren = 0, brackets = 0, braces = 0;
+        List<ExpressionValue> values = new ArrayList<>();
 
         Token lastOperator = null;
+
+        int paren = 0, brackets = 0, braces = 0;
 
         while (stream.hasNext()) {
             if (stream.current().getType() == Token.Type.LPAREN) {
@@ -61,10 +66,16 @@ public class ExpressionParser {
             tokens.add(stream.current());
 
             if ((stream.current().getType().isOperator() && paren == 0 && brackets == 0 && braces == 0) || (stream.peek() == null)) {
+                boolean modifiedEmpty = false;
+
                 if (stream.current().getType().isOperator()) {
                     tokens.remove(tokens.size() - 1);
 
+                    lastOperator = stream.current();
+
                     if (tokens.isEmpty()) {
+                        modifiedEmpty = true;
+
                         stream.match(Token.Type.MINUS, Token.Type.PLUS);
 
                         boolean negate = stream.current().getType() == Token.Type.MINUS;
@@ -82,29 +93,35 @@ public class ExpressionParser {
                         }
 
                         tokens.add(new Token(Token.Type.NUMBER, number.toString(), stream.current().getPosition()));
-
-                        stream.next();
-                    } else {
-                        lastOperator = stream.current();
                     }
                 }
 
-                Value op = createParser(new TokenStream(tokens)).parseSpecialized();
+                if (!modifiedEmpty || stream.peek() == null) {
+                    ExpressionValue newValue = new ExpressionValue();
+                    newValue.operator = lastOperator;
+                    newValue.value = createParser(new TokenStream(tokens)).parseSpecialized();
 
-                if (value == null) {
-                    value = op;
-                } else if (lastOperator != null) {
-                    value = value.onOperator(op, lastOperator);
+                    values.add(newValue);
 
-                    if (value == null) {
-                        throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, lastOperator.getPosition(), lastOperator.getType());
-                    }
+                    tokens.clear();
                 }
-
-                tokens.clear();
             }
 
             stream.next();
+        }
+
+        Value value = null;
+
+        for (ExpressionValue exprValue : values) {
+            if (value == null) {
+                value = exprValue.value;
+            } else {
+                value = value.onOperator(exprValue.value, exprValue.operator);
+
+                if (value == null) {
+                    throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, lastOperator.getPosition(), lastOperator.getType());
+                }
+            }
         }
 
         return value;
