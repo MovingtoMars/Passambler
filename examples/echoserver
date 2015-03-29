@@ -1,6 +1,5 @@
-import('net');
-import('std.Writeln');
-import('std.Read');
+using('net');
+using('std.Writeln', 'std.Read');
 
 sock = net.Listen(8080);
 

@@ -10,7 +10,7 @@ import passambler.value.ValueStr;
 import passambler.pack.Package;
 import passambler.pack.PackageFileSystem;
 
-public class FunctionImport extends Function {
+public class FunctionUsing extends Function {
     @Override
     public int getArguments() {
         return -1;
@@ -24,7 +24,7 @@ public class FunctionImport extends Function {
     @Override
     public Value invoke(FunctionContext context) throws ParserException {
         if (context.isAssignment() && context.getArguments().length > 1) {
-            throw new ParserException(ParserException.Type.BAD_SYNTAX, null, "can only import 1 value when assigning");
+            throw new ParserException(ParserException.Type.BAD_SYNTAX, null, "can only use 1 value when assigning");
         }
 
         for (int i = 0; i < context.getArguments().length; ++i) {
@@ -75,7 +75,7 @@ public class FunctionImport extends Function {
 
                     if (key.equals("*")) {
                         if (context.isAssignment()) {
-                            throw new ParserException(ParserException.Type.BAD_SYNTAX, null, "can't import with * when assigning");
+                            throw new ParserException(ParserException.Type.BAD_SYNTAX, null, "using * is not possible here");
                         }
 
                         context.getParser().getScope().getSymbols().putAll(symbols);

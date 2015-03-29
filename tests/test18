@@ -2,7 +2,7 @@
 Tests named arguments.
 
 --INPUT--
-import('std.Writeln');
+using('std.Writeln');
 
 fn s(a, b) {
     Writeln(a - b);

@@ -1,5 +1,5 @@
-import('std.Writeln');
-import('net/http');
+using('std.Writeln');
+using('net/http');
 
 http.Handle('/', fn(request, response) {
     Writeln(response, 'Hello World!');

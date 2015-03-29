@@ -2,7 +2,7 @@
 Tests std package.
 
 --INPUT--
-import("std.*");
+using("std.*");
 
 n = 1..10;
 Push(n, 20);
