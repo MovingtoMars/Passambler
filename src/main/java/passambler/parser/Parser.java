@@ -1,6 +1,7 @@
 package passambler.parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +9,6 @@ import passambler.lexer.Lexer;
 import passambler.lexer.LexerException;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
-import passambler.function.Function;
-import passambler.function.FunctionContext;
 import passambler.function.FunctionUser;
 import passambler.pack.Package;
 import passambler.pack.file.PackageFile;
@@ -26,6 +25,8 @@ import passambler.value.ValueList;
 import passambler.value.ValueNum;
 
 public class Parser {
+    private Map<Token.Type, Integer> operatorPrecedence = new HashMap();
+
     private List<Package> defaultPackages = new ArrayList<>();
 
     private Scope scope;
@@ -44,10 +45,21 @@ public class Parser {
         defaultPackages.add(new PackageNet());
         defaultPackages.add(new PackageThread());
         defaultPackages.add(new PackageJson());
+
+        operatorPrecedence.put(Token.Type.MULTIPLY, 10);
+        operatorPrecedence.put(Token.Type.DIVIDE, 10);
+        operatorPrecedence.put(Token.Type.POWER, 20);
+        operatorPrecedence.put(Token.Type.RANGE, 30);
+        operatorPrecedence.put(Token.Type.OR, 40);
+        operatorPrecedence.put(Token.Type.AND, 40);
     }
 
     public List<Package> getDefaultPackages() {
         return defaultPackages;
+    }
+
+    public int getPrecedence(Token.Type type) {
+        return operatorPrecedence.getOrDefault(type, 0);
     }
 
     public Scope getScope() {

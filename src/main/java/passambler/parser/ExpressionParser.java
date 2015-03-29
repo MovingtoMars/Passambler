@@ -62,7 +62,7 @@ public class ExpressionParser {
             } else if (stream.current().getType() == Token.Type.RBRACKET) {
                 brackets--;
             }
-            
+
             tokens.add(stream.current());
 
             if ((stream.current().getType().isOperator() || stream.peek() == null) && paren == 0 && brackets == 0 && braces == 0) {
@@ -107,6 +107,21 @@ public class ExpressionParser {
 
         Value value = null;
 
+        for (int i = 0; i < values.size(); ++i) {
+            if (i > 0 && parser.getPrecedence(values.get(i).operator.getType()) == getBiggestPrecedence(values)) {
+                ExpressionValue current = values.get(i);
+                ExpressionValue behind = values.get(i - 1);
+                ExpressionValue replacement = new ExpressionValue();
+
+                replacement.operator = behind.operator;
+                replacement.value = behind.value.onOperator(current.value, current.operator);
+
+                values.add(i - 1, replacement);
+                values.remove(current);
+                values.remove(behind);
+            }
+        }
+
         for (ExpressionValue exprValue : values) {
             if (value == null) {
                 value = exprValue.value;
@@ -120,6 +135,24 @@ public class ExpressionParser {
         }
 
         return value;
+    }
+
+    private int getBiggestPrecedence(List<ExpressionValue> values) {
+        int i = 0;
+
+        for (ExpressionValue exprValue : values) {
+            if (exprValue.operator == null) {
+                continue;
+            }
+
+            int precedence = parser.getPrecedence(exprValue.operator.getType());
+
+            if (precedence > i) {
+                i = precedence;
+            }
+        }
+
+        return i;
     }
 
     public Value parseSpecialized() throws ParserException {
