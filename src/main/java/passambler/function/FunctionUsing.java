@@ -88,7 +88,11 @@ public class FunctionUsing extends Function {
 
                         context.getParser().getScope().setSymbol(key, value);
 
-                        return value;
+                        if (context.isAssignment()) {
+                            return value;
+                        } else {
+                            context.getParser().getScope().setSymbol(key, value);
+                        }
                     }
                 } else {
                     Value value = new Value();
@@ -99,7 +103,11 @@ public class FunctionUsing extends Function {
 
                     context.getParser().getScope().setSymbol(currentPackageName, value);
 
-                    return value;
+                    if (context.isAssignment()) {
+                        return value;
+                    } else {
+                        context.getParser().getScope().setSymbol(currentPackageName, value);
+                    }
                 }
             }
         }
