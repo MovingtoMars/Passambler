@@ -6,9 +6,9 @@ import passambler.lexer.Token;
 import passambler.parser.ParserException;
 
 public class Value {
-    public static ValueBool VALUE_TRUE = new ValueBool(true);
-    public static ValueBool VALUE_FALSE = new ValueBool(false);
-    public static ValueNil VALUE_NIL = new ValueNil();
+    public static final ValueBool VALUE_TRUE = new ValueBool(true);
+    public static final ValueBool VALUE_FALSE = new ValueBool(false);
+    public static final ValueNil VALUE_NIL = new ValueNil();
 
     protected boolean constant = false;
 
