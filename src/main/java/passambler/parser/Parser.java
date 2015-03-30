@@ -400,20 +400,58 @@ public class Parser {
                 break;
             } else {
                 stream.match(Token.Type.IDENTIFIER);
-                
+
                 ArgumentDefinition definition = new ArgumentDefinition();
 
                 definition.setName(stream.current().getValue());
 
-                if (stream.peek().getType() != Token.Type.RPAREN) {
+                int braces = 0, paren = 0, brackets = 0;
+
+                stream.next();
+
+                if (stream.current().getType() == Token.Type.ASSIGN) {
+                    stream.next();
+
+                    List<Token> defaultValueTokens = new ArrayList<>();
+
+                    while (stream.hasNext()) {
+                        Token token = stream.current();
+
+                        if ((token.getType() == Token.Type.RPAREN || token.getType() == Token.Type.COMMA) && braces == 0 && paren == 0 && brackets == 0) {
+                            break;
+                        }
+
+                        if (token.getType() == Token.Type.LBRACE) {
+                            braces++;
+                        } else if (token.getType() == Token.Type.RBRACE) {
+                            braces--;
+                        } else if (token.getType() == Token.Type.LPAREN) {
+                            paren++;
+                        } else if (token.getType() == Token.Type.RPAREN) {
+                            paren--;
+                        } else if (token.getType() == Token.Type.LBRACKET) {
+                            brackets++;
+                        } else if (token.getType() == Token.Type.RBRACKET) {
+                            brackets--;
+                        }
+
+                        defaultValueTokens.add(token);
+
+                        stream.next();
+                    }
+
+                    definition.setDefaultValue(new ExpressionParser(this, new TokenStream(defaultValueTokens)).parse());
+                }
+
+                if (stream.current().getType() != Token.Type.RPAREN) {
                     stream.next();
 
                     stream.match(Token.Type.COMMA);
-                }
-                
-                arguments.add(definition);
 
-                stream.next();
+                    stream.next();
+                }
+
+                arguments.add(definition);
             }
         }
 
