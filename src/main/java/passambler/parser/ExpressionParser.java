@@ -2,6 +2,7 @@ package passambler.parser;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import passambler.function.Function;
 import passambler.function.FunctionContext;
@@ -106,21 +107,12 @@ public class ExpressionParser {
         }
 
         Value value = null;
-
-        for (int i = 0; i < values.size(); ++i) {
-            if (i > 0 && parser.getPrecedence(values.get(i).operator.getType()) == getBiggestPrecedence(values)) {
-                ExpressionValue current = values.get(i);
-                ExpressionValue behind = values.get(i - 1);
-                ExpressionValue replacement = new ExpressionValue();
-
-                replacement.operator = behind.operator;
-                replacement.value = behind.value.onOperator(current.value, current.operator);
-
-                values.add(i - 1, replacement);
-                values.remove(current);
-                values.remove(behind);
-            }
-        }
+       
+        doPrecedence(values, Token.Type.AND, Token.Type.OR);
+        doPrecedence(values, Token.Type.EQUAL, Token.Type.NEQUAL, Token.Type.GT, Token.Type.GTE, Token.Type.LT, Token.Type.LTE);
+        doPrecedence(values, Token.Type.RANGE);
+        doPrecedence(values, Token.Type.POWER);
+        doPrecedence(values, Token.Type.MULTIPLY, Token.Type.DIVIDE);
 
         for (ExpressionValue exprValue : values) {
             if (value == null) {
@@ -137,22 +129,18 @@ public class ExpressionParser {
         return value;
     }
 
-    private int getBiggestPrecedence(List<ExpressionValue> values) {
-        int i = 0;
+    private void doPrecedence(List<ExpressionValue> values, Token.Type... types) throws ParserException {
+        for (int i = 0; i < values.size(); ++i) {
+            ExpressionValue current = values.get(i);
+            
+            if (i > 0 && current.operator != null && Arrays.asList(types).contains(current.operator.getType())) {
+                ExpressionValue behind = values.get(i - 1);
 
-        for (ExpressionValue exprValue : values) {
-            if (exprValue.operator == null) {
-                continue;
-            }
-
-            int precedence = parser.getPrecedence(exprValue.operator.getType());
-
-            if (precedence > i) {
-                i = precedence;
+                behind.value = behind.value.onOperator(current.value, current.operator);
+                
+                values.remove(current);
             }
         }
-
-        return i;
     }
 
     public Value parseSpecialized() throws ParserException {
