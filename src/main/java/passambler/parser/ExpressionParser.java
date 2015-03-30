@@ -203,32 +203,13 @@ public class ExpressionParser {
     private Value parseFunction() throws ParserException {
         stream.next();
 
-        List<String> argumentNames = parser.argumentNames(stream);
+        List<ArgumentDefinition> arguments = parser.argumentDefinitions(stream);
 
         stream.next();
 
         Block callback = parser.block(stream);
 
-        return new Function() {
-            @Override
-            public int getArguments() {
-                return argumentNames.size();
-            }
-
-            @Override
-            public boolean isArgumentValid(Value value, int argument) {
-                return argument < argumentNames.size();
-            }
-
-            @Override
-            public Value invoke(FunctionContext context) throws ParserException {
-                for (int i = 0; i < argumentNames.size(); ++i) {
-                    callback.getParser().getScope().setSymbol(argumentNames.get(i), context.getArgument(i));
-                }
-
-                return callback.invoke();
-            }
-        };
+        return new FunctionUser(callback, arguments);
     }
 
     private Value parseParen(Value currentValue) throws ParserException {
@@ -266,6 +247,8 @@ public class ExpressionParser {
 
             int brackets = 0;
 
+            Function currentFunction = (Function) currentValue;
+            
             for (Token token : tokens) {
                 if (token.getType() == Token.Type.LPAREN) {
                     paren++;
@@ -295,7 +278,9 @@ public class ExpressionParser {
                             argumentTokenStream.next();
                             argumentTokenStream.next();
 
-                            int index = ((FunctionUser) currentValue).getArgumentNames().indexOf(name);
+                            List<ArgumentDefinition> argumentDefinitions = ((FunctionUser) currentFunction).getArgumentDefinitions();
+                            
+                            int index = argumentDefinitions.indexOf(argumentDefinitions.stream().filter(a -> a.getName().equals(name)).findFirst().get());
 
                             if (index == -1) {
                                 throw new ParserException(ParserException.Type.UNDEFINED_ARGUMENT, token.getPosition(), name);
@@ -326,8 +311,6 @@ public class ExpressionParser {
             if (paren != 0 || brackets != 0) {
                 throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "unmatching " + (paren != 0 ? "parens" : "brackets"));
             }
-
-            Function currentFunction = (Function) currentValue;
 
             if (currentFunction.getArguments() != -1 && currentFunction.getArguments() != arguments.size()) {
                 throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), currentFunction.getArguments(), arguments.size());

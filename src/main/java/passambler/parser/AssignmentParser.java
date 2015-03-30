@@ -2,7 +2,6 @@ package passambler.parser;
 
 import java.util.ArrayList;
 import java.util.List;
-import passambler.lexer.Lexer;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
 import passambler.value.Value;

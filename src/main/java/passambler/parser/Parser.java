@@ -284,13 +284,13 @@ public class Parser {
 
             stream.next();
 
-            List<String> argumentNames = argumentNames(stream);
+            List<ArgumentDefinition> arguments = argumentDefinitions(stream);
 
             stream.next();
 
             Block callback = block(stream);
 
-            scope.setSymbol(name, new FunctionUser(callback, argumentNames));
+            scope.setSymbol(name, new FunctionUser(callback, arguments));
         } else if (AssignmentParser.isAssignment(stream.copyAtCurrentPosition())) {
             AssignmentParser assignmentParser = new AssignmentParser(this, stream);
 
@@ -388,26 +388,30 @@ public class Parser {
         return block;
     }
 
-    public List<String> argumentNames(TokenStream stream) throws ParserException {
+    public List<ArgumentDefinition> argumentDefinitions(TokenStream stream) throws ParserException {
         stream.match(Token.Type.LPAREN);
 
         stream.next();
 
-        List<String> arguments = new ArrayList<>();
+        List<ArgumentDefinition> arguments = new ArrayList<>();
 
         while (stream.hasNext()) {
             if (stream.current().getType() == Token.Type.RPAREN) {
                 break;
             } else {
                 stream.match(Token.Type.IDENTIFIER);
+                
+                ArgumentDefinition definition = new ArgumentDefinition();
 
-                arguments.add(stream.current().getValue());
+                definition.setName(stream.current().getValue());
 
                 if (stream.peek().getType() != Token.Type.RPAREN) {
                     stream.next();
 
                     stream.match(Token.Type.COMMA);
                 }
+                
+                arguments.add(definition);
 
                 stream.next();
             }

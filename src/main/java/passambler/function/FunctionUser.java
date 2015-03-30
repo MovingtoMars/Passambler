@@ -1,37 +1,38 @@
 package passambler.function;
 
 import java.util.List;
+import passambler.parser.ArgumentDefinition;
 import passambler.parser.Block;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 
 public class FunctionUser extends Function {
     private Block callback;
-    private List<String> argumentNames;
+    private List<ArgumentDefinition> arguments;
 
-    public FunctionUser(Block callback, List<String> argumentNames) {
+    public FunctionUser(Block callback, List<ArgumentDefinition> arguments) {
         this.callback = callback;
-        this.argumentNames = argumentNames;
+        this.arguments = arguments;
     }
 
-    public List<String> getArgumentNames() {
-        return argumentNames;
+    public List<ArgumentDefinition> getArgumentDefinitions() {
+        return arguments;
     }
 
     @Override
     public int getArguments() {
-        return argumentNames.size();
+        return arguments.size();
     }
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return argument < argumentNames.size();
+        return argument < getArguments();
     }
 
     @Override
     public Value invoke(FunctionContext context) throws ParserException {
-        for (int i = 0; i < getArgumentNames().size(); ++i) {
-            callback.getParser().getScope().setSymbol(argumentNames.get(i), context.getArgument(i));
+        for (int i = 0; i < getArguments(); ++i) {
+            callback.getParser().getScope().setSymbol(arguments.get(i).getName(), context.getArgument(i));
         }
 
         return callback.invoke();
