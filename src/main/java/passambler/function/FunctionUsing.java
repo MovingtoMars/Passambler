@@ -9,6 +9,7 @@ import passambler.value.Value;
 import passambler.value.ValueStr;
 import passambler.pack.Package;
 import passambler.pack.PackageFileSystem;
+import passambler.value.ValueList;
 
 public class FunctionUsing extends Function {
     @Override
@@ -23,9 +24,7 @@ public class FunctionUsing extends Function {
 
     @Override
     public Value invoke(FunctionContext context) throws ParserException {
-        if (context.isAssignment() && context.getArguments().length > 1) {
-            throw new ParserException(ParserException.Type.BAD_SYNTAX, null, "can only use 1 value when assigning");
-        }
+        ValueList array = new ValueList();
 
         for (int i = 0; i < context.getArguments().length; ++i) {
             String specificValue = null;
@@ -73,27 +72,17 @@ public class FunctionUsing extends Function {
                 if (specificValue != null) {
                     final String key = specificValue;
 
-                    if (key.equals("*")) {
-                        if (context.isAssignment()) {
-                            throw new ParserException(ParserException.Type.BAD_SYNTAX, null, "using * is not possible here");
-                        }
+                    Value value = symbols.entrySet().stream()
+                        .filter(s -> s.getKey().equals(key))
+                        .findFirst()
+                        .orElseThrow(() -> new ParserException(ParserException.Type.UNDEFINED_PROPERTY, null, key))
+                        .getValue();
 
-                        context.getParser().getScope().getSymbols().putAll(symbols);
-                    } else {
-                        Value value = symbols.entrySet().stream()
-                            .filter(s -> s.getKey().equals(key))
-                            .findFirst()
-                            .orElseThrow(() -> new ParserException(ParserException.Type.UNDEFINED_PROPERTY, null, key))
-                            .getValue();
-
+                    if (!context.isAssignment()) {
                         context.getParser().getScope().setSymbol(key, value);
-
-                        if (context.isAssignment()) {
-                            return value;
-                        } else {
-                            context.getParser().getScope().setSymbol(key, value);
-                        }
                     }
+
+                    array.getValue().add(value);
                 } else {
                     Value value = new Value();
 
@@ -101,17 +90,15 @@ public class FunctionUsing extends Function {
                         value.setProperty(symbol.getKey(), symbol.getValue());
                     }
 
-                    context.getParser().getScope().setSymbol(currentPackageName, value);
-
-                    if (context.isAssignment()) {
-                        return value;
-                    } else {
+                    if (!context.isAssignment()) {
                         context.getParser().getScope().setSymbol(currentPackageName, value);
                     }
+
+                    array.getValue().add(value);
                 }
             }
         }
 
-        return null;
+        return array.getValue().size() == 1 ? array.getValue().get(0) : array;
     }
 }
