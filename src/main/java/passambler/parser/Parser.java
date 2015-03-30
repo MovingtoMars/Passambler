@@ -444,8 +444,6 @@ public class Parser {
                 }
 
                 if (stream.current().getType() != Token.Type.RPAREN) {
-                    stream.next();
-
                     stream.match(Token.Type.COMMA);
 
                     stream.next();

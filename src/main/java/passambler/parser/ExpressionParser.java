@@ -107,7 +107,7 @@ public class ExpressionParser {
         }
 
         Value value = null;
-       
+
         doPrecedence(values, Token.Type.AND, Token.Type.OR);
         doPrecedence(values, Token.Type.EQUAL, Token.Type.NEQUAL, Token.Type.GT, Token.Type.GTE, Token.Type.LT, Token.Type.LTE);
         doPrecedence(values, Token.Type.RANGE);
@@ -132,12 +132,12 @@ public class ExpressionParser {
     private void doPrecedence(List<ExpressionValue> values, Token.Type... types) throws ParserException {
         for (int i = 0; i < values.size(); ++i) {
             ExpressionValue current = values.get(i);
-            
+
             if (i > 0 && current.operator != null && Arrays.asList(types).contains(current.operator.getType())) {
                 ExpressionValue behind = values.get(i - 1);
 
                 behind.value = behind.value.onOperator(current.value, current.operator);
-                
+
                 values.remove(current);
             }
         }
@@ -248,7 +248,7 @@ public class ExpressionParser {
             int brackets = 0;
 
             Function currentFunction = (Function) currentValue;
-            
+
             for (Token token : tokens) {
                 if (token.getType() == Token.Type.LPAREN) {
                     paren++;
@@ -279,7 +279,7 @@ public class ExpressionParser {
                             argumentTokenStream.next();
 
                             List<ArgumentDefinition> argumentDefinitions = ((FunctionUser) currentFunction).getArgumentDefinitions();
-                            
+
                             int index = argumentDefinitions.indexOf(argumentDefinitions.stream().filter(a -> a.getName().equals(name)).findFirst().get());
 
                             if (index == -1) {
@@ -305,6 +305,23 @@ public class ExpressionParser {
                     }
 
                     argumentTokens.clear();
+                }
+            }
+
+            if (currentFunction instanceof FunctionUser) {
+                List<ArgumentDefinition> definitions = ((FunctionUser) currentFunction).getArgumentDefinitions();
+
+                for (int i = 0; i < definitions.size(); ++i) {
+                    if (i >= arguments.size()) {
+                        do {
+                            arguments.add(null);
+                        } while (arguments.size() != definitions.size());
+                    }
+
+                    if (arguments.get(i) == null) {
+                        arguments.remove(i);
+                        arguments.add(i, definitions.get(i).getDefaultValue());
+                    }
                 }
             }
 
