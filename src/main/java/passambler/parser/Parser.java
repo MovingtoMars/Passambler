@@ -11,6 +11,7 @@ import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
 import passambler.value.function.FunctionUser;
 import passambler.pack.Package;
+import passambler.pack.error.PackageError;
 import passambler.pack.file.PackageFile;
 import passambler.pack.json.PackageJson;
 import passambler.pack.math.PackageMath;
@@ -43,6 +44,7 @@ public class Parser {
         defaultPackages.add(new PackageNet());
         defaultPackages.add(new PackageThread());
         defaultPackages.add(new PackageJson());
+        defaultPackages.add(new PackageError());
     }
 
     public List<Package> getDefaultPackages() {
