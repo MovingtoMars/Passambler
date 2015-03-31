@@ -139,59 +139,45 @@ public class Parser {
                 value = new ExpressionParser(this, new TokenStream(tokens)).parse();
             }
         } else if (stream.first().getType() == Token.Type.FOR) {
-            stream.next();
-
-            stream.match(Token.Type.LPAREN);
-
-            int paren = 1;
-
-            stream.next();
-
-            List<Token> tokens = new ArrayList<>();
-
             List<String> arguments = new ArrayList<>();
 
-            while (stream.hasNext()) {
-                if (stream.rest().stream().anyMatch(t -> t.getType() == Token.Type.COL)) {
-                    while (stream.hasNext()) {
-                        arguments.add(stream.current().getValue());
-
-                        stream.next();
-
-                        if (stream.current().getType() == Token.Type.COL) {
-                            stream.next();
-
-                            break;
-                        } else {
-                            stream.match(Token.Type.COMMA);
-
-                            stream.next();
-                        }
-                    }
-
-                    continue;
-                } else if (stream.current().getType() == Token.Type.LPAREN) {
-                    paren++;
-                } else if (stream.current().getType() == Token.Type.RPAREN) {
-                    paren--;
-
-                    if (paren == 0) {
-                        break;
-                    }
-                }
-
-                tokens.add(stream.current());
-
-                stream.next();
-            }
-
-            stream.match(Token.Type.RPAREN);
+            stream.next();
+            stream.match(Token.Type.LPAREN);
 
             stream.next();
 
-            Value value = new ExpressionParser(this, new TokenStream(tokens)).parse();
+            TokenStream left = new TokenStream(expressionTokens(stream, Token.Type.RPAREN, Token.Type.COL));
+            Value right = null;
+
+            if (stream.current().getType() == Token.Type.COL) {
+                stream.next();
+
+                right = expression(stream, Token.Type.RPAREN);
+
+                stream.match(Token.Type.RPAREN);
+            }
+
+            stream.next();
 
             Block callback = block(stream);
+
+            if (right != null) {
+                while (left.hasNext()) {
+                    left.match(Token.Type.IDENTIFIER);
+
+                    arguments.add(left.current().getValue());
+
+                    if (left.peek() != null) {
+                        left.next();
+
+                        left.match(Token.Type.COMMA);
+                    }
+
+                    left.next();
+                }
+            }
+
+            Value value = right == null ? new ExpressionParser(this, left.copy()).parse() : right;
 
             if (value instanceof ValueList) {
                 ValueList list = (ValueList) value;
