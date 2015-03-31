@@ -66,11 +66,11 @@ Writeln(std.Split("My name is Raoul", " "));
 
 Writeln(std.List("Raoul"));
 
-Writeln(std.Num("1") + std.Num(1));
-Writeln(std.Bool(true) == std.Bool("true"));
-Writeln(std.Bool("true") == std.Bool(false));
-Writeln(std.Num("dog"));
-Writeln(std.Bool("cat"));
+Writeln(std.ToNum("1") + std.ToNum(1));
+Writeln(std.ToBool(true) == std.ToBool("true"));
+Writeln(std.ToBool("true") == std.ToBool(false));
+Writeln(std.ToNum("dog"));
+Writeln(std.ToBool("cat"));
 
 Writeln(std.Join(["I", "like", "cats", "and", "dogs"], "-"));
 

@@ -24,9 +24,9 @@ public class PackageStd implements Package {
         symbols.put("Read", new FunctionRead());
         symbols.put("ReadNum", new FunctionReadNum());
         symbols.put("ReadStr", new FunctionReadStr());
-        symbols.put("Str", new FunctionStr());
-        symbols.put("Num", new FunctionNum());
-        symbols.put("Bool", new FunctionBool());
+        symbols.put("ToStr", new FunctionToStr());
+        symbols.put("ToNum", new FunctionToNum());
+        symbols.put("ToBool", new FunctionToBool());
         symbols.put("Lcase", new FunctionLCase());
         symbols.put("Ucase", new FunctionUCase());
         symbols.put("Contains", new FunctionContains());
