@@ -19,7 +19,6 @@ try {
 try {
     Writeln("Now a problem should occur");
     throw("Problem!!");
-    Writeln("never ran");
 } catch (z) {
     Writeln("problem found: " + ToStr(z));
 }

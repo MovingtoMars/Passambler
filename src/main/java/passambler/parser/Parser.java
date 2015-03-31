@@ -28,6 +28,9 @@ import passambler.value.ValueNum;
 public class Parser {
     private List<Package> defaultPackages = new ArrayList<>();
 
+    private Block catchBlock;
+    private String catchErrorName;
+
     private Scope scope;
 
     public Parser() {
@@ -44,6 +47,11 @@ public class Parser {
         defaultPackages.add(new PackageNet());
         defaultPackages.add(new PackageThread());
         defaultPackages.add(new PackageJson());
+    }
+
+    public void setCatch(Block block, String errorName) {
+        this.catchBlock = block;
+        this.catchErrorName = errorName;
     }
 
     public List<Package> getDefaultPackages() {
@@ -266,13 +274,13 @@ public class Parser {
                 stream.match(Token.Type.RPAREN);
 
                 stream.next();
-                Block catchBlock = block(stream);
+
+                tryBlock.getParser().setCatch(block(stream), name);
 
                 Value result = tryBlock.invoke();
 
-                if (result instanceof ValueError) {
-                    catchBlock.getParser().getScope().setSymbol(name, result);
-                    catchBlock.invoke();
+                if (result != null) {
+                    return result;
                 }
             } else if (AssignmentParser.isAssignment(stream.copyAtCurrentPosition())) {
                 AssignmentParser assignmentParser = new AssignmentParser(this, stream);
@@ -282,7 +290,13 @@ public class Parser {
                 new ExpressionParser(this, stream).parse();
             }
         } catch (ErrorException e) {
-            return e.getError();
+            if (catchBlock != null) {
+                catchBlock.getParser().getScope().setSymbol(catchErrorName, e.getError());
+                
+                return catchBlock.invoke();
+            } else {
+                return e.getError();
+            }
         }
 
         return null;
@@ -331,6 +345,10 @@ public class Parser {
                     subTokens.clear();
 
                     if (result != null) {
+                        if (result instanceof ValueError) {
+                            throw new ErrorException((ValueError) result);
+                        }
+
                         return result;
                     }
                 }

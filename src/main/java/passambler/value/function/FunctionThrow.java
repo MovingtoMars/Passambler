@@ -3,6 +3,7 @@ package passambler.value.function;
 import passambler.parser.ErrorException;
 import passambler.parser.ParserException;
 import passambler.value.Value;
+import passambler.value.ValueError;
 
 public class FunctionThrow extends Value implements Function {
     @Override
@@ -17,6 +18,6 @@ public class FunctionThrow extends Value implements Function {
 
     @Override
     public Value invoke(FunctionContext context) throws ParserException {
-        throw new ErrorException(context.getArgument(0));
+        throw new ErrorException(new ValueError(context.getArgument(0)));
     }
 }

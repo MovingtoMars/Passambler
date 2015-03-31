@@ -16,6 +16,7 @@ import passambler.parser.ParserException;
 import passambler.lexer.Lexer;
 import passambler.lexer.LexerException;
 import passambler.lexer.Token;
+import passambler.parser.ErrorException;
 import passambler.tests.OutputRecorder;
 import passambler.tests.TestException;
 import passambler.tests.TestParser;
@@ -87,7 +88,7 @@ public class Main {
         } catch (LexerException e) {
             LOGGER.log(Level.SEVERE, "Lexer exception", e);
         } catch (ParserException e) {
-            LOGGER.log(Level.SEVERE, "Parser exception", e);
+            LOGGER.log(Level.SEVERE, e instanceof ErrorException ? "Error exception" : "Parser exception", e);
         } catch (RuntimeException e) {
             LOGGER.log(Level.SEVERE, "Runtime exception", e);
         }
@@ -178,7 +179,7 @@ public class Main {
 
                 tokens.clear();
             } catch (ParserException e) {
-                LOGGER.log(Level.WARNING, "Parser exception", e);
+                LOGGER.log(Level.WARNING, e instanceof ErrorException ? "Error exception" : "Parser exception", e);
 
                 tokens.clear();
             } catch (RuntimeException e) {
