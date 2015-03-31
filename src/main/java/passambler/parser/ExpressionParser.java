@@ -213,31 +213,9 @@ public class ExpressionParser {
     }
 
     private Value parseParen(Value currentValue) throws ParserException {
-        List<Token> tokens = new ArrayList<>();
-
         stream.next();
 
-        int paren = 1;
-
-        while (stream.hasNext()) {
-            if (stream.current().getType() == Token.Type.LPAREN) {
-                paren++;
-            } else if (stream.current().getType() == Token.Type.RPAREN) {
-                paren--;
-
-                if (paren == 0) {
-                    break;
-                }
-            }
-
-            tokens.add(stream.current());
-
-            stream.next();
-        }
-
-        if (paren != 0) {
-            throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "unmatching parens");
-        }
+        List<Token> tokens = parser.expressionTokens(stream, Token.Type.RPAREN);
 
         if (currentValue instanceof Function) {
             List<Token> argumentTokens = new ArrayList<>();
@@ -245,7 +223,7 @@ public class ExpressionParser {
 
             boolean usedNamedArguments = false;
 
-            int brackets = 0;
+            int braces = 0, paren = 0, brackets = 0;
 
             Function currentFunction = (Function) currentValue;
 
@@ -258,11 +236,15 @@ public class ExpressionParser {
                     brackets++;
                 } else if (token.getType() == Token.Type.RBRACKET) {
                     brackets--;
+                } else if (token.getType() == Token.Type.LBRACE) {
+                    braces++;
+                } else if (token.getType() == Token.Type.RBRACE) {
+                    braces--;
                 }
 
                 argumentTokens.add(token);
 
-                if (paren == 0 && brackets == 0 && (token.getType() == Token.Type.COMMA || tokens.indexOf(token) == tokens.size() - 1)) {
+                if (paren == 0 && brackets == 0 && braces == 0 && (token.getType() == Token.Type.COMMA || tokens.indexOf(token) == tokens.size() - 1)) {
                     if (token.getType() == Token.Type.COMMA) {
                         argumentTokens.remove(argumentTokens.size() - 1);
                     }
