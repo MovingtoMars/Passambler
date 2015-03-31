@@ -3,6 +3,7 @@ package passambler.pack.file.function;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import passambler.value.ValueError;
 import passambler.parser.ParserException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
@@ -30,7 +31,7 @@ public class FunctionWrite extends Value implements Function {
                 Files.write(Paths.get(fileName), ((ValueStr) context.getArgument(i)).getValue().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
             }
         } catch (Exception e) {
-            return new ValueBool(false);
+            return new ValueError(e);
         }
 
         return new ValueBool(true);

@@ -1,12 +1,12 @@
 package passambler.pack.net.function;
 
 import java.io.IOException;
+import passambler.value.ValueError;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.pack.net.value.ValueServerSocket;
 import passambler.value.Value;
-import passambler.value.ValueBool;
 import passambler.value.ValueNum;
 
 public class FunctionListen extends Value implements Function {
@@ -25,7 +25,7 @@ public class FunctionListen extends Value implements Function {
         try {
             return new ValueServerSocket(((ValueNum) context.getArgument(0)).getValue().intValue());
         } catch (IOException e) {
-            return new ValueBool(false);
+            return new ValueError(e);
         }
     }
 }

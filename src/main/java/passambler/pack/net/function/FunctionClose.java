@@ -1,6 +1,7 @@
 package passambler.pack.net.function;
 
 import java.io.IOException;
+import passambler.value.ValueError;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.parser.ParserException;
@@ -31,7 +32,7 @@ public class FunctionClose extends Value implements Function {
 
             return new ValueBool(true);
         } catch (IOException e) {
-            return new ValueBool(false);
+            return new ValueError(e);
         }
     }
 }

@@ -110,7 +110,7 @@ I like dogs
 2
 true
 false
-false
+java.lang.NumberFormatException
 false
 I-like-cats-and-dogs
 [{name=Sonja, age=18}, {name=Geert, age=20}]

@@ -1,13 +1,13 @@
 package passambler.pack.net.function;
 
 import java.io.IOException;
+import passambler.value.ValueError;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.pack.net.value.ValueServerSocket;
 import passambler.pack.net.value.ValueSocket;
 import passambler.value.Value;
-import passambler.value.ValueBool;
 
 public class FunctionAccept extends Value implements Function {
     @Override
@@ -27,7 +27,7 @@ public class FunctionAccept extends Value implements Function {
         try {
             return new ValueSocket(socket.getValue().accept());
         } catch (IOException e) {
-            return new ValueBool(false);
+            return new ValueError(e);
         }
     }
 }

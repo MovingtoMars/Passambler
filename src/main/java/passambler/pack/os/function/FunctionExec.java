@@ -3,6 +3,7 @@ package passambler.pack.os.function;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import passambler.value.ValueError;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.parser.ParserException;
@@ -46,7 +47,7 @@ public class FunctionExec extends Value implements Function {
 
             return new ValueStr(output.toString());
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            return new ValueError(e);
         }
     }
 }

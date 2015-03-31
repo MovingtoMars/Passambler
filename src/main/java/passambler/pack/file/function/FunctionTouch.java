@@ -3,6 +3,7 @@ package passambler.pack.file.function;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
+import passambler.value.ValueError;
 import passambler.value.Value;
 import passambler.value.ValueBool;
 
@@ -12,7 +13,7 @@ public class FunctionTouch extends FunctionSimpleFile {
         try {
             Files.setLastModifiedTime(file, FileTime.fromMillis(System.currentTimeMillis()));
         } catch (Exception e) {
-            return new ValueBool(false);
+            return new ValueError(e);
         }
 
         return new ValueBool(true);
