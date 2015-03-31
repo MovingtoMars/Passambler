@@ -19,6 +19,7 @@ try {
 try {
     Writeln("Now a problem should occur");
     throw("Problem!!");
+    Writeln('not ran');
 } catch (z) {
     Writeln("problem found: " + ToStr(z));
 }
