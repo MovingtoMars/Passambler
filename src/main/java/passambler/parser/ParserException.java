@@ -13,6 +13,7 @@ public class ParserException extends Exception {
         UNDEFINED_ARGUMENT("undefined argument %s"),
         UNDEFINED_VARIABLE("undefined variable %s"),
         UNDEFINED_PROPERTY("undefined property %s"),
+        UNDEFINED_CLASS("undefined class %s"),
         UNDEFINED_DICT_ENTRY("undefined dictionary entry %s"),
         UNDEFINED_PACKAGE("undefined package %s"),
         UNEXPECTED_EOF("unexpected end of file"),
@@ -20,10 +21,12 @@ public class ParserException extends Exception {
         UNSUPPORTED_OPERATOR("unsupported operator %s"),
         CANNOT_ITERATE("cannot iterate over this value"),
         CANNOT_USE_NAMED_ARGUMENTS("cannot use named arguments on this function"),
+        CANNOT_INSTANTIATE_EMPTY_FUNCTIONS("cannot instantiate class %s, it contains empty functions"),
         ZERO_DIVISION("cannot divide by 0"),
         NOT_ALLOWED("not allowed here"),
         NOT_A_LIST("value is not a list"),
         NOT_A_DICT("value is not a dictionary"),
+        NOT_A_CLASS("value is not a class"),
         EXPECTED_A_BOOL("expected a boolean");
 
         String message;

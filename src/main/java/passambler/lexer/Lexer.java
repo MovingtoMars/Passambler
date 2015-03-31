@@ -20,6 +20,7 @@ public class Lexer {
         tokenMap.put("return", Token.Type.RETURN);
         tokenMap.put("elseif", Token.Type.ELSEIF);
 
+        tokenMap.put("class", Token.Type.CLASS);
         tokenMap.put("catch", Token.Type.CATCH);
         tokenMap.put("while", Token.Type.WHILE);
 
@@ -214,6 +215,10 @@ public class Lexer {
 
     public Character peek(int amount) {
         return position + amount > input.length() - 1 ? null : input.charAt(position + amount);
+    }
+
+    public static boolean isPublic(String string) {
+        return Character.isUpperCase(string.charAt(0));
     }
 
     public static boolean isIdentifier(char c) {

@@ -20,10 +20,12 @@ import passambler.pack.std.PackageStd;
 import passambler.pack.thread.PackageThread;
 import passambler.value.Value;
 import passambler.value.ValueBool;
+import passambler.value.ValueClass;
 import passambler.value.ValueDict;
 import passambler.value.ValueError;
 import passambler.value.ValueList;
 import passambler.value.ValueNum;
+import passambler.value.function.FunctionContext;
 
 public class Parser {
     private List<Package> defaultPackages = new ArrayList<>();
@@ -246,7 +248,7 @@ public class Parser {
                 List<ArgumentDefinition> arguments = argumentDefinitions(stream);
 
                 if (stream.peek() == null) {
-                    scope.setSymbol(name, new FunctionUser(new Block(scope), arguments));
+                    scope.setSymbol(name, new FunctionUser(null, arguments));
                 } else {
                     stream.next();
 
@@ -254,6 +256,89 @@ public class Parser {
 
                     scope.setSymbol(name, new FunctionUser(callback, arguments));
                 }
+            } else if (stream.first().getType() == Token.Type.CLASS) {
+                ValueClass classValue = new ValueClass();
+
+                stream.next();
+                stream.match(Token.Type.IDENTIFIER);
+
+                Token name = stream.current();
+
+                stream.next();
+
+                List<ArgumentDefinition> arguments = argumentDefinitions(stream);
+
+                stream.next();
+
+                if (stream.current().getType() == Token.Type.COL) {
+                    List<Token> classes = new ArrayList<>();
+
+                    stream.next();
+
+                    while (stream.hasNext()) {
+                        stream.match(Token.Type.IDENTIFIER);
+
+                        classes.add(stream.current());
+
+                        stream.next();
+
+                        if (stream.current().getType() == Token.Type.LBRACE) {
+                            break;
+                        } else {
+                            stream.match(Token.Type.COMMA);
+
+                            stream.next();
+                        }
+                    }
+
+                    for (Token extend : classes) {
+                        String extendName = extend.getValue();
+
+                        if (scope.hasSymbol(extendName)) {
+                            if (scope.getSymbol(extendName) instanceof ValueClass) {
+                                ValueClass extendClass = (ValueClass) scope.getSymbol(extendName);
+
+                                for (Map.Entry<String, Value> symbol : extendClass.getBlock().getParser().getScope().getSymbols().entrySet()) {
+                                    classValue.setProperty(symbol.getKey(), symbol.getValue());
+                                }
+                            } else {
+                                throw new ParserException(ParserException.Type.NOT_A_CLASS, extend.getPosition());
+                            }
+                        } else {
+                            throw new ParserException(ParserException.Type.UNDEFINED_CLASS, extend.getPosition(), extend.getValue());
+                        }
+                    }
+                }
+
+                classValue.setBlock(block(stream));
+                classValue.getBlock().invoke();
+
+                for (Map.Entry<String, Value> symbol : classValue.getBlock().getParser().getScope().getSymbols().entrySet()) {
+                    classValue.setProperty(symbol.getKey(), symbol.getValue());
+                }
+
+                // I'm creating a user function here so that default and named arguments work.
+                // I'm also providing an empty block so the parser doesn't think it's an empty function.
+                classValue.setProperty("New", new FunctionUser(new Block(scope), arguments) {
+                    @Override
+                    public Value invoke(FunctionContext context) throws ParserException {
+                        if (classValue.hasEmptyFunctions()) {
+                            throw new ParserException(ParserException.Type.CANNOT_INSTANTIATE_EMPTY_FUNCTIONS, name.getValue());
+                        }
+
+                        for (int i = 0; i < getArguments(); ++i) {
+                            classValue.setProperty(arguments.get(i).getName(), context.getArgument(i));
+                        }
+                        
+                        if (classValue.hasProperty(name.getValue()) && classValue.getProperty(name.getValue()).getValue() instanceof FunctionUser) {
+                            ((FunctionUser) classValue.getProperty(name.getValue()).getValue()).invoke(context);
+                        }
+
+                        return classValue;
+                    }
+                });
+
+                scope.setSymbol(name.getValue(), classValue);
             } else if (stream.first().getType() == Token.Type.TRY) {
                 stream.next();
 
@@ -292,7 +377,7 @@ public class Parser {
         } catch (ErrorException e) {
             if (catchBlock != null) {
                 catchBlock.getParser().getScope().setSymbol(catchErrorName, e.getError());
-                
+
                 return catchBlock.invoke();
             } else {
                 return e.getError();

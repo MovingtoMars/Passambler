@@ -32,10 +32,14 @@ public class Value {
         this.value = value;
     }
 
+    public Map<String, Property> getProperties() {
+        return properties;
+    }
+
     public Property getProperty(String key) {
         return properties.get(key);
     }
-    
+
     public boolean hasProperty(String key) {
         return getProperty(key) != null;
     }

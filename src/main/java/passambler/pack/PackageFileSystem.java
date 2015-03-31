@@ -71,7 +71,7 @@ public class PackageFileSystem implements Package {
         }
 
         for (Map.Entry<String, Value> symbol : parser.getScope().getSymbols().entrySet()) {
-            if (Character.isUpperCase(symbol.getKey().charAt(0))) {
+            if (Lexer.isPublic(symbol.getKey())) {
                 symbols.put(symbol.getKey(), symbol.getValue());
             }
         }

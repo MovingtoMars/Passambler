@@ -7,12 +7,16 @@ import passambler.parser.ParserException;
 import passambler.value.Value;
 
 public class FunctionUser extends Value implements Function {
-    private Block callback;
+    private Block block;
     private List<ArgumentDefinition> arguments;
 
     public FunctionUser(Block callback, List<ArgumentDefinition> arguments) {
-        this.callback = callback;
+        this.block = callback;
         this.arguments = arguments;
+    }
+
+    public Block getBlock() {
+        return block;
     }
 
     public List<ArgumentDefinition> getArgumentDefinitions() {
@@ -31,10 +35,14 @@ public class FunctionUser extends Value implements Function {
 
     @Override
     public Value invoke(FunctionContext context) throws ParserException {
-        for (int i = 0; i < getArguments(); ++i) {
-            callback.getParser().getScope().setSymbol(arguments.get(i).getName(), context.getArgument(i));
+        if (block != null) {
+            for (int i = 0; i < getArguments(); ++i) {
+                block.getParser().getScope().setSymbol(arguments.get(i).getName(), context.getArgument(i));
+            }
+
+            return block.invoke();
         }
 
-        return callback.invoke();
+        return null;
     }
 }

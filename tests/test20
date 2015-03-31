@@ -1,5 +1,5 @@
 --TEST--
-Tests errors
+Tests errors.
 
 --INPUT--
 using('std.Writeln', 'std.ToStr');
