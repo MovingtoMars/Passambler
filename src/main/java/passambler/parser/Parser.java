@@ -317,8 +317,7 @@ public class Parser {
             subTokens.add(token);
 
             if (braces == 0 && paren == 0 && brackets == 0 && (token.getType() == Token.Type.SEMI_COL || token.getType() == Token.Type.RBRACE)) {
-                // TODO: make a method isSameLineToken() instead of large if
-                if (peekToken != null && (peekToken.getType() == Token.Type.ELSE || peekToken.getType() == Token.Type.ELSEIF || peekToken.getType() == Token.Type.CATCH || peekToken.getType().isOperator())) {
+                if (peekToken != null && peekToken.getType().isNotLineSensitive()) {
                     continue;
                 }
 
