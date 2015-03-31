@@ -249,11 +249,15 @@ public class Parser {
 
             List<ArgumentDefinition> arguments = argumentDefinitions(stream);
 
-            stream.next();
+            if (stream.peek() == null) {
+                scope.setSymbol(name, new FunctionUser(new Block(scope), arguments));
+            } else {
+                stream.next();
 
-            Block callback = block(stream);
+                Block callback = block(stream);
 
-            scope.setSymbol(name, new FunctionUser(callback, arguments));
+                scope.setSymbol(name, new FunctionUser(callback, arguments));
+            }
         } else if (AssignmentParser.isAssignment(stream.copyAtCurrentPosition())) {
             AssignmentParser assignmentParser = new AssignmentParser(this, stream);
 
