@@ -2,7 +2,7 @@
 Tests errors
 
 --INPUT--
-using('std.Writeln');
+using('std.Writeln', 'std.ToStr');
 
 try {
     using('file.Read')('sdjfisdjfidsfjisd');
@@ -16,6 +16,16 @@ try {
     Writeln('nope, not any problem');
 }
 
+try {
+    Writeln("Now a problem should occur");
+    throw("Problem!!");
+    Writeln("never ran");
+} catch (z) {
+    Writeln("problem found: " + ToStr(z));
+}
+
 --OUTPUT--
 java.nio.file.NoSuchFileException: sdjfisdjfidsfjisd
 no problem
+Now a problem should occur
+problem found: Problem!!
