@@ -8,7 +8,7 @@ import passambler.value.ValueStr;
 
 public class FunctionType extends FunctionSimpleFile {
     @Override
-    public Value getValue(Path file) {
+    public Value getReturnValue(Path file) {
         try {
             return new ValueStr(Files.probeContentType(file));
         } catch (Exception e) {

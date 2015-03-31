@@ -2,12 +2,12 @@ package passambler.pack.math.function;
 
 import java.math.BigDecimal;
 import passambler.parser.ParserException;
-import passambler.function.Function;
-import passambler.function.FunctionContext;
+import passambler.value.function.Function;
+import passambler.value.function.FunctionContext;
 import passambler.value.Value;
 import passambler.value.ValueNum;
 
-public abstract class FunctionSimpleMath extends Function {
+public abstract class FunctionSimpleMath extends Value implements Function {
     @Override
     public int getArguments() {
         return 1;
@@ -20,8 +20,8 @@ public abstract class FunctionSimpleMath extends Function {
 
     @Override
     public Value invoke(FunctionContext context) throws ParserException {
-        return new ValueNum(getValue(((ValueNum) context.getArgument(0)).getValue()));
+        return new ValueNum(getReturnValue(((ValueNum) context.getArgument(0)).getValue()));
     }
 
-    public abstract BigDecimal getValue(BigDecimal value);
+    public abstract BigDecimal getReturnValue(BigDecimal value);
 }

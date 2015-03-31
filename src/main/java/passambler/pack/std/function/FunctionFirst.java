@@ -1,12 +1,12 @@
 package passambler.pack.std.function;
 
 import passambler.parser.ParserException;
-import passambler.function.Function;
-import passambler.function.FunctionContext;
+import passambler.value.function.Function;
+import passambler.value.function.FunctionContext;
 import passambler.value.ValueList;
 import passambler.value.Value;
 
-public class FunctionFirst extends Function {
+public class FunctionFirst extends Value implements Function {
     @Override
     public int getArguments() {
         return 1;

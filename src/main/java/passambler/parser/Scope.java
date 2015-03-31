@@ -2,7 +2,7 @@ package passambler.parser;
 
 import java.util.HashMap;
 import java.util.Map;
-import passambler.function.FunctionUsing;
+import passambler.value.function.FunctionUsing;
 import passambler.lexer.Lexer;
 import passambler.value.Value;
 

@@ -1,4 +1,4 @@
-package passambler.function;
+package passambler.value.function;
 
 import java.util.List;
 import passambler.parser.ArgumentDefinition;
@@ -6,7 +6,7 @@ import passambler.parser.Block;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 
-public class FunctionUser extends Function {
+public class FunctionUser extends Value implements Function {
     private Block callback;
     private List<ArgumentDefinition> arguments;
 

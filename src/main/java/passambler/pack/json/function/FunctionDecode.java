@@ -4,8 +4,8 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import passambler.function.Function;
-import passambler.function.FunctionContext;
+import passambler.value.function.Function;
+import passambler.value.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueBool;
@@ -14,7 +14,7 @@ import passambler.value.ValueList;
 import passambler.value.ValueNum;
 import passambler.value.ValueStr;
 
-public class FunctionDecode extends Function {
+public class FunctionDecode extends Value implements Function {
     @Override
     public int getArguments() {
         return 1;

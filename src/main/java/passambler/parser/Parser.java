@@ -9,7 +9,7 @@ import passambler.lexer.Lexer;
 import passambler.lexer.LexerException;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
-import passambler.function.FunctionUser;
+import passambler.value.function.FunctionUser;
 import passambler.pack.Package;
 import passambler.pack.file.PackageFile;
 import passambler.pack.json.PackageJson;

@@ -7,7 +7,7 @@ import passambler.value.ValueNum;
 
 public class FunctionSize extends FunctionSimpleFile {
     @Override
-    public Value getValue(Path file) {
+    public Value getReturnValue(Path file) {
         try {
             return new ValueNum(Files.size(file));
         } catch (Exception e) {

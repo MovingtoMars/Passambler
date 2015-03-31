@@ -1,4 +1,4 @@
-package passambler.function;
+package passambler.value.function;
 
 import passambler.parser.Parser;
 import passambler.value.Value;

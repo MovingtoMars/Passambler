@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class FunctionLog extends FunctionSimpleMath {
     @Override
-    public BigDecimal getValue(BigDecimal value) {
+    public BigDecimal getReturnValue(BigDecimal value) {
         return new BigDecimal(Math.log(value.doubleValue()));
     }
 }

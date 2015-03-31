@@ -1,13 +1,13 @@
 package passambler.pack.std.function;
 
-import passambler.function.Function;
-import passambler.function.FunctionContext;
+import passambler.value.function.Function;
+import passambler.value.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueList;
 import passambler.value.ValueStr;
 
-public class FunctionJoin extends Function {
+public class FunctionJoin extends Value implements Function {
     @Override
     public int getArguments() {
         return 2;

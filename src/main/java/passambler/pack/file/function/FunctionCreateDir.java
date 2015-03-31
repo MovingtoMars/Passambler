@@ -7,7 +7,7 @@ import passambler.value.ValueBool;
 
 public class FunctionCreateDir extends FunctionSimpleFile {
     @Override
-    public Value getValue(Path file) {
+    public Value getReturnValue(Path file) {
         try {
             Files.createDirectory(file);
         } catch (Exception e) {

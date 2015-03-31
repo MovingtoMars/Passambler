@@ -8,7 +8,7 @@ import passambler.value.ValueNum;
 
 public class FunctionModified extends FunctionSimpleFile {
     @Override
-    public Value getValue(Path file) {
+    public Value getReturnValue(Path file) {
         try {
             return new ValueNum(Files.getLastModifiedTime(file).toMillis());
         } catch (Exception e) {

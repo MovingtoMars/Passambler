@@ -7,7 +7,7 @@ import passambler.value.ValueBool;
 
 public class FunctionDelete extends FunctionSimpleFile {
     @Override
-    public Value getValue(Path file) {
+    public Value getReturnValue(Path file) {
         try {
             Files.delete(file);
         } catch (Exception e) {

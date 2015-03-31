@@ -8,7 +8,7 @@ import passambler.value.ValueBool;
 
 public class FunctionTouch extends FunctionSimpleFile {
     @Override
-    public Value getValue(Path file) {
+    public Value getReturnValue(Path file) {
         try {
             Files.setLastModifiedTime(file, FileTime.fromMillis(System.currentTimeMillis()));
         } catch (Exception e) {

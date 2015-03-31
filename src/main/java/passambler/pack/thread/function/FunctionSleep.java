@@ -1,13 +1,13 @@
 package passambler.pack.thread.function;
 
-import passambler.function.Function;
-import passambler.function.FunctionContext;
+import passambler.value.function.Function;
+import passambler.value.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueNum;
 
-public class FunctionSleep extends Function {
+public class FunctionSleep extends Value implements Function {
     @Override
     public int getArguments() {
         return 1;

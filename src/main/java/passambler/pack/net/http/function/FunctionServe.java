@@ -9,15 +9,15 @@ import org.apache.http.protocol.ResponseDate;
 import org.apache.http.protocol.ResponseServer;
 import org.apache.http.protocol.UriHttpRequestHandlerMapper;
 import passambler.Main;
-import passambler.function.Function;
-import passambler.function.FunctionContext;
+import passambler.value.function.Function;
+import passambler.value.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.pack.net.http.thread.RequestListenerThread;
 import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueNum;
 
-public class FunctionServe extends Function {
+public class FunctionServe extends Value implements Function {
     private UriHttpRequestHandlerMapper mapper;
 
     public FunctionServe(UriHttpRequestHandlerMapper mapper) {

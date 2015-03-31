@@ -2,12 +2,12 @@ package passambler.pack.thread.function;
 
 import java.util.ArrayList;
 import java.util.List;
-import passambler.function.Function;
-import passambler.function.FunctionContext;
+import passambler.value.function.Function;
+import passambler.value.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 
-public class FunctionStart extends Function {
+public class FunctionStart extends Value implements Function {
     @Override
     public int getArguments() {
         return -1;

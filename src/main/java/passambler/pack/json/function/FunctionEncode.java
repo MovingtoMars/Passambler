@@ -3,8 +3,8 @@ package passambler.pack.json.function;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
-import passambler.function.Function;
-import passambler.function.FunctionContext;
+import passambler.value.function.Function;
+import passambler.value.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueBool;
@@ -13,7 +13,7 @@ import passambler.value.ValueList;
 import passambler.value.ValueNum;
 import passambler.value.ValueStr;
 
-public class FunctionEncode extends Function {
+public class FunctionEncode extends Value implements Function {
     @Override
     public int getArguments() {
         return 1;

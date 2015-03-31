@@ -1,13 +1,13 @@
 package passambler.pack.std.function;
 
 import passambler.parser.ParserException;
-import passambler.function.Function;
-import passambler.function.FunctionContext;
+import passambler.value.function.Function;
+import passambler.value.function.FunctionContext;
 import passambler.value.Value;
 import passambler.value.ValueList;
 import passambler.value.ValueNum;
 
-public class FunctionSlice extends Function {
+public class FunctionSlice extends Value implements Function {
     @Override
     public int getArguments() {
         return 3;

@@ -2,13 +2,13 @@ package passambler.pack.file.function;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import passambler.function.Function;
-import passambler.function.FunctionContext;
+import passambler.value.function.Function;
+import passambler.value.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueStr;
 
-public abstract class FunctionSimpleFile extends Function {
+public abstract class FunctionSimpleFile extends Value implements Function {
     @Override
     public int getArguments() {
         return 1;
@@ -21,8 +21,8 @@ public abstract class FunctionSimpleFile extends Function {
 
     @Override
     public Value invoke(FunctionContext context) throws ParserException {
-        return getValue(Paths.get(((ValueStr) context.getArgument(0)).getValue()));
+        return getReturnValue(Paths.get(((ValueStr) context.getArgument(0)).getValue()));
     }
 
-    public abstract Value getValue(Path file);
+    public abstract Value getReturnValue(Path file);
 }

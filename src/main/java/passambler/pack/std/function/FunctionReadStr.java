@@ -1,13 +1,13 @@
 package passambler.pack.std.function;
 
 import java.util.Scanner;
-import passambler.function.Function;
-import passambler.function.FunctionContext;
+import passambler.value.function.Function;
+import passambler.value.function.FunctionContext;
 import passambler.parser.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueStr;
 
-public class FunctionReadStr extends Function {
+public class FunctionReadStr extends Value implements Function {
     @Override
     public int getArguments() {
         return 0;

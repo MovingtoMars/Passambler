@@ -7,7 +7,7 @@ import passambler.value.ValueBool;
 
 public class FunctionIsDir extends FunctionSimpleFile {
     @Override
-    public Value getValue(Path file) {
+    public Value getReturnValue(Path file) {
         try {
             return new ValueBool(Files.isDirectory(file));
         } catch (Exception e) {

@@ -1,4 +1,4 @@
-package passambler.function;
+package passambler.value.function;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -11,7 +11,7 @@ import passambler.pack.Package;
 import passambler.pack.PackageFileSystem;
 import passambler.value.ValueList;
 
-public class FunctionUsing extends Function {
+public class FunctionUsing extends Value implements Function {
     @Override
     public int getArguments() {
         return -1;

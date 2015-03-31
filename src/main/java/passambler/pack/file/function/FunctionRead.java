@@ -8,7 +8,7 @@ import passambler.value.ValueStr;
 
 public class FunctionRead extends FunctionSimpleFile {
     @Override
-    public Value getValue(Path file) {
+    public Value getReturnValue(Path file) {
         try {
             return new ValueStr(String.join("\n", Files.readAllLines(file)));
         } catch (Exception e) {

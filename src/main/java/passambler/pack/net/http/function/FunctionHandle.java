@@ -7,8 +7,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.apache.http.protocol.UriHttpRequestHandlerMapper;
-import passambler.function.Function;
-import passambler.function.FunctionContext;
+import passambler.value.function.Function;
+import passambler.value.function.FunctionContext;
 import passambler.parser.Parser;
 import passambler.parser.ParserException;
 import passambler.pack.net.http.value.ValueRequest;
@@ -16,7 +16,7 @@ import passambler.pack.net.http.value.ValueResponse;
 import passambler.value.Value;
 import passambler.value.ValueStr;
 
-public class FunctionHandle extends Function {
+public class FunctionHandle extends Value implements Function {
     private UriHttpRequestHandlerMapper mapper;
     
     public FunctionHandle(UriHttpRequestHandlerMapper mapper) {
