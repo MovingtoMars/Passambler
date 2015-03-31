@@ -20,10 +20,12 @@ public class Lexer {
         tokenMap.put("return", Token.Type.RETURN);
         tokenMap.put("elseif", Token.Type.ELSEIF);
 
+        tokenMap.put("catch", Token.Type.CATCH);
         tokenMap.put("while", Token.Type.WHILE);
 
         tokenMap.put("else", Token.Type.ELSE);
 
+        tokenMap.put("try", Token.Type.TRY);
         tokenMap.put("for", Token.Type.FOR);
 
         tokenMap.put("<=>", Token.Type.COMPARE);

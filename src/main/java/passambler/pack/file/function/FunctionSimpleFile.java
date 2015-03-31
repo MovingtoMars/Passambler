@@ -24,5 +24,5 @@ public abstract class FunctionSimpleFile extends Value implements Function {
         return getReturnValue(Paths.get(((ValueStr) context.getArgument(0)).getValue()));
     }
 
-    public abstract Value getReturnValue(Path file);
+    public abstract Value getReturnValue(Path file) throws ParserException;
 }

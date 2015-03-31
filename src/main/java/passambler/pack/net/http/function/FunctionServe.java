@@ -9,7 +9,7 @@ import org.apache.http.protocol.ResponseDate;
 import org.apache.http.protocol.ResponseServer;
 import org.apache.http.protocol.UriHttpRequestHandlerMapper;
 import passambler.Main;
-import passambler.value.ValueError;
+import passambler.parser.ErrorException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.parser.ParserException;
@@ -52,7 +52,7 @@ public class FunctionServe extends Value implements Function {
 
             return new ValueBool(true);
         } catch (Exception e) {
-            return new ValueError(e);
+            throw new ErrorException(e);
         }
     }
 }

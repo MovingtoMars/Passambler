@@ -21,6 +21,7 @@ import passambler.pack.thread.PackageThread;
 import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueDict;
+import passambler.value.ValueError;
 import passambler.value.ValueList;
 import passambler.value.ValueNum;
 
@@ -54,202 +55,234 @@ public class Parser {
     }
 
     public Value parse(TokenStream stream) throws ParserException {
-        if (stream.first().getType() == Token.Type.IF) {
-            stream.next();
-
-            boolean elseCondition = false;
-
-            Map<ValueBool, Block> cases = new LinkedHashMap();
-
-            while (stream.hasNext()) {
-                if (!elseCondition) {
-                    stream.match(Token.Type.LPAREN);
-                    stream.next();
-
-                    List<Token> tokens = expressionTokens(stream, Token.Type.RPAREN);
-
-                    stream.match(Token.Type.RPAREN);
-
-                    Value condition = new ExpressionParser(this, new TokenStream(tokens)).parse();
-
-                    if (!(condition instanceof ValueBool)) {
-                        throw new ParserException(ParserException.Type.EXPECTED_A_BOOL, tokens.get(0).getPosition());
-                    }
-
-                    stream.next();
-
-                    cases.put((ValueBool) condition, block(stream));
-
-                    tokens.clear();
-                } else {
-                    cases.put(new ValueBool(true), block(stream));
-                }
-
+        try {
+            if (stream.first().getType() == Token.Type.IF) {
                 stream.next();
 
-                if (stream.current() != null) {
-                    if (elseCondition) {
-                        throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "else should be the last statement");
-                    }
+                boolean elseCondition = false;
 
-                    stream.match(Token.Type.ELSE, Token.Type.ELSEIF);
+                Map<ValueBool, Block> cases = new LinkedHashMap();
 
-                    if (stream.current().getType() == Token.Type.ELSE) {
-                        elseCondition = true;
+                while (stream.hasNext()) {
+                    if (!elseCondition) {
+                        stream.match(Token.Type.LPAREN);
+                        stream.next();
+
+                        List<Token> tokens = expressionTokens(stream, Token.Type.RPAREN);
+
+                        stream.match(Token.Type.RPAREN);
+
+                        Value condition = new ExpressionParser(this, new TokenStream(tokens)).parse();
+
+                        if (!(condition instanceof ValueBool)) {
+                            throw new ParserException(ParserException.Type.EXPECTED_A_BOOL, tokens.get(0).getPosition());
+                        }
+
+                        stream.next();
+
+                        cases.put((ValueBool) condition, block(stream));
+
+                        tokens.clear();
+                    } else {
+                        cases.put(new ValueBool(true), block(stream));
                     }
 
                     stream.next();
-                }
-            }
 
-            for (Map.Entry<ValueBool, Block> entry : cases.entrySet()) {
-                if (entry.getKey().getValue() == true) {
-                    Value result = entry.getValue().invoke();
+                    if (stream.current() != null) {
+                        if (elseCondition) {
+                            throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "else should be the last statement");
+                        }
 
-                    if (result != null) {
-                        return result;
+                        stream.match(Token.Type.ELSE, Token.Type.ELSEIF);
+
+                        if (stream.current().getType() == Token.Type.ELSE) {
+                            elseCondition = true;
+                        }
+
+                        stream.next();
                     }
-
-                    break;
-                }
-            }
-        } else if (stream.first().getType() == Token.Type.WHILE) {
-            stream.next();
-
-            stream.match(Token.Type.LPAREN);
-            stream.next();
-
-            List<Token> tokens = expressionTokens(stream, Token.Type.RPAREN);
-
-            stream.match(Token.Type.RPAREN);
-
-            stream.next();
-
-            Value value = new ExpressionParser(this, new TokenStream(tokens)).parse();
-
-            Block callback = block(stream);
-
-            while (((ValueBool) value).getValue()) {
-                Value result = callback.invoke();
-
-                if (result != null) {
-                    return result;
                 }
 
-                value = new ExpressionParser(this, new TokenStream(tokens)).parse();
-            }
-        } else if (stream.first().getType() == Token.Type.FOR) {
-            List<String> arguments = new ArrayList<>();
+                for (Map.Entry<ValueBool, Block> entry : cases.entrySet()) {
+                    if (entry.getKey().getValue() == true) {
+                        Value result = entry.getValue().invoke();
 
-            stream.next();
-            stream.match(Token.Type.LPAREN);
+                        if (result != null) {
+                            return result;
+                        }
 
-            stream.next();
-
-            TokenStream left = new TokenStream(expressionTokens(stream, Token.Type.RPAREN, Token.Type.COL));
-            Value right = null;
-
-            if (stream.current().getType() == Token.Type.COL) {
+                        break;
+                    }
+                }
+            } else if (stream.first().getType() == Token.Type.WHILE) {
                 stream.next();
 
-                right = expression(stream, Token.Type.RPAREN);
+                stream.match(Token.Type.LPAREN);
+                stream.next();
+
+                List<Token> tokens = expressionTokens(stream, Token.Type.RPAREN);
 
                 stream.match(Token.Type.RPAREN);
-            }
 
-            stream.next();
+                stream.next();
 
-            Block callback = block(stream);
+                Value value = new ExpressionParser(this, new TokenStream(tokens)).parse();
 
-            if (right != null) {
-                while (left.hasNext()) {
-                    left.match(Token.Type.IDENTIFIER);
+                Block callback = block(stream);
 
-                    arguments.add(left.current().getValue());
-
-                    if (left.peek() != null) {
-                        left.next();
-
-                        left.match(Token.Type.COMMA);
-                    }
-
-                    left.next();
-                }
-            }
-
-            Value value = right == null ? new ExpressionParser(this, left.copy()).parse() : right;
-
-            if (value instanceof ValueList) {
-                ValueList list = (ValueList) value;
-
-                for (int i = 0; i < list.getValue().size(); ++i) {
-                    if (arguments.size() == 1) {
-                        callback.getParser().getScope().setSymbol(arguments.get(0), list.getValue().get(i));
-                    } else if (arguments.size() == 2) {
-                        callback.getParser().getScope().setSymbol(arguments.get(0), new ValueNum(i));
-                        callback.getParser().getScope().setSymbol(arguments.get(1), list.getValue().get(i));
-                    } else if (arguments.size() > 2) {
-                        throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), 2, arguments.size());
-                    }
-
+                while (((ValueBool) value).getValue()) {
                     Value result = callback.invoke();
 
                     if (result != null) {
                         return result;
                     }
+
+                    value = new ExpressionParser(this, new TokenStream(tokens)).parse();
                 }
-            } else if (value instanceof ValueDict) {
-                ValueDict dict = (ValueDict) value;
+            } else if (stream.first().getType() == Token.Type.FOR) {
+                List<String> arguments = new ArrayList<>();
 
-                for (Map.Entry<Value, Value> entry : dict.getValue().entrySet()) {
-                    if (arguments.size() == 1) {
-                        callback.getParser().getScope().setSymbol(arguments.get(0), entry.getValue());
-                    } else if (arguments.size() == 2) {
-                        callback.getParser().getScope().setSymbol(arguments.get(0), entry.getKey());
-                        callback.getParser().getScope().setSymbol(arguments.get(1), entry.getValue());
-                    } else if (arguments.size() > 2) {
-                        throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), 2, arguments.size());
-                    }
+                stream.next();
+                stream.match(Token.Type.LPAREN);
 
-                    Value result = callback.invoke();
+                stream.next();
 
-                    if (result != null) {
-                        return result;
-                    }
+                TokenStream left = new TokenStream(expressionTokens(stream, Token.Type.RPAREN, Token.Type.COL));
+                Value right = null;
+
+                if (stream.current().getType() == Token.Type.COL) {
+                    stream.next();
+
+                    right = expression(stream, Token.Type.RPAREN);
+
+                    stream.match(Token.Type.RPAREN);
                 }
-            } else {
-                throw new ParserException(ParserException.Type.CANNOT_ITERATE, stream.first().getPosition());
-            }
-        } else if (stream.first().getType() == Token.Type.RETURN) {
-            stream.next();
 
-            return new ExpressionParser(this, new TokenStream(stream.rest())).parse();
-        } else if (stream.first().getType() == Token.Type.FN) {
-            stream.next();
-
-            stream.match(Token.Type.IDENTIFIER);
-
-            String name = stream.current().getValue();
-
-            stream.next();
-
-            List<ArgumentDefinition> arguments = argumentDefinitions(stream);
-
-            if (stream.peek() == null) {
-                scope.setSymbol(name, new FunctionUser(new Block(scope), arguments));
-            } else {
                 stream.next();
 
                 Block callback = block(stream);
 
-                scope.setSymbol(name, new FunctionUser(callback, arguments));
-            }
-        } else if (AssignmentParser.isAssignment(stream.copyAtCurrentPosition())) {
-            AssignmentParser assignmentParser = new AssignmentParser(this, stream);
+                if (right != null) {
+                    while (left.hasNext()) {
+                        left.match(Token.Type.IDENTIFIER);
 
-            assignmentParser.parse();
-        } else {
-            new ExpressionParser(this, stream).parse();
+                        arguments.add(left.current().getValue());
+
+                        if (left.peek() != null) {
+                            left.next();
+
+                            left.match(Token.Type.COMMA);
+                        }
+
+                        left.next();
+                    }
+                }
+
+                Value value = right == null ? new ExpressionParser(this, left.copy()).parse() : right;
+
+                if (value instanceof ValueList) {
+                    ValueList list = (ValueList) value;
+
+                    for (int i = 0; i < list.getValue().size(); ++i) {
+                        if (arguments.size() == 1) {
+                            callback.getParser().getScope().setSymbol(arguments.get(0), list.getValue().get(i));
+                        } else if (arguments.size() == 2) {
+                            callback.getParser().getScope().setSymbol(arguments.get(0), new ValueNum(i));
+                            callback.getParser().getScope().setSymbol(arguments.get(1), list.getValue().get(i));
+                        } else if (arguments.size() > 2) {
+                            throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), 2, arguments.size());
+                        }
+
+                        Value result = callback.invoke();
+
+                        if (result != null) {
+                            return result;
+                        }
+                    }
+                } else if (value instanceof ValueDict) {
+                    ValueDict dict = (ValueDict) value;
+
+                    for (Map.Entry<Value, Value> entry : dict.getValue().entrySet()) {
+                        if (arguments.size() == 1) {
+                            callback.getParser().getScope().setSymbol(arguments.get(0), entry.getValue());
+                        } else if (arguments.size() == 2) {
+                            callback.getParser().getScope().setSymbol(arguments.get(0), entry.getKey());
+                            callback.getParser().getScope().setSymbol(arguments.get(1), entry.getValue());
+                        } else if (arguments.size() > 2) {
+                            throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), 2, arguments.size());
+                        }
+
+                        Value result = callback.invoke();
+
+                        if (result != null) {
+                            return result;
+                        }
+                    }
+                } else {
+                    throw new ParserException(ParserException.Type.CANNOT_ITERATE, stream.first().getPosition());
+                }
+            } else if (stream.first().getType() == Token.Type.RETURN) {
+                stream.next();
+
+                return new ExpressionParser(this, new TokenStream(stream.rest())).parse();
+            } else if (stream.first().getType() == Token.Type.FN) {
+                stream.next();
+
+                stream.match(Token.Type.IDENTIFIER);
+
+                String name = stream.current().getValue();
+
+                stream.next();
+
+                List<ArgumentDefinition> arguments = argumentDefinitions(stream);
+
+                if (stream.peek() == null) {
+                    scope.setSymbol(name, new FunctionUser(new Block(scope), arguments));
+                } else {
+                    stream.next();
+
+                    Block callback = block(stream);
+
+                    scope.setSymbol(name, new FunctionUser(callback, arguments));
+                }
+            } else if (stream.first().getType() == Token.Type.TRY) {
+                stream.next();
+
+                Block tryBlock = block(stream);
+
+                stream.next();
+
+                stream.match(Token.Type.CATCH);
+                stream.next();
+
+                stream.match(Token.Type.LPAREN);
+                stream.next();
+
+                stream.match(Token.Type.IDENTIFIER);
+                String name = stream.current().getValue();
+
+                stream.next();
+                stream.match(Token.Type.RPAREN);
+
+                stream.next();
+                Block catchBlock = block(stream);
+
+                Value result = tryBlock.invoke();
+
+                if (result instanceof ValueError) {
+                    catchBlock.getParser().getScope().setSymbol(name, result);
+                    catchBlock.invoke();
+                }
+            } else if (AssignmentParser.isAssignment(stream.copyAtCurrentPosition())) {
+                AssignmentParser assignmentParser = new AssignmentParser(this, stream);
+
+                assignmentParser.parse();
+            } else {
+                new ExpressionParser(this, stream).parse();
+            }
+        } catch (ErrorException e) {
+            return e.getError();
         }
 
         return null;
@@ -284,7 +317,8 @@ public class Parser {
             subTokens.add(token);
 
             if (braces == 0 && paren == 0 && brackets == 0 && (token.getType() == Token.Type.SEMI_COL || token.getType() == Token.Type.RBRACE)) {
-                if (peekToken != null && (peekToken.getType() == Token.Type.ELSE || peekToken.getType() == Token.Type.ELSEIF || peekToken.getType().isOperator())) {
+                // TODO: make a method isSameLineToken() instead of large if
+                if (peekToken != null && (peekToken.getType() == Token.Type.ELSE || peekToken.getType() == Token.Type.ELSEIF || peekToken.getType() == Token.Type.CATCH || peekToken.getType().isOperator())) {
                     continue;
                 }
 

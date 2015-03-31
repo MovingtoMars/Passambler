@@ -10,7 +10,8 @@ public class Token {
         AND, OR,
         WHILE, FOR, FN, RETURN, IF, ELSEIF, ELSE,
         RANGE,
-        PERIOD, COMMA, SEMI_COL, COL;
+        PERIOD, COMMA, SEMI_COL, COL,
+        TRY, CATCH;
 
         public boolean isOperator() {
             return this == PLUS || this == MINUS || this == MULTIPLY || this == DIVIDE || this == POWER || this == MODULO

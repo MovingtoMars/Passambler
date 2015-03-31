@@ -1,7 +1,7 @@
 package passambler.pack.std.function;
 
 import java.math.BigDecimal;
-import passambler.value.ValueError;
+import passambler.parser.ErrorException;
 import passambler.parser.ParserException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
@@ -24,7 +24,7 @@ public class FunctionToNum extends Value implements Function {
         try {
             return new ValueNum(new BigDecimal(context.getArgument(0).toString()));
         } catch (Exception e) {
-            return new ValueError(e);
+            throw new ErrorException(e);
         }
     }
 }

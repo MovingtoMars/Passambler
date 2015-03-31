@@ -1,7 +1,7 @@
 package passambler.pack.net.function;
 
 import java.io.IOException;
-import passambler.value.ValueError;
+import passambler.parser.ErrorException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.parser.ParserException;
@@ -27,7 +27,7 @@ public class FunctionAccept extends Value implements Function {
         try {
             return new ValueSocket(socket.getValue().accept());
         } catch (IOException e) {
-            return new ValueError(e);
+            throw new ErrorException(e);
         }
     }
 }

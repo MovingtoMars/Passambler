@@ -1,6 +1,6 @@
 package passambler.pack.std.function;
 
-import passambler.value.ValueError;
+import passambler.parser.ErrorException;
 import passambler.parser.ParserException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
@@ -23,7 +23,7 @@ public class FunctionToBool extends Value implements Function {
         try {
             return new ValueBool(Boolean.valueOf(context.getArgument(0).toString()));
         } catch (Exception e) {
-            return new ValueError(e);
+            throw new ErrorException(e);
         }
     }
 }

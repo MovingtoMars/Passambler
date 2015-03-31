@@ -1,0 +1,21 @@
+--TEST--
+Tests errors
+
+--INPUT--
+using('std.Writeln');
+
+try {
+    using('file.Read')('sdjfisdjfidsfjisd');
+} catch (x) {
+    Writeln(x);
+}
+
+try {
+    Writeln('no problem');
+} catch (y) {
+    Writeln('nope, not any problem');
+}
+
+--OUTPUT--
+java.nio.file.NoSuchFileException: sdjfisdjfidsfjisd
+no problem

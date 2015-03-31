@@ -1,7 +1,7 @@
 package passambler.pack.std.function;
 
 import java.util.Scanner;
-import passambler.value.ValueError;
+import passambler.parser.ErrorException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.parser.ParserException;
@@ -29,7 +29,7 @@ public class FunctionReadNum extends Value implements Function {
         try {
             return new ValueNum(floating ? scanner.nextDouble() : scanner.nextInt());
         } catch (Exception e) {
-            return new ValueError(e);
+            throw new ErrorException(e);
         }
     }
 }

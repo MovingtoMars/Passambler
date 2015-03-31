@@ -69,8 +69,6 @@ Writeln(std.List("Raoul"));
 Writeln(std.ToNum("1") + std.ToNum(1));
 Writeln(std.ToBool(true) == std.ToBool("true"));
 Writeln(std.ToBool("true") == std.ToBool(false));
-Writeln(std.ToNum("dog"));
-Writeln(std.ToBool("cat"));
 
 Writeln(std.Join(["I", "like", "cats", "and", "dogs"], "-"));
 
@@ -109,8 +107,6 @@ I like dogs
 [R, a, o, u, l]
 2
 true
-false
-java.lang.NumberFormatException
 false
 I-like-cats-and-dogs
 [{name=Sonja, age=18}, {name=Geert, age=20}]
