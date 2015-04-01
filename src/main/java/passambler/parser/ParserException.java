@@ -21,7 +21,6 @@ public class ParserException extends Exception {
         UNSUPPORTED_OPERATOR("unsupported operator %s"),
         CANNOT_ITERATE("cannot iterate over this value"),
         CANNOT_USE_NAMED_ARGUMENTS("cannot use named arguments on this function"),
-        CANNOT_INSTANTIATE_EMPTY_FUNCTIONS("cannot instantiate class %s, it contains empty functions"),
         ZERO_DIVISION("cannot divide by 0"),
         NOT_ALLOWED("not allowed here"),
         NOT_A_LIST("value is not a list"),

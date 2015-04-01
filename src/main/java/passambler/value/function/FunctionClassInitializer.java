@@ -48,29 +48,23 @@ public class FunctionClassInitializer extends FunctionUser {
 
         Value self = new Value();
 
-        // Set all the symbols of the constructor.
+        // Constructor arguments
         for (int i = 0; i < getArguments(); ++i) {
             self.setProperty(getArgumentDefinitions().get(i).getName(), context.getArgument(i));
         }
 
-        // First initialize all the parent symbols.
+        // Apply symbols from parents
         for (FunctionClassInitializer parent : parents) {
-            // Set the symbols of the parent class to self.
             for (Map.Entry<String, Value> symbol : parent.getBlock().getParser().getScope().getSymbols().entrySet()) {
                 self.setProperty(symbol.getKey(), symbol.getValue());
             }
-        }
-
-        // Check if ANY function is empty.
-        if (getFunctions().stream().anyMatch(f -> f.getBlock() == null)) {
-            throw new ParserException(ParserException.Type.CANNOT_INSTANTIATE_EMPTY_FUNCTIONS, name);
         }
 
         getBlock().getParser().getScope().setSymbol("self", self);
 
         getBlock().invoke();
 
-        // Now set all the symbols...
+        // Apply all the symbols to the class
         for (Map.Entry<String, Value> symbol : getBlock().getParser().getScope().getSymbols().entrySet()) {
             if (Lexer.isPublic(symbol.getKey())) {
                 child.setProperty(symbol.getKey(), symbol.getValue());
