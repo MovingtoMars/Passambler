@@ -28,7 +28,7 @@ public class TestParser {
             } else if (section != null) {
                 sections.get(section).append(line);
 
-                if (!line.equals(lines.get(lines.size() - 1))) {
+                if (lines.indexOf(line) != lines.size() - 1) {
                     sections.get(section).append("\n");
                 }
             }
