@@ -8,10 +8,18 @@ import passambler.value.Value;
 public class Block {
     private Parser parser;
 
+    private Scope rootScope;
+
     private List<Token> tokens = new ArrayList<>();
 
     public Block(Scope scope) {
-        this.parser = new Parser(new Scope(scope));
+        this.rootScope = scope;
+
+        this.refreshParser();
+    }
+
+    public void refreshParser() {
+        this.parser = new Parser(new Scope(rootScope));
     }
 
     public Parser getParser() {

@@ -21,11 +21,11 @@ import passambler.pack.thread.PackageThread;
 import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueClass;
+import passambler.value.function.FunctionClassInitializer;
 import passambler.value.ValueDict;
 import passambler.value.ValueError;
 import passambler.value.ValueList;
 import passambler.value.ValueNum;
-import passambler.value.function.FunctionContext;
 
 public class Parser {
     private List<Package> defaultPackages = new ArrayList<>();
@@ -268,10 +268,30 @@ public class Parser {
 
                 stream.next();
 
-                ValueClass valueClass = new ValueClass(name, block(stream), arguments);
-                valueClass.applyBlockSymbols(valueClass.getBlock());
+                List<FunctionClassInitializer> parents = new ArrayList<>();
 
-                scope.setSymbol(name, valueClass);
+                if (stream.current().getType() == Token.Type.COL) {
+                    stream.next();
+
+                    while (stream.current().getType() != Token.Type.LBRACE) {
+                        Value expression = expression(stream, Token.Type.COMMA, Token.Type.RPAREN, Token.Type.LBRACE);
+
+                        if (!(expression instanceof ValueClass)) {
+                            throw new ParserException(ParserException.Type.NOT_A_CLASS, stream.current().getPosition());
+                        }
+
+                        // Here we add the class initializer (the name of the symbol is the name of the class expression)
+                        parents.add((FunctionClassInitializer) scope.getSymbol(((ValueClass) expression).getName()));
+                    }
+                }
+
+                FunctionClassInitializer child = new FunctionClassInitializer(name, block(stream), arguments);
+
+                for (FunctionClassInitializer parent : parents) {
+                    child.addParent(parent);
+                }
+
+                scope.setSymbol(name, child);
             } else if (stream.first().getType() == Token.Type.TRY) {
                 stream.next();
 

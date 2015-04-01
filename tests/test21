@@ -24,10 +24,55 @@ Writeln(a);
 
 Writeln(g);
 
+class Sayer(msg="Hello world")
+{
+    fn Say(n)
+    {
+        Writeln(n + " " + self.msg);
+    }
+
+    fn SayMore()
+    {
+        for (1..3) {
+            Writeln(self.msg);
+        }
+    }
+
+    fn private()
+    {
+        Writeln("private");
+    }
+}
+
+s = Sayer("test");
+s.Say("Raoul");
+
+x = Sayer();
+x.Say("Raoul");
+
+y = Sayer(msg="test 2");
+y.Say("Raoul");
+
+class Sayer2() : Sayer("How are you?")
+{
+    fn Say2(x)
+    {
+        self.Say(x);
+        self.private();
+    }
+}
+
+z = Sayer2();
+z.Say2("Raoul");
+
 --OUTPUT--
 Hello Raoul
 Goodmorning Passambler
 Hello Raoul
 Greeter
-
 Greeter
+Raoul test
+Raoul Hello world
+Raoul test 2
+Raoul How are you?
+private
