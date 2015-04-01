@@ -349,7 +349,7 @@ public class Parser {
             subTokens.add(token);
 
             if (braces == 0 && paren == 0 && brackets == 0 && (token.getType() == Token.Type.SEMI_COL || token.getType() == Token.Type.RBRACE)) {
-                if (peekToken != null && peekToken.getType().isNotLineSensitive()) {
+                if (peekToken != null && peekToken.getType().isLineInsensitive()) {
                     continue;
                 }
 

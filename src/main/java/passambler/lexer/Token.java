@@ -26,7 +26,7 @@ public class Token {
                 || this == ASSIGN_PLUS || this == ASSIGN_MINUS || this == ASSIGN_MULTIPLY || this == ASSIGN_DIVIDE || this == ASSIGN_POWER || this == ASSIGN_MODULO;
         }
 
-        public boolean isNotLineSensitive() {
+        public boolean isLineInsensitive() {
             return this == ELSE || this == ELSEIF
                 || this == CATCH
                 || isOperator();
