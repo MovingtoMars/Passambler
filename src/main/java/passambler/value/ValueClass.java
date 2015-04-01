@@ -77,4 +77,9 @@ public class ValueClass extends FunctionUser {
 
         return classValue;
     }
+    
+    @Override
+    public String toString() {
+        return name;
+    }
 }
