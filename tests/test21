@@ -4,43 +4,23 @@ Tests classes.
 --INPUT--
 using('std.Writeln');
 
-class Hello()
+class Greeter(name, manner="Hello")
 {
-    fn Hello()
+    fn Greet()
     {
-        Writeln("hello");
-    }
-
-    fn Greet(who="User")
-    {
-        Writeln("greetings " + who);
+        Writeln(self.manner + " " + self.name);
     }
 }
 
-h = Hello.New();
-h.Greet();
-h.Greet("Raoul");
+g = Greeter("Raoul");
+g.Greet();
 
-class Math()
-{
-    fn sum(a, b) { return a + b; }
-    fn mul(a, b) { return a * b; }
-}
+a = Greeter(manner="Goodmorning", name="Passambler");
+a.Greet();
 
-class TestMath(n1, n2) : Math
-{
-    fn TestMath()
-    {
-        Writeln(this.sum(this.n1, this.n2));
-        Writeln(this.mul(this.n2, this.n1));
-    }
-}
-
-tm = TestMath.New(n2=3, n1=4);
+g.Greet();
 
 --OUTPUT--
-hello
-greetings User
-greetings Raoul
-7
-12
+Hello Raoul
+Goodmorning Passambler
+Hello Raoul

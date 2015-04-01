@@ -10,8 +10,8 @@ public class FunctionUser extends Value implements Function {
     private Block block;
     private List<ArgumentDefinition> arguments;
 
-    public FunctionUser(Block callback, List<ArgumentDefinition> arguments) {
-        this.block = callback;
+    public FunctionUser(Block block, List<ArgumentDefinition> arguments) {
+        this.block = block;
         this.arguments = arguments;
     }
 
