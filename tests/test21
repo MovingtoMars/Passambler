@@ -20,7 +20,14 @@ a.Greet();
 
 g.Greet();
 
+Writeln(a);
+
+Writeln(g);
+
 --OUTPUT--
 Hello Raoul
 Goodmorning Passambler
 Hello Raoul
+Greeter
+
+Greeter
