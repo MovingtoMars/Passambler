@@ -99,6 +99,8 @@ public class Main {
             files.add(testFile);
         }
 
+        LOGGER.log(Level.INFO, String.format("Running %d tests", files.size()));
+        
         for (Path file : files) {
             try {
                 TestParser parser = new TestParser(file);
@@ -111,11 +113,11 @@ public class Main {
 
                 OutputRecorder.stop();
 
-                LOGGER.log(Level.INFO, String.format("Test %s passed", file.getFileName()));
+                LOGGER.log(Level.INFO, String.format("Test '%s' passed", file.getFileName()));
             } catch (EngineException e) {
                 OutputRecorder.stop();
 
-                LOGGER.log(Level.WARNING, String.format("Test %s failed", file.getFileName()), e);
+                LOGGER.log(Level.WARNING, String.format("Test '%s' failed", file.getFileName()), e);
             }
         }
     }
