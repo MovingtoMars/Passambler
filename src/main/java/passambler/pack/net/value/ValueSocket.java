@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import passambler.exception.EngineException;
+import passambler.exception.ErrorException;
 import passambler.value.ReadHandler;
 import passambler.value.Value;
 import passambler.value.ValueStr;
@@ -25,19 +27,20 @@ public class ValueSocket extends Value implements WriteHandler, ReadHandler {
     }
 
     @Override
-    public void write(Value value) {
+    public void write(Value value) throws EngineException {
         try {
             socket.getOutputStream().write(value.getValue().toString().getBytes());
         } catch (IOException e) {
+            throw new ErrorException(e);
         }
     }
 
     @Override
-    public Value read() {
+    public Value read() throws EngineException {
         try {
             return new ValueStr(new BufferedReader(new InputStreamReader(socket.getInputStream())).readLine());
         } catch (IOException e) {
-            return Value.VALUE_NIL;
+            throw new ErrorException(e);
         }
     }
 }
