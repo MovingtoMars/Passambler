@@ -1,4 +1,4 @@
-package passambler.parser;
+package passambler.parser.assignment;
 
 import passambler.parser.expression.ExpressionParser;
 import passambler.exception.ParserException;
@@ -9,6 +9,7 @@ import passambler.lexer.TokenStream;
 import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenType;
+import passambler.parser.Parser;
 import passambler.value.Value;
 import passambler.value.ValueDict;
 import passambler.value.ValueList;
@@ -21,7 +22,6 @@ public class AssignmentParser {
 
     public AssignmentParser(Parser parser, TokenStream stream) {
         this.parser = parser;
-
         this.stream = stream;
     }
 

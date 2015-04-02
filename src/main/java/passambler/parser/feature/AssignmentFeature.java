@@ -2,7 +2,7 @@ package passambler.parser.feature;
 
 import passambler.exception.EngineException;
 import passambler.lexer.TokenStream;
-import passambler.parser.AssignmentParser;
+import passambler.parser.assignment.AssignmentParser;
 import passambler.parser.Parser;
 import passambler.value.Value;
 
