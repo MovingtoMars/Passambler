@@ -207,11 +207,11 @@ public class ExpressionParser {
     private Value parseFunction() throws EngineException {
         stream.next();
 
-        List<ArgumentDefinition> arguments = parser.argumentDefinitions(stream);
+        List<ArgumentDefinition> arguments = parser.parseArgumentDefinition(stream);
 
         stream.next();
 
-        Block callback = parser.block(stream);
+        Block callback = parser.parseBlock(stream);
 
         return new FunctionUser(callback, arguments);
     }
@@ -219,7 +219,7 @@ public class ExpressionParser {
     private Value parseParen(Value currentValue) throws EngineException {
         stream.next();
 
-        List<Token> tokens = parser.expressionTokens(stream, TokenType.RPAREN);
+        List<Token> tokens = parser.parseExpressionTokens(stream, TokenType.RPAREN);
 
         if (currentValue instanceof Function) {
             List<Token> argumentTokens = new ArrayList<>();

@@ -34,7 +34,7 @@ public class IfFeature implements Feature {
                 stream.match(TokenType.LPAREN);
                 stream.next();
 
-                List<Token> tokens = parser.expressionTokens(stream, TokenType.RPAREN);
+                List<Token> tokens = parser.parseExpressionTokens(stream, TokenType.RPAREN);
 
                 stream.match(TokenType.RPAREN);
 
@@ -46,11 +46,11 @@ public class IfFeature implements Feature {
 
                 stream.next();
 
-                cases.put((ValueBool) condition, parser.block(stream));
+                cases.put((ValueBool) condition, parser.parseBlock(stream));
 
                 tokens.clear();
             } else {
-                cases.put(new ValueBool(true), parser.block(stream));
+                cases.put(new ValueBool(true), parser.parseBlock(stream));
             }
 
             stream.next();

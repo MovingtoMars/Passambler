@@ -28,7 +28,7 @@ public class ClassFeature implements Feature {
 
         stream.next();
 
-        List<ArgumentDefinition> arguments = parser.argumentDefinitions(stream);
+        List<ArgumentDefinition> arguments = parser.parseArgumentDefinition(stream);
 
         stream.next();
 
@@ -38,7 +38,7 @@ public class ClassFeature implements Feature {
             stream.next();
 
             while (stream.current().getType() != TokenType.LBRACE) {
-                Value expression = parser.expression(stream, TokenType.COMMA, TokenType.RPAREN, TokenType.LBRACE);
+                Value expression = parser.parseExpression(stream, TokenType.COMMA, TokenType.RPAREN, TokenType.LBRACE);
 
                 if (!(expression instanceof ValueClass)) {
                     throw new ParserException(ParserExceptionType.NOT_A_CLASS, stream.current().getPosition());
@@ -49,7 +49,7 @@ public class ClassFeature implements Feature {
             }
         }
 
-        FunctionClassInitializer child = new FunctionClassInitializer(name, parser.block(stream), arguments);
+        FunctionClassInitializer child = new FunctionClassInitializer(name, parser.parseBlock(stream), arguments);
 
         for (FunctionClassInitializer parent : parents) {
             child.addParent(parent);

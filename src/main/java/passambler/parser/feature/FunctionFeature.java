@@ -26,14 +26,14 @@ public class FunctionFeature implements Feature {
 
         stream.next();
 
-        List<ArgumentDefinition> arguments = parser.argumentDefinitions(stream);
+        List<ArgumentDefinition> arguments = parser.parseArgumentDefinition(stream);
 
         if (stream.peek() == null) {
             parser.getScope().setSymbol(name, new FunctionUser(null, arguments));
         } else {
             stream.next();
 
-            Block callback = parser.block(stream);
+            Block callback = parser.parseBlock(stream);
 
             parser.getScope().setSymbol(name, new FunctionUser(callback, arguments));
         }

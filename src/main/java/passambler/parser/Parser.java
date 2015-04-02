@@ -157,7 +157,7 @@ public class Parser {
         return null;
     }
 
-    public Block block(TokenStream stream) throws EngineException {
+    public Block parseBlock(TokenStream stream) throws EngineException {
         Block block = new Block(scope);
 
         stream.match(TokenType.LBRACE);
@@ -187,7 +187,7 @@ public class Parser {
         return block;
     }
 
-    public List<Token> expressionTokens(TokenStream stream, TokenType... endingTokens) throws EngineException {
+    public List<Token> parseExpressionTokens(TokenStream stream, TokenType... endingTokens) throws EngineException {
         int braces = 0, paren = 0, brackets = 0;
 
         List<Token> valueTokens = new ArrayList<>();
@@ -221,11 +221,11 @@ public class Parser {
         return valueTokens;
     }
 
-    public Value expression(TokenStream stream, TokenType... endingTokens) throws EngineException {
-        return new ExpressionParser(this, new TokenStream(expressionTokens(stream, endingTokens))).parse();
+    public Value parseExpression(TokenStream stream, TokenType... endingTokens) throws EngineException {
+        return new ExpressionParser(this, new TokenStream(parseExpressionTokens(stream, endingTokens))).parse();
     }
 
-    public List<ArgumentDefinition> argumentDefinitions(TokenStream stream) throws EngineException {
+    public List<ArgumentDefinition> parseArgumentDefinition(TokenStream stream) throws EngineException {
         stream.match(TokenType.LPAREN);
 
         stream.next();
@@ -247,7 +247,7 @@ public class Parser {
                 if (stream.current().getType() == TokenType.ASSIGN) {
                     stream.next();
 
-                    definition.setDefaultValue(expression(stream, TokenType.RPAREN, TokenType.COMMA));
+                    definition.setDefaultValue(parseExpression(stream, TokenType.RPAREN, TokenType.COMMA));
                 }
 
                 if (stream.current().getType() != TokenType.RPAREN) {

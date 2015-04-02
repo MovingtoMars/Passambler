@@ -24,7 +24,7 @@ public class WhileFeature implements Feature {
         stream.match(TokenType.LPAREN);
         stream.next();
 
-        List<Token> tokens = parser.expressionTokens(stream, TokenType.RPAREN);
+        List<Token> tokens = parser.parseExpressionTokens(stream, TokenType.RPAREN);
 
         stream.match(TokenType.RPAREN);
 
@@ -32,7 +32,7 @@ public class WhileFeature implements Feature {
 
         Value value = new ExpressionParser(parser, new TokenStream(tokens)).parse();
 
-        Block callback = parser.block(stream);
+        Block callback = parser.parseBlock(stream);
 
         while (((ValueBool) value).getValue()) {
             Value result = callback.invoke();

@@ -31,20 +31,20 @@ public class ForFeature implements Feature {
 
         stream.next();
 
-        TokenStream left = new TokenStream(parser.expressionTokens(stream, TokenType.RPAREN, TokenType.COL));
+        TokenStream left = new TokenStream(parser.parseExpressionTokens(stream, TokenType.RPAREN, TokenType.COL));
         Value right = null;
 
         if (stream.current().getType() == TokenType.COL) {
             stream.next();
 
-            right = parser.expression(stream, TokenType.RPAREN);
+            right = parser.parseExpression(stream, TokenType.RPAREN);
 
             stream.match(TokenType.RPAREN);
         }
 
         stream.next();
 
-        Block callback = parser.block(stream);
+        Block callback = parser.parseBlock(stream);
 
         if (right != null) {
             while (left.hasNext()) {

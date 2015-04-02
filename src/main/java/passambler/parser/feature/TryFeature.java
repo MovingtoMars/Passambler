@@ -17,7 +17,7 @@ public class TryFeature implements Feature {
     public Value perform(Parser parser, TokenStream stream) throws EngineException {
         stream.next();
 
-        Block tryBlock = parser.block(stream);
+        Block tryBlock = parser.parseBlock(stream);
 
         stream.next();
 
@@ -35,7 +35,7 @@ public class TryFeature implements Feature {
 
         stream.next();
 
-        tryBlock.getParser().setCatch(parser.block(stream), name);
+        tryBlock.getParser().setCatch(parser.parseBlock(stream), name);
 
         Value result = tryBlock.invoke();
 
