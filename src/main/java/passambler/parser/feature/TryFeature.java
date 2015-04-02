@@ -39,6 +39,10 @@ public class TryFeature implements Feature {
 
         Value result = tryBlock.invoke();
 
-        return result;
+        if (result != null && result != Value.VALUE_NIL) {
+            return result;
+        }
+
+        return null;
     }
 }

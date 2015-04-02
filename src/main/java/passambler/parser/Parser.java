@@ -89,7 +89,9 @@ public class Parser {
             if (catchBlock != null) {
                 catchBlock.getParser().getScope().setSymbol(catchErrorName, e.getError());
 
-                return catchBlock.invoke();
+                Value catchResult = catchBlock.invoke();
+
+                return catchResult == null ? Value.VALUE_NIL : catchResult;
             } else {
                 return e.getError();
             }
