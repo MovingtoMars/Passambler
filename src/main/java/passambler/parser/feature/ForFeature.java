@@ -9,7 +9,7 @@ import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenStream;
 import passambler.lexer.TokenType;
 import passambler.parser.Block;
-import passambler.parser.ExpressionParser;
+import passambler.parser.expression.ExpressionParser;
 import passambler.parser.Parser;
 import passambler.value.Value;
 import passambler.value.ValueDict;

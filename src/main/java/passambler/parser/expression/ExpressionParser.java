@@ -1,4 +1,4 @@
-package passambler.parser;
+package passambler.parser.expression;
 
 import passambler.exception.ParserException;
 import java.math.BigDecimal;
@@ -14,6 +14,9 @@ import passambler.lexer.TokenStream;
 import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenType;
+import passambler.parser.ArgumentDefinition;
+import passambler.parser.Block;
+import passambler.parser.Parser;
 import passambler.value.ValueBool;
 import passambler.value.ValueDict;
 import passambler.value.ValueList;
@@ -21,12 +24,6 @@ import passambler.value.ValueNum;
 import passambler.value.ValueStr;
 
 public class ExpressionParser {
-    class ExpressionValue {
-        public Token operator;
-
-        public Value value;
-    }
-
     private boolean assignment;
 
     private Parser parser;
@@ -39,15 +36,13 @@ public class ExpressionParser {
 
     public ExpressionParser(Parser parser, TokenStream stream, boolean assignment) {
         this.parser = parser;
-
         this.stream = stream;
-
         this.assignment = assignment;
     }
 
     public Value parse() throws EngineException {
         List<Token> tokens = new ArrayList<>();
-        List<ExpressionValue> values = new ArrayList<>();
+        List<ValueOperatorPair> values = new ArrayList<>();
 
         Token lastOperator = null;
 
@@ -95,12 +90,12 @@ public class ExpressionParser {
                     tokens.add(new Token(TokenType.NUMBER, number.toString(), stream.current().getPosition()));
                 }
 
-                ExpressionValue newValue = new ExpressionValue();
+                ValueOperatorPair pair = new ValueOperatorPair();
 
-                newValue.operator = lastOperator;
-                newValue.value = createParser(new TokenStream(tokens)).parseSpecialized();
+                pair.setOperator(lastOperator);
+                pair.setValue(createParser(new TokenStream(tokens)).parseSpecialized());
 
-                values.add(newValue);
+                values.add(pair);
 
                 tokens.clear();
 
@@ -118,14 +113,14 @@ public class ExpressionParser {
         doPrecedence(values, TokenType.POWER);
         doPrecedence(values, TokenType.MULTIPLY, TokenType.DIVIDE);
 
-        for (ExpressionValue exprValue : values) {
+        for (ValueOperatorPair pair : values) {
             if (value == null) {
-                value = exprValue.value;
+                value = pair.getValue();
             } else {
-                value = value.onOperator(exprValue.value, exprValue.operator);
+                value = value.onOperator(pair.getValue(), pair.getOperator());
 
                 if (value == null) {
-                    throw new ParserException(ParserExceptionType.UNSUPPORTED_OPERATOR, exprValue.operator.getPosition(), exprValue.operator.getType());
+                    throw new ParserException(ParserExceptionType.UNSUPPORTED_OPERATOR, pair.getOperator().getPosition(), pair.getOperator().getType());
                 }
             }
         }
@@ -133,14 +128,14 @@ public class ExpressionParser {
         return value;
     }
 
-    private void doPrecedence(List<ExpressionValue> values, TokenType... types) throws EngineException {
+    private void doPrecedence(List<ValueOperatorPair> values, TokenType... types) throws EngineException {
         for (int i = 0; i < values.size(); ++i) {
-            ExpressionValue current = values.get(i);
+            ValueOperatorPair current = values.get(i);
 
-            if (i > 0 && current.operator != null && Arrays.asList(types).contains(current.operator.getType())) {
-                ExpressionValue behind = values.get(i - 1);
+            if (i > 0 && current.getOperator() != null && Arrays.asList(types).contains(current.getOperator().getType())) {
+                ValueOperatorPair behind = values.get(i - 1);
 
-                behind.value = behind.value.onOperator(current.value, current.operator);
+                behind.setValue(behind.getValue().onOperator(current.getValue(), current.getOperator()));
 
                 values.remove(current);
             }
