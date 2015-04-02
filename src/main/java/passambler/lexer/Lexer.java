@@ -188,7 +188,7 @@ public class Lexer {
 
                     position += identifierFound.length();
                 } else if (!matched) {
-                    throw new LexerException(String.format("unexpected character %c", current()), line, column);
+                    throw new LexerException(String.format("unexpected character '%c'", current()), line, column);
                 }
             }
         }
