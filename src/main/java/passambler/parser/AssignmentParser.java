@@ -7,6 +7,7 @@ import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
 import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
+import passambler.lexer.TokenType;
 import passambler.value.Value;
 import passambler.value.ValueDict;
 import passambler.value.ValueList;
@@ -48,7 +49,7 @@ public class AssignmentParser {
         while (leftStream.hasNext()) {
             Token token = leftStream.current();
 
-            if (token.getType() == Token.Type.IDENTIFIER) {
+            if (token.getType() == TokenType.IDENTIFIER) {
                 if (leftStream.peek() == null) {
                     if (!parser.getScope().hasSymbol(token.getValue())) {
                         parser.getScope().setSymbol(token.getValue(), rightValue);
@@ -62,10 +63,10 @@ public class AssignmentParser {
 
                     leftValue = parser.getScope().getSymbol(token.getValue());
                 }
-            } else if (token.getType() == Token.Type.PERIOD) {
+            } else if (token.getType() == TokenType.PERIOD) {
                 leftStream.next();
 
-                leftStream.match(Token.Type.IDENTIFIER);
+                leftStream.match(TokenType.IDENTIFIER);
 
                 String name = leftStream.current().getValue();
 
@@ -78,7 +79,7 @@ public class AssignmentParser {
                 } else {
                     leftValue = leftValue.getProperty(name).getValue();
                 }
-            } else if (token.getType() == Token.Type.LBRACKET) {
+            } else if (token.getType() == TokenType.LBRACKET) {
                 int brackets = 1;
 
                 List<Token> bracketTokens = new ArrayList<>();
@@ -86,9 +87,9 @@ public class AssignmentParser {
                 leftStream.next();
 
                 while (leftStream.hasNext()) {
-                    if (leftStream.current().getType() == Token.Type.LBRACKET) {
+                    if (leftStream.current().getType() == TokenType.LBRACKET) {
                         brackets++;
-                    } else if (leftStream.current().getType() == Token.Type.RBRACKET) {
+                    } else if (leftStream.current().getType() == TokenType.RBRACKET) {
                         brackets--;
 
                         if (brackets == 0) {
@@ -101,7 +102,7 @@ public class AssignmentParser {
                     leftStream.next();
                 }
 
-                leftStream.match(Token.Type.RBRACKET);
+                leftStream.match(TokenType.RBRACKET);
 
                 Value value = new ExpressionParser(parser, new TokenStream(bracketTokens)).parse();
 
@@ -144,7 +145,7 @@ public class AssignmentParser {
 
     public static boolean isAssignment(TokenStream stream) {
         while (stream.hasNext()) {
-            if (stream.current().getType() == Token.Type.LBRACE || stream.current().getType() == Token.Type.LPAREN) {
+            if (stream.current().getType() == TokenType.LBRACE || stream.current().getType() == TokenType.LPAREN) {
                 return false;
             } else if (stream.current().getType().isAssignmentOperator()) {
                 return true;

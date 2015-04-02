@@ -21,6 +21,7 @@ import passambler.pack.std.PackageStd;
 import passambler.pack.thread.PackageThread;
 import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
+import passambler.lexer.TokenType;
 import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueClass;
@@ -69,7 +70,7 @@ public class Parser {
 
     public Value parse(TokenStream stream) throws EngineException {
         try {
-            if (stream.first().getType() == Token.Type.IF) {
+            if (stream.first().getType() == TokenType.IF) {
                 stream.next();
 
                 boolean elseCondition = false;
@@ -78,12 +79,12 @@ public class Parser {
 
                 while (stream.hasNext()) {
                     if (!elseCondition) {
-                        stream.match(Token.Type.LPAREN);
+                        stream.match(TokenType.LPAREN);
                         stream.next();
 
-                        List<Token> tokens = expressionTokens(stream, Token.Type.RPAREN);
+                        List<Token> tokens = expressionTokens(stream, TokenType.RPAREN);
 
-                        stream.match(Token.Type.RPAREN);
+                        stream.match(TokenType.RPAREN);
 
                         Value condition = new ExpressionParser(this, new TokenStream(tokens)).parse();
 
@@ -107,9 +108,9 @@ public class Parser {
                             throw new ParserException(ParserExceptionType.BAD_SYNTAX, stream.first().getPosition(), "else should be the last statement");
                         }
 
-                        stream.match(Token.Type.ELSE, Token.Type.ELSEIF);
+                        stream.match(TokenType.ELSE, TokenType.ELSEIF);
 
-                        if (stream.current().getType() == Token.Type.ELSE) {
+                        if (stream.current().getType() == TokenType.ELSE) {
                             elseCondition = true;
                         }
 
@@ -128,15 +129,15 @@ public class Parser {
                         break;
                     }
                 }
-            } else if (stream.first().getType() == Token.Type.WHILE) {
+            } else if (stream.first().getType() == TokenType.WHILE) {
                 stream.next();
 
-                stream.match(Token.Type.LPAREN);
+                stream.match(TokenType.LPAREN);
                 stream.next();
 
-                List<Token> tokens = expressionTokens(stream, Token.Type.RPAREN);
+                List<Token> tokens = expressionTokens(stream, TokenType.RPAREN);
 
-                stream.match(Token.Type.RPAREN);
+                stream.match(TokenType.RPAREN);
 
                 stream.next();
 
@@ -153,23 +154,23 @@ public class Parser {
 
                     value = new ExpressionParser(this, new TokenStream(tokens)).parse();
                 }
-            } else if (stream.first().getType() == Token.Type.FOR) {
+            } else if (stream.first().getType() == TokenType.FOR) {
                 List<String> arguments = new ArrayList<>();
 
                 stream.next();
-                stream.match(Token.Type.LPAREN);
+                stream.match(TokenType.LPAREN);
 
                 stream.next();
 
-                TokenStream left = new TokenStream(expressionTokens(stream, Token.Type.RPAREN, Token.Type.COL));
+                TokenStream left = new TokenStream(expressionTokens(stream, TokenType.RPAREN, TokenType.COL));
                 Value right = null;
 
-                if (stream.current().getType() == Token.Type.COL) {
+                if (stream.current().getType() == TokenType.COL) {
                     stream.next();
 
-                    right = expression(stream, Token.Type.RPAREN);
+                    right = expression(stream, TokenType.RPAREN);
 
-                    stream.match(Token.Type.RPAREN);
+                    stream.match(TokenType.RPAREN);
                 }
 
                 stream.next();
@@ -178,14 +179,14 @@ public class Parser {
 
                 if (right != null) {
                     while (left.hasNext()) {
-                        left.match(Token.Type.IDENTIFIER);
+                        left.match(TokenType.IDENTIFIER);
 
                         arguments.add(left.current().getValue());
 
                         if (left.peek() != null) {
                             left.next();
 
-                            left.match(Token.Type.COMMA);
+                            left.match(TokenType.COMMA);
                         }
 
                         left.next();
@@ -235,14 +236,14 @@ public class Parser {
                 } else {
                     throw new ParserException(ParserExceptionType.CANNOT_ITERATE, stream.first().getPosition());
                 }
-            } else if (stream.first().getType() == Token.Type.RETURN) {
+            } else if (stream.first().getType() == TokenType.RETURN) {
                 stream.next();
 
                 return new ExpressionParser(this, new TokenStream(stream.rest())).parse();
-            } else if (stream.first().getType() == Token.Type.FN) {
+            } else if (stream.first().getType() == TokenType.FN) {
                 stream.next();
 
-                stream.match(Token.Type.IDENTIFIER);
+                stream.match(TokenType.IDENTIFIER);
 
                 String name = stream.current().getValue();
 
@@ -259,9 +260,9 @@ public class Parser {
 
                     scope.setSymbol(name, new FunctionUser(callback, arguments));
                 }
-            } else if (stream.first().getType() == Token.Type.CLASS) {
+            } else if (stream.first().getType() == TokenType.CLASS) {
                 stream.next();
-                stream.match(Token.Type.IDENTIFIER);
+                stream.match(TokenType.IDENTIFIER);
 
                 String name = stream.current().getValue();
 
@@ -273,11 +274,11 @@ public class Parser {
 
                 List<FunctionClassInitializer> parents = new ArrayList<>();
 
-                if (stream.current().getType() == Token.Type.COL) {
+                if (stream.current().getType() == TokenType.COL) {
                     stream.next();
 
-                    while (stream.current().getType() != Token.Type.LBRACE) {
-                        Value expression = expression(stream, Token.Type.COMMA, Token.Type.RPAREN, Token.Type.LBRACE);
+                    while (stream.current().getType() != TokenType.LBRACE) {
+                        Value expression = expression(stream, TokenType.COMMA, TokenType.RPAREN, TokenType.LBRACE);
 
                         if (!(expression instanceof ValueClass)) {
                             throw new ParserException(ParserExceptionType.NOT_A_CLASS, stream.current().getPosition());
@@ -295,24 +296,24 @@ public class Parser {
                 }
 
                 scope.setSymbol(name, child);
-            } else if (stream.first().getType() == Token.Type.TRY) {
+            } else if (stream.first().getType() == TokenType.TRY) {
                 stream.next();
 
                 Block tryBlock = block(stream);
 
                 stream.next();
 
-                stream.match(Token.Type.CATCH);
+                stream.match(TokenType.CATCH);
                 stream.next();
 
-                stream.match(Token.Type.LPAREN);
+                stream.match(TokenType.LPAREN);
                 stream.next();
 
-                stream.match(Token.Type.IDENTIFIER);
+                stream.match(TokenType.IDENTIFIER);
                 String name = stream.current().getValue();
 
                 stream.next();
-                stream.match(Token.Type.RPAREN);
+                stream.match(TokenType.RPAREN);
 
                 stream.next();
 
@@ -355,28 +356,28 @@ public class Parser {
         for (Token token : tokens) {
             Token peekToken = tokens.indexOf(token) == tokens.size() - 1 ? null : tokens.get(tokens.indexOf(token) + 1);
 
-            if (token.getType() == Token.Type.LBRACE) {
+            if (token.getType() == TokenType.LBRACE) {
                 braces++;
-            } else if (token.getType() == Token.Type.RBRACE) {
+            } else if (token.getType() == TokenType.RBRACE) {
                 braces--;
-            } else if (token.getType() == Token.Type.LPAREN) {
+            } else if (token.getType() == TokenType.LPAREN) {
                 paren++;
-            } else if (token.getType() == Token.Type.RPAREN) {
+            } else if (token.getType() == TokenType.RPAREN) {
                 paren--;
-            } else if (token.getType() == Token.Type.LBRACKET) {
+            } else if (token.getType() == TokenType.LBRACKET) {
                 brackets++;
-            } else if (token.getType() == Token.Type.RBRACKET) {
+            } else if (token.getType() == TokenType.RBRACKET) {
                 brackets--;
             }
 
             subTokens.add(token);
 
-            if (braces == 0 && paren == 0 && brackets == 0 && (token.getType() == Token.Type.SEMI_COL || token.getType() == Token.Type.RBRACE)) {
+            if (braces == 0 && paren == 0 && brackets == 0 && (token.getType() == TokenType.SEMI_COL || token.getType() == TokenType.RBRACE)) {
                 if (peekToken != null && peekToken.getType().isLineInsensitive()) {
                     continue;
                 }
 
-                if (token.getType() == Token.Type.SEMI_COL) {
+                if (token.getType() == TokenType.SEMI_COL) {
                     subTokens.remove(subTokens.size() - 1);
                 }
 
@@ -406,16 +407,16 @@ public class Parser {
     public Block block(TokenStream stream) throws EngineException {
         Block block = new Block(scope);
 
-        stream.match(Token.Type.LBRACE);
+        stream.match(TokenType.LBRACE);
 
         stream.next();
 
         int braces = 1;
 
         while (stream.hasNext()) {
-            if (stream.current().getType() == Token.Type.LBRACE) {
+            if (stream.current().getType() == TokenType.LBRACE) {
                 braces++;
-            } else if (stream.current().getType() == Token.Type.RBRACE) {
+            } else if (stream.current().getType() == TokenType.RBRACE) {
                 braces--;
 
                 if (braces == 0) {
@@ -428,12 +429,12 @@ public class Parser {
             stream.next();
         }
 
-        stream.match(Token.Type.RBRACE);
+        stream.match(TokenType.RBRACE);
 
         return block;
     }
 
-    public List<Token> expressionTokens(TokenStream stream, Token.Type... endingTokens) throws EngineException {
+    public List<Token> expressionTokens(TokenStream stream, TokenType... endingTokens) throws EngineException {
         int braces = 0, paren = 0, brackets = 0;
 
         List<Token> valueTokens = new ArrayList<>();
@@ -445,17 +446,17 @@ public class Parser {
                 break;
             }
 
-            if (token.getType() == Token.Type.LBRACE) {
+            if (token.getType() == TokenType.LBRACE) {
                 braces++;
-            } else if (token.getType() == Token.Type.RBRACE) {
+            } else if (token.getType() == TokenType.RBRACE) {
                 braces--;
-            } else if (token.getType() == Token.Type.LPAREN) {
+            } else if (token.getType() == TokenType.LPAREN) {
                 paren++;
-            } else if (token.getType() == Token.Type.RPAREN) {
+            } else if (token.getType() == TokenType.RPAREN) {
                 paren--;
-            } else if (token.getType() == Token.Type.LBRACKET) {
+            } else if (token.getType() == TokenType.LBRACKET) {
                 brackets++;
-            } else if (token.getType() == Token.Type.RBRACKET) {
+            } else if (token.getType() == TokenType.RBRACKET) {
                 brackets--;
             }
 
@@ -467,22 +468,22 @@ public class Parser {
         return valueTokens;
     }
 
-    public Value expression(TokenStream stream, Token.Type... endingTokens) throws EngineException {
+    public Value expression(TokenStream stream, TokenType... endingTokens) throws EngineException {
         return new ExpressionParser(this, new TokenStream(expressionTokens(stream, endingTokens))).parse();
     }
 
     public List<ArgumentDefinition> argumentDefinitions(TokenStream stream) throws EngineException {
-        stream.match(Token.Type.LPAREN);
+        stream.match(TokenType.LPAREN);
 
         stream.next();
 
         List<ArgumentDefinition> arguments = new ArrayList<>();
 
         while (stream.hasNext()) {
-            if (stream.current().getType() == Token.Type.RPAREN) {
+            if (stream.current().getType() == TokenType.RPAREN) {
                 break;
             } else {
-                stream.match(Token.Type.IDENTIFIER);
+                stream.match(TokenType.IDENTIFIER);
 
                 ArgumentDefinition definition = new ArgumentDefinition();
 
@@ -490,14 +491,14 @@ public class Parser {
 
                 stream.next();
 
-                if (stream.current().getType() == Token.Type.ASSIGN) {
+                if (stream.current().getType() == TokenType.ASSIGN) {
                     stream.next();
 
-                    definition.setDefaultValue(expression(stream, Token.Type.RPAREN, Token.Type.COMMA));
+                    definition.setDefaultValue(expression(stream, TokenType.RPAREN, TokenType.COMMA));
                 }
 
-                if (stream.current().getType() != Token.Type.RPAREN) {
-                    stream.match(Token.Type.COMMA);
+                if (stream.current().getType() != TokenType.RPAREN) {
+                    stream.match(TokenType.COMMA);
 
                     stream.next();
                 }
@@ -506,7 +507,7 @@ public class Parser {
             }
         }
 
-        stream.match(Token.Type.RPAREN);
+        stream.match(TokenType.RPAREN);
 
         return arguments;
     }

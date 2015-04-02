@@ -74,7 +74,7 @@ public class TokenStream {
         return new TokenStream(tokens, position);
     }
 
-    public void match(Token.Type... types) throws ParserException {
+    public void match(TokenType... types) throws ParserException {
         StringBuilder typesExpected = new StringBuilder();
 
         for (int i = 0; i < types.length; ++i) {

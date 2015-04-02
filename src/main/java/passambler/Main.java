@@ -16,7 +16,7 @@ import passambler.lexer.Lexer;
 import passambler.lexer.Token;
 import passambler.exception.EngineException;
 import passambler.tests.OutputRecorder;
-import passambler.exception.TestException;
+import passambler.lexer.TokenType;
 import passambler.tests.TestParser;
 import passambler.tests.TestRunner;
 import passambler.value.Value;
@@ -138,10 +138,10 @@ public class Main {
                 tokens.addAll(lexer.scan());
 
                 if (tokens.size() > 0) {
-                    Token.Type type = tokens.get(tokens.size() - 1).getType();
+                    TokenType type = tokens.get(tokens.size() - 1).getType();
 
-                    if (type != Token.Type.SEMI_COL && type != Token.Type.LBRACE) {
-                        tokens.add(new Token(Token.Type.SEMI_COL, null));
+                    if (type != TokenType.SEMI_COL && type != TokenType.LBRACE) {
+                        tokens.add(new Token(TokenType.SEMI_COL, null));
                     }
                 }
 
@@ -155,9 +155,9 @@ public class Main {
                     int braces = 0;
 
                     for (Token token : tokens) {
-                        if (token.getType() == Token.Type.LBRACE) {
+                        if (token.getType() == TokenType.LBRACE) {
                             braces++;
-                        } else if (token.getType() == Token.Type.RBRACE) {
+                        } else if (token.getType() == TokenType.RBRACE) {
                             braces--;
                         }
                     }

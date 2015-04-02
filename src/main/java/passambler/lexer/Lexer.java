@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Lexer {
-    private Map<String, Token.Type> tokenMap = new LinkedHashMap();
+    private Map<String, TokenType> tokenMap = new LinkedHashMap();
 
     private int line = 1, column = 1;
 
@@ -18,66 +18,66 @@ public class Lexer {
     public Lexer(String input) {
         this.input = input;
 
-        tokenMap.put("return", Token.Type.RETURN);
-        tokenMap.put("elseif", Token.Type.ELSEIF);
+        tokenMap.put("return", TokenType.RETURN);
+        tokenMap.put("elseif", TokenType.ELSEIF);
 
-        tokenMap.put("class", Token.Type.CLASS);
-        tokenMap.put("catch", Token.Type.CATCH);
-        tokenMap.put("while", Token.Type.WHILE);
+        tokenMap.put("class", TokenType.CLASS);
+        tokenMap.put("catch", TokenType.CATCH);
+        tokenMap.put("while", TokenType.WHILE);
 
-        tokenMap.put("else", Token.Type.ELSE);
+        tokenMap.put("else", TokenType.ELSE);
 
-        tokenMap.put("try", Token.Type.TRY);
-        tokenMap.put("for", Token.Type.FOR);
+        tokenMap.put("try", TokenType.TRY);
+        tokenMap.put("for", TokenType.FOR);
 
-        tokenMap.put("<=>", Token.Type.COMPARE);
+        tokenMap.put("<=>", TokenType.COMPARE);
 
-        tokenMap.put("fn", Token.Type.FN);
-        tokenMap.put("if", Token.Type.IF);
+        tokenMap.put("fn", TokenType.FN);
+        tokenMap.put("if", TokenType.IF);
 
-        tokenMap.put("==", Token.Type.EQUAL);
-        tokenMap.put("!=", Token.Type.NEQUAL);
-        tokenMap.put(">=", Token.Type.GTE);
-        tokenMap.put("<=", Token.Type.LTE);
+        tokenMap.put("==", TokenType.EQUAL);
+        tokenMap.put("!=", TokenType.NEQUAL);
+        tokenMap.put(">=", TokenType.GTE);
+        tokenMap.put("<=", TokenType.LTE);
 
-        tokenMap.put("&&", Token.Type.AND);
-        tokenMap.put("||", Token.Type.OR);
+        tokenMap.put("&&", TokenType.AND);
+        tokenMap.put("||", TokenType.OR);
 
-        tokenMap.put("..", Token.Type.RANGE);
-        tokenMap.put("+=", Token.Type.ASSIGN_PLUS);
-        tokenMap.put("-=", Token.Type.ASSIGN_MINUS);
-        tokenMap.put("*=", Token.Type.ASSIGN_MULTIPLY);
-        tokenMap.put("/=", Token.Type.ASSIGN_DIVIDE);
-        tokenMap.put("^=", Token.Type.ASSIGN_POWER);
-        tokenMap.put("%=", Token.Type.ASSIGN_MODULO);
+        tokenMap.put("..", TokenType.RANGE);
+        tokenMap.put("+=", TokenType.ASSIGN_PLUS);
+        tokenMap.put("-=", TokenType.ASSIGN_MINUS);
+        tokenMap.put("*=", TokenType.ASSIGN_MULTIPLY);
+        tokenMap.put("/=", TokenType.ASSIGN_DIVIDE);
+        tokenMap.put("^=", TokenType.ASSIGN_POWER);
+        tokenMap.put("%=", TokenType.ASSIGN_MODULO);
 
-        tokenMap.put("=", Token.Type.ASSIGN);
-        tokenMap.put(">", Token.Type.GT);
-        tokenMap.put("<", Token.Type.LT);
-        tokenMap.put("[", Token.Type.LBRACKET);
-        tokenMap.put("]", Token.Type.RBRACKET);
-        tokenMap.put("(", Token.Type.LPAREN);
-        tokenMap.put(")", Token.Type.RPAREN);
-        tokenMap.put("{", Token.Type.LBRACE);
-        tokenMap.put("}", Token.Type.RBRACE);
-        tokenMap.put("!", Token.Type.NOT);
-        tokenMap.put(",", Token.Type.COMMA);
-        tokenMap.put(".", Token.Type.PERIOD);
-        tokenMap.put("+", Token.Type.PLUS);
-        tokenMap.put("-", Token.Type.MINUS);
-        tokenMap.put("*", Token.Type.MULTIPLY);
-        tokenMap.put("/", Token.Type.DIVIDE);
-        tokenMap.put(":", Token.Type.COL);
-        tokenMap.put(";", Token.Type.SEMI_COL);
-        tokenMap.put("^", Token.Type.POWER);
-        tokenMap.put("%", Token.Type.MODULO);
+        tokenMap.put("=", TokenType.ASSIGN);
+        tokenMap.put(">", TokenType.GT);
+        tokenMap.put("<", TokenType.LT);
+        tokenMap.put("[", TokenType.LBRACKET);
+        tokenMap.put("]", TokenType.RBRACKET);
+        tokenMap.put("(", TokenType.LPAREN);
+        tokenMap.put(")", TokenType.RPAREN);
+        tokenMap.put("{", TokenType.LBRACE);
+        tokenMap.put("}", TokenType.RBRACE);
+        tokenMap.put("!", TokenType.NOT);
+        tokenMap.put(",", TokenType.COMMA);
+        tokenMap.put(".", TokenType.PERIOD);
+        tokenMap.put("+", TokenType.PLUS);
+        tokenMap.put("-", TokenType.MINUS);
+        tokenMap.put("*", TokenType.MULTIPLY);
+        tokenMap.put("/", TokenType.DIVIDE);
+        tokenMap.put(":", TokenType.COL);
+        tokenMap.put(";", TokenType.SEMI_COL);
+        tokenMap.put("^", TokenType.POWER);
+        tokenMap.put("%", TokenType.MODULO);
     }
 
-    public Token createToken(Token.Type type, String value) {
+    public Token createToken(TokenType type, String value) {
         return new Token(type, value, new SourcePosition(line, column));
     }
 
-    public Token createToken(Token.Type type) {
+    public Token createToken(TokenType type) {
         return createToken(type, null);
     }
 
@@ -125,7 +125,7 @@ public class Lexer {
                 if (inString) {
                     stringChar = current();
 
-                    tokens.add(createToken(Token.Type.STRING, ""));
+                    tokens.add(createToken(TokenType.STRING, ""));
                 }
 
                 next();
@@ -160,7 +160,7 @@ public class Lexer {
 
                 position -= identifierFound.length();
 
-                for (Map.Entry<String, Token.Type> match : tokenMap.entrySet()) {
+                for (Map.Entry<String, TokenType> match : tokenMap.entrySet()) {
                     for (int i = 0; i < match.getKey().length(); ++i) {
                         char current = match.getKey().charAt(i);
 
@@ -184,7 +184,7 @@ public class Lexer {
                 }
 
                 if (!matched && identifierFound.length() > 0) {
-                    tokens.add(createToken(Lexer.isNumber(identifierFound.toString()) ? Token.Type.NUMBER : Token.Type.IDENTIFIER, identifierFound.toString()));
+                    tokens.add(createToken(Lexer.isNumber(identifierFound.toString()) ? TokenType.NUMBER : TokenType.IDENTIFIER, identifierFound.toString()));
 
                     position += identifierFound.length();
                 } else if (!matched) {
