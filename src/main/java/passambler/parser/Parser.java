@@ -80,6 +80,8 @@ public class Parser {
                     if (result != null) {
                         return result;
                     }
+
+                    break;
                 }
             }
         } catch (ErrorException e) {
