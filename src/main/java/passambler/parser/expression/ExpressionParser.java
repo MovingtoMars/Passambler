@@ -324,7 +324,9 @@ public class ExpressionParser {
                 }
             }
 
-            return currentFunction.invoke(new FunctionContext(parser, arguments.toArray(new Value[arguments.size()]), assignment));
+            Value result = currentFunction.invoke(new FunctionContext(parser, arguments.toArray(new Value[arguments.size()]), assignment));
+
+            return result == null ? Value.VALUE_NIL : result;
         } else if (!tokens.isEmpty()) {
             return createParser(new TokenStream(tokens)).parse();
         }

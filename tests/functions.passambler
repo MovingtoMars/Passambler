@@ -1,5 +1,5 @@
 --TEST--
-Tests function and anonymous function declaration.
+Tests function and anonymous function declaration
 
 --INPUT--
 fn a() {
@@ -26,7 +26,13 @@ cc = fn(x, y) {
     return x + y;
 }
 
-return [a(), b(5), c(4, 3), aa(), bb(10), cc(5, 10)];
+fn dd() {}
+fn zz()
+{
+
+}
+
+return [a(), b(5), c(4, 3), aa(), bb(10), cc(5, 10), dd(), zz()];
 
 --RESULT--
-[null, 7, 7, null, 12, 15]
+[nil, 7, 7, nil, 12, 15, nil, nil]
