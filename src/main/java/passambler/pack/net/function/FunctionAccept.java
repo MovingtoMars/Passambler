@@ -22,7 +22,7 @@ public class FunctionAccept extends Value implements Function {
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        ValueServerSocket socket = (ValueServerSocket) context.getArgument(1);
+        ValueServerSocket socket = (ValueServerSocket) context.getArgument(0);
 
         try {
             return new ValueSocket(socket.getValue().accept());
