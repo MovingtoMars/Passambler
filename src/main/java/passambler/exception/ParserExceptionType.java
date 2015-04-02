@@ -5,7 +5,7 @@ public enum ParserExceptionType {
     INDEX_OUT_OF_RANGE("index %d out of range (size: %d)"),
     INVALID_ARGUMENT("invalid argument %d"),
     INVALID_ARGUMENT_COUNT("%d arguments expected, %d given"),
-    INVALID_TOKEN("token '%s' expected, '%s' found"),
+    INVALID_TOKEN("token %s expected, %s found"),
     UNDEFINED_FUNCTION("undefined function '%s'"),
     UNDEFINED_ARGUMENT("undefined argument '%s'"),
     UNDEFINED_VARIABLE("undefined variable '%s'"),
