@@ -3,7 +3,7 @@ package passambler.value.function;
 import java.util.List;
 import passambler.parser.ArgumentDefinition;
 import passambler.parser.Block;
-import passambler.parser.ParserException;
+import passambler.exception.EngineException;
 import passambler.value.Value;
 
 public class FunctionUser extends Value implements Function {
@@ -34,7 +34,7 @@ public class FunctionUser extends Value implements Function {
     }
 
     @Override
-    public Value invoke(FunctionContext context) throws ParserException {
+    public Value invoke(FunctionContext context) throws EngineException {
         if (block != null) {
             for (int i = 0; i < getArguments(); ++i) {
                 block.getParser().getScope().setSymbol(arguments.get(i).getName(), context.getArgument(i));

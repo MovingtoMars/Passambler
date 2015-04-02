@@ -4,11 +4,13 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import passambler.parser.ParserException;
+import passambler.exception.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueStr;
 import passambler.pack.Package;
 import passambler.pack.PackageFileSystem;
+import passambler.exception.EngineException;
+import passambler.exception.ParserExceptionType;
 import passambler.value.ValueList;
 
 public class FunctionUsing extends Value implements Function {
@@ -23,7 +25,7 @@ public class FunctionUsing extends Value implements Function {
     }
 
     @Override
-    public Value invoke(FunctionContext context) throws ParserException {
+    public Value invoke(FunctionContext context) throws EngineException {
         ValueList array = new ValueList();
 
         for (int i = 0; i < context.getArguments().length; ++i) {
@@ -58,7 +60,7 @@ public class FunctionUsing extends Value implements Function {
                     currentPackage = Arrays.asList(currentPackage.getChildren()).stream()
                         .filter(p -> p.getId().equals(child))
                         .findFirst()
-                        .orElseThrow(() -> new ParserException(ParserException.Type.UNDEFINED_PACKAGE, null, child));
+                        .orElseThrow(() -> new ParserException(ParserExceptionType.UNDEFINED_PACKAGE, null, child));
                 }
 
                 currentPackageName = child;
@@ -75,7 +77,7 @@ public class FunctionUsing extends Value implements Function {
                     Value value = symbols.entrySet().stream()
                         .filter(s -> s.getKey().equals(key))
                         .findFirst()
-                        .orElseThrow(() -> new ParserException(ParserException.Type.UNDEFINED_PROPERTY, null, key))
+                        .orElseThrow(() -> new ParserException(ParserExceptionType.UNDEFINED_PROPERTY, null, key))
                         .getValue();
 
                     if (!context.isAssignment()) {

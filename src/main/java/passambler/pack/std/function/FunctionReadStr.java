@@ -3,7 +3,7 @@ package passambler.pack.std.function;
 import java.util.Scanner;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
-import passambler.parser.ParserException;
+import passambler.exception.EngineException;
 import passambler.value.Value;
 import passambler.value.ValueStr;
 
@@ -19,7 +19,7 @@ public class FunctionReadStr extends Value implements Function {
     }
 
     @Override
-    public Value invoke(FunctionContext context) throws ParserException {
+    public Value invoke(FunctionContext context) throws EngineException {
         Scanner scanner = new Scanner(System.in);
 
         return new ValueStr(scanner.nextLine());

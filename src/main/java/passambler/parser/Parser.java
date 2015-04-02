@@ -1,12 +1,13 @@
 package passambler.parser;
 
+import passambler.exception.ParserException;
+import passambler.exception.ErrorException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import passambler.lexer.Lexer;
-import passambler.lexer.LexerException;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
 import passambler.value.function.FunctionUser;
@@ -18,6 +19,8 @@ import passambler.pack.net.PackageNet;
 import passambler.pack.os.PackageOs;
 import passambler.pack.std.PackageStd;
 import passambler.pack.thread.PackageThread;
+import passambler.exception.EngineException;
+import passambler.exception.ParserExceptionType;
 import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueClass;
@@ -64,7 +67,7 @@ public class Parser {
         return scope;
     }
 
-    public Value parse(TokenStream stream) throws ParserException {
+    public Value parse(TokenStream stream) throws EngineException {
         try {
             if (stream.first().getType() == Token.Type.IF) {
                 stream.next();
@@ -85,7 +88,7 @@ public class Parser {
                         Value condition = new ExpressionParser(this, new TokenStream(tokens)).parse();
 
                         if (!(condition instanceof ValueBool)) {
-                            throw new ParserException(ParserException.Type.EXPECTED_A_BOOL, tokens.get(0).getPosition());
+                            throw new ParserException(ParserExceptionType.EXPECTED_A_BOOL, tokens.get(0).getPosition());
                         }
 
                         stream.next();
@@ -101,7 +104,7 @@ public class Parser {
 
                     if (stream.current() != null) {
                         if (elseCondition) {
-                            throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "else should be the last statement");
+                            throw new ParserException(ParserExceptionType.BAD_SYNTAX, stream.first().getPosition(), "else should be the last statement");
                         }
 
                         stream.match(Token.Type.ELSE, Token.Type.ELSEIF);
@@ -201,7 +204,7 @@ public class Parser {
                             callback.getParser().getScope().setSymbol(arguments.get(0), new ValueNum(i));
                             callback.getParser().getScope().setSymbol(arguments.get(1), list.getValue().get(i));
                         } else if (arguments.size() > 2) {
-                            throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), 2, arguments.size());
+                            throw new ParserException(ParserExceptionType.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), 2, arguments.size());
                         }
 
                         Value result = callback.invoke();
@@ -220,7 +223,7 @@ public class Parser {
                             callback.getParser().getScope().setSymbol(arguments.get(0), entry.getKey());
                             callback.getParser().getScope().setSymbol(arguments.get(1), entry.getValue());
                         } else if (arguments.size() > 2) {
-                            throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), 2, arguments.size());
+                            throw new ParserException(ParserExceptionType.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), 2, arguments.size());
                         }
 
                         Value result = callback.invoke();
@@ -230,7 +233,7 @@ public class Parser {
                         }
                     }
                 } else {
-                    throw new ParserException(ParserException.Type.CANNOT_ITERATE, stream.first().getPosition());
+                    throw new ParserException(ParserExceptionType.CANNOT_ITERATE, stream.first().getPosition());
                 }
             } else if (stream.first().getType() == Token.Type.RETURN) {
                 stream.next();
@@ -277,7 +280,7 @@ public class Parser {
                         Value expression = expression(stream, Token.Type.COMMA, Token.Type.RPAREN, Token.Type.LBRACE);
 
                         if (!(expression instanceof ValueClass)) {
-                            throw new ParserException(ParserException.Type.NOT_A_CLASS, stream.current().getPosition());
+                            throw new ParserException(ParserExceptionType.NOT_A_CLASS, stream.current().getPosition());
                         }
 
                         // Here we add the class initializer (the name of the symbol is the name of the class expression)
@@ -340,11 +343,11 @@ public class Parser {
         return null;
     }
 
-    public Value parse(Lexer lexer) throws LexerException, ParserException {
+    public Value parse(Lexer lexer) throws EngineException {
         return parse(lexer.scan());
     }
 
-    public Value parse(List<Token> tokens) throws ParserException {
+    public Value parse(List<Token> tokens) throws EngineException {
         List<Token> subTokens = new ArrayList<>();
 
         int braces = 0, paren = 0, brackets = 0;
@@ -394,13 +397,13 @@ public class Parser {
         }
 
         if (!subTokens.isEmpty()) {
-            throw new ParserException(ParserException.Type.UNEXPECTED_EOF);
+            throw new ParserException(ParserExceptionType.UNEXPECTED_EOF);
         }
 
         return null;
     }
 
-    public Block block(TokenStream stream) throws ParserException {
+    public Block block(TokenStream stream) throws EngineException {
         Block block = new Block(scope);
 
         stream.match(Token.Type.LBRACE);
@@ -430,7 +433,7 @@ public class Parser {
         return block;
     }
 
-    public List<Token> expressionTokens(TokenStream stream, Token.Type... endingTokens) throws ParserException {
+    public List<Token> expressionTokens(TokenStream stream, Token.Type... endingTokens) throws EngineException {
         int braces = 0, paren = 0, brackets = 0;
 
         List<Token> valueTokens = new ArrayList<>();
@@ -464,11 +467,11 @@ public class Parser {
         return valueTokens;
     }
 
-    public Value expression(TokenStream stream, Token.Type... endingTokens) throws ParserException {
+    public Value expression(TokenStream stream, Token.Type... endingTokens) throws EngineException {
         return new ExpressionParser(this, new TokenStream(expressionTokens(stream, endingTokens))).parse();
     }
 
-    public List<ArgumentDefinition> argumentDefinitions(TokenStream stream) throws ParserException {
+    public List<ArgumentDefinition> argumentDefinitions(TokenStream stream) throws EngineException {
         stream.match(Token.Type.LPAREN);
 
         stream.next();

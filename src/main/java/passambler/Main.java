@@ -12,13 +12,11 @@ import java.util.logging.Logger;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import passambler.parser.Parser;
-import passambler.parser.ParserException;
 import passambler.lexer.Lexer;
-import passambler.lexer.LexerException;
 import passambler.lexer.Token;
-import passambler.parser.ErrorException;
+import passambler.exception.EngineException;
 import passambler.tests.OutputRecorder;
-import passambler.tests.TestException;
+import passambler.exception.TestException;
 import passambler.tests.TestParser;
 import passambler.tests.TestRunner;
 import passambler.value.Value;
@@ -85,12 +83,8 @@ public class Main {
 
                 parser.parse(lexer);
             }
-        } catch (LexerException e) {
-            LOGGER.log(Level.SEVERE, "Lexer exception", e);
-        } catch (ParserException e) {
-            LOGGER.log(Level.SEVERE, e instanceof ErrorException ? "Error exception" : "Parser exception", e);
-        } catch (RuntimeException e) {
-            LOGGER.log(Level.SEVERE, "Runtime exception", e);
+        } catch (EngineException e) {
+            LOGGER.log(Level.SEVERE, e.getName(), e);
         }
     }
 
@@ -118,7 +112,7 @@ public class Main {
                 OutputRecorder.stop();
 
                 LOGGER.log(Level.INFO, String.format("Test %s passed", file.getFileName()));
-            } catch (LexerException | ParserException | TestException e) {
+            } catch (EngineException e) {
                 OutputRecorder.stop();
 
                 LOGGER.log(Level.WARNING, String.format("Test %s failed", file.getFileName()), e);
@@ -174,16 +168,8 @@ public class Main {
                         tokens.clear();
                     }
                 }
-            } catch (LexerException e) {
-                LOGGER.log(Level.WARNING, "Lexer exception", e);
-
-                tokens.clear();
-            } catch (ParserException e) {
-                LOGGER.log(Level.WARNING, e instanceof ErrorException ? "Error exception" : "Parser exception", e);
-
-                tokens.clear();
-            } catch (RuntimeException e) {
-                LOGGER.log(Level.WARNING, "Runtime exception", e);
+            } catch (EngineException e) {
+                LOGGER.log(Level.WARNING, e.getName(), e);
 
                 tokens.clear();
             }

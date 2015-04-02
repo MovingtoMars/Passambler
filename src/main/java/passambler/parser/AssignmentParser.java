@@ -1,9 +1,12 @@
 package passambler.parser;
 
+import passambler.exception.ParserException;
 import java.util.ArrayList;
 import java.util.List;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
+import passambler.exception.EngineException;
+import passambler.exception.ParserExceptionType;
 import passambler.value.Value;
 import passambler.value.ValueDict;
 import passambler.value.ValueList;
@@ -20,7 +23,7 @@ public class AssignmentParser {
         this.stream = stream;
     }
 
-    public void parse() throws ParserException {
+    public void parse() throws EngineException {
         List<Token> tokens = new ArrayList<>();
 
         while (stream.hasNext()) {
@@ -54,7 +57,7 @@ public class AssignmentParser {
                     }
                 } else {
                     if (!parser.getScope().hasSymbol(token.getValue())) {
-                        throw new ParserException(ParserException.Type.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());
+                        throw new ParserException(ParserExceptionType.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());
                     }
 
                     leftValue = parser.getScope().getSymbol(token.getValue());
@@ -67,7 +70,7 @@ public class AssignmentParser {
                 String name = leftStream.current().getValue();
 
                 if (!leftValue.hasProperty(name)) {
-                    throw new ParserException(ParserException.Type.UNDEFINED_PROPERTY, stream.current().getPosition(), name);
+                    throw new ParserException(ParserExceptionType.UNDEFINED_PROPERTY, stream.current().getPosition(), name);
                 }
 
                 if (leftStream.peek() == null) {
@@ -104,7 +107,7 @@ public class AssignmentParser {
 
                 if (value instanceof ValueNum) {
                     if (!(leftValue instanceof ValueList)) {
-                        throw new ParserException(ParserException.Type.NOT_A_LIST, stream.current().getPosition());
+                        throw new ParserException(ParserExceptionType.NOT_A_LIST, stream.current().getPosition());
                     }
 
                     ValueList list = (ValueList) leftValue;
@@ -112,7 +115,7 @@ public class AssignmentParser {
                     int index = ((ValueNum) value).getValue().intValue();
 
                     if (index < -list.getValue().size() || index > list.getValue().size() - 1) {
-                        throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, stream.current().getPosition(), index, list.getValue().size());
+                        throw new ParserException(ParserExceptionType.INDEX_OUT_OF_RANGE, stream.current().getPosition(), index, list.getValue().size());
                     }
 
                     if (leftStream.peek() == null) {

@@ -2,7 +2,8 @@ package passambler.value;
 
 import java.math.BigDecimal;
 import passambler.lexer.Token;
-import passambler.parser.ParserException;
+import passambler.exception.ParserException;
+import passambler.exception.ParserExceptionType;
 
 public class ValueNum extends Value {
     public ValueNum(double data) {
@@ -38,7 +39,7 @@ public class ValueNum extends Value {
                 case DIVIDE:
                 case ASSIGN_DIVIDE:
                     if (((ValueNum) value).getValue().intValue() == 0) {
-                        throw new ParserException(ParserException.Type.ZERO_DIVISION, operatorToken.getPosition());
+                        throw new ParserException(ParserExceptionType.ZERO_DIVISION, operatorToken.getPosition());
                     }
                     
                     return new ValueNum(getValue().divide(((ValueNum) value).getValue()));

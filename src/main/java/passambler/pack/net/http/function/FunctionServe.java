@@ -9,11 +9,11 @@ import org.apache.http.protocol.ResponseDate;
 import org.apache.http.protocol.ResponseServer;
 import org.apache.http.protocol.UriHttpRequestHandlerMapper;
 import passambler.Main;
-import passambler.parser.ErrorException;
+import passambler.exception.ErrorException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
-import passambler.parser.ParserException;
 import passambler.pack.net.http.thread.RequestListenerThread;
+import passambler.exception.EngineException;
 import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueNum;
@@ -36,7 +36,7 @@ public class FunctionServe extends Value implements Function {
     }
 
     @Override
-    public Value invoke(FunctionContext context) throws ParserException {
+    public Value invoke(FunctionContext context) throws EngineException {
         try {
             HttpProcessor httpProcessor = HttpProcessorBuilder.create()
                 .add(new ResponseDate())

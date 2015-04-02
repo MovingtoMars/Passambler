@@ -3,6 +3,7 @@ package passambler.parser;
 import java.util.ArrayList;
 import java.util.List;
 import passambler.lexer.Token;
+import passambler.exception.EngineException;
 import passambler.value.Value;
 
 public class Block {
@@ -30,7 +31,7 @@ public class Block {
         return tokens;
     }
 
-    public Value invoke() throws ParserException {
+    public Value invoke() throws EngineException {
         return parser.parse(tokens);
     }
 }

@@ -1,7 +1,9 @@
 package passambler.pack.math.function;
 
 import java.util.Random;
-import passambler.parser.ParserException;
+import passambler.exception.EngineException;
+import passambler.exception.ParserException;
+import passambler.exception.ParserExceptionType;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
@@ -19,12 +21,12 @@ public class FunctionRand extends Value implements Function {
     }
 
     @Override
-    public Value invoke(FunctionContext context) throws ParserException {
+    public Value invoke(FunctionContext context) throws EngineException {
         int min = ((ValueNum) context.getArgument(0)).getValue().intValue();
         int max = ((ValueNum) context.getArgument(1)).getValue().intValue();
 
         if (min > max) {
-            throw new ParserException(ParserException.Type.BAD_SYNTAX, String.format("%d can't be bigger than %d", min, max));
+            throw new ParserException(ParserExceptionType.BAD_SYNTAX, String.format("%d can't be bigger than %d", min, max));
         }
 
         return new ValueNum(new Random().nextInt((max - min) + 1) + min);

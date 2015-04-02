@@ -2,9 +2,11 @@ package passambler.pack.thread.function;
 
 import java.util.ArrayList;
 import java.util.List;
+import passambler.exception.EngineException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
-import passambler.parser.ParserException;
+import passambler.exception.ParserException;
+import passambler.exception.ParserExceptionType;
 import passambler.value.Value;
 
 public class FunctionStart extends Value implements Function {
@@ -23,7 +25,7 @@ public class FunctionStart extends Value implements Function {
     }
 
     @Override
-    public Value invoke(FunctionContext context) throws ParserException {
+    public Value invoke(FunctionContext context) throws EngineException {
         new Runnable() {
             @Override
             public void run() {
@@ -31,7 +33,7 @@ public class FunctionStart extends Value implements Function {
                     Function function = (Function) context.getArgument(0);
 
                     if (function.getArguments() != context.getArguments().length - 1) {
-                        throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, null, function.getArguments(), context.getArguments().length - 1);
+                        throw new ParserException(ParserExceptionType.INVALID_ARGUMENT_COUNT, null, function.getArguments(), context.getArguments().length - 1);
                     }
 
                     List<Value> values = new ArrayList<>();
@@ -41,7 +43,7 @@ public class FunctionStart extends Value implements Function {
                     }
 
                     function.invoke(new FunctionContext(context.getParser(), values.toArray(new Value[values.size()])));
-                } catch (ParserException e) {
+                } catch (EngineException e) {
                     throw new RuntimeException(e);
                 }
             }

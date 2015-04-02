@@ -10,9 +10,9 @@ import org.apache.http.protocol.UriHttpRequestHandlerMapper;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.parser.Parser;
-import passambler.parser.ParserException;
 import passambler.pack.net.http.value.ValueRequest;
 import passambler.pack.net.http.value.ValueResponse;
+import passambler.exception.EngineException;
 import passambler.value.Value;
 import passambler.value.ValueStr;
 
@@ -38,7 +38,7 @@ public class FunctionHandle extends Value implements Function {
     }
 
     @Override
-    public Value invoke(FunctionContext context) throws ParserException {
+    public Value invoke(FunctionContext context) throws EngineException {
         mapper.register(((ValueStr) context.getArgument(0)).getValue(), context.getArgument(1) instanceof HttpRequestHandler ? (HttpRequestHandler) context.getArgument(1) : createHandlerFromFunction(context.getParser(), (Function) context.getArgument(1)));
 
         return null;
@@ -55,7 +55,7 @@ public class FunctionHandle extends Value implements Function {
                 httpResponse.setHeaders(response.getHeaders());
                 httpResponse.setStatusCode(response.getStatus());
                 httpResponse.setEntity(new StringEntity(response.getResponseData(), ContentType.create("text/html", "UTF-8")));
-            } catch (ParserException e) {
+            } catch (EngineException e) {
                 throw new RuntimeException(e);
             }
         };

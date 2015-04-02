@@ -3,10 +3,10 @@ package passambler.pack.os.function;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import passambler.parser.ErrorException;
+import passambler.exception.EngineException;
+import passambler.exception.ErrorException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
-import passambler.parser.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueStr;
 
@@ -22,7 +22,7 @@ public class FunctionExec extends Value implements Function {
     }
 
     @Override
-    public Value invoke(FunctionContext context) throws ParserException {
+    public Value invoke(FunctionContext context) throws EngineException {
         Process process;
 
         try {

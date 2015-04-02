@@ -1,12 +1,12 @@
 package passambler.pack.net.function;
 
 import java.io.IOException;
-import passambler.parser.ErrorException;
+import passambler.exception.ErrorException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
-import passambler.parser.ParserException;
 import passambler.pack.net.value.ValueServerSocket;
 import passambler.pack.net.value.ValueSocket;
+import passambler.exception.EngineException;
 import passambler.value.Value;
 
 public class FunctionAccept extends Value implements Function {
@@ -21,7 +21,7 @@ public class FunctionAccept extends Value implements Function {
     }
 
     @Override
-    public Value invoke(FunctionContext context) throws ParserException {
+    public Value invoke(FunctionContext context) throws EngineException {
         ValueServerSocket socket = (ValueServerSocket) context.getArgument(1);
 
         try {

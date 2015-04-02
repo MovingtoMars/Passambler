@@ -1,7 +1,8 @@
 package passambler.lexer;
 
 import java.util.List;
-import passambler.parser.ParserException;
+import passambler.exception.ParserException;
+import passambler.exception.ParserExceptionType;
 
 public class TokenStream {
     private int position;
@@ -90,6 +91,6 @@ public class TokenStream {
             }
         }
 
-        throw new ParserException(ParserException.Type.INVALID_TOKEN, current() == null ? first().getPosition() : current().getPosition(), typesExpected.toString(), current() == null ? "nothing" : current().getType());
+        throw new ParserException(ParserExceptionType.INVALID_TOKEN, current() == null ? first().getPosition() : current().getPosition(), typesExpected.toString(), current() == null ? "nothing" : current().getType());
     }
 }

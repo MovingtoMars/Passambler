@@ -2,8 +2,8 @@ package passambler.pack.net.http.function;
 
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
-import passambler.parser.ParserException;
 import passambler.pack.net.http.value.ValueFileHandler;
+import passambler.exception.EngineException;
 import passambler.value.Value;
 import passambler.value.ValueStr;
 
@@ -19,7 +19,7 @@ public class FunctionFileHandler extends Value implements Function {
     }
 
     @Override
-    public Value invoke(FunctionContext context) throws ParserException {
+    public Value invoke(FunctionContext context) throws EngineException {
         return new ValueFileHandler(((ValueStr) context.getArgument(0)).getValue());
     }
 }

@@ -1,5 +1,6 @@
 package passambler.parser;
 
+import passambler.exception.ParserException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +11,8 @@ import passambler.value.function.FunctionUser;
 import passambler.value.Value;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
+import passambler.exception.EngineException;
+import passambler.exception.ParserExceptionType;
 import passambler.value.ValueBool;
 import passambler.value.ValueDict;
 import passambler.value.ValueList;
@@ -41,7 +44,7 @@ public class ExpressionParser {
         this.assignment = assignment;
     }
 
-    public Value parse() throws ParserException {
+    public Value parse() throws EngineException {
         List<Token> tokens = new ArrayList<>();
         List<ExpressionValue> values = new ArrayList<>();
 
@@ -121,7 +124,7 @@ public class ExpressionParser {
                 value = value.onOperator(exprValue.value, exprValue.operator);
 
                 if (value == null) {
-                    throw new ParserException(ParserException.Type.UNSUPPORTED_OPERATOR, exprValue.operator.getPosition(), exprValue.operator.getType());
+                    throw new ParserException(ParserExceptionType.UNSUPPORTED_OPERATOR, exprValue.operator.getPosition(), exprValue.operator.getType());
                 }
             }
         }
@@ -129,7 +132,7 @@ public class ExpressionParser {
         return value;
     }
 
-    private void doPrecedence(List<ExpressionValue> values, Token.Type... types) throws ParserException {
+    private void doPrecedence(List<ExpressionValue> values, Token.Type... types) throws EngineException {
         for (int i = 0; i < values.size(); ++i) {
             ExpressionValue current = values.get(i);
 
@@ -143,7 +146,7 @@ public class ExpressionParser {
         }
     }
 
-    public Value parseSpecialized() throws ParserException {
+    public Value parseSpecialized() throws EngineException {
         Value value = null;
 
         boolean not = false;
@@ -183,7 +186,7 @@ public class ExpressionParser {
 
                     break;
                 default:
-                    throw new ParserException(ParserException.Type.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
+                    throw new ParserException(ParserExceptionType.UNEXPECTED_TOKEN, token.getPosition(), token.getType());
             }
 
             stream.next();
@@ -191,7 +194,7 @@ public class ExpressionParser {
 
         if (not) {
             if (!(value instanceof ValueBool)) {
-                throw new ParserException(ParserException.Type.EXPECTED_A_BOOL, stream.first().getPosition());
+                throw new ParserException(ParserExceptionType.EXPECTED_A_BOOL, stream.first().getPosition());
             }
 
             value = new ValueBool(!((ValueBool) value).getValue());
@@ -200,7 +203,7 @@ public class ExpressionParser {
         return value;
     }
 
-    private Value parseFunction() throws ParserException {
+    private Value parseFunction() throws EngineException {
         stream.next();
 
         List<ArgumentDefinition> arguments = parser.argumentDefinitions(stream);
@@ -212,7 +215,7 @@ public class ExpressionParser {
         return new FunctionUser(callback, arguments);
     }
 
-    private Value parseParen(Value currentValue) throws ParserException {
+    private Value parseParen(Value currentValue) throws EngineException {
         stream.next();
 
         List<Token> tokens = parser.expressionTokens(stream, Token.Type.RPAREN);
@@ -265,7 +268,7 @@ public class ExpressionParser {
                             int index = argumentDefinitions.indexOf(argumentDefinitions.stream().filter(a -> a.getName().equals(name)).findFirst().get());
 
                             if (index == -1) {
-                                throw new ParserException(ParserException.Type.UNDEFINED_ARGUMENT, token.getPosition(), name);
+                                throw new ParserException(ParserExceptionType.UNDEFINED_ARGUMENT, token.getPosition(), name);
                             }
 
                             if (index >= arguments.size()) {
@@ -276,11 +279,11 @@ public class ExpressionParser {
 
                             arguments.set(index, createParser(argumentTokenStream.copyAtCurrentPosition()).parse());
                         } else {
-                            throw new ParserException(ParserException.Type.CANNOT_USE_NAMED_ARGUMENTS, token.getPosition());
+                            throw new ParserException(ParserExceptionType.CANNOT_USE_NAMED_ARGUMENTS, token.getPosition());
                         }
                     } else {
                         if (usedNamedArguments) {
-                            throw new ParserException(ParserException.Type.BAD_SYNTAX, token.getPosition(), "cannot specify a normal argument after a specifying a named argument");
+                            throw new ParserException(ParserExceptionType.BAD_SYNTAX, token.getPosition(), "cannot specify a normal argument after a specifying a named argument");
                         }
 
                         arguments.add(createParser(argumentTokenStream).parse());
@@ -308,20 +311,20 @@ public class ExpressionParser {
             }
 
             if (paren != 0 || brackets != 0) {
-                throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.first().getPosition(), "unmatching " + (paren != 0 ? "parens" : "brackets"));
+                throw new ParserException(ParserExceptionType.BAD_SYNTAX, stream.first().getPosition(), "unmatching " + (paren != 0 ? "parens" : "brackets"));
             }
 
             if (currentFunction.getArguments() != -1 && currentFunction.getArguments() != arguments.size()) {
-                throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), currentFunction.getArguments(), arguments.size());
+                throw new ParserException(ParserExceptionType.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), currentFunction.getArguments(), arguments.size());
             }
 
             if (arguments.stream().anyMatch(v -> v == null)) {
-                throw new ParserException(ParserException.Type.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), currentFunction.getArguments(), arguments.size() - arguments.stream().filter(v -> v == null).count());
+                throw new ParserException(ParserExceptionType.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), currentFunction.getArguments(), arguments.size() - arguments.stream().filter(v -> v == null).count());
             }
 
             for (int argument = 0; argument < arguments.size(); ++argument) {
                 if (!currentFunction.isArgumentValid(arguments.get(argument), argument)) {
-                    throw new ParserException(ParserException.Type.INVALID_ARGUMENT, stream.first().getPosition(), argument + 1);
+                    throw new ParserException(ParserExceptionType.INVALID_ARGUMENT, stream.first().getPosition(), argument + 1);
                 }
             }
 
@@ -333,7 +336,7 @@ public class ExpressionParser {
         return null;
     }
 
-    private Value parseIndexed(Value currentValue) throws ParserException {
+    private Value parseIndexed(Value currentValue) throws EngineException {
         List<Token> tokens = new ArrayList<>();
 
         int brackets = 1, paren = 0, braces = 0;
@@ -346,7 +349,7 @@ public class ExpressionParser {
             if ((stream.current().getType() == Token.Type.COMMA || stream.current().getType() == Token.Type.RBRACKET) && brackets == 1 && paren == 0 && braces == 0) {
                 if (tokens.isEmpty()) {
                     if (stream.back(2) != null) {
-                        throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "no value specified");
+                        throw new ParserException(ParserExceptionType.BAD_SYNTAX, stream.current().getPosition(), "no value specified");
                     }
                 } else {
                     inlineDeclaration.getValue().add(createParser(new TokenStream(tokens)).parse());
@@ -391,7 +394,7 @@ public class ExpressionParser {
 
             if (indexValue instanceof ValueNum) {
                 if (!(currentValue instanceof ValueList)) {
-                    throw new ParserException(ParserException.Type.NOT_A_LIST);
+                    throw new ParserException(ParserExceptionType.NOT_A_LIST);
                 }
 
                 ValueList list = (ValueList) currentValue;
@@ -399,7 +402,7 @@ public class ExpressionParser {
                 int index = ((ValueNum) indexValue).getValue().intValue();
 
                 if (index < -list.getValue().size() || index > list.getValue().size() - 1) {
-                    throw new ParserException(ParserException.Type.INDEX_OUT_OF_RANGE, null, index, list.getValue().size());
+                    throw new ParserException(ParserExceptionType.INDEX_OUT_OF_RANGE, null, index, list.getValue().size());
                 }
 
                 if (index < 0) {
@@ -409,7 +412,7 @@ public class ExpressionParser {
                 }
             } else {
                 if (!(currentValue instanceof ValueDict)) {
-                    throw new ParserException(ParserException.Type.NOT_A_DICT);
+                    throw new ParserException(ParserExceptionType.NOT_A_DICT);
                 }
 
                 ValueDict dict = (ValueDict) currentValue;
@@ -423,9 +426,9 @@ public class ExpressionParser {
         }
     }
 
-    private Value parseProperty(Value currentValue) throws ParserException {
+    private Value parseProperty(Value currentValue) throws EngineException {
         if (stream.peek() == null) {
-            throw new ParserException(ParserException.Type.BAD_SYNTAX, stream.current().getPosition(), "missing property name");
+            throw new ParserException(ParserExceptionType.BAD_SYNTAX, stream.current().getPosition(), "missing property name");
         }
 
         stream.next();
@@ -435,13 +438,13 @@ public class ExpressionParser {
         String propertyName = stream.current().getValue();
 
         if (!currentValue.hasProperty(propertyName)) {
-            throw new ParserException(ParserException.Type.UNDEFINED_PROPERTY, stream.current().getPosition(), propertyName);
+            throw new ParserException(ParserExceptionType.UNDEFINED_PROPERTY, stream.current().getPosition(), propertyName);
         }
 
         return currentValue.getProperty(propertyName).getValue();
     }
 
-    private Value parseSymbol() throws ParserException {
+    private Value parseSymbol() throws EngineException {
         Token token = stream.current();
 
         if (token.getType() == Token.Type.STRING) {
@@ -472,7 +475,7 @@ public class ExpressionParser {
             }
 
             if (!parser.getScope().hasSymbol(token.getValue())) {
-                throw new ParserException(stream.peek() != null && stream.peek().getType() == Token.Type.LPAREN ? ParserException.Type.UNDEFINED_FUNCTION : ParserException.Type.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());
+                throw new ParserException(stream.peek() != null && stream.peek().getType() == Token.Type.LPAREN ? ParserExceptionType.UNDEFINED_FUNCTION : ParserExceptionType.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());
             }
 
             return parser.getScope().getSymbol(token.getValue());
@@ -481,7 +484,7 @@ public class ExpressionParser {
         return null;
     }
 
-    private Value parseBrace() throws ParserException {
+    private Value parseBrace() throws EngineException {
         int braces = 1, paren = 0, brackets = 0;
 
         stream.next();

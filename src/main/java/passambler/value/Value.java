@@ -3,7 +3,7 @@ package passambler.value;
 import java.util.HashMap;
 import java.util.Map;
 import passambler.lexer.Token;
-import passambler.parser.ParserException;
+import passambler.exception.ParserException;
 
 public class Value {
     public static final ValueBool VALUE_TRUE = new ValueBool(true);

@@ -1,7 +1,7 @@
 package passambler.pack.std.function;
 
-import passambler.parser.ErrorException;
-import passambler.parser.ParserException;
+import passambler.exception.ErrorException;
+import passambler.exception.EngineException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
@@ -19,7 +19,7 @@ public class FunctionToBool extends Value implements Function {
     }
 
     @Override
-    public Value invoke(FunctionContext context) throws ParserException {
+    public Value invoke(FunctionContext context) throws EngineException {
         try {
             return new ValueBool(Boolean.valueOf(context.getArgument(0).toString()));
         } catch (Exception e) {

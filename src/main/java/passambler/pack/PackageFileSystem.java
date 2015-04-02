@@ -7,9 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import passambler.lexer.Lexer;
-import passambler.lexer.LexerException;
 import passambler.parser.Parser;
-import passambler.parser.ParserException;
+import passambler.exception.EngineException;
 import passambler.value.Value;
 
 public class PackageFileSystem implements Package {
@@ -66,7 +65,7 @@ public class PackageFileSystem implements Package {
 
         try {
             parser.parse(new Lexer(String.join("\n", Files.readAllLines(path))));
-        } catch (IOException | LexerException | ParserException e) {
+        } catch (IOException | EngineException e) {
             throw new RuntimeException(e);
         }
 

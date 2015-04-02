@@ -1,6 +1,6 @@
 package passambler.value.function;
 
-import passambler.parser.ParserException;
+import passambler.exception.EngineException;
 import passambler.value.Value;
 
 public interface Function {
@@ -8,5 +8,5 @@ public interface Function {
 
     public boolean isArgumentValid(Value value, int argument);
 
-    public Value invoke(FunctionContext context) throws ParserException;
+    public Value invoke(FunctionContext context) throws EngineException;
 }

@@ -3,9 +3,9 @@ package passambler.pack.json.function;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
+import passambler.exception.EngineException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
-import passambler.parser.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueDict;
@@ -25,7 +25,7 @@ public class FunctionEncode extends Value implements Function {
     }
 
     @Override
-    public Value invoke(FunctionContext context) throws ParserException {
+    public Value invoke(FunctionContext context) throws EngineException {
         return new ValueStr(((JSONAware) parse(context.getArgument(0))).toJSONString());
     }
 

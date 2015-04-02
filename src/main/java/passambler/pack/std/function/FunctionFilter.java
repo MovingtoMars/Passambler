@@ -2,7 +2,9 @@ package passambler.pack.std.function;
 
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
-import passambler.parser.ParserException;
+import passambler.exception.EngineException;
+import passambler.exception.ParserException;
+import passambler.exception.ParserExceptionType;
 import passambler.value.Value;
 import passambler.value.ValueBool;
 import passambler.value.ValueList;
@@ -23,7 +25,7 @@ public class FunctionFilter extends Value implements Function {
     }
 
     @Override
-    public Value invoke(FunctionContext context) throws ParserException {
+    public Value invoke(FunctionContext context) throws EngineException {
         ValueList list = (ValueList) context.getArgument(0);
 
         Function callback = (Function) context.getArgument(1);
@@ -34,7 +36,7 @@ public class FunctionFilter extends Value implements Function {
             Value result = callback.invoke(new FunctionContext(context.getParser(), new Value[] { list.getValue().get(i) }));
 
             if (!(result instanceof ValueBool)) {
-                throw new ParserException(ParserException.Type.EXPECTED_A_BOOL);
+                throw new ParserException(ParserExceptionType.EXPECTED_A_BOOL);
             }
 
             if (((ValueBool) result).getValue() == true) {

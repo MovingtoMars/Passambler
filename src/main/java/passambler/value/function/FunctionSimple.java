@@ -1,6 +1,6 @@
 package passambler.value.function;
 
-import passambler.parser.ParserException;
+import passambler.exception.EngineException;
 import passambler.value.Value;
 
 public abstract class FunctionSimple extends Value implements Function {
@@ -15,7 +15,7 @@ public abstract class FunctionSimple extends Value implements Function {
     }
 
     @Override
-    public Value invoke(FunctionContext context) throws ParserException {
+    public Value invoke(FunctionContext context) throws EngineException {
         return getReturnValue();
     }
 

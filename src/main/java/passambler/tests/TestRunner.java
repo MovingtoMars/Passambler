@@ -1,9 +1,9 @@
 package passambler.tests;
 
+import passambler.exception.TestException;
 import passambler.lexer.Lexer;
-import passambler.lexer.LexerException;
 import passambler.parser.Parser;
-import passambler.parser.ParserException;
+import passambler.exception.EngineException;
 import passambler.value.Value;
 
 public class TestRunner {
@@ -13,7 +13,7 @@ public class TestRunner {
         this.test = test;
     }
 
-    public void run() throws LexerException, ParserException, TestException {
+    public void run() throws EngineException {
         Parser parser = new Parser();
 
         if (test.getInput() == null) {

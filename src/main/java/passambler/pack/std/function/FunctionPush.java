@@ -1,6 +1,6 @@
 package passambler.pack.std.function;
 
-import passambler.parser.ParserException;
+import passambler.exception.EngineException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
@@ -22,7 +22,7 @@ public class FunctionPush extends Value implements Function {
     }
 
     @Override
-    public Value invoke(FunctionContext context) throws ParserException {
+    public Value invoke(FunctionContext context) throws EngineException {
         ((ValueList) context.getArgument(0)).getValue().add(context.getArgument(1));
 
         return null;

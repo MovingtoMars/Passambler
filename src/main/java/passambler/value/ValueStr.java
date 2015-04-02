@@ -1,7 +1,7 @@
 package passambler.value;
 
 import passambler.lexer.Token;
-import passambler.parser.ParserException;
+import passambler.exception.ParserException;
 
 public class ValueStr extends Value {
     public ValueStr(String data) {

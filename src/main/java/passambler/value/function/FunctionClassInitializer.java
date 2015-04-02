@@ -6,7 +6,7 @@ import java.util.Map;
 import passambler.lexer.Lexer;
 import passambler.parser.ArgumentDefinition;
 import passambler.parser.Block;
-import passambler.parser.ParserException;
+import passambler.exception.EngineException;
 import passambler.value.Property;
 import passambler.value.Value;
 import passambler.value.ValueClass;
@@ -22,7 +22,7 @@ public class FunctionClassInitializer extends FunctionUser {
         this.name = name;
     }
 
-    public void addParent(FunctionClassInitializer parent) throws ParserException {
+    public void addParent(FunctionClassInitializer parent) throws EngineException {
         parents.add(parent);
     }
 
@@ -41,7 +41,7 @@ public class FunctionClassInitializer extends FunctionUser {
     }
 
     @Override
-    public Value invoke(FunctionContext context) throws ParserException {
+    public Value invoke(FunctionContext context) throws EngineException {
         getBlock().refreshParser();
 
         ValueClass child = new ValueClass(name);
