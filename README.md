@@ -1,7 +1,7 @@
 # Passambler
-Passambler is a simple scripting language.
+Passambler is a simple programming language.
 
-Some packages aren't finished yet, but the language is usable.
+It isn't finished yet, but the language is usable.
 
 ## Examples
 A simple Hello World program looks like this:
