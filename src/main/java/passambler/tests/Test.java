@@ -11,11 +11,8 @@ public class Test {
 
     public Test(String description, String input, String output, String result) {
         this.description = description;
-
         this.input = input;
-
         this.output = output;
-
         this.result = result;
     }
 
