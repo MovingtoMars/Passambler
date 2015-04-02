@@ -1,9 +1,10 @@
 package passambler.value.function;
 
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import passambler.exception.ParserException;
 import passambler.value.Value;
 import passambler.value.ValueStr;
@@ -28,42 +29,40 @@ public class FunctionUsing extends Value implements Function {
     public Value invoke(FunctionContext context) throws EngineException {
         ValueList array = new ValueList();
 
-        for (int i = 0; i < context.getArguments().length; ++i) {
-            String specificValue = null;
-
+        for (Value value : context.getArguments()) {
+            Package currentPackage = null;
             String currentPackageName = null;
 
-            Package currentPackage = null;
+            String valueName = null;
 
-            String[] children = ((ValueStr) context.getArgument(i)).getValue().split("/");
+            for (String child : ((ValueStr) value).getValue().split("/")) {
+                if (child.contains(".")) {
+                    valueName = child.split(Pattern.quote("."))[1];
 
-            for (int x = 0; x < children.length; ++x) {
-                String rawChild = children[x];
-
-                if (rawChild.contains(".")) {
-                    specificValue = rawChild.substring(rawChild.indexOf('.') + 1);
-                    rawChild = rawChild.substring(0, rawChild.indexOf('.'));
+                    currentPackageName = child.split(Pattern.quote("."))[0];
+                } else {
+                    currentPackageName = child;
                 }
-
-                final String child = rawChild;
 
                 if (currentPackage == null) {
-                    if (context.getParser().getDefaultPackages().stream().anyMatch(p -> p.getId().equals(child))) {
-                        currentPackage = context.getParser().getDefaultPackages().stream()
-                            .filter(p -> p.getId().equals(child))
-                            .findFirst()
-                            .get();
-                    } else {
-                        currentPackage = new PackageFileSystem(Paths.get(child));
-                    }
+                    currentPackage = getPackage(context.getParser().getDefaultPackages(), currentPackageName);
                 } else {
-                    currentPackage = Arrays.asList(currentPackage.getChildren()).stream()
-                        .filter(p -> p.getId().equals(child))
-                        .findFirst()
-                        .orElseThrow(() -> new ParserException(ParserExceptionType.UNDEFINED_PACKAGE, null, child));
-                }
+                    boolean found = false;
 
-                currentPackageName = child;
+                    for (Package childPackage : currentPackage.getChildren()) {
+                        if (childPackage.getId().equals(currentPackageName)) {
+                            currentPackage = childPackage;
+
+                            found = true;
+
+                            break;
+                        }
+                    }
+
+                    if (!found) {
+                        throw new ParserException(ParserExceptionType.UNDEFINED_PACKAGE, null, currentPackageName);
+                    }
+                }
             }
 
             if (currentPackage != null) {
@@ -71,36 +70,50 @@ public class FunctionUsing extends Value implements Function {
 
                 currentPackage.apply(symbols);
 
-                if (specificValue != null) {
-                    final String key = specificValue;
-
-                    Value value = symbols.entrySet().stream()
-                        .filter(s -> s.getKey().equals(key))
-                        .findFirst()
-                        .orElseThrow(() -> new ParserException(ParserExceptionType.UNDEFINED_PROPERTY, null, key))
-                        .getValue();
-
-                    if (!context.isAssignment()) {
-                        context.getParser().getScope().setSymbol(key, value);
-                    }
-
-                    array.getValue().add(value);
-                } else {
-                    Value value = new Value();
+                if (valueName == null) {
+                    Value packageValue = new Value();
 
                     for (Map.Entry<String, Value> symbol : symbols.entrySet()) {
-                        value.setProperty(symbol.getKey(), symbol.getValue());
+                        packageValue.setProperty(symbol.getKey(), symbol.getValue());
                     }
 
                     if (!context.isAssignment()) {
-                        context.getParser().getScope().setSymbol(currentPackageName, value);
+                        context.getParser().getScope().setSymbol(currentPackageName, packageValue);
                     }
 
-                    array.getValue().add(value);
+                    array.getValue().add(packageValue);
+                } else {
+                    boolean found = false;
+
+                    for (Map.Entry<String, Value> symbol : symbols.entrySet()) {
+                        if (symbol.getKey().equals(valueName)) {
+                            if (!context.isAssignment()) {
+                                context.getParser().getScope().setSymbol(symbol.getKey(), symbol.getValue());
+                            }
+
+                            array.getValue().add(symbol.getValue());
+
+                            found = true;
+                        }
+                    }
+
+                    if (!found) {
+                        throw new ParserException(ParserExceptionType.UNDEFINED_PROPERTY, null, valueName);
+                    }
                 }
             }
         }
 
         return array.getValue().size() == 1 ? array.getValue().get(0) : array;
+    }
+
+    private Package getPackage(List<Package> defaultPackages, String name) {
+        Package defaultPackage = defaultPackages.stream().filter(p -> p.getId().equals(name)).findFirst().orElse(null);
+
+        if (defaultPackage == null) {
+            return new PackageFileSystem(Paths.get(name));
+        }
+
+        return defaultPackage;
     }
 }
