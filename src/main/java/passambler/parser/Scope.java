@@ -28,7 +28,7 @@ public class Scope {
             parent.setSymbol(key, value);
         } else {
             if (symbols.containsKey(key) && symbols.get(key).isConstant()) {
-                throw new RuntimeException(String.format("cannot modify constant %s", key));
+                throw new RuntimeException(String.format("cannot modify constant '%s'", key));
             }
 
             if (Lexer.isConstant(key)) {
