@@ -29,7 +29,7 @@ public class ValueFileHandler extends Value implements HttpRequestHandler {
         String method = request.getRequestLine().getMethod().toUpperCase(Locale.ENGLISH);
 
         if (!method.equals("GET") && !method.equals("HEAD") && !method.equals("POST")) {
-            throw new MethodNotSupportedException(method + " method not supported");
+            throw new MethodNotSupportedException(String.format("Method '%s' not supported", method));
         }
 
         String target = request.getRequestLine().getUri();

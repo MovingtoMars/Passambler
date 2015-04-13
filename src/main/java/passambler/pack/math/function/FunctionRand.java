@@ -2,11 +2,11 @@ package passambler.pack.math.function;
 
 import java.util.Random;
 import passambler.exception.EngineException;
-import passambler.exception.ParserException;
-import passambler.exception.ParserExceptionType;
+import passambler.exception.ErrorException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
+import passambler.value.ValueError;
 import passambler.value.ValueNum;
 
 public class FunctionRand extends Value implements Function {
@@ -26,7 +26,7 @@ public class FunctionRand extends Value implements Function {
         int max = ((ValueNum) context.getArgument(1)).getValue().intValue();
 
         if (min > max) {
-            throw new ParserException(ParserExceptionType.BAD_SYNTAX, String.format("%d can't be bigger than %d", min, max));
+            throw new ErrorException(new ValueError(String.format("Invalid bounds (%d > %d)", min, max)));
         }
 
         return new ValueNum(new Random().nextInt((max - min) + 1) + min);

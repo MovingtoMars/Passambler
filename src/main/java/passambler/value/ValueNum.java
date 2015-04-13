@@ -39,7 +39,7 @@ public class ValueNum extends Value {
                 case DIVIDE:
                 case ASSIGN_DIVIDE:
                     if (((ValueNum) value).getValue().intValue() == 0) {
-                        throw new ParserException(ParserExceptionType.ZERO_DIVISION, operatorToken.getPosition());
+                        throw new ParserException(ParserExceptionType.CANNOT_DIVIDE_BY_ZERO, operatorToken.getPosition());
                     }
                     
                     return new ValueNum(getValue().divide(((ValueNum) value).getValue()));

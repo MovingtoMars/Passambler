@@ -6,7 +6,6 @@ import java.nio.file.attribute.FileTime;
 import passambler.exception.ErrorException;
 import passambler.exception.EngineException;
 import passambler.value.Value;
-import passambler.value.ValueBool;
 
 public class FunctionTouch extends FunctionSimpleFile {
     @Override
@@ -17,6 +16,6 @@ public class FunctionTouch extends FunctionSimpleFile {
             throw new ErrorException(e);
         }
 
-        return new ValueBool(true);
+        return null;
     }
 }

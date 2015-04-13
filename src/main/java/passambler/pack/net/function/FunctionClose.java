@@ -8,7 +8,6 @@ import passambler.pack.net.value.ValueServerSocket;
 import passambler.pack.net.value.ValueSocket;
 import passambler.exception.EngineException;
 import passambler.value.Value;
-import passambler.value.ValueBool;
 
 public class FunctionClose extends Value implements Function {
     @Override
@@ -29,10 +28,10 @@ public class FunctionClose extends Value implements Function {
             } else if (context.getArgument(1) instanceof ValueServerSocket) {
                 ((ValueServerSocket) context.getArgument(1)).getValue().close();
             }
-
-            return new ValueBool(true);
         } catch (IOException e) {
             throw new ErrorException(e);
         }
+
+        return null;
     }
 }

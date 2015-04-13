@@ -21,7 +21,7 @@ public class LogHandler extends Handler {
         }
 
         if (record.getThrown() != null) {
-            output.println(String.format("%s: %s", record.getMessage(), record.getThrown().getMessage()));
+            output.println(String.format("[%s: %s]", record.getMessage(), record.getThrown().getMessage()));
 
             if (stacktrace) {
                 output.println("Stacktrace:");

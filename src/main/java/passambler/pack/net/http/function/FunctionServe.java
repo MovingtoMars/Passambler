@@ -15,7 +15,6 @@ import passambler.value.function.FunctionContext;
 import passambler.pack.net.http.thread.RequestListenerThread;
 import passambler.exception.EngineException;
 import passambler.value.Value;
-import passambler.value.ValueBool;
 import passambler.value.ValueNum;
 
 public class FunctionServe extends Value implements Function {
@@ -49,10 +48,10 @@ public class FunctionServe extends Value implements Function {
             Thread requestListener = new RequestListenerThread(((ValueNum) context.getArgument(0)).getValue().intValue(), httpService);
             requestListener.setDaemon(false);
             requestListener.start();
-
-            return new ValueBool(true);
         } catch (Exception e) {
             throw new ErrorException(e);
         }
+
+        return null;
     }
 }

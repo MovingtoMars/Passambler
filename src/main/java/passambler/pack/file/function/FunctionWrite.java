@@ -8,7 +8,6 @@ import passambler.exception.EngineException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
-import passambler.value.ValueBool;
 import passambler.value.ValueStr;
 
 public class FunctionWrite extends Value implements Function {
@@ -34,6 +33,6 @@ public class FunctionWrite extends Value implements Function {
             throw new ErrorException(e);
         }
 
-        return new ValueBool(true);
+        return null;
     }
 }

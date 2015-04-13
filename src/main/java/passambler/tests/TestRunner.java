@@ -17,20 +17,20 @@ public class TestRunner {
         Parser parser = new Parser();
 
         if (test.getInput() == null) {
-            throw new TestException("missing input section");
+            throw new TestException("Missing input section");
         }
 
         Value result = parser.parse(new Lexer(test.getInput()));
 
         if (test.getOutput() != null && !test.getOutput().equals(OutputRecorder.getOutput())) {
-            throw new TestException("unexpected output, expected '%s' but got '%s'", test.getOutput(), OutputRecorder.getOutput());
+            throw new TestException("Unexpected output, expected '%s' but got '%s'", test.getOutput(), OutputRecorder.getOutput());
         }
 
         if (test.getResult() != null) {
             if (result == null) {
-                throw new TestException("unexpected result, expected '%s'", test.getResult());
+                throw new TestException("Unexpected result, expected '%s'", test.getResult());
             } else if (!test.getResult().equals(result.toString())) {
-                throw new TestException("unexpected result, expected '%s' but got '%s'", test.getResult(), result.toString());
+                throw new TestException("Unexpected result, expected '%s' but got '%s'", test.getResult(), result.toString());
             }
         }
     }
