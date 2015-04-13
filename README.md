@@ -1,5 +1,5 @@
 # Passambler
-Passambler is a simple programming language.
+Passambler is a simple general purpose language.
 
 It isn't finished yet, but the language is usable.
 
@@ -12,7 +12,7 @@ using('std.Writeln');
 Writeln('Hello World!');
 ```
 
-A FizzBuzz program is written like this:
+And a FizzBuzz program is written like this:
 ```
 using('std.Writeln');
 
@@ -26,6 +26,3 @@ for (x : 0..100) {
     }
 }
 ```
-
-## License
-GPL v2 license (&copy; 2015 Raoul Van den Berge)
