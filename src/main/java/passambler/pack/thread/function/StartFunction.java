@@ -9,7 +9,7 @@ import passambler.exception.ParserException;
 import passambler.exception.ParserExceptionType;
 import passambler.value.Value;
 
-public class FunctionStart extends Value implements Function {
+public class StartFunction extends Value implements Function {
     @Override
     public int getArguments() {
         return -1;

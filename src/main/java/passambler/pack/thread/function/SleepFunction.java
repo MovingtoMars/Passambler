@@ -7,7 +7,7 @@ import passambler.value.function.FunctionContext;
 import passambler.value.Value;
 import passambler.value.NumberValue;
 
-public class FunctionSleep extends Value implements Function {
+public class SleepFunction extends Value implements Function {
     @Override
     public int getArguments() {
         return 1;
