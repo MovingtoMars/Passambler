@@ -10,16 +10,16 @@ public class StringValue extends Value {
     }
 
     @Override
-    public String getValue() {
-        return (String) value;
-    }
-
-    @Override
     public Value onOperator(Value value, Token operatorToken) throws ParserException {
         if (value instanceof StringValue && (operatorToken.getType() == TokenType.PLUS || operatorToken.getType() == TokenType.ASSIGN_PLUS)) {
             return new StringValue(getValue() + value.toString());
         }
 
         return super.onOperator(value, operatorToken);
+    }
+
+    @Override
+    public String getValue() {
+        return (String) value;
     }
 }

@@ -25,7 +25,7 @@ public class DictValue extends Value {
 
         return null;
     }
-    
+
     public void setEntry(Value key, Value value) {
         dict.put(key, value);
     }

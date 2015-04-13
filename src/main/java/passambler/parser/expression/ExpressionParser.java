@@ -285,6 +285,14 @@ public class ExpressionParser {
                         arguments.add(i, definitions.get(i).getDefaultValue());
                     }
                 }
+
+                for (int i = 0; i < definitions.size(); ++i) {
+                    ArgumentDefinition definition = definitions.get(i);
+
+                    if (!definition.getTypehint().matches(arguments.get(i))) {
+                        throw new ParserException(ParserExceptionType.TYPE_MISMATCH, i + 1);
+                    }
+                }
             }
 
             if (currentFunction.getArguments() != -1 && currentFunction.getArguments() != arguments.size()) {

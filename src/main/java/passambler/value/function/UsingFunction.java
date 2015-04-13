@@ -45,7 +45,7 @@ public class UsingFunction extends Value implements Function {
                 }
 
                 if (currentPackage == null) {
-                    currentPackage = getPackage(context.getParser().getDefaultPackages(), currentPackageName);
+                    currentPackage = getPackage(context.getParser().getPackages(), currentPackageName);
                 } else {
                     boolean found = false;
 

@@ -9,6 +9,7 @@ import passambler.lexer.TokenStream;
 import passambler.lexer.TokenType;
 import passambler.parser.ArgumentDefinition;
 import passambler.parser.Parser;
+import passambler.parser.typehint.ClassTypehint;
 import passambler.value.Value;
 import passambler.value.ClassValue;
 import passambler.value.function.ClassInitializerFunction;
@@ -56,6 +57,8 @@ public class ClassFeature implements Feature {
         }
 
         parser.getScope().setSymbol(name, child);
+
+        parser.getTypehints().put(name, new ClassTypehint(name));
 
         return null;
     }

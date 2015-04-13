@@ -41,7 +41,7 @@ public class NumberValue extends Value {
                     if (((NumberValue) value).getValue().intValue() == 0) {
                         throw new ParserException(ParserExceptionType.CANNOT_DIVIDE_BY_ZERO, operatorToken.getPosition());
                     }
-                    
+
                     return new NumberValue(getValue().divide(((NumberValue) value).getValue()));
                 case POWER:
                 case ASSIGN_POWER:
