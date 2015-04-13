@@ -41,7 +41,7 @@ public class Main {
         options = optionParser.parse(args);
 
         LOGGER.setUseParentHandlers(false);
-        LOGGER.addHandler(new LogHandler(options.has("debug")));
+        LOGGER.addHandler(new LogHandler(options.has("d")));
 
         if (options.has("v")) {
             LOGGER.log(Level.INFO, String.format("Passambler %s", VERSION));
