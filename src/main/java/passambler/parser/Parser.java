@@ -15,7 +15,7 @@ import passambler.pack.json.JsonPackage;
 import passambler.pack.math.MathPackage;
 import passambler.pack.net.NetPackage;
 import passambler.pack.os.OsPackage;
-import passambler.pack.std.PackageStd;
+import passambler.pack.std.StdPackage;
 import passambler.pack.thread.PackageThread;
 import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
@@ -50,7 +50,7 @@ public class Parser {
         features.add(new AssignmentFeature());
         features.add(new ExpressionFeature());
 
-        defaultPackages.add(new PackageStd());
+        defaultPackages.add(new StdPackage());
         defaultPackages.add(new MathPackage());
         defaultPackages.add(new FilePackage());
         defaultPackages.add(new OsPackage());
