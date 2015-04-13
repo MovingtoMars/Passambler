@@ -115,40 +115,22 @@ public class Main {
     public void runInteractiveMode() {
         Parser parser = new Parser();
 
-        Scanner input = new Scanner(System.in);
-
         List<Token> tokens = new ArrayList<>();
 
-        while (true) {
-            System.out.print("-> ");
+        String input = "";
 
-            Value result = null;
-
+        while ((input = System.console().readLine("-> ")) != null) {
             try {
-                Lexer lexer = new Lexer(input.nextLine());
+                tokens.addAll(new Lexer(input).scan());
 
-                tokens.addAll(lexer.scan());
+                long depth = tokens.stream().filter(t -> t.getType() == TokenType.LBRACE).count() - tokens.stream().filter(t -> t.getType() == TokenType.RBRACE).count();
 
-                if (tokens.size() > 0) {
-                    TokenType type = tokens.get(tokens.size() - 1).getType();
+                if (depth == 0) {
+                    Value result = parser.parse(tokens);
 
-                    if (type != TokenType.SEMI_COL && type != TokenType.LBRACE) {
-                        tokens.add(new Token(TokenType.SEMI_COL, null));
+                    if (result != null) {
+                        System.out.println(result);
                     }
-                }
-
-                int braces = 0;
-
-                for (Token token : tokens) {
-                    if (token.getType() == TokenType.LBRACE) {
-                        braces++;
-                    } else if (token.getType() == TokenType.RBRACE) {
-                        braces--;
-                    }
-                }
-
-                if (braces == 0) {
-                    result = parser.parse(tokens);
 
                     tokens.clear();
                 }
@@ -156,10 +138,6 @@ public class Main {
                 LOGGER.log(Level.WARNING, e.getName(), e);
 
                 tokens.clear();
-            }
-
-            if (result != null) {
-                System.out.println(result);
             }
         }
     }
