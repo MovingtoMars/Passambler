@@ -2,9 +2,9 @@ package passambler.pack.math.function;
 
 import java.math.BigDecimal;
 
-public class FunctionCos extends FunctionSimpleMath {
+public class AbsFunction extends SimpleMathFunction {
     @Override
     public BigDecimal getReturnValue(BigDecimal value) {
-        return new BigDecimal(Math.cos(value.doubleValue()));
+        return value.abs();
     }
 }

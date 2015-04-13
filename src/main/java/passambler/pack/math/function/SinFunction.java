@@ -2,9 +2,9 @@ package passambler.pack.math.function;
 
 import java.math.BigDecimal;
 
-public class FunctionSqrt extends FunctionSimpleMath {
+public class SinFunction extends SimpleMathFunction {
     @Override
     public BigDecimal getReturnValue(BigDecimal value) {
-        return new BigDecimal(Math.sqrt(value.doubleValue()));
+        return new BigDecimal(Math.sin(value.doubleValue()));
     }
 }

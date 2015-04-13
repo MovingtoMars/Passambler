@@ -7,7 +7,7 @@ import passambler.value.function.FunctionContext;
 import passambler.value.Value;
 import passambler.value.NumberValue;
 
-public abstract class FunctionSimpleMath extends Value implements Function {
+public abstract class SimpleMathFunction extends Value implements Function {
     @Override
     public int getArguments() {
         return 1;

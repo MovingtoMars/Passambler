@@ -2,9 +2,9 @@ package passambler.pack.math.function;
 
 import java.math.BigDecimal;
 
-public class FunctionTan extends FunctionSimpleMath {
+public class SqrtFunction extends SimpleMathFunction {
     @Override
     public BigDecimal getReturnValue(BigDecimal value) {
-        return new BigDecimal(Math.tan(value.doubleValue()));
+        return new BigDecimal(Math.sqrt(value.doubleValue()));
     }
 }

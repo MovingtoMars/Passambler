@@ -9,7 +9,7 @@ import passambler.value.Value;
 import passambler.value.ErrorValue;
 import passambler.value.NumberValue;
 
-public class FunctionRand extends Value implements Function {
+public class RandFunction extends Value implements Function {
     @Override
     public int getArguments() {
         return 2;

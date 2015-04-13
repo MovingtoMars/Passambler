@@ -1,11 +1,10 @@
 package passambler.pack.math.function;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
-public class FunctionCeil extends FunctionSimpleMath {
+public class CosFunction extends SimpleMathFunction {
     @Override
     public BigDecimal getReturnValue(BigDecimal value) {
-        return value.setScale(0, RoundingMode.CEILING);
+        return new BigDecimal(Math.cos(value.doubleValue()));
     }
 }

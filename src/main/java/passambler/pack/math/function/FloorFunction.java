@@ -1,10 +1,11 @@
 package passambler.pack.math.function;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
-public class FunctionLog extends FunctionSimpleMath {
+public class FloorFunction extends SimpleMathFunction {
     @Override
     public BigDecimal getReturnValue(BigDecimal value) {
-        return new BigDecimal(Math.log(value.doubleValue()));
+        return value.setScale(0, RoundingMode.FLOOR);
     }
 }
