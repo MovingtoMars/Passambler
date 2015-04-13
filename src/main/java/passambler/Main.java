@@ -123,7 +123,7 @@ public class Main {
             try {
                 tokens.addAll(new Lexer(input).scan());
 
-                long depth = tokens.stream().filter(t -> t.getType() == TokenType.LBRACE).count() - tokens.stream().filter(t -> t.getType() == TokenType.RBRACE).count();
+                long depth = tokens.stream().filter(t -> t.getType() == TokenType.LEFT_BRACE).count() - tokens.stream().filter(t -> t.getType() == TokenType.RIGHT_BRACE).count();
 
                 if (depth == 0) {
                     Value result = parser.parse(tokens);

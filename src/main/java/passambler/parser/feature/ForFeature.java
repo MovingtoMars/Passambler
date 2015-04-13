@@ -27,19 +27,19 @@ public class ForFeature implements Feature {
         List<String> arguments = new ArrayList<>();
 
         stream.next();
-        stream.match(TokenType.LPAREN);
+        stream.match(TokenType.LEFT_PAREN);
 
         stream.next();
 
-        TokenStream left = new TokenStream(parser.parseExpressionTokens(stream, TokenType.RPAREN, TokenType.COL));
+        TokenStream left = new TokenStream(parser.parseExpressionTokens(stream, TokenType.RIGHT_PAREN, TokenType.COL));
         Value right = null;
 
         if (stream.current().getType() == TokenType.COL) {
             stream.next();
 
-            right = parser.parseExpression(stream, TokenType.RPAREN);
+            right = parser.parseExpression(stream, TokenType.RIGHT_PAREN);
 
-            stream.match(TokenType.RPAREN);
+            stream.match(TokenType.RIGHT_PAREN);
         }
 
         stream.next();

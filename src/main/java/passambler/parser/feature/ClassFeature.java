@@ -37,8 +37,8 @@ public class ClassFeature implements Feature {
         if (stream.current().getType() == TokenType.COL) {
             stream.next();
 
-            while (stream.current().getType() != TokenType.LBRACE) {
-                Value expression = parser.parseExpression(stream, TokenType.COMMA, TokenType.RPAREN, TokenType.LBRACE);
+            while (stream.current().getType() != TokenType.LEFT_BRACE) {
+                Value expression = parser.parseExpression(stream, TokenType.COMMA, TokenType.RIGHT_PAREN, TokenType.LEFT_BRACE);
 
                 if (!(expression instanceof ValueClass)) {
                     throw new ParserException(ParserExceptionType.NOT_A_CLASS, stream.current().getPosition());

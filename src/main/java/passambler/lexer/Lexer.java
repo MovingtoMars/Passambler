@@ -54,12 +54,12 @@ public class Lexer {
         tokenMap.put("=", TokenType.ASSIGN);
         tokenMap.put(">", TokenType.GT);
         tokenMap.put("<", TokenType.LT);
-        tokenMap.put("[", TokenType.LBRACKET);
-        tokenMap.put("]", TokenType.RBRACKET);
-        tokenMap.put("(", TokenType.LPAREN);
-        tokenMap.put(")", TokenType.RPAREN);
-        tokenMap.put("{", TokenType.LBRACE);
-        tokenMap.put("}", TokenType.RBRACE);
+        tokenMap.put("[", TokenType.LEFT_BRACKET);
+        tokenMap.put("]", TokenType.RIGHT_BRACKET);
+        tokenMap.put("(", TokenType.LEFT_PAREN);
+        tokenMap.put(")", TokenType.RIGHT_PAREN);
+        tokenMap.put("{", TokenType.LEFT_BRACE);
+        tokenMap.put("}", TokenType.RIGHT_BRACE);
         tokenMap.put("!", TokenType.NOT);
         tokenMap.put(",", TokenType.COMMA);
         tokenMap.put(".", TokenType.PERIOD);

@@ -112,23 +112,23 @@ public class Parser {
         for (Token token : tokens) {
             Token peekToken = tokens.indexOf(token) == tokens.size() - 1 ? null : tokens.get(tokens.indexOf(token) + 1);
 
-            if (token.getType() == TokenType.LBRACE) {
+            if (token.getType() == TokenType.LEFT_BRACE) {
                 braces++;
-            } else if (token.getType() == TokenType.RBRACE) {
+            } else if (token.getType() == TokenType.RIGHT_BRACE) {
                 braces--;
-            } else if (token.getType() == TokenType.LPAREN) {
+            } else if (token.getType() == TokenType.LEFT_PAREN) {
                 paren++;
-            } else if (token.getType() == TokenType.RPAREN) {
+            } else if (token.getType() == TokenType.RIGHT_PAREN) {
                 paren--;
-            } else if (token.getType() == TokenType.LBRACKET) {
+            } else if (token.getType() == TokenType.LEFT_BRACKET) {
                 brackets++;
-            } else if (token.getType() == TokenType.RBRACKET) {
+            } else if (token.getType() == TokenType.RIGHT_BRACKET) {
                 brackets--;
             }
 
             subTokens.add(token);
 
-            if (braces == 0 && paren == 0 && brackets == 0 && (token.getType() == TokenType.SEMI_COL || token.getType() == TokenType.RBRACE)) {
+            if (braces == 0 && paren == 0 && brackets == 0 && (token.getType() == TokenType.SEMI_COL || token.getType() == TokenType.RIGHT_BRACE)) {
                 if (peekToken != null && peekToken.getType().isLineInsensitive()) {
                     continue;
                 }
@@ -163,16 +163,16 @@ public class Parser {
     public Block parseBlock(TokenStream stream) throws EngineException {
         Block block = new Block(scope);
 
-        stream.match(TokenType.LBRACE);
+        stream.match(TokenType.LEFT_BRACE);
 
         stream.next();
 
         int braces = 1;
 
         while (stream.hasNext()) {
-            if (stream.current().getType() == TokenType.LBRACE) {
+            if (stream.current().getType() == TokenType.LEFT_BRACE) {
                 braces++;
-            } else if (stream.current().getType() == TokenType.RBRACE) {
+            } else if (stream.current().getType() == TokenType.RIGHT_BRACE) {
                 braces--;
 
                 if (braces == 0) {
@@ -185,7 +185,7 @@ public class Parser {
             stream.next();
         }
 
-        stream.match(TokenType.RBRACE);
+        stream.match(TokenType.RIGHT_BRACE);
 
         return block;
     }
@@ -202,17 +202,17 @@ public class Parser {
                 break;
             }
 
-            if (token.getType() == TokenType.LBRACE) {
+            if (token.getType() == TokenType.LEFT_BRACE) {
                 braces++;
-            } else if (token.getType() == TokenType.RBRACE) {
+            } else if (token.getType() == TokenType.RIGHT_BRACE) {
                 braces--;
-            } else if (token.getType() == TokenType.LPAREN) {
+            } else if (token.getType() == TokenType.LEFT_PAREN) {
                 paren++;
-            } else if (token.getType() == TokenType.RPAREN) {
+            } else if (token.getType() == TokenType.RIGHT_PAREN) {
                 paren--;
-            } else if (token.getType() == TokenType.LBRACKET) {
+            } else if (token.getType() == TokenType.LEFT_BRACKET) {
                 brackets++;
-            } else if (token.getType() == TokenType.RBRACKET) {
+            } else if (token.getType() == TokenType.RIGHT_BRACKET) {
                 brackets--;
             }
 
@@ -229,14 +229,14 @@ public class Parser {
     }
 
     public List<ArgumentDefinition> parseArgumentDefinition(TokenStream stream) throws EngineException {
-        stream.match(TokenType.LPAREN);
+        stream.match(TokenType.LEFT_PAREN);
 
         stream.next();
 
         List<ArgumentDefinition> arguments = new ArrayList<>();
 
         while (stream.hasNext()) {
-            if (stream.current().getType() == TokenType.RPAREN) {
+            if (stream.current().getType() == TokenType.RIGHT_PAREN) {
                 break;
             } else {
                 stream.match(TokenType.IDENTIFIER);
@@ -250,10 +250,10 @@ public class Parser {
                 if (stream.current().getType() == TokenType.ASSIGN) {
                     stream.next();
 
-                    definition.setDefaultValue(parseExpression(stream, TokenType.RPAREN, TokenType.COMMA));
+                    definition.setDefaultValue(parseExpression(stream, TokenType.RIGHT_PAREN, TokenType.COMMA));
                 }
 
-                if (stream.current().getType() != TokenType.RPAREN) {
+                if (stream.current().getType() != TokenType.RIGHT_PAREN) {
                     stream.match(TokenType.COMMA);
 
                     stream.next();
@@ -263,7 +263,7 @@ public class Parser {
             }
         }
 
-        stream.match(TokenType.RPAREN);
+        stream.match(TokenType.RIGHT_PAREN);
 
         return arguments;
     }

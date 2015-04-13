@@ -21,12 +21,12 @@ public class WhileFeature implements Feature {
     public Value perform(Parser parser, TokenStream stream) throws EngineException {
         stream.next();
 
-        stream.match(TokenType.LPAREN);
+        stream.match(TokenType.LEFT_PAREN);
         stream.next();
 
-        List<Token> tokens = parser.parseExpressionTokens(stream, TokenType.RPAREN);
+        List<Token> tokens = parser.parseExpressionTokens(stream, TokenType.RIGHT_PAREN);
 
-        stream.match(TokenType.RPAREN);
+        stream.match(TokenType.RIGHT_PAREN);
 
         stream.next();
 

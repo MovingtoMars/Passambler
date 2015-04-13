@@ -24,14 +24,14 @@ public class TryFeature implements Feature {
         stream.match(TokenType.CATCH);
         stream.next();
 
-        stream.match(TokenType.LPAREN);
+        stream.match(TokenType.LEFT_PAREN);
         stream.next();
 
         stream.match(TokenType.IDENTIFIER);
         String name = stream.current().getValue();
 
         stream.next();
-        stream.match(TokenType.RPAREN);
+        stream.match(TokenType.RIGHT_PAREN);
 
         stream.next();
 

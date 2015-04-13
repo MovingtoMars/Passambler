@@ -31,12 +31,12 @@ public class IfFeature implements Feature {
 
         while (stream.hasNext()) {
             if (!elseCondition) {
-                stream.match(TokenType.LPAREN);
+                stream.match(TokenType.LEFT_PAREN);
                 stream.next();
 
-                List<Token> tokens = parser.parseExpressionTokens(stream, TokenType.RPAREN);
+                List<Token> tokens = parser.parseExpressionTokens(stream, TokenType.RIGHT_PAREN);
 
-                stream.match(TokenType.RPAREN);
+                stream.match(TokenType.RIGHT_PAREN);
 
                 Value condition = new ExpressionParser(parser, new TokenStream(tokens)).parse();
 

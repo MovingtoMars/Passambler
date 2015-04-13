@@ -49,17 +49,17 @@ public class ExpressionParser {
         int paren = 0, brackets = 0, braces = 0;
 
         while (stream.hasNext()) {
-            if (stream.current().getType() == TokenType.LPAREN) {
+            if (stream.current().getType() == TokenType.LEFT_PAREN) {
                 paren++;
-            } else if (stream.current().getType() == TokenType.RPAREN) {
+            } else if (stream.current().getType() == TokenType.RIGHT_PAREN) {
                 paren--;
-            } else if (stream.current().getType() == TokenType.LBRACE) {
+            } else if (stream.current().getType() == TokenType.LEFT_BRACE) {
                 braces++;
-            } else if (stream.current().getType() == TokenType.RBRACE) {
+            } else if (stream.current().getType() == TokenType.RIGHT_BRACE) {
                 braces--;
-            } else if (stream.current().getType() == TokenType.LBRACKET) {
+            } else if (stream.current().getType() == TokenType.LEFT_BRACKET) {
                 brackets++;
-            } else if (stream.current().getType() == TokenType.RBRACKET) {
+            } else if (stream.current().getType() == TokenType.RIGHT_BRACKET) {
                 brackets--;
             }
 
@@ -155,15 +155,15 @@ public class ExpressionParser {
                     not = true;
 
                     break;
-                case LPAREN:
+                case LEFT_PAREN:
                     value = parseParen(value);
 
                     break;
-                case LBRACE:
+                case LEFT_BRACE:
                     value = parseBrace();
 
                     break;
-                case LBRACKET:
+                case LEFT_BRACKET:
                     value = parseIndexed(value);
 
                     break;
@@ -214,7 +214,7 @@ public class ExpressionParser {
     private Value parseParen(Value currentValue) throws EngineException {
         stream.next();
 
-        List<Token> tokens = parser.parseExpressionTokens(stream, TokenType.RPAREN);
+        List<Token> tokens = parser.parseExpressionTokens(stream, TokenType.RIGHT_PAREN);
 
         if (currentValue instanceof Function) {
             List<Token> argumentTokens = new ArrayList<>();
@@ -227,17 +227,17 @@ public class ExpressionParser {
             Function currentFunction = (Function) currentValue;
 
             for (Token token : tokens) {
-                if (token.getType() == TokenType.LPAREN) {
+                if (token.getType() == TokenType.LEFT_PAREN) {
                     paren++;
-                } else if (token.getType() == TokenType.RPAREN) {
+                } else if (token.getType() == TokenType.RIGHT_PAREN) {
                     paren--;
-                } else if (token.getType() == TokenType.LBRACKET) {
+                } else if (token.getType() == TokenType.LEFT_BRACKET) {
                     brackets++;
-                } else if (token.getType() == TokenType.RBRACKET) {
+                } else if (token.getType() == TokenType.RIGHT_BRACKET) {
                     brackets--;
-                } else if (token.getType() == TokenType.LBRACE) {
+                } else if (token.getType() == TokenType.LEFT_BRACE) {
                     braces++;
-                } else if (token.getType() == TokenType.RBRACE) {
+                } else if (token.getType() == TokenType.RIGHT_BRACE) {
                     braces--;
                 }
 
@@ -344,7 +344,7 @@ public class ExpressionParser {
         ValueList inlineDeclaration = new ValueList();
 
         while (stream.hasNext()) {
-            if ((stream.current().getType() == TokenType.COMMA || stream.current().getType() == TokenType.RBRACKET) && brackets == 1 && paren == 0 && braces == 0) {
+            if ((stream.current().getType() == TokenType.COMMA || stream.current().getType() == TokenType.RIGHT_BRACKET) && brackets == 1 && paren == 0 && braces == 0) {
                 if (tokens.isEmpty()) {
                     if (stream.back(2) != null) {
                         throw new ParserException(ParserExceptionType.BAD_SYNTAX, stream.current().getPosition(), "no value specified");
@@ -353,7 +353,7 @@ public class ExpressionParser {
                     inlineDeclaration.getValue().add(createParser(new TokenStream(tokens)).parse());
                 }
 
-                if (stream.current().getType() == TokenType.RBRACKET) {
+                if (stream.current().getType() == TokenType.RIGHT_BRACKET) {
                     brackets--;
                 } else {
                     stream.next();
@@ -362,17 +362,17 @@ public class ExpressionParser {
 
                     continue;
                 }
-            } else if (stream.current().getType() == TokenType.LBRACKET) {
+            } else if (stream.current().getType() == TokenType.LEFT_BRACKET) {
                 brackets++;
-            } else if (stream.current().getType() == TokenType.RBRACKET) {
+            } else if (stream.current().getType() == TokenType.RIGHT_BRACKET) {
                 brackets--;
-            } else if (stream.current().getType() == TokenType.LPAREN) {
+            } else if (stream.current().getType() == TokenType.LEFT_PAREN) {
                 paren++;
-            } else if (stream.current().getType() == TokenType.RPAREN) {
+            } else if (stream.current().getType() == TokenType.RIGHT_PAREN) {
                 paren--;
-            } else if (stream.current().getType() == TokenType.LBRACE) {
+            } else if (stream.current().getType() == TokenType.LEFT_BRACE) {
                 braces++;
-            } else if (stream.current().getType() == TokenType.RBRACE) {
+            } else if (stream.current().getType() == TokenType.RIGHT_BRACE) {
                 braces--;
             }
 
@@ -473,7 +473,7 @@ public class ExpressionParser {
             }
 
             if (!parser.getScope().hasSymbol(token.getValue())) {
-                throw new ParserException(stream.peek() != null && stream.peek().getType() == TokenType.LPAREN ? ParserExceptionType.UNDEFINED_FUNCTION : ParserExceptionType.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());
+                throw new ParserException(stream.peek() != null && stream.peek().getType() == TokenType.LEFT_PAREN ? ParserExceptionType.UNDEFINED_FUNCTION : ParserExceptionType.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());
             }
 
             return parser.getScope().getSymbol(token.getValue());
@@ -492,21 +492,21 @@ public class ExpressionParser {
         List<Token> tokens = new ArrayList<>();
 
         while (stream.hasNext()) {
-            if (stream.current().getType() == TokenType.LBRACKET) {
+            if (stream.current().getType() == TokenType.LEFT_BRACKET) {
                 brackets++;
-            } else if (stream.current().getType() == TokenType.RBRACKET) {
+            } else if (stream.current().getType() == TokenType.RIGHT_BRACKET) {
                 brackets--;
-            } else if (stream.current().getType() == TokenType.LPAREN) {
+            } else if (stream.current().getType() == TokenType.LEFT_PAREN) {
                 paren++;
-            } else if (stream.current().getType() == TokenType.RPAREN) {
+            } else if (stream.current().getType() == TokenType.RIGHT_PAREN) {
                 paren--;
-            } else if (stream.current().getType() == TokenType.LBRACE) {
+            } else if (stream.current().getType() == TokenType.LEFT_BRACE) {
                 braces++;
-            } else if (stream.current().getType() == TokenType.RBRACE) {
+            } else if (stream.current().getType() == TokenType.RIGHT_BRACE) {
                 braces--;
             }
 
-            if ((stream.current().getType() == TokenType.COMMA || stream.current().getType() == TokenType.RBRACE) && braces <= 1 && paren == 0 && brackets == 0) {
+            if ((stream.current().getType() == TokenType.COMMA || stream.current().getType() == TokenType.RIGHT_BRACE) && braces <= 1 && paren == 0 && brackets == 0) {
                 // Ugly hack...
                 if (tokens.isEmpty()) {
                     break;
