@@ -34,16 +34,14 @@ public class Main {
         optionParser.accepts("v", "Show the version number");
         optionParser.accepts("h", "Show help");
         optionParser.accepts("a", "Run interactively");
+        optionParser.accepts("d", "Enables debug mode");
         optionParser.accepts("f", "Run one or multiple file(s)").withRequiredArg();
         optionParser.accepts("t", "Run a test (file(s) or a whole directory)").withRequiredArg();
-
-        optionParser.accepts("show-stacktrace", "Shows the stacktrace of the parser");
-        optionParser.accepts("show-tokens", "Shows the tokens of a file");
 
         options = optionParser.parse(args);
 
         LOGGER.setUseParentHandlers(false);
-        LOGGER.addHandler(new LogHandler(options.has("show-stacktrace")));
+        LOGGER.addHandler(new LogHandler(options.has("debug")));
 
         if (options.has("v")) {
             LOGGER.log(Level.INFO, String.format("Passambler %s", VERSION));
@@ -72,17 +70,9 @@ public class Main {
 
     public void runFile(Path file) throws IOException {
         try {
-            Lexer lexer = new Lexer(String.join("\n", Files.readAllLines(file)));
+            Parser parser = new Parser();
 
-            if (options.has("show-tokens")) {
-                for (Token token : lexer.scan()) {
-                    LOGGER.log(Level.INFO, token.toString());
-                }
-            } else {
-                Parser parser = new Parser();
-
-                parser.parse(lexer);
-            }
+            parser.parse(new Lexer(String.join("\n", Files.readAllLines(file))));
         } catch (EngineException e) {
             LOGGER.log(Level.SEVERE, e.getName(), e);
         }
@@ -100,7 +90,7 @@ public class Main {
         }
 
         LOGGER.log(Level.INFO, String.format("Running %d tests", files.size()));
-        
+
         for (Path file : files) {
             try {
                 TestParser parser = new TestParser(file);
@@ -147,28 +137,20 @@ public class Main {
                     }
                 }
 
-                if (options.has("show-tokens")) {
-                    for (Token token : tokens) {
-                        LOGGER.log(Level.INFO, token.toString());
+                int braces = 0;
+
+                for (Token token : tokens) {
+                    if (token.getType() == TokenType.LBRACE) {
+                        braces++;
+                    } else if (token.getType() == TokenType.RBRACE) {
+                        braces--;
                     }
+                }
+
+                if (braces == 0) {
+                    result = parser.parse(tokens);
 
                     tokens.clear();
-                } else {
-                    int braces = 0;
-
-                    for (Token token : tokens) {
-                        if (token.getType() == TokenType.LBRACE) {
-                            braces++;
-                        } else if (token.getType() == TokenType.RBRACE) {
-                            braces--;
-                        }
-                    }
-
-                    if (braces == 0) {
-                        result = parser.parse(tokens);
-
-                        tokens.clear();
-                    }
                 }
             } catch (EngineException e) {
                 LOGGER.log(Level.WARNING, e.getName(), e);
