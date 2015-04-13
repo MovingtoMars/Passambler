@@ -9,7 +9,11 @@ A simple Hello World program looks like this:
 ```
 using('std.Writeln');
 
-Writeln('Hello World!');
+fn hello(name) {
+    Writeln('Hello ' + name + '!');
+}
+
+hello('World');
 ```
 
 And a FizzBuzz program is written like this:
@@ -26,3 +30,14 @@ for (x : 0..100) {
     }
 }
 ```
+
+Passambler also supports typehinting. See this example:
+```
+fn sum(num a, num b) {
+    return a + b;
+}
+
+sum(1, 1);
+sum('Another type!', 1);
+```
+The second `sum` call would cause a type mismatch error.
