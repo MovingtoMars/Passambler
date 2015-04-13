@@ -11,10 +11,10 @@ import passambler.parser.Parser;
 import passambler.exception.EngineException;
 import passambler.value.Value;
 
-public class PackageFileSystem implements Package {
+public class FileSystemPackage implements Package {
     private Path path;
 
-    public PackageFileSystem(Path path) {
+    public FileSystemPackage(Path path) {
         this.path = path;
     }
 
@@ -34,7 +34,7 @@ public class PackageFileSystem implements Package {
 
             for (Path file : Files.newDirectoryStream(path)) {
                 if (Files.isDirectory(file)) {
-                    packages.add(new PackageFileSystem(file));
+                    packages.add(new FileSystemPackage(file));
                 }
             }
 

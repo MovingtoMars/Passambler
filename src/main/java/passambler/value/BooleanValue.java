@@ -3,8 +3,8 @@ package passambler.value;
 import passambler.lexer.Token;
 import passambler.exception.ParserException;
 
-public class ValueBool extends Value {
-    public ValueBool(Boolean value) {
+public class BooleanValue extends Value {
+    public BooleanValue(Boolean value) {
         setValue(value);
     }
 
@@ -15,12 +15,12 @@ public class ValueBool extends Value {
 
     @Override
     public Value onOperator(Value value, Token operatorToken) throws ParserException {
-        if (value instanceof ValueBool) {
+        if (value instanceof BooleanValue) {
             switch (operatorToken.getType()) {
                 case AND:
-                    return new ValueBool(getValue() == ((ValueBool) value).getValue());
+                    return new BooleanValue(getValue() == ((BooleanValue) value).getValue());
                 case OR:
-                    return new ValueBool(getValue() || ((ValueBool) value).getValue());
+                    return new BooleanValue(getValue() || ((BooleanValue) value).getValue());
             }
         }
 

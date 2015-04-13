@@ -6,9 +6,14 @@ import passambler.lexer.Token;
 import passambler.exception.ParserException;
 
 public class Value {
-    public static final ValueBool VALUE_TRUE = new ValueBool(true);
-    public static final ValueBool VALUE_FALSE = new ValueBool(false);
-    public static final ValueNil VALUE_NIL = new ValueNil();
+    public static final BooleanValue VALUE_TRUE = new BooleanValue(true);
+    public static final BooleanValue VALUE_FALSE = new BooleanValue(false);
+    public static final Value VALUE_NIL = new Value() {
+        @Override
+        public String toString() {
+            return "nil";
+        }
+    };
 
     protected boolean constant = false;
 
@@ -55,9 +60,9 @@ public class Value {
     public Value onOperator(Value value, Token operatorToken) throws ParserException {
         switch (operatorToken.getType()) {
             case EQUAL:
-                return new ValueBool(equals(value));
+                return new BooleanValue(equals(value));
             case NEQUAL:
-                return new ValueBool(!equals(value));
+                return new BooleanValue(!equals(value));
             case ASSIGN:
                 return value;
         }

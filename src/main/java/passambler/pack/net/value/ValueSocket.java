@@ -6,19 +6,19 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
-import passambler.value.ReadHandler;
+import passambler.value.ReadableValue;
 import passambler.value.Value;
-import passambler.value.ValueStr;
-import passambler.value.WriteHandler;
+import passambler.value.StringValue;
+import passambler.value.WriteableValue;
 
-public class ValueSocket extends Value implements WriteHandler, ReadHandler {
+public class ValueSocket extends Value implements WriteableValue, ReadableValue {
     private Socket socket;
 
     public ValueSocket(Socket socket) {
         this.socket = socket;
 
-        this.setProperty("HostAddr", new ValueStr(socket.getInetAddress().getHostAddress()));
-        this.setProperty("HostName", new ValueStr(socket.getInetAddress().getHostName()));
+        this.setProperty("HostAddr", new StringValue(socket.getInetAddress().getHostAddress()));
+        this.setProperty("HostName", new StringValue(socket.getInetAddress().getHostName()));
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ValueSocket extends Value implements WriteHandler, ReadHandler {
     @Override
     public Value read() throws EngineException {
         try {
-            return new ValueStr(new BufferedReader(new InputStreamReader(socket.getInputStream())).readLine());
+            return new StringValue(new BufferedReader(new InputStreamReader(socket.getInputStream())).readLine());
         } catch (IOException e) {
             throw new ErrorException(e);
         }

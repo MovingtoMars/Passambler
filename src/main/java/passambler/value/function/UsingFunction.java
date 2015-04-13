@@ -7,14 +7,14 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import passambler.exception.ParserException;
 import passambler.value.Value;
-import passambler.value.ValueStr;
+import passambler.value.StringValue;
 import passambler.pack.Package;
-import passambler.pack.PackageFileSystem;
+import passambler.pack.FileSystemPackage;
 import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
-import passambler.value.ValueList;
+import passambler.value.ListValue;
 
-public class FunctionUsing extends Value implements Function {
+public class UsingFunction extends Value implements Function {
     @Override
     public int getArguments() {
         return -1;
@@ -22,12 +22,12 @@ public class FunctionUsing extends Value implements Function {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof ValueStr;
+        return value instanceof StringValue;
     }
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        ValueList array = new ValueList();
+        ListValue array = new ListValue();
 
         for (Value value : context.getArguments()) {
             Package currentPackage = null;
@@ -35,7 +35,7 @@ public class FunctionUsing extends Value implements Function {
 
             String valueName = null;
 
-            for (String child : ((ValueStr) value).getValue().split("/")) {
+            for (String child : ((StringValue) value).getValue().split("/")) {
                 if (child.contains(".")) {
                     valueName = child.split(Pattern.quote("."))[1];
 
@@ -111,7 +111,7 @@ public class FunctionUsing extends Value implements Function {
         Package defaultPackage = defaultPackages.stream().filter(p -> p.getId().equals(name)).findFirst().orElse(null);
 
         if (defaultPackage == null) {
-            return new PackageFileSystem(Paths.get(name));
+            return new FileSystemPackage(Paths.get(name));
         }
 
         return defaultPackage;

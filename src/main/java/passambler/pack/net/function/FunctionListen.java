@@ -7,7 +7,7 @@ import passambler.value.function.FunctionContext;
 import passambler.pack.net.value.ValueServerSocket;
 import passambler.exception.EngineException;
 import passambler.value.Value;
-import passambler.value.ValueNum;
+import passambler.value.NumberValue;
 
 public class FunctionListen extends Value implements Function {
     @Override
@@ -17,13 +17,13 @@ public class FunctionListen extends Value implements Function {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof ValueNum;
+        return value instanceof NumberValue;
     }
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
         try {
-            return new ValueServerSocket(((ValueNum) context.getArgument(0)).getValue().intValue());
+            return new ValueServerSocket(((NumberValue) context.getArgument(0)).getValue().intValue());
         } catch (IOException e) {
             throw new ErrorException(e);
         }

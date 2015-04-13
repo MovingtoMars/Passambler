@@ -4,15 +4,15 @@ import passambler.exception.EngineException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
-import passambler.value.ValueStr;
-import passambler.value.WriteHandler;
+import passambler.value.StringValue;
+import passambler.value.WriteableValue;
 
 public class FunctionWrite extends Value implements Function {
-    private WriteHandler handler;
+    private WriteableValue handler;
 
     private boolean newLine;
 
-    public FunctionWrite(WriteHandler handler, boolean newLine) {
+    public FunctionWrite(WriteableValue handler, boolean newLine) {
         this.handler = handler;
         this.newLine = newLine;
     }
@@ -29,26 +29,26 @@ public class FunctionWrite extends Value implements Function {
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        WriteHandler handler = this.handler;
+        WriteableValue handler = this.handler;
 
-        if (context.getArguments().length > 0 && context.getArgument(0) instanceof WriteHandler) {
-            handler = (WriteHandler) context.getArgument(0);
+        if (context.getArguments().length > 0 && context.getArgument(0) instanceof WriteableValue) {
+            handler = (WriteableValue) context.getArgument(0);
         }
 
         for (Value argument : context.getArguments()) {
-            if (argument == context.getArgument(0) && argument instanceof WriteHandler) {
+            if (argument == context.getArgument(0) && argument instanceof WriteableValue) {
                 continue;
             }
 
             handler.write(argument);
 
             if (argument != context.getArgument(context.getArguments().length - 1)) {
-                handler.write(new ValueStr(" "));
+                handler.write(new StringValue(" "));
             }
         }
 
         if (newLine) {
-            handler.write(new ValueStr("\n"));
+            handler.write(new StringValue("\n"));
         }
 
         return null;

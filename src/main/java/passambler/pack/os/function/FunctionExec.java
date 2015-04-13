@@ -8,7 +8,7 @@ import passambler.exception.ErrorException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
-import passambler.value.ValueStr;
+import passambler.value.StringValue;
 
 public class FunctionExec extends Value implements Function {
     @Override
@@ -18,7 +18,7 @@ public class FunctionExec extends Value implements Function {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof ValueStr;
+        return value instanceof StringValue;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class FunctionExec extends Value implements Function {
         Process process;
 
         try {
-            process = Runtime.getRuntime().exec(((ValueStr) context.getArgument(0)).getValue());
+            process = Runtime.getRuntime().exec(((StringValue) context.getArgument(0)).getValue());
             process.waitFor();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -45,7 +45,7 @@ public class FunctionExec extends Value implements Function {
                 }
             }
 
-            return new ValueStr(output.toString());
+            return new StringValue(output.toString());
         } catch (IOException | InterruptedException e) {
             throw new ErrorException(e);
         }

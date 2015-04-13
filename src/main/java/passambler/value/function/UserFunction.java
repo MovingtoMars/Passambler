@@ -6,11 +6,11 @@ import passambler.parser.Block;
 import passambler.exception.EngineException;
 import passambler.value.Value;
 
-public class FunctionUser extends Value implements Function {
+public class UserFunction extends Value implements Function {
     private Block block;
     private List<ArgumentDefinition> arguments;
 
-    public FunctionUser(Block block, List<ArgumentDefinition> arguments) {
+    public UserFunction(Block block, List<ArgumentDefinition> arguments) {
         this.block = block;
         this.arguments = arguments;
     }

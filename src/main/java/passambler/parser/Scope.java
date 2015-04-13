@@ -2,8 +2,8 @@ package passambler.parser;
 
 import java.util.HashMap;
 import java.util.Map;
-import passambler.value.function.FunctionUsing;
-import passambler.value.function.FunctionThrow;
+import passambler.value.function.UsingFunction;
+import passambler.value.function.ThrowFunction;
 import passambler.lexer.Lexer;
 import passambler.value.Value;
 
@@ -19,8 +19,8 @@ public class Scope {
     public Scope(Scope parentScope) {
         parent = parentScope;
 
-        symbols.put("using", new FunctionUsing());
-        symbols.put("throw", new FunctionThrow());
+        symbols.put("using", new UsingFunction());
+        symbols.put("throw", new ThrowFunction());
     }
 
     public void setSymbol(String key, Value value) {

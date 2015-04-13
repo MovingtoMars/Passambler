@@ -5,13 +5,13 @@ import java.nio.file.Path;
 import passambler.exception.ErrorException;
 import passambler.exception.EngineException;
 import passambler.value.Value;
-import passambler.value.ValueNum;
+import passambler.value.NumberValue;
 
 public class FunctionModified extends FunctionSimpleFile {
     @Override
     public Value getReturnValue(Path file) throws EngineException {
         try {
-            return new ValueNum(Files.getLastModifiedTime(file).toMillis());
+            return new NumberValue(Files.getLastModifiedTime(file).toMillis());
         } catch (Exception e) {
             throw new ErrorException(e);
         }

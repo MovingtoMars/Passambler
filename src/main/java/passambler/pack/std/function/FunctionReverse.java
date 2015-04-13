@@ -4,7 +4,7 @@ import passambler.exception.EngineException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
-import passambler.value.ValueList;
+import passambler.value.ListValue;
 
 public class FunctionReverse extends Value implements Function {
     @Override
@@ -14,14 +14,14 @@ public class FunctionReverse extends Value implements Function {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof ValueList;
+        return value instanceof ListValue;
     }
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        ValueList value = (ValueList) context.getArgument(0);
+        ListValue value = (ListValue) context.getArgument(0);
 
-        ValueList subList = new ValueList();
+        ListValue subList = new ListValue();
 
         for (int i = value.getValue().size() - 1; i >= 0; --i) {
             subList.getValue().add(value.getValue().get(i));

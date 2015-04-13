@@ -4,8 +4,8 @@ import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.exception.EngineException;
 import passambler.value.Value;
-import passambler.value.ValueList;
-import passambler.value.ValueStr;
+import passambler.value.ListValue;
+import passambler.value.StringValue;
 
 public class FunctionList extends Value implements Function {
     @Override
@@ -15,15 +15,15 @@ public class FunctionList extends Value implements Function {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof ValueStr;
+        return value instanceof StringValue;
     }
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        ValueList list = new ValueList();
+        ListValue list = new ListValue();
 
-        for (char c : ((ValueStr) context.getArgument(0)).getValue().toCharArray()) {
-            list.getValue().add(new ValueStr(String.valueOf(c)));
+        for (char c : ((StringValue) context.getArgument(0)).getValue().toCharArray()) {
+            list.getValue().add(new StringValue(String.valueOf(c)));
         }
 
         return list;

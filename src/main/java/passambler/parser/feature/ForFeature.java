@@ -12,9 +12,9 @@ import passambler.parser.Block;
 import passambler.parser.expression.ExpressionParser;
 import passambler.parser.Parser;
 import passambler.value.Value;
-import passambler.value.ValueDict;
-import passambler.value.ValueList;
-import passambler.value.ValueNum;
+import passambler.value.DictValue;
+import passambler.value.ListValue;
+import passambler.value.NumberValue;
 
 public class ForFeature implements Feature {
     @Override
@@ -64,14 +64,14 @@ public class ForFeature implements Feature {
 
         Value value = right == null ? new ExpressionParser(parser, left.copy()).parse() : right;
 
-        if (value instanceof ValueList) {
-            ValueList list = (ValueList) value;
+        if (value instanceof ListValue) {
+            ListValue list = (ListValue) value;
 
             for (int i = 0; i < list.getValue().size(); ++i) {
                 if (arguments.size() == 1) {
                     callback.getParser().getScope().setSymbol(arguments.get(0), list.getValue().get(i));
                 } else if (arguments.size() == 2) {
-                    callback.getParser().getScope().setSymbol(arguments.get(0), new ValueNum(i));
+                    callback.getParser().getScope().setSymbol(arguments.get(0), new NumberValue(i));
                     callback.getParser().getScope().setSymbol(arguments.get(1), list.getValue().get(i));
                 } else if (arguments.size() > 2) {
                     throw new ParserException(ParserExceptionType.INVALID_ARGUMENT_COUNT, stream.first().getPosition(), 2, arguments.size());
@@ -83,8 +83,8 @@ public class ForFeature implements Feature {
                     return result;
                 }
             }
-        } else if (value instanceof ValueDict) {
-            ValueDict dict = (ValueDict) value;
+        } else if (value instanceof DictValue) {
+            DictValue dict = (DictValue) value;
 
             for (Map.Entry<Value, Value> entry : dict.getValue().entrySet()) {
                 if (arguments.size() == 1) {

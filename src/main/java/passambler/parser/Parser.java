@@ -22,7 +22,7 @@ import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenType;
 import passambler.parser.feature.*;
 import passambler.value.Value;
-import passambler.value.ValueError;
+import passambler.value.ErrorValue;
 
 public class Parser {
     private List<Feature> features = new ArrayList<>();
@@ -135,8 +135,8 @@ public class Parser {
                     subTokens.clear();
 
                     if (result != null) {
-                        if (result instanceof ValueError) {
-                            throw new ErrorException((ValueError) result);
+                        if (result instanceof ErrorValue) {
+                            throw new ErrorException((ErrorValue) result);
                         }
 
                         return result;

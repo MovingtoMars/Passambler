@@ -8,30 +8,30 @@ import org.apache.http.HttpResponse;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HttpContext;
 import passambler.value.Value;
-import passambler.value.ValueDict;
-import passambler.value.ValueNum;
-import passambler.value.ValueStr;
-import passambler.value.WriteHandler;
+import passambler.value.DictValue;
+import passambler.value.NumberValue;
+import passambler.value.StringValue;
+import passambler.value.WriteableValue;
 
-public class ValueResponse extends Value implements WriteHandler {
+public class ValueResponse extends Value implements WriteableValue {
     private StringBuilder responseData = new StringBuilder();
 
     public ValueResponse(HttpContext context, HttpResponse response) {
-        setProperty("Headers", new ValueDict());
-        setProperty("Status", new ValueNum(200));
+        setProperty("Headers", new DictValue());
+        setProperty("Status", new NumberValue(200));
     }
 
     public int getStatus() {
-        return ((ValueNum) getProperty("Status").getValue()).getValue().intValue();
+        return ((NumberValue) getProperty("Status").getValue()).getValue().intValue();
     }
 
     public Header[] getHeaders() {
-        if (getProperty("Headers").getValue() instanceof ValueDict) {
+        if (getProperty("Headers").getValue() instanceof DictValue) {
             List<Header> headers = new ArrayList<>();
 
-            for (Map.Entry<Value, Value> entry : ((ValueDict) getProperty("Headers").getValue()).getValue().entrySet()) {
-                if (entry.getKey() instanceof ValueStr && entry.getValue() instanceof ValueStr) {
-                    headers.add(new BasicHeader(((ValueStr) entry.getKey()).getValue(), ((ValueStr) entry.getValue()).getValue()));
+            for (Map.Entry<Value, Value> entry : ((DictValue) getProperty("Headers").getValue()).getValue().entrySet()) {
+                if (entry.getKey() instanceof StringValue && entry.getValue() instanceof StringValue) {
+                    headers.add(new BasicHeader(((StringValue) entry.getKey()).getValue(), ((StringValue) entry.getValue()).getValue()));
                 }
             }
 

@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
-import passambler.value.function.FunctionUser;
+import passambler.value.function.UserFunction;
 import passambler.value.Value;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
@@ -17,11 +17,11 @@ import passambler.lexer.TokenType;
 import passambler.parser.ArgumentDefinition;
 import passambler.parser.Block;
 import passambler.parser.Parser;
-import passambler.value.ValueBool;
-import passambler.value.ValueDict;
-import passambler.value.ValueList;
-import passambler.value.ValueNum;
-import passambler.value.ValueStr;
+import passambler.value.BooleanValue;
+import passambler.value.DictValue;
+import passambler.value.ListValue;
+import passambler.value.NumberValue;
+import passambler.value.StringValue;
 
 public class ExpressionParser {
     private boolean assignment;
@@ -178,11 +178,11 @@ public class ExpressionParser {
         }
 
         if (not) {
-            if (!(value instanceof ValueBool)) {
+            if (!(value instanceof BooleanValue)) {
                 throw new ParserException(ParserExceptionType.EXPECTED_A_BOOL, stream.first().getPosition());
             }
 
-            value = new ValueBool(!((ValueBool) value).getValue());
+            value = new BooleanValue(!((BooleanValue) value).getValue());
         }
 
         return value;
@@ -197,7 +197,7 @@ public class ExpressionParser {
 
         Block callback = parser.parseBlock(stream);
 
-        return new FunctionUser(callback, arguments);
+        return new UserFunction(callback, arguments);
     }
 
     private Value parseParen(Value currentValue) throws EngineException {
@@ -232,7 +232,7 @@ public class ExpressionParser {
                     TokenStream argumentTokenStream = new TokenStream(argumentTokens);
 
                     if (argumentTokenStream.current().getType() == TokenType.IDENTIFIER && argumentTokenStream.peek() != null && argumentTokenStream.peek().getType() == TokenType.ASSIGN) {
-                        if (currentValue instanceof FunctionUser) {
+                        if (currentValue instanceof UserFunction) {
                             usedNamedArguments = true;
 
                             String name = argumentTokenStream.current().getValue();
@@ -240,7 +240,7 @@ public class ExpressionParser {
                             argumentTokenStream.next();
                             argumentTokenStream.next();
 
-                            List<ArgumentDefinition> argumentDefinitions = ((FunctionUser) currentFunction).getArgumentDefinitions();
+                            List<ArgumentDefinition> argumentDefinitions = ((UserFunction) currentFunction).getArgumentDefinitions();
 
                             int index = argumentDefinitions.indexOf(argumentDefinitions.stream().filter(a -> a.getName().equals(name)).findFirst().get());
 
@@ -270,8 +270,8 @@ public class ExpressionParser {
                 }
             }
 
-            if (currentFunction instanceof FunctionUser) {
-                List<ArgumentDefinition> definitions = ((FunctionUser) currentFunction).getArgumentDefinitions();
+            if (currentFunction instanceof UserFunction) {
+                List<ArgumentDefinition> definitions = ((UserFunction) currentFunction).getArgumentDefinitions();
 
                 for (int i = 0; i < definitions.size(); ++i) {
                     if (i >= arguments.size()) {
@@ -318,7 +318,7 @@ public class ExpressionParser {
 
         stream.next();
 
-        ValueList inlineDeclaration = new ValueList();
+        ListValue inlineDeclaration = new ListValue();
 
         while (stream.hasNext()) {
             if ((stream.current().getType() == TokenType.COMMA || stream.current().getType() == TokenType.RIGHT_BRACKET) && brackets == 1 && paren == 0 && braces == 0) {
@@ -367,14 +367,14 @@ public class ExpressionParser {
         } else {
             Value indexValue = createParser(new TokenStream(tokens)).parse();
 
-            if (indexValue instanceof ValueNum) {
-                if (!(currentValue instanceof ValueList)) {
+            if (indexValue instanceof NumberValue) {
+                if (!(currentValue instanceof ListValue)) {
                     throw new ParserException(ParserExceptionType.NOT_A_LIST);
                 }
 
-                ValueList list = (ValueList) currentValue;
+                ListValue list = (ListValue) currentValue;
 
-                int index = ((ValueNum) indexValue).getValue().intValue();
+                int index = ((NumberValue) indexValue).getValue().intValue();
 
                 if (index < -list.getValue().size() || index > list.getValue().size() - 1) {
                     throw new ParserException(ParserExceptionType.INDEX_OUT_OF_RANGE, null, index, list.getValue().size());
@@ -386,11 +386,11 @@ public class ExpressionParser {
                     return list.getValue().get(index);
                 }
             } else {
-                if (!(currentValue instanceof ValueDict)) {
+                if (!(currentValue instanceof DictValue)) {
                     throw new ParserException(ParserExceptionType.NOT_A_DICT);
                 }
 
-                ValueDict dict = (ValueDict) currentValue;
+                DictValue dict = (DictValue) currentValue;
 
                 if (dict.getEntry(indexValue) == null) {
                     return Value.VALUE_NIL;
@@ -423,7 +423,7 @@ public class ExpressionParser {
         Token token = stream.current();
 
         if (token.getType() == TokenType.STRING) {
-            return new ValueStr(token.getValue());
+            return new StringValue(token.getValue());
         } else if (token.getType() == TokenType.NUMBER) {
             StringBuilder number = new StringBuilder();
 
@@ -439,7 +439,7 @@ public class ExpressionParser {
                 number.append(stream.current().getValue());
             }
 
-            return new ValueNum(new BigDecimal(number.toString()));
+            return new NumberValue(new BigDecimal(number.toString()));
         } else if (token.getType() == TokenType.IDENTIFIER) {
             if (token.getValue().equals("true")) {
                 return Value.VALUE_TRUE;
@@ -464,7 +464,7 @@ public class ExpressionParser {
 
         stream.next();
 
-        ValueDict value = new ValueDict();
+        DictValue value = new DictValue();
 
         List<Token> tokens = new ArrayList<>();
 

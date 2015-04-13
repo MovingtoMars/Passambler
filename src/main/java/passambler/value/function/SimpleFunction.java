@@ -3,7 +3,7 @@ package passambler.value.function;
 import passambler.exception.EngineException;
 import passambler.value.Value;
 
-public abstract class FunctionSimple extends Value implements Function {
+public abstract class SimpleFunction extends Value implements Function {
     @Override
     public int getArguments() {
         return 0;

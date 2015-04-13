@@ -9,31 +9,31 @@ import passambler.parser.Block;
 import passambler.exception.EngineException;
 import passambler.value.Property;
 import passambler.value.Value;
-import passambler.value.ValueClass;
+import passambler.value.ClassValue;
 
-public class FunctionClassInitializer extends FunctionUser {
+public class ClassInitializerFunction extends UserFunction {
     private String name;
 
-    private List<FunctionClassInitializer> parents = new ArrayList<>();
+    private List<ClassInitializerFunction> parents = new ArrayList<>();
 
-    public FunctionClassInitializer(String name, Block block, List<ArgumentDefinition> argumentDefinitions) {
+    public ClassInitializerFunction(String name, Block block, List<ArgumentDefinition> argumentDefinitions) {
         super(block, argumentDefinitions);
 
         this.name = name;
     }
 
-    public void addParent(FunctionClassInitializer parent) throws EngineException {
+    public void addParent(ClassInitializerFunction parent) throws EngineException {
         parents.add(parent);
     }
 
-    public List<FunctionUser> getFunctions() {
-        List<FunctionUser> functions = new ArrayList<>();
+    public List<UserFunction> getFunctions() {
+        List<UserFunction> functions = new ArrayList<>();
 
         for (Map.Entry<String, Property> property : properties.entrySet()) {
             Value propertyValue = property.getValue().getValue();
 
-            if (propertyValue instanceof FunctionUser) {
-                functions.add((FunctionUser) propertyValue);
+            if (propertyValue instanceof UserFunction) {
+                functions.add((UserFunction) propertyValue);
             }
         }
 
@@ -44,7 +44,7 @@ public class FunctionClassInitializer extends FunctionUser {
     public Value invoke(FunctionContext context) throws EngineException {
         getBlock().refreshParser();
 
-        ValueClass child = new ValueClass(name);
+        ClassValue child = new ClassValue(name);
 
         Value self = new Value();
 
@@ -54,7 +54,7 @@ public class FunctionClassInitializer extends FunctionUser {
         }
 
         // Apply symbols from parents
-        for (FunctionClassInitializer parent : parents) {
+        for (ClassInitializerFunction parent : parents) {
             for (Map.Entry<String, Value> symbol : parent.getBlock().getParser().getScope().getSymbols().entrySet()) {
                 self.setProperty(symbol.getKey(), symbol.getValue());
             }
@@ -72,8 +72,8 @@ public class FunctionClassInitializer extends FunctionUser {
         }
 
         // Invoke constructor
-        if (child.hasProperty(name) && child.getProperty(name).getValue() instanceof FunctionUser) {
-            ((FunctionUser) child.getProperty(name).getValue()).invoke(context);
+        if (child.hasProperty(name) && child.getProperty(name).getValue() instanceof UserFunction) {
+            ((UserFunction) child.getProperty(name).getValue()).invoke(context);
         }
 
         return child;

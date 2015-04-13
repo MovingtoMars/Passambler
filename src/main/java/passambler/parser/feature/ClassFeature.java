@@ -10,8 +10,8 @@ import passambler.lexer.TokenType;
 import passambler.parser.ArgumentDefinition;
 import passambler.parser.Parser;
 import passambler.value.Value;
-import passambler.value.ValueClass;
-import passambler.value.function.FunctionClassInitializer;
+import passambler.value.ClassValue;
+import passambler.value.function.ClassInitializerFunction;
 
 public class ClassFeature implements Feature {
     @Override
@@ -32,7 +32,7 @@ public class ClassFeature implements Feature {
 
         stream.next();
 
-        List<FunctionClassInitializer> parents = new ArrayList<>();
+        List<ClassInitializerFunction> parents = new ArrayList<>();
 
         if (stream.current().getType() == TokenType.COL) {
             stream.next();
@@ -40,18 +40,18 @@ public class ClassFeature implements Feature {
             while (stream.current().getType() != TokenType.LEFT_BRACE) {
                 Value expression = parser.parseExpression(stream, TokenType.COMMA, TokenType.RIGHT_PAREN, TokenType.LEFT_BRACE);
 
-                if (!(expression instanceof ValueClass)) {
+                if (!(expression instanceof ClassValue)) {
                     throw new ParserException(ParserExceptionType.NOT_A_CLASS, stream.current().getPosition());
                 }
 
                 // Here we add the class initializer (the name of the symbol is the name of the class expression)
-                parents.add((FunctionClassInitializer) parser.getScope().getSymbol(((ValueClass) expression).getName()));
+                parents.add((ClassInitializerFunction) parser.getScope().getSymbol(((ClassValue) expression).getName()));
             }
         }
 
-        FunctionClassInitializer child = new FunctionClassInitializer(name, parser.parseBlock(stream), arguments);
+        ClassInitializerFunction child = new ClassInitializerFunction(name, parser.parseBlock(stream), arguments);
 
-        for (FunctionClassInitializer parent : parents) {
+        for (ClassInitializerFunction parent : parents) {
             child.addParent(parent);
         }
 

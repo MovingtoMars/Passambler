@@ -6,8 +6,8 @@ import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.exception.EngineException;
 import passambler.value.Value;
-import passambler.value.ValueBool;
-import passambler.value.ValueNum;
+import passambler.value.BooleanValue;
+import passambler.value.NumberValue;
 
 public class FunctionReadNum extends Value implements Function {
     @Override
@@ -17,17 +17,17 @@ public class FunctionReadNum extends Value implements Function {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return argument == 0 && value instanceof ValueBool;
+        return argument == 0 && value instanceof BooleanValue;
     }
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        boolean floating = context.getArguments().length == 0 ? false : ((ValueBool) context.getArgument(0)).getValue();
+        boolean floating = context.getArguments().length == 0 ? false : ((BooleanValue) context.getArgument(0)).getValue();
 
         Scanner scanner = new Scanner(System.in);
 
         try {
-            return new ValueNum(floating ? scanner.nextDouble() : scanner.nextInt());
+            return new NumberValue(floating ? scanner.nextDouble() : scanner.nextInt());
         } catch (Exception e) {
             throw new ErrorException(e);
         }

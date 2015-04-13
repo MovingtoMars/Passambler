@@ -6,8 +6,8 @@ import passambler.exception.ErrorException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
-import passambler.value.ValueError;
-import passambler.value.ValueNum;
+import passambler.value.ErrorValue;
+import passambler.value.NumberValue;
 
 public class FunctionRand extends Value implements Function {
     @Override
@@ -17,18 +17,18 @@ public class FunctionRand extends Value implements Function {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof ValueNum;
+        return value instanceof NumberValue;
     }
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        int min = ((ValueNum) context.getArgument(0)).getValue().intValue();
-        int max = ((ValueNum) context.getArgument(1)).getValue().intValue();
+        int min = ((NumberValue) context.getArgument(0)).getValue().intValue();
+        int max = ((NumberValue) context.getArgument(1)).getValue().intValue();
 
         if (min > max) {
-            throw new ErrorException(new ValueError(String.format("Invalid bounds (%d > %d)", min, max)));
+            throw new ErrorException(new ErrorValue(String.format("Invalid bounds (%d > %d)", min, max)));
         }
 
-        return new ValueNum(new Random().nextInt((max - min) + 1) + min);
+        return new NumberValue(new Random().nextInt((max - min) + 1) + min);
     }
 }

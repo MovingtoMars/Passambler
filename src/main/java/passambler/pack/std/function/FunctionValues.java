@@ -4,8 +4,8 @@ import passambler.exception.EngineException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
-import passambler.value.ValueDict;
-import passambler.value.ValueList;
+import passambler.value.DictValue;
+import passambler.value.ListValue;
 
 public class FunctionValues extends Value implements Function {
     @Override
@@ -15,14 +15,14 @@ public class FunctionValues extends Value implements Function {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof ValueDict;
+        return value instanceof DictValue;
     }
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        ValueList list = new ValueList();
+        ListValue list = new ListValue();
 
-        ((ValueDict) context.getArgument(0)).getValue().values().stream().forEach((value) -> {
+        ((DictValue) context.getArgument(0)).getValue().values().stream().forEach((value) -> {
             list.getValue().add(value);
         });
 

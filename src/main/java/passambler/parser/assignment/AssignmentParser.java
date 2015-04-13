@@ -11,9 +11,9 @@ import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenType;
 import passambler.parser.Parser;
 import passambler.value.Value;
-import passambler.value.ValueDict;
-import passambler.value.ValueList;
-import passambler.value.ValueNum;
+import passambler.value.DictValue;
+import passambler.value.ListValue;
+import passambler.value.NumberValue;
 
 public class AssignmentParser {
     private Parser parser;
@@ -107,14 +107,14 @@ public class AssignmentParser {
 
                 Value value = new ExpressionParser(parser, new TokenStream(bracketTokens)).parse();
 
-                if (value instanceof ValueNum) {
-                    if (!(leftValue instanceof ValueList)) {
+                if (value instanceof NumberValue) {
+                    if (!(leftValue instanceof ListValue)) {
                         throw new ParserException(ParserExceptionType.NOT_A_LIST, stream.current().getPosition());
                     }
 
-                    ValueList list = (ValueList) leftValue;
+                    ListValue list = (ListValue) leftValue;
 
-                    int index = ((ValueNum) value).getValue().intValue();
+                    int index = ((NumberValue) value).getValue().intValue();
 
                     if (index < -list.getValue().size() || index > list.getValue().size() - 1) {
                         throw new ParserException(ParserExceptionType.INDEX_OUT_OF_RANGE, stream.current().getPosition(), index, list.getValue().size());
@@ -125,8 +125,8 @@ public class AssignmentParser {
                     } else {
                         leftValue = list.getValue().get(index);
                     }
-                } else if (leftValue instanceof ValueDict) {
-                    ValueDict dict = (ValueDict) leftValue;
+                } else if (leftValue instanceof DictValue) {
+                    DictValue dict = (DictValue) leftValue;
 
                     if (leftStream.peek() == null) {
                         if (dict.getEntry(value) == null) {

@@ -4,8 +4,8 @@ import passambler.exception.EngineException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
-import passambler.value.ValueNum;
-import passambler.value.ValueStr;
+import passambler.value.NumberValue;
+import passambler.value.StringValue;
 
 public class FunctionSubstr extends Value implements Function {
     @Override
@@ -16,23 +16,23 @@ public class FunctionSubstr extends Value implements Function {
     @Override
     public boolean isArgumentValid(Value value, int argument) {
         if (argument == 0) {
-            return value instanceof ValueStr;
+            return value instanceof StringValue;
         }
 
-        return value instanceof ValueNum;
+        return value instanceof NumberValue;
     }
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        ValueStr str = (ValueStr) context.getArgument(0);
-        int min = ((ValueNum) context.getArgument(1)).getValue().intValue();
+        StringValue str = (StringValue) context.getArgument(0);
+        int min = ((NumberValue) context.getArgument(1)).getValue().intValue();
 
         if (context.getArguments().length == 3) {
-            int max = ((ValueNum) context.getArgument(2)).getValue().intValue();
+            int max = ((NumberValue) context.getArgument(2)).getValue().intValue();
 
-            return new ValueStr(str.getValue().substring(min, max));
+            return new StringValue(str.getValue().substring(min, max));
         } else {
-            return new ValueStr(str.getValue().substring(min));
+            return new StringValue(str.getValue().substring(min));
         }
     }
 }

@@ -1,13 +1,13 @@
 package passambler.pack.os.function;
 
 import java.time.Instant;
-import passambler.value.function.FunctionSimple;
+import passambler.value.function.SimpleFunction;
 import passambler.value.Value;
-import passambler.value.ValueNum;
+import passambler.value.NumberValue;
 
-public class FunctionTime extends FunctionSimple {
+public class FunctionTime extends SimpleFunction {
     @Override
     public Value getReturnValue() {
-        return new ValueNum(Instant.now().getEpochSecond());
+        return new NumberValue(Instant.now().getEpochSecond());
     }
 }

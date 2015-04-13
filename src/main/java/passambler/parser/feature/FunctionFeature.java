@@ -8,7 +8,7 @@ import passambler.parser.ArgumentDefinition;
 import passambler.parser.Block;
 import passambler.parser.Parser;
 import passambler.value.Value;
-import passambler.value.function.FunctionUser;
+import passambler.value.function.UserFunction;
 
 public class FunctionFeature implements Feature {
     @Override
@@ -29,13 +29,13 @@ public class FunctionFeature implements Feature {
         List<ArgumentDefinition> arguments = parser.parseArgumentDefinition(stream);
 
         if (stream.peek() == null) {
-            parser.getScope().setSymbol(name, new FunctionUser(null, arguments));
+            parser.getScope().setSymbol(name, new UserFunction(null, arguments));
         } else {
             stream.next();
 
             Block callback = parser.parseBlock(stream);
 
-            parser.getScope().setSymbol(name, new FunctionUser(callback, arguments));
+            parser.getScope().setSymbol(name, new UserFunction(callback, arguments));
         }
 
         return null;

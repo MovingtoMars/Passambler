@@ -4,7 +4,7 @@ import java.util.Map;
 import passambler.pack.Package;
 import passambler.pack.math.function.*;
 import passambler.value.Value;
-import passambler.value.ValueNum;
+import passambler.value.NumberValue;
 
 public class PackageMath implements Package {
     @Override
@@ -30,7 +30,7 @@ public class PackageMath implements Package {
         symbols.put("Log10", new FunctionLog10());
         symbols.put("Rand", new FunctionRand());
 
-        symbols.put("Pi", new ValueNum(Math.PI));
-        symbols.put("E", new ValueNum(Math.E));
+        symbols.put("Pi", new NumberValue(Math.PI));
+        symbols.put("E", new NumberValue(Math.E));
     }
 }

@@ -8,11 +8,11 @@ import passambler.exception.EngineException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
-import passambler.value.ValueBool;
-import passambler.value.ValueDict;
-import passambler.value.ValueList;
-import passambler.value.ValueNum;
-import passambler.value.ValueStr;
+import passambler.value.BooleanValue;
+import passambler.value.DictValue;
+import passambler.value.ListValue;
+import passambler.value.NumberValue;
+import passambler.value.StringValue;
 
 public class FunctionDecode extends Value implements Function {
     @Override
@@ -22,17 +22,17 @@ public class FunctionDecode extends Value implements Function {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof ValueStr;
+        return value instanceof StringValue;
     }
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        return parse(JSONValue.parse(((ValueStr) context.getArgument(0)).getValue()));
+        return parse(JSONValue.parse(((StringValue) context.getArgument(0)).getValue()));
     }
     
     public Value parse(Object object) {
         if (object instanceof JSONArray) {
-            ValueList list = new ValueList();
+            ListValue list = new ListValue();
             
             for (Object item : (JSONArray) object) {
                 list.getValue().add(parse(item));
@@ -40,7 +40,7 @@ public class FunctionDecode extends Value implements Function {
             
             return list;
         } else if (object instanceof JSONObject) {
-            ValueDict dict = new ValueDict();
+            DictValue dict = new DictValue();
             
             for (Object item : ((JSONObject) object).entrySet()) {
                Map.Entry entry = (Map.Entry) item;
@@ -50,13 +50,13 @@ public class FunctionDecode extends Value implements Function {
             
             return dict;
         } else if (object instanceof String) {
-            return new ValueStr(String.valueOf(object));
+            return new StringValue(String.valueOf(object));
         } else if (object instanceof Long) {
-            return new ValueNum((Long) object);
+            return new NumberValue((Long) object);
         } else if (object instanceof Double) {
-            return new ValueNum((Double) object);
+            return new NumberValue((Double) object);
         } else if (object instanceof Boolean) {
-            return new ValueBool((Boolean) object);
+            return new BooleanValue((Boolean) object);
         }
         
         return Value.VALUE_NIL;

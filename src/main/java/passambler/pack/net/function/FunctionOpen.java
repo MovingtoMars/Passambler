@@ -6,8 +6,8 @@ import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
 import passambler.pack.net.value.ValueSocket;
 import passambler.value.Value;
-import passambler.value.ValueNum;
-import passambler.value.ValueStr;
+import passambler.value.NumberValue;
+import passambler.value.StringValue;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 
@@ -20,9 +20,9 @@ public class FunctionOpen extends Value implements Function {
     @Override
     public boolean isArgumentValid(Value value, int argument) {
         if (argument == 0) {
-            return value instanceof ValueStr;
+            return value instanceof StringValue;
         } else if (argument == 1) {
-            return value instanceof ValueNum;
+            return value instanceof NumberValue;
         }
 
         return false;
@@ -31,7 +31,7 @@ public class FunctionOpen extends Value implements Function {
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
         try {
-            return new ValueSocket(new Socket(((ValueStr) context.getArgument(0)).getValue(), ((ValueNum) context.getArgument(1)).getValue().intValue()));
+            return new ValueSocket(new Socket(((StringValue) context.getArgument(0)).getValue(), ((NumberValue) context.getArgument(1)).getValue().intValue()));
         } catch (IOException e) {
             throw new ErrorException(e);
         }

@@ -9,7 +9,7 @@ import passambler.parser.Block;
 import passambler.parser.expression.ExpressionParser;
 import passambler.parser.Parser;
 import passambler.value.Value;
-import passambler.value.ValueBool;
+import passambler.value.BooleanValue;
 
 public class WhileFeature implements Feature {
     @Override
@@ -34,7 +34,7 @@ public class WhileFeature implements Feature {
 
         Block callback = parser.parseBlock(stream);
 
-        while (((ValueBool) value).getValue()) {
+        while (((BooleanValue) value).getValue()) {
             Value result = callback.invoke();
 
             if (result != null) {

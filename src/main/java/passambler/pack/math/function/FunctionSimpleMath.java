@@ -5,7 +5,7 @@ import passambler.exception.EngineException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
-import passambler.value.ValueNum;
+import passambler.value.NumberValue;
 
 public abstract class FunctionSimpleMath extends Value implements Function {
     @Override
@@ -15,12 +15,12 @@ public abstract class FunctionSimpleMath extends Value implements Function {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof ValueNum;
+        return value instanceof NumberValue;
     }
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        return new ValueNum(getReturnValue(((ValueNum) context.getArgument(0)).getValue()));
+        return new NumberValue(getReturnValue(((NumberValue) context.getArgument(0)).getValue()));
     }
 
     public abstract BigDecimal getReturnValue(BigDecimal value);

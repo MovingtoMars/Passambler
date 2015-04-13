@@ -4,7 +4,7 @@ import passambler.exception.EngineException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
-import passambler.value.ReadHandler;
+import passambler.value.ReadableValue;
 
 public class FunctionRead extends Value implements Function {
     @Override
@@ -14,11 +14,11 @@ public class FunctionRead extends Value implements Function {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof ReadHandler;
+        return value instanceof ReadableValue;
     }
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        return ((ReadHandler) context.getArgument(0)).read();
+        return ((ReadableValue) context.getArgument(0)).read();
     }
 }

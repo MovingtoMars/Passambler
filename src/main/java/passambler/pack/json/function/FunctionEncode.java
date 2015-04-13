@@ -7,11 +7,11 @@ import passambler.exception.EngineException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
-import passambler.value.ValueBool;
-import passambler.value.ValueDict;
-import passambler.value.ValueList;
-import passambler.value.ValueNum;
-import passambler.value.ValueStr;
+import passambler.value.BooleanValue;
+import passambler.value.DictValue;
+import passambler.value.ListValue;
+import passambler.value.NumberValue;
+import passambler.value.StringValue;
 
 public class FunctionEncode extends Value implements Function {
     @Override
@@ -21,33 +21,33 @@ public class FunctionEncode extends Value implements Function {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof ValueDict || value instanceof ValueList;
+        return value instanceof DictValue || value instanceof ListValue;
     }
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        return new ValueStr(((JSONAware) parse(context.getArgument(0))).toJSONString());
+        return new StringValue(((JSONAware) parse(context.getArgument(0))).toJSONString());
     }
 
     private Object parse(Value value) {
-        if (value instanceof ValueStr) {
-            return ((ValueStr) value).getValue();
-        } else if (value instanceof ValueNum) {
-            return ((ValueNum) value).getValue();
-        } else if (value instanceof ValueBool) {
-            return ((ValueBool) value).getValue();
-        } else if (value instanceof ValueList) {
+        if (value instanceof StringValue) {
+            return ((StringValue) value).getValue();
+        } else if (value instanceof NumberValue) {
+            return ((NumberValue) value).getValue();
+        } else if (value instanceof BooleanValue) {
+            return ((BooleanValue) value).getValue();
+        } else if (value instanceof ListValue) {
             JSONArray list = new JSONArray();
 
-            for (Value item : ((ValueList) value).getValue()) {
+            for (Value item : ((ListValue) value).getValue()) {
                 list.add(parse(item));
             }
 
             return list;
-        } else if (value instanceof ValueDict) {
+        } else if (value instanceof DictValue) {
             JSONObject object = new JSONObject();
 
-            ((ValueDict) value).getValue().entrySet().stream().forEach((entry) -> {
+            ((DictValue) value).getValue().entrySet().stream().forEach((entry) -> {
                 object.put(parse(entry.getKey()), parse(entry.getValue()));
             });
 

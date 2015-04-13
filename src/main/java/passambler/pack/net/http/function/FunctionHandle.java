@@ -14,7 +14,7 @@ import passambler.pack.net.http.value.ValueRequest;
 import passambler.pack.net.http.value.ValueResponse;
 import passambler.exception.EngineException;
 import passambler.value.Value;
-import passambler.value.ValueStr;
+import passambler.value.StringValue;
 
 public class FunctionHandle extends Value implements Function {
     private UriHttpRequestHandlerMapper mapper;
@@ -31,7 +31,7 @@ public class FunctionHandle extends Value implements Function {
     @Override
     public boolean isArgumentValid(Value value, int argument) {
         if (argument == 0) {
-            return value instanceof ValueStr;
+            return value instanceof StringValue;
         }
 
         return value instanceof Function || value instanceof HttpRequestHandler;
@@ -39,7 +39,7 @@ public class FunctionHandle extends Value implements Function {
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        mapper.register(((ValueStr) context.getArgument(0)).getValue(), context.getArgument(1) instanceof HttpRequestHandler ? (HttpRequestHandler) context.getArgument(1) : createHandlerFromFunction(context.getParser(), (Function) context.getArgument(1)));
+        mapper.register(((StringValue) context.getArgument(0)).getValue(), context.getArgument(1) instanceof HttpRequestHandler ? (HttpRequestHandler) context.getArgument(1) : createHandlerFromFunction(context.getParser(), (Function) context.getArgument(1)));
 
         return null;
     }

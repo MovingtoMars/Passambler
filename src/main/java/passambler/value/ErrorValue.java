@@ -1,15 +1,15 @@
 package passambler.value;
 
-public class ValueError extends Value {
-    public ValueError(Value value) {
+public class ErrorValue extends Value {
+    public ErrorValue(Value value) {
         setValue(value.toString());
     }
 
-    public ValueError(Exception exception) {
+    public ErrorValue(Exception exception) {
         setValue(exception.toString());
     }
 
-    public ValueError(String message) {
+    public ErrorValue(String message) {
         setValue(message);
     }
 

@@ -13,38 +13,38 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
 import passambler.value.Property;
 import passambler.value.Value;
-import passambler.value.ValueDict;
-import passambler.value.ValueStr;
+import passambler.value.DictValue;
+import passambler.value.StringValue;
 
 public class ValueRequest extends Value {
     public ValueRequest(HttpContext context, HttpRequest request) {
         setProperty("Headers", new Property() {
             @Override
             public Value getValue() {
-                ValueDict headers = new ValueDict();
+                DictValue headers = new DictValue();
 
                 for (Header header : request.getAllHeaders()) {
-                    headers.getValue().put(new ValueStr(header.getName()), new ValueStr(header.getValue()));
+                    headers.getValue().put(new StringValue(header.getName()), new StringValue(header.getValue()));
                 }
 
                 return headers;
             }
         });
 
-        ValueDict form = new ValueDict();
-        ValueDict query = new ValueDict();
+        DictValue form = new DictValue();
+        DictValue query = new DictValue();
 
         try {
             if (request instanceof HttpEntityEnclosingRequest) {
                 HttpEntityEnclosingRequest enclosingRequest = (HttpEntityEnclosingRequest) request;
 
                 URLEncodedUtils.parse(enclosingRequest.getEntity()).stream().forEach((pair) -> {
-                    form.setEntry(new ValueStr(pair.getName()), pair.getValue().trim().isEmpty() ? Value.VALUE_NIL : new ValueStr(pair.getValue()));
+                    form.setEntry(new StringValue(pair.getName()), pair.getValue().trim().isEmpty() ? Value.VALUE_NIL : new StringValue(pair.getValue()));
                 });
             }
 
             URLEncodedUtils.parse(new URI(request.getRequestLine().getUri()), "UTF-8").stream().forEach((pair) -> {
-                query.setEntry(new ValueStr(pair.getName()), new ValueStr(pair.getValue()));
+                query.setEntry(new StringValue(pair.getName()), new StringValue(pair.getValue()));
             });
         } catch (IOException | URISyntaxException e) {
 
@@ -53,10 +53,10 @@ public class ValueRequest extends Value {
         setProperty("Form", form);
         setProperty("Query", query);
 
-        setProperty("Method", new ValueStr(request.getRequestLine().getMethod().toUpperCase(Locale.ENGLISH)));
-        setProperty("Uri", new ValueStr(request.getRequestLine().getUri()));
+        setProperty("Method", new StringValue(request.getRequestLine().getMethod().toUpperCase(Locale.ENGLISH)));
+        setProperty("Uri", new StringValue(request.getRequestLine().getUri()));
 
-        setProperty("HostAddr", new ValueStr(((HttpInetConnection) context.getAttribute(HttpCoreContext.HTTP_CONNECTION)).getRemoteAddress().getHostAddress()));
-        setProperty("HostName", new ValueStr(((HttpInetConnection) context.getAttribute(HttpCoreContext.HTTP_CONNECTION)).getRemoteAddress().getHostName()));
+        setProperty("HostAddr", new StringValue(((HttpInetConnection) context.getAttribute(HttpCoreContext.HTTP_CONNECTION)).getRemoteAddress().getHostAddress()));
+        setProperty("HostName", new StringValue(((HttpInetConnection) context.getAttribute(HttpCoreContext.HTTP_CONNECTION)).getRemoteAddress().getHostName()));
     }
 }

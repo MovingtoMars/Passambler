@@ -13,7 +13,7 @@ import passambler.parser.Block;
 import passambler.parser.expression.ExpressionParser;
 import passambler.parser.Parser;
 import passambler.value.Value;
-import passambler.value.ValueBool;
+import passambler.value.BooleanValue;
 
 public class IfFeature implements Feature {
     @Override
@@ -27,7 +27,7 @@ public class IfFeature implements Feature {
 
         boolean elseCondition = false;
 
-        Map<ValueBool, Block> cases = new LinkedHashMap();
+        Map<BooleanValue, Block> cases = new LinkedHashMap();
 
         while (stream.hasNext()) {
             if (!elseCondition) {
@@ -40,17 +40,17 @@ public class IfFeature implements Feature {
 
                 Value condition = new ExpressionParser(parser, new TokenStream(tokens)).parse();
 
-                if (!(condition instanceof ValueBool)) {
+                if (!(condition instanceof BooleanValue)) {
                     throw new ParserException(ParserExceptionType.EXPECTED_A_BOOL, tokens.get(0).getPosition());
                 }
 
                 stream.next();
 
-                cases.put((ValueBool) condition, parser.parseBlock(stream));
+                cases.put((BooleanValue) condition, parser.parseBlock(stream));
 
                 tokens.clear();
             } else {
-                cases.put(new ValueBool(true), parser.parseBlock(stream));
+                cases.put(new BooleanValue(true), parser.parseBlock(stream));
             }
 
             stream.next();
@@ -70,7 +70,7 @@ public class IfFeature implements Feature {
             }
         }
 
-        for (Map.Entry<ValueBool, Block> entry : cases.entrySet()) {
+        for (Map.Entry<BooleanValue, Block> entry : cases.entrySet()) {
             if (entry.getKey().getValue() == true) {
                 Value result = entry.getValue().invoke();
 

@@ -1,21 +1,21 @@
 package passambler.exception;
 
-import passambler.value.ValueError;
+import passambler.value.ErrorValue;
 
 public class ErrorException extends EngineException {
-    private ValueError error;
+    private ErrorValue error;
     
-    public ErrorException(ValueError value) {
+    public ErrorException(ErrorValue value) {
         super(value.toString());
 
-        this.error = new ValueError(value.toString());
+        this.error = new ErrorValue(value.toString());
     }
     
     public ErrorException(Exception e) {
-        this(new ValueError(e));
+        this(new ErrorValue(e));
     }
     
-    public ValueError getError() {
+    public ErrorValue getError() {
         return error;
     }
 

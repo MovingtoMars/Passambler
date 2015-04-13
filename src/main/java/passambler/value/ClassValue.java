@@ -1,9 +1,9 @@
 package passambler.value;
 
-public class ValueClass extends Value {
+public class ClassValue extends Value {
     private String name;
 
-    public ValueClass(String name) {
+    public ClassValue(String name) {
         this.name = name;
     }
 

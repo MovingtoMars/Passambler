@@ -4,8 +4,8 @@ import passambler.lexer.Token;
 import passambler.exception.ParserException;
 import passambler.lexer.TokenType;
 
-public class ValueStr extends Value {
-    public ValueStr(String data) {
+public class StringValue extends Value {
+    public StringValue(String data) {
         setValue(data);
     }
 
@@ -16,8 +16,8 @@ public class ValueStr extends Value {
 
     @Override
     public Value onOperator(Value value, Token operatorToken) throws ParserException {
-        if (value instanceof ValueStr && (operatorToken.getType() == TokenType.PLUS || operatorToken.getType() == TokenType.ASSIGN_PLUS)) {
-            return new ValueStr(getValue() + value.toString());
+        if (value instanceof StringValue && (operatorToken.getType() == TokenType.PLUS || operatorToken.getType() == TokenType.ASSIGN_PLUS)) {
+            return new StringValue(getValue() + value.toString());
         }
 
         return super.onOperator(value, operatorToken);

@@ -3,7 +3,7 @@ package passambler.value;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ValueList extends Value {
+public class ListValue extends Value {
     protected List<Value> list = new ArrayList<>();
 
     @Override
@@ -13,8 +13,8 @@ public class ValueList extends Value {
 
     @Override
     public boolean equals(Value value) {
-        if (value instanceof ValueList) {
-            ValueList givenList = (ValueList) value;
+        if (value instanceof ListValue) {
+            ListValue givenList = (ListValue) value;
 
             if (givenList.getValue().size() != list.size()) {
                 return false;

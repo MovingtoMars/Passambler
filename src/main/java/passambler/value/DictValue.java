@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ValueDict extends Value {
+public class DictValue extends Value {
     protected Map<Value, Value> dict = new LinkedHashMap();
 
     @Override
@@ -32,15 +32,15 @@ public class ValueDict extends Value {
 
     @Override
     public boolean equals(Value value) {
-        if (value instanceof ValueDict) {
+        if (value instanceof DictValue) {
             List valuesLeft = new ArrayList<>(getValue().values());
-            List valuesRight = new ArrayList<>(((ValueDict) value).getValue().values());
+            List valuesRight = new ArrayList<>(((DictValue) value).getValue().values());
 
             if (!valuesLeft.equals(valuesRight)) {
                 return false;
             } else {
                 List keysLeft = new ArrayList<>(getValue().keySet());
-                List keysRight = new ArrayList<>(((ValueDict) value).getValue().keySet());
+                List keysRight = new ArrayList<>(((DictValue) value).getValue().keySet());
 
                 return keysLeft.equals(keysRight);
             }
