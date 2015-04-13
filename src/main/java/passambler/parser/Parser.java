@@ -107,28 +107,20 @@ public class Parser {
     public Value parse(List<Token> tokens) throws EngineException {
         List<Token> subTokens = new ArrayList<>();
 
-        int braces = 0, paren = 0, brackets = 0;
+        int depth = 0;
 
         for (Token token : tokens) {
             Token peekToken = tokens.indexOf(token) == tokens.size() - 1 ? null : tokens.get(tokens.indexOf(token) + 1);
 
-            if (token.getType() == TokenType.LEFT_BRACE) {
-                braces++;
-            } else if (token.getType() == TokenType.RIGHT_BRACE) {
-                braces--;
-            } else if (token.getType() == TokenType.LEFT_PAREN) {
-                paren++;
-            } else if (token.getType() == TokenType.RIGHT_PAREN) {
-                paren--;
-            } else if (token.getType() == TokenType.LEFT_BRACKET) {
-                brackets++;
-            } else if (token.getType() == TokenType.RIGHT_BRACKET) {
-                brackets--;
+            if (token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
+                depth++;
+            } else if (token.getType() == TokenType.RIGHT_BRACE || token.getType() == TokenType.RIGHT_PAREN || token.getType() == TokenType.RIGHT_BRACKET) {
+                depth--;
             }
 
             subTokens.add(token);
 
-            if (braces == 0 && paren == 0 && brackets == 0 && (token.getType() == TokenType.SEMI_COL || token.getType() == TokenType.RIGHT_BRACE)) {
+            if (depth == 0 && (token.getType() == TokenType.SEMI_COL || token.getType() == TokenType.RIGHT_BRACE)) {
                 if (peekToken != null && peekToken.getType().isLineInsensitive()) {
                     continue;
                 }
@@ -191,29 +183,21 @@ public class Parser {
     }
 
     public List<Token> parseExpressionTokens(TokenStream stream, TokenType... endingTokens) throws EngineException {
-        int braces = 0, paren = 0, brackets = 0;
+        int depth = 0;
 
         List<Token> valueTokens = new ArrayList<>();
 
         while (stream.hasNext()) {
             Token token = stream.current();
 
-            if (Arrays.asList(endingTokens).contains(token.getType()) && braces == 0 && paren == 0 && brackets == 0) {
+            if (Arrays.asList(endingTokens).contains(token.getType()) && depth == 0) {
                 break;
             }
 
-            if (token.getType() == TokenType.LEFT_BRACE) {
-                braces++;
-            } else if (token.getType() == TokenType.RIGHT_BRACE) {
-                braces--;
-            } else if (token.getType() == TokenType.LEFT_PAREN) {
-                paren++;
-            } else if (token.getType() == TokenType.RIGHT_PAREN) {
-                paren--;
-            } else if (token.getType() == TokenType.LEFT_BRACKET) {
-                brackets++;
-            } else if (token.getType() == TokenType.RIGHT_BRACKET) {
-                brackets--;
+            if (token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
+                depth++;
+            } else if (token.getType() == TokenType.RIGHT_BRACE || token.getType() == TokenType.RIGHT_PAREN || token.getType() == TokenType.RIGHT_BRACKET) {
+                depth--;
             }
 
             valueTokens.add(token);
