@@ -3,7 +3,7 @@ package passambler.pack.net;
 import java.util.Map;
 import passambler.pack.Package;
 import passambler.pack.net.function.*;
-import passambler.pack.net.http.PackageHttp;
+import passambler.pack.net.http.HttpPackage;
 import passambler.value.Value;
 
 public class NetPackage implements Package {
@@ -14,7 +14,7 @@ public class NetPackage implements Package {
 
     @Override
     public Package[] getChildren() {
-        return new Package[] { new PackageHttp() };
+        return new Package[] { new HttpPackage() };
     }
     
     @Override

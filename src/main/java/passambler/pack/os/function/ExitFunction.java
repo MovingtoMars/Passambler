@@ -6,7 +6,7 @@ import passambler.value.function.FunctionContext;
 import passambler.value.Value;
 import passambler.value.NumberValue;
 
-public class FunctionExit extends Value implements Function {
+public class ExitFunction extends Value implements Function {
     @Override
     public int getArguments() {
         return 1;

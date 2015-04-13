@@ -11,10 +11,10 @@ import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
 import passambler.pack.Package;
 import passambler.pack.file.FilePackage;
-import passambler.pack.json.PackageJson;
-import passambler.pack.math.PackageMath;
-import passambler.pack.net.PackageNet;
-import passambler.pack.os.PackageOs;
+import passambler.pack.json.JsonPackage;
+import passambler.pack.math.MathPackage;
+import passambler.pack.net.NetPackage;
+import passambler.pack.os.OsPackage;
 import passambler.pack.std.PackageStd;
 import passambler.pack.thread.PackageThread;
 import passambler.exception.EngineException;
@@ -51,12 +51,12 @@ public class Parser {
         features.add(new ExpressionFeature());
 
         defaultPackages.add(new PackageStd());
-        defaultPackages.add(new PackageMath());
+        defaultPackages.add(new MathPackage());
         defaultPackages.add(new FilePackage());
-        defaultPackages.add(new PackageOs());
-        defaultPackages.add(new PackageNet());
+        defaultPackages.add(new OsPackage());
+        defaultPackages.add(new NetPackage());
         defaultPackages.add(new PackageThread());
-        defaultPackages.add(new PackageJson());
+        defaultPackages.add(new JsonPackage());
     }
 
     public void setCatch(Block block, String errorName) {

@@ -10,7 +10,7 @@ import passambler.value.function.FunctionContext;
 import passambler.value.Value;
 import passambler.value.StringValue;
 
-public class FunctionExec extends Value implements Function {
+public class ExecFunction extends Value implements Function {
     @Override
     public int getArguments() {
         return 1;

@@ -6,7 +6,7 @@ import passambler.pack.os.function.*;
 import passambler.value.Value;
 import passambler.value.StringValue;
 
-public class PackageOs implements Package {
+public class OsPackage implements Package {
     @Override
     public String getId() {
         return "os";
@@ -19,9 +19,9 @@ public class PackageOs implements Package {
     
     @Override
     public void apply(Map<String, Value> symbols) {
-        symbols.put("Exit", new FunctionExit());
-        symbols.put("Time", new FunctionTime());
-        symbols.put("Exec", new FunctionExec());
+        symbols.put("Exit", new ExitFunction());
+        symbols.put("Time", new TimeFunction());
+        symbols.put("Exec", new ExecFunction());
 
         symbols.put("LineSeparator", new StringValue(System.getProperty("line.separator")));
         symbols.put("FileSeparator", new StringValue(System.getProperty("file.separator")));

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
-import passambler.pack.net.value.ValueSocket;
+import passambler.pack.net.value.SocketValue;
 import passambler.value.Value;
 import passambler.value.NumberValue;
 import passambler.value.StringValue;
@@ -31,7 +31,7 @@ public class OpenFunction extends Value implements Function {
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
         try {
-            return new ValueSocket(new Socket(((StringValue) context.getArgument(0)).getValue(), ((NumberValue) context.getArgument(1)).getValue().intValue()));
+            return new SocketValue(new Socket(((StringValue) context.getArgument(0)).getValue(), ((NumberValue) context.getArgument(1)).getValue().intValue()));
         } catch (IOException e) {
             throw new ErrorException(e);
         }
