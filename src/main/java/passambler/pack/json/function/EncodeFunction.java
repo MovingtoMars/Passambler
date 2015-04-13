@@ -13,7 +13,7 @@ import passambler.value.ListValue;
 import passambler.value.NumberValue;
 import passambler.value.StringValue;
 
-public class FunctionEncode extends Value implements Function {
+public class EncodeFunction extends Value implements Function {
     @Override
     public int getArguments() {
         return 1;

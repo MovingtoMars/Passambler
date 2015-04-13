@@ -14,7 +14,7 @@ import passambler.value.ListValue;
 import passambler.value.NumberValue;
 import passambler.value.StringValue;
 
-public class FunctionDecode extends Value implements Function {
+public class DecodeFunction extends Value implements Function {
     @Override
     public int getArguments() {
         return 1;
