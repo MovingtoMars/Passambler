@@ -49,6 +49,7 @@ public class PackageStd implements Package {
         symbols.put("List", new FunctionList());
         symbols.put("Join", new FunctionJoin());
         symbols.put("Filter", new FunctionFilter());
+        symbols.put("Substr", new FunctionSubstr());
 
         symbols.put("Out", new ValueOut());
         symbols.put("Err", new ValueErr());
