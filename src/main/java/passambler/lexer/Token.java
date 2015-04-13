@@ -3,21 +3,21 @@ package passambler.lexer;
 public class Token {
     private TokenType type;
 
-    private SourcePosition position;
+    private TokenPosition position;
 
     private String value;
 
-    public Token(TokenType type, SourcePosition position) {
+    public Token(TokenType type, TokenPosition position) {
         this(type, null, position);
     }
 
-    public Token(TokenType type, String value, SourcePosition position) {
+    public Token(TokenType type, String value, TokenPosition position) {
         this.type = type;
         this.value = value;
         this.position = position;
     }
 
-    public SourcePosition getPosition() {
+    public TokenPosition getPosition() {
         return position;
     }
 

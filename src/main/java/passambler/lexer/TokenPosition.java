@@ -1,10 +1,10 @@
 package passambler.lexer;
 
-public class SourcePosition {
+public class TokenPosition {
     private int line;
     private int column;
 
-    public SourcePosition(int line, int column) {
+    public TokenPosition(int line, int column) {
         this.line = line;
         this.column = column;
     }

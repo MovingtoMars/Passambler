@@ -74,7 +74,7 @@ public class Lexer {
     }
 
     public Token createToken(TokenType type, String value) {
-        return new Token(type, value, new SourcePosition(line, column));
+        return new Token(type, value, new TokenPosition(line, column));
     }
 
     public Token createToken(TokenType type) {

@@ -1,6 +1,6 @@
 package passambler.exception;
 
-import passambler.lexer.SourcePosition;
+import passambler.lexer.TokenPosition;
 
 public class ParserException extends EngineException {
     public ParserException(String message, Object... args) {
@@ -11,7 +11,7 @@ public class ParserException extends EngineException {
         this(type.message, args);
     }
 
-    public ParserException(ParserExceptionType type, SourcePosition position, Object... args) {
+    public ParserException(ParserExceptionType type, TokenPosition position, Object... args) {
         this(type.message + (position != null ? " at line " + position.getLine() + ", column " + position.getColumn() : ""), args);
     }
 
