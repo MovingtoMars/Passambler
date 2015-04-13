@@ -57,7 +57,7 @@ public class IfFeature implements Feature {
 
             if (stream.current() != null) {
                 if (elseCondition) {
-                    throw new ParserException(ParserExceptionType.BAD_SYNTAX, stream.first().getPosition(), "else should be the last statement");
+                    throw new ParserException(ParserExceptionType.BAD_SYNTAX, stream.first().getPosition(), "Else block should be the last statement");
                 }
 
                 stream.match(TokenType.ELSE, TokenType.ELSEIF);

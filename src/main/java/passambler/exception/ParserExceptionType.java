@@ -13,6 +13,7 @@ public enum ParserExceptionType {
     UNDEFINED_CLASS("Undefined class '%s'"),
     UNDEFINED_DICT_ENTRY("Undefined dictionary entry '%s'"),
     UNDEFINED_PACKAGE("Undefined package '%s'"),
+    UNDEFINED_TYPEHINT("Typehint '%s' not found"),
     UNEXPECTED_EOF("Unexpected end of file"),
     UNEXPECTED_TOKEN("Unexpected token '%s'"),
     UNSUPPORTED_OPERATOR("Unsupported operator '%s'"),
@@ -23,9 +24,7 @@ public enum ParserExceptionType {
     NOT_A_LIST("Value is not a list"),
     NOT_A_DICT("Value is not a dictionary"),
     NOT_A_CLASS("Value is not a class"),
-    EXPECTED_A_BOOL("Expected a boolean"),
-    TYPE_MISMATCH("Type mismatch at argument %d"),
-    TYPE_HINT_NOT_FOUND("Typehint '%s' not found");
+    EXPECTED_A_BOOL("Expected a boolean");
 
     String message;
 

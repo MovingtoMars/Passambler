@@ -254,7 +254,7 @@ public class Parser {
 
                 if (stream.current().getType() == TokenType.IDENTIFIER) {
                     if (!typehints.containsKey(definition.getName())) {
-                        throw new ParserException(ParserExceptionType.TYPE_HINT_NOT_FOUND, stream.current().getPosition(), definition.getName());
+                        throw new ParserException(ParserExceptionType.UNDEFINED_TYPEHINT, stream.current().getPosition(), definition.getName());
                     }
 
                     definition.setTypehint(typehints.get(definition.getName()));

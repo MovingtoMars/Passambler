@@ -12,6 +12,7 @@ import passambler.value.Value;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
 import passambler.exception.EngineException;
+import passambler.exception.ErrorException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenType;
 import passambler.parser.ArgumentDefinition;
@@ -19,6 +20,7 @@ import passambler.parser.Block;
 import passambler.parser.Parser;
 import passambler.value.BooleanValue;
 import passambler.value.DictValue;
+import passambler.value.ErrorValue;
 import passambler.value.ListValue;
 import passambler.value.NumberValue;
 import passambler.value.StringValue;
@@ -260,7 +262,7 @@ public class ExpressionParser {
                         }
                     } else {
                         if (usedNamedArguments) {
-                            throw new ParserException(ParserExceptionType.BAD_SYNTAX, token.getPosition(), "cannot specify a normal argument after a specifying a named argument");
+                            throw new ParserException(ParserExceptionType.BAD_SYNTAX, token.getPosition(), "Cannot specify a normal argument after a specifying a named argument");
                         }
 
                         arguments.add(createParser(argumentTokenStream).parse());
@@ -290,7 +292,7 @@ public class ExpressionParser {
                     ArgumentDefinition definition = definitions.get(i);
 
                     if (!definition.getTypehint().matches(arguments.get(i))) {
-                        throw new ParserException(ParserExceptionType.TYPE_MISMATCH, i + 1);
+                        throw new ErrorException(new ErrorValue(String.format("Type mismatch at argument %d", i + 1)));
                     }
                 }
             }
@@ -332,7 +334,7 @@ public class ExpressionParser {
             if ((stream.current().getType() == TokenType.COMMA || stream.current().getType() == TokenType.RIGHT_BRACKET) && brackets == 1 && paren == 0 && braces == 0) {
                 if (tokens.isEmpty()) {
                     if (stream.back(2) != null) {
-                        throw new ParserException(ParserExceptionType.BAD_SYNTAX, stream.current().getPosition(), "no value specified");
+                        throw new ParserException(ParserExceptionType.BAD_SYNTAX, stream.current().getPosition(), "No value specified");
                     }
                 } else {
                     inlineDeclaration.getValue().add(createParser(new TokenStream(tokens)).parse());
@@ -411,7 +413,7 @@ public class ExpressionParser {
 
     private Value parseProperty(Value currentValue) throws EngineException {
         if (stream.peek() == null) {
-            throw new ParserException(ParserExceptionType.BAD_SYNTAX, stream.current().getPosition(), "missing property name");
+            throw new ParserException(ParserExceptionType.BAD_SYNTAX, stream.current().getPosition(), "Missing property name");
         }
 
         stream.next();
