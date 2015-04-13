@@ -2,16 +2,15 @@ package passambler.pack.file.function;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.FileTime;
 import passambler.exception.ErrorException;
 import passambler.exception.EngineException;
 import passambler.value.Value;
 
-public class FunctionTouch extends FunctionSimpleFile {
+public class CreateDirFunction extends SimpleFileFunction {
     @Override
     public Value getReturnValue(Path file) throws EngineException {
         try {
-            Files.setLastModifiedTime(file, FileTime.fromMillis(System.currentTimeMillis()));
+            Files.createDirectory(file);
         } catch (Exception e) {
             throw new ErrorException(e);
         }

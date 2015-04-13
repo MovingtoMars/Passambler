@@ -8,7 +8,7 @@ import passambler.exception.EngineException;
 import passambler.value.Value;
 import passambler.value.StringValue;
 
-public abstract class FunctionSimpleFile extends Value implements Function {
+public abstract class SimpleFileFunction extends Value implements Function {
     @Override
     public int getArguments() {
         return 1;

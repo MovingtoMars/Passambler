@@ -5,15 +5,16 @@ import java.nio.file.Path;
 import passambler.exception.ErrorException;
 import passambler.exception.EngineException;
 import passambler.value.Value;
-import passambler.value.StringValue;
 
-public class FunctionRead extends FunctionSimpleFile {
+public class DeleteFunction extends SimpleFileFunction {
     @Override
     public Value getReturnValue(Path file) throws EngineException {
         try {
-            return new StringValue(String.join("\n", Files.readAllLines(file)));
+            Files.delete(file);
         } catch (Exception e) {
             throw new ErrorException(e);
         }
+
+        return null;
     }
 }

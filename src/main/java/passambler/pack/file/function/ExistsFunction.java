@@ -5,16 +5,15 @@ import java.nio.file.Path;
 import passambler.exception.ErrorException;
 import passambler.exception.EngineException;
 import passambler.value.Value;
+import passambler.value.BooleanValue;
 
-public class FunctionCreateDir extends FunctionSimpleFile {
+public class ExistsFunction extends SimpleFileFunction {
     @Override
     public Value getReturnValue(Path file) throws EngineException {
         try {
-            Files.createDirectory(file);
+            return new BooleanValue(Files.exists(file));
         } catch (Exception e) {
             throw new ErrorException(e);
         }
-
-        return null;
     }
 }

@@ -7,11 +7,11 @@ import passambler.exception.EngineException;
 import passambler.value.Value;
 import passambler.value.NumberValue;
 
-public class FunctionSize extends FunctionSimpleFile {
+public class ModifiedFunction extends SimpleFileFunction {
     @Override
     public Value getReturnValue(Path file) throws EngineException {
         try {
-            return new NumberValue(Files.size(file));
+            return new NumberValue(Files.getLastModifiedTime(file).toMillis());
         } catch (Exception e) {
             throw new ErrorException(e);
         }

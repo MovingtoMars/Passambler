@@ -10,7 +10,7 @@ import passambler.lexer.Lexer;
 import passambler.lexer.Token;
 import passambler.lexer.TokenStream;
 import passambler.pack.Package;
-import passambler.pack.file.PackageFile;
+import passambler.pack.file.FilePackage;
 import passambler.pack.json.PackageJson;
 import passambler.pack.math.PackageMath;
 import passambler.pack.net.PackageNet;
@@ -52,7 +52,7 @@ public class Parser {
 
         defaultPackages.add(new PackageStd());
         defaultPackages.add(new PackageMath());
-        defaultPackages.add(new PackageFile());
+        defaultPackages.add(new FilePackage());
         defaultPackages.add(new PackageOs());
         defaultPackages.add(new PackageNet());
         defaultPackages.add(new PackageThread());

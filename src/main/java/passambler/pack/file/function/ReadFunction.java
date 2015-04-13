@@ -7,11 +7,11 @@ import passambler.exception.EngineException;
 import passambler.value.Value;
 import passambler.value.StringValue;
 
-public class FunctionType extends FunctionSimpleFile {
+public class ReadFunction extends SimpleFileFunction {
     @Override
     public Value getReturnValue(Path file) throws EngineException {
         try {
-            return new StringValue(Files.probeContentType(file));
+            return new StringValue(String.join("\n", Files.readAllLines(file)));
         } catch (Exception e) {
             throw new ErrorException(e);
         }

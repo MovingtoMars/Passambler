@@ -5,16 +5,15 @@ import java.nio.file.Path;
 import passambler.exception.ErrorException;
 import passambler.exception.EngineException;
 import passambler.value.Value;
+import passambler.value.NumberValue;
 
-public class FunctionCreate extends FunctionSimpleFile {
+public class SizeFunction extends SimpleFileFunction {
     @Override
     public Value getReturnValue(Path file) throws EngineException {
         try {
-            Files.createFile(file);
+            return new NumberValue(Files.size(file));
         } catch (Exception e) {
             throw new ErrorException(e);
         }
-
-        return null;
     }
 }
