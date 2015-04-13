@@ -120,7 +120,7 @@ public class Main {
         List<Token> tokens = new ArrayList<>();
 
         while (true) {
-            System.out.print((tokens.isEmpty() ? "~>" : "->") + " ");
+            System.out.print("-> ");
 
             Value result = null;
 
