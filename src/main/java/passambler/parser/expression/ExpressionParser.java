@@ -46,27 +46,21 @@ public class ExpressionParser {
 
         Token lastOperator = null;
 
-        int paren = 0, brackets = 0, braces = 0;
+        int depth = 0;
 
         while (stream.hasNext()) {
-            if (stream.current().getType() == TokenType.LEFT_PAREN) {
-                paren++;
-            } else if (stream.current().getType() == TokenType.RIGHT_PAREN) {
-                paren--;
-            } else if (stream.current().getType() == TokenType.LEFT_BRACE) {
-                braces++;
-            } else if (stream.current().getType() == TokenType.RIGHT_BRACE) {
-                braces--;
-            } else if (stream.current().getType() == TokenType.LEFT_BRACKET) {
-                brackets++;
-            } else if (stream.current().getType() == TokenType.RIGHT_BRACKET) {
-                brackets--;
+            Token token = stream.current();
+
+            if (token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
+                depth++;
+            } else if (token.getType() == TokenType.RIGHT_BRACE || token.getType() == TokenType.RIGHT_PAREN || token.getType() == TokenType.RIGHT_BRACKET) {
+                depth--;
             }
 
-            tokens.add(stream.current());
+            tokens.add(token);
 
-            if ((stream.current().getType().isOperator() || stream.peek() == null) && paren == 0 && brackets == 0 && braces == 0) {
-                if (stream.current().getType().isOperator()) {
+            if ((token.getType().isOperator() || stream.peek() == null) && depth == 0) {
+                if (token.getType().isOperator()) {
                     tokens.remove(tokens.size() - 1);
                 }
 
@@ -90,12 +84,7 @@ public class ExpressionParser {
                     tokens.add(new Token(TokenType.NUMBER, number.toString(), stream.current().getPosition()));
                 }
 
-                ValueOperatorPair pair = new ValueOperatorPair();
-
-                pair.setOperator(lastOperator);
-                pair.setValue(createParser(new TokenStream(tokens)).parseSpecialized());
-
-                values.add(pair);
+                values.add(new ValueOperatorPair(createParser(new TokenStream(tokens)).parseSpecialized(), lastOperator));
 
                 tokens.clear();
 
@@ -222,28 +211,20 @@ public class ExpressionParser {
 
             boolean usedNamedArguments = false;
 
-            int braces = 0, paren = 0, brackets = 0;
+            int depth = 0;
 
             Function currentFunction = (Function) currentValue;
 
             for (Token token : tokens) {
-                if (token.getType() == TokenType.LEFT_PAREN) {
-                    paren++;
-                } else if (token.getType() == TokenType.RIGHT_PAREN) {
-                    paren--;
-                } else if (token.getType() == TokenType.LEFT_BRACKET) {
-                    brackets++;
-                } else if (token.getType() == TokenType.RIGHT_BRACKET) {
-                    brackets--;
-                } else if (token.getType() == TokenType.LEFT_BRACE) {
-                    braces++;
-                } else if (token.getType() == TokenType.RIGHT_BRACE) {
-                    braces--;
+                if (token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
+                    depth++;
+                } else if (token.getType() == TokenType.RIGHT_BRACE || token.getType() == TokenType.RIGHT_PAREN || token.getType() == TokenType.RIGHT_BRACKET) {
+                    depth--;
                 }
 
                 argumentTokens.add(token);
 
-                if (paren == 0 && brackets == 0 && braces == 0 && (token.getType() == TokenType.COMMA || tokens.indexOf(token) == tokens.size() - 1)) {
+                if (depth == 0 && (token.getType() == TokenType.COMMA || tokens.indexOf(token) == tokens.size() - 1)) {
                     if (token.getType() == TokenType.COMMA) {
                         argumentTokens.remove(argumentTokens.size() - 1);
                     }
@@ -304,10 +285,6 @@ public class ExpressionParser {
                         arguments.add(i, definitions.get(i).getDefaultValue());
                     }
                 }
-            }
-
-            if (paren != 0 || brackets != 0) {
-                throw new ParserException(ParserExceptionType.BAD_SYNTAX, stream.first().getPosition(), "unmatching " + (paren != 0 ? "parens" : "brackets"));
             }
 
             if (currentFunction.getArguments() != -1 && currentFunction.getArguments() != arguments.size()) {

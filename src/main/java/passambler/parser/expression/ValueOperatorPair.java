@@ -8,6 +8,11 @@ public class ValueOperatorPair {
 
     private Token operator;
 
+    public ValueOperatorPair(Value value, Token operator) {
+        this.value = value;
+        this.operator = operator;
+    }
+
     public Value getValue() {
         return value;
     }
