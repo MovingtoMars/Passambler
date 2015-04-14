@@ -1,0 +1,13 @@
+--TEST--
+Tests return typehints
+
+--INPUT--
+fn sum(num a, num b):num
+{
+    return a + b;
+}
+
+return sum(1, 1);
+
+--RESULT--
+2

@@ -11,6 +11,6 @@ public class StandardTypehint implements Typehint {
 
     @Override
     public boolean matches(Value value) {
-        return value.getClass().isAssignableFrom(valueClass);
+        return value != null && value.getClass().isAssignableFrom(valueClass);
     }
 }

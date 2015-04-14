@@ -1,5 +1,5 @@
 --TEST--
-Tests typehinting
+Tests typehints
 
 --INPUT--
 using('std.Writeln');

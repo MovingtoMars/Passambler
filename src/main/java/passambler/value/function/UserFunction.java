@@ -4,11 +4,16 @@ import java.util.List;
 import passambler.parser.ArgumentDefinition;
 import passambler.parser.Block;
 import passambler.exception.EngineException;
+import passambler.exception.ErrorException;
+import passambler.parser.typehint.AnyTypehint;
+import passambler.parser.typehint.Typehint;
+import passambler.value.ErrorValue;
 import passambler.value.Value;
 
 public class UserFunction extends Value implements Function {
     private Block block;
     private List<ArgumentDefinition> arguments;
+    private Typehint typehint = new AnyTypehint();
 
     public UserFunction(Block block, List<ArgumentDefinition> arguments) {
         this.block = block;
@@ -21,6 +26,10 @@ public class UserFunction extends Value implements Function {
 
     public List<ArgumentDefinition> getArgumentDefinitions() {
         return arguments;
+    }
+
+    public void setTypehint(Typehint typehint) {
+        this.typehint = typehint;
     }
 
     @Override
@@ -40,7 +49,13 @@ public class UserFunction extends Value implements Function {
                 block.getParser().getScope().setSymbol(arguments.get(i).getName(), context.getArgument(i));
             }
 
-            return block.invoke();
+            Value result = block.invoke();
+
+            if (!typehint.matches(result)) {
+                throw new ErrorException(new ErrorValue(String.format("Type mismatch")));
+            }
+
+            return result;
         }
 
         return null;

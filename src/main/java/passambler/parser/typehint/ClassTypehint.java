@@ -12,10 +12,6 @@ public class ClassTypehint implements Typehint {
 
     @Override
     public boolean matches(Value value) {
-        if (!(value instanceof ClassValue)) {
-            return false;
-        }
-        
-        return ((ClassValue) value).getName().equals(name);
+        return value instanceof ClassValue && ((ClassValue) value).getName().equals(name);
     }
 }
