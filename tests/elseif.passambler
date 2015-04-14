@@ -2,15 +2,27 @@
 Tests elseif statements.
 
 --INPUT--
+using('std.Push');
+
+a = [];
+
 if (5 > 10) {
-    return 1;
+    Push(a, 1);
 } elseif (10 < 5) {
-    return 2;
+    Push(a, 2);
 } elseif (10 == 10) {
-    return 3;
+    Push(a, 3);
 }
 
-return 4;
+if (5 > 10) {
+    Push(a, 1);
+} else if (10 < 5) {
+    Push(a, 2);
+} else if (10 == 10) {
+    Push(a, 3);
+}
+
+return a;
 
 --RESULT--
-3
+[3, 3]

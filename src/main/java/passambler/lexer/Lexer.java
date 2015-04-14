@@ -18,6 +18,8 @@ public class Lexer {
     public Lexer(String input) {
         this.input = input;
 
+        tokenMap.put("else if", TokenType.ELSEIF);
+        
         tokenMap.put("return", TokenType.RETURN);
         tokenMap.put("elseif", TokenType.ELSEIF);
 
