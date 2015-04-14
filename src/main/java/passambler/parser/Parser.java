@@ -73,7 +73,7 @@ public class Parser {
         typehints.put("bool", new StandardTypehint(BooleanValue.class));
         typehints.put("list", new StandardTypehint(ListValue.class));
         typehints.put("dict", new StandardTypehint(DictValue.class));
-        typehints.put("error", new StandardTypehint(ErrorValue.class));
+        typehints.put("err", new StandardTypehint(ErrorValue.class));
     }
 
     public void setCatch(Block block, String errorName) {
