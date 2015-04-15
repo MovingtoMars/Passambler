@@ -35,7 +35,7 @@ public class ExpressionParser {
 
         features.add(new FunctionCallFeature());
         features.add(new ParenFeature());
-        features.add(new DictOrBlockFeature());
+        features.add(new DictFeature());
         features.add(new IndexedOrArrayFeature());
         features.add(new SymbolFeature());
         features.add(new PropertyFeature());
