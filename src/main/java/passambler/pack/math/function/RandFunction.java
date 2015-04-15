@@ -26,7 +26,7 @@ public class RandFunction extends Value implements Function {
         int max = ((NumberValue) context.getArgument(1)).getValue().intValue();
 
         if (min > max) {
-            throw new ErrorException(new ErrorValue(String.format("Invalid bounds (%d > %d)", min, max)));
+            throw new ErrorException(new ErrorValue("Invalid bounds (%d > %d)", min, max));
         }
 
         return new NumberValue(new Random().nextInt((max - min) + 1) + min);

@@ -9,8 +9,8 @@ public class ErrorValue extends Value {
         setValue(exception.toString());
     }
 
-    public ErrorValue(String message) {
-        setValue(message);
+    public ErrorValue(String message, Object... args) {
+        setValue(String.format(message, args));
     }
 
     @Override

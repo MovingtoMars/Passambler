@@ -60,7 +60,7 @@ public class UsingFunction extends Value implements Function {
                     }
 
                     if (!found) {
-                        throw new ErrorException(new ErrorValue(String.format("Undefined package: '%s'", currentPackageName)));
+                        throw new ErrorException(new ErrorValue("Undefined package: '%s'", currentPackageName));
                     }
                 }
             }
@@ -98,7 +98,7 @@ public class UsingFunction extends Value implements Function {
                     }
 
                     if (!found) {
-                        throw new ErrorException(new ErrorValue(String.format("Undefined package property: '%s'", valueName)));
+                        throw new ErrorException(new ErrorValue("Undefined package property: '%s'", valueName));
                     }
                 }
             }

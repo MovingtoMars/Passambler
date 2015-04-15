@@ -113,7 +113,7 @@ public class FunctionCallFeature implements Feature {
                 ArgumentDefinition definition = definitions.get(i);
 
                 if (!definition.getTypehint().matches(arguments.get(i))) {
-                    throw new ErrorException(new ErrorValue(String.format("Type mismatch at argument %d", i + 1)));
+                    throw new ErrorException(new ErrorValue("Type mismatch at argument %d", i + 1));
                 }
             }
         }

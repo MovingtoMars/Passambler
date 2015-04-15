@@ -33,7 +33,7 @@ public class StartFunction extends Value implements Function {
                     Function function = (Function) context.getArgument(0);
 
                     if (function.getArguments() != context.getArguments().length - 1) {
-                        throw new ErrorException(new ErrorValue(String.format("Thread callback expected %d arguments, %d given",  function.getArguments(), context.getArguments().length - 1)));
+                        throw new ErrorException(new ErrorValue("Thread callback expected %d arguments, %d given",  function.getArguments(), context.getArguments().length - 1));
                     }
 
                     List<Value> values = new ArrayList<>();

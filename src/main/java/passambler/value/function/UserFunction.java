@@ -52,7 +52,7 @@ public class UserFunction extends Value implements Function {
             Value result = block.invoke();
 
             if (!typehint.matches(result)) {
-                throw new ErrorException(new ErrorValue(String.format("Type mismatch")));
+                throw new ErrorException(new ErrorValue("Type mismatch"));
             }
 
             return result;
