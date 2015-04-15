@@ -5,6 +5,5 @@ build.xml
 nb-configuration.xml
 nbactions.xml
 Thumbs.db
-/test
-TODO.txt
 /target/
+/local/
