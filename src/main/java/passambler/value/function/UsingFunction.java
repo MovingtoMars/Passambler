@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-import passambler.exception.ParserException;
 import passambler.value.Value;
 import passambler.value.StringValue;
 import passambler.pack.Package;
 import passambler.pack.FileSystemPackage;
 import passambler.exception.EngineException;
-import passambler.exception.ParserExceptionType;
+import passambler.exception.ErrorException;
+import passambler.value.ErrorValue;
 import passambler.value.ListValue;
 
 public class UsingFunction extends Value implements Function {
@@ -60,7 +60,7 @@ public class UsingFunction extends Value implements Function {
                     }
 
                     if (!found) {
-                        throw new ParserException(ParserExceptionType.UNDEFINED_PACKAGE, null, currentPackageName);
+                        throw new ErrorException(new ErrorValue(String.format("Undefined package: '%s'", currentPackageName)));
                     }
                 }
             }
@@ -98,7 +98,7 @@ public class UsingFunction extends Value implements Function {
                     }
 
                     if (!found) {
-                        throw new ParserException(ParserExceptionType.UNDEFINED_PROPERTY, null, valueName);
+                        throw new ErrorException(new ErrorValue(String.format("Undefined package property: '%s'", valueName)));
                     }
                 }
             }

@@ -3,8 +3,6 @@ package passambler.pack.std.function;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.exception.EngineException;
-import passambler.exception.ParserException;
-import passambler.exception.ParserExceptionType;
 import passambler.value.Value;
 import passambler.value.BooleanValue;
 import passambler.value.ListValue;
@@ -29,17 +27,13 @@ public class FilterFunction extends Value implements Function {
         ListValue list = (ListValue) context.getArgument(0);
 
         Function callback = (Function) context.getArgument(1);
-        
+
         ListValue filteredList = new ListValue();
 
         for (int i = 0; i < list.getValue().size(); ++i) {
-            Value result = callback.invoke(new FunctionContext(context.getParser(), new Value[] { list.getValue().get(i) }));
+            Value value = callback.invoke(new FunctionContext(context.getParser(), new Value[]{list.getValue().get(i)}));
 
-            if (!(result instanceof BooleanValue)) {
-                throw new ParserException(ParserExceptionType.EXPECTED_A_BOOL);
-            }
-
-            if (((BooleanValue) result).getValue() == true) {
+            if (value instanceof BooleanValue && ((BooleanValue) value).getValue() == true) {
                 filteredList.getValue().add(list.getValue().get(i));
             }
         }

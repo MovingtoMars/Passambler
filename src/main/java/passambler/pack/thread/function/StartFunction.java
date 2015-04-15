@@ -3,10 +3,10 @@ package passambler.pack.thread.function;
 import java.util.ArrayList;
 import java.util.List;
 import passambler.exception.EngineException;
+import passambler.exception.ErrorException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
-import passambler.exception.ParserException;
-import passambler.exception.ParserExceptionType;
+import passambler.value.ErrorValue;
 import passambler.value.Value;
 
 public class StartFunction extends Value implements Function {
@@ -33,7 +33,7 @@ public class StartFunction extends Value implements Function {
                     Function function = (Function) context.getArgument(0);
 
                     if (function.getArguments() != context.getArguments().length - 1) {
-                        throw new ParserException(ParserExceptionType.INVALID_ARGUMENT_COUNT, null, function.getArguments(), context.getArguments().length - 1);
+                        throw new ErrorException(new ErrorValue(String.format("Thread callback expected %d arguments, %d given",  function.getArguments(), context.getArguments().length - 1)));
                     }
 
                     List<Value> values = new ArrayList<>();
