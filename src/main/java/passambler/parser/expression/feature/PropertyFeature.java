@@ -15,10 +15,6 @@ public class PropertyFeature implements Feature {
 
     @Override
     public Value perform(ExpressionParser parser, Value currentValue) throws EngineException {
-        if (parser.getStream().peek() == null) {
-            throw new ParserException(ParserExceptionType.BAD_SYNTAX, parser.getStream().current().getPosition(), "Missing property name");
-        }
-
         parser.getStream().next();
 
         parser.getStream().match(TokenType.IDENTIFIER);
