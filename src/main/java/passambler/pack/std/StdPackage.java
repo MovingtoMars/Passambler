@@ -22,8 +22,6 @@ public class StdPackage implements Package {
         symbols.put("Write", new WriteFunction(new OutValue(), false));
         symbols.put("Writeln", new WriteFunction(new OutValue(), true));
         symbols.put("Read", new ReadFunction());
-        symbols.put("ReadNum", new ReadNumFunction());
-        symbols.put("ReadStr", new ReadStrFunction());
         symbols.put("ToStr", new ToStrFunction());
         symbols.put("ToNum", new ToNumFunction());
         symbols.put("ToBool", new ToBoolFunction());
@@ -52,6 +50,7 @@ public class StdPackage implements Package {
         symbols.put("Substr", new SubstrFunction());
 
         symbols.put("Out", new OutValue());
+        symbols.put("In", new InValue());
         symbols.put("Err", new ErrValue());
     }
 }
