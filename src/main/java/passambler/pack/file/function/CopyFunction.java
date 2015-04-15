@@ -2,13 +2,12 @@ package passambler.pack.file.function;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
+import passambler.pack.file.value.FileValue;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
-import passambler.value.StringValue;
 
 public class CopyFunction extends Value implements Function {
     @Override
@@ -18,14 +17,14 @@ public class CopyFunction extends Value implements Function {
 
     @Override
     public boolean isArgumentValid(Value value, int argument) {
-        return value instanceof StringValue;
+        return value instanceof FileValue;
     }
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
         try {
-            Path file = Paths.get(((StringValue) context.getArgument(0)).getValue());
-            Path destination = Paths.get(((StringValue) context.getArgument(1)).getValue());
+            Path file = ((FileValue) context.getArgument(0)).getValue();
+            Path destination = ((FileValue) context.getArgument(1)).getValue();
 
             Files.copy(file, destination);
         } catch (Exception e) {

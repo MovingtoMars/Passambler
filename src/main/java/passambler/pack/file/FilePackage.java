@@ -18,11 +18,10 @@ public class FilePackage implements Package {
     
     @Override
     public void apply(Map<String, Value> symbols) {
+        symbols.put("Open", new OpenFunction());
         symbols.put("Create", new CreateFunction());
         symbols.put("Exists", new ExistsFunction());
         symbols.put("Delete", new DeleteFunction());
-        symbols.put("Write", new WriteFunction());
-        symbols.put("Read", new ReadFunction());
         symbols.put("Size", new SizeFunction());
         symbols.put("Copy", new CopyFunction());
         symbols.put("Move", new MoveFunction());
