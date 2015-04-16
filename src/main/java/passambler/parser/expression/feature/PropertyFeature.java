@@ -10,19 +10,19 @@ import passambler.value.Value;
 public class PropertyFeature implements Feature {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
-        return parser.getStream().current().getType() == TokenType.PERIOD;
+        return parser.getTokens().current().getType() == TokenType.PERIOD;
     }
 
     @Override
     public Value perform(ExpressionParser parser, Value currentValue) throws EngineException {
-        parser.getStream().next();
+        parser.getTokens().next();
 
-        parser.getStream().match(TokenType.IDENTIFIER);
+        parser.getTokens().match(TokenType.IDENTIFIER);
 
-        String propertyName = parser.getStream().current().getValue();
+        String propertyName = parser.getTokens().current().getValue();
 
         if (!currentValue.hasProperty(propertyName)) {
-            throw new ParserException(ParserExceptionType.UNDEFINED_PROPERTY, parser.getStream().current().getPosition(), propertyName);
+            throw new ParserException(ParserExceptionType.UNDEFINED_PROPERTY, parser.getTokens().current().getPosition(), propertyName);
         }
 
         return currentValue.getProperty(propertyName).getValue();

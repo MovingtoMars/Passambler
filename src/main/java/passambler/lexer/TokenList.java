@@ -4,26 +4,18 @@ import java.util.List;
 import passambler.exception.ParserException;
 import passambler.exception.ParserExceptionType;
 
-public class TokenStream {
+public class TokenList {
     private int position;
 
     private List<Token> tokens;
 
-    public TokenStream(List<Token> tokens) {
+    public TokenList(List<Token> tokens) {
         this(tokens, 0);
     }
 
-    public TokenStream(List<Token> tokens, int position) {
+    public TokenList(List<Token> tokens, int position) {
         this.tokens = tokens;
         this.position = position;
-    }
-
-    public Token back() {
-        return back(1);
-    }
-
-    public Token back(int amount) {
-        return position - amount < 0 ? null : tokens.get(position - amount);
     }
 
     public Token current() {
@@ -50,28 +42,28 @@ public class TokenStream {
         return position + amount < tokens.size() ? tokens.get(position + amount) : null;
     }
 
-    public Token first() {
-        return tokens.get(0);
-    }
-
-    public Token last() {
-        return tokens.get(tokens.size() - 1);
+    public Token get(int index) {
+        return tokens.get(index);
     }
 
     public int getPosition() {
         return position;
     }
 
-    public List<Token> rest() {
+    public List<Token> getTokens() {
+        return tokens;
+    }
+
+    public List<Token> getTokensFromPosition() {
         return tokens.subList(position, tokens.size());
     }
 
-    public TokenStream copy() {
-        return new TokenStream(tokens);
+    public TokenList copy() {
+        return new TokenList(tokens);
     }
 
-    public TokenStream copyAtCurrentPosition() {
-        return new TokenStream(tokens, position);
+    public TokenList copyAtCurrentPosition() {
+        return new TokenList(tokens, position);
     }
 
     public void match(TokenType... types) throws ParserException {
@@ -91,6 +83,6 @@ public class TokenStream {
             }
         }
 
-        throw new ParserException(ParserExceptionType.INVALID_TOKEN, current() == null ? first().getPosition() : current().getPosition(), typesExpected.toString(), current() == null ? "nothing" : current().getType());
+        throw new ParserException(ParserExceptionType.INVALID_TOKEN, current() == null ? get(0).getPosition() : current().getPosition(), typesExpected.toString(), current() == null ? "nothing" : current().getType());
     }
 }

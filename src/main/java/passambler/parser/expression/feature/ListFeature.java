@@ -1,7 +1,7 @@
 package passambler.parser.expression.feature;
 
 import passambler.exception.EngineException;
-import passambler.lexer.TokenStream;
+import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
 import passambler.parser.expression.ExpressionParser;
 import passambler.value.ListValue;
@@ -10,33 +10,33 @@ import passambler.value.Value;
 public class ListFeature implements Feature {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
-        return parser.getStream().current().getType() == TokenType.LEFT_BRACKET;
+        return parser.getTokens().current().getType() == TokenType.LEFT_BRACKET;
     }
 
     @Override
     public Value perform(ExpressionParser parser, Value currentValue) throws EngineException {
         ListValue list = new ListValue();
 
-        TokenStream stream = parser.getStream();
+        TokenList tokens = parser.getTokens();
 
-        stream.next();
+        tokens.next();
 
-        while (stream.hasNext()) {
+        while (tokens.hasNext()) {
             // Empty lists
-            if (stream.current().getType() == TokenType.RIGHT_BRACKET) {
+            if (tokens.current().getType() == TokenType.RIGHT_BRACKET) {
                 break;
             }
 
-            Value value = parser.getParser().parseExpression(stream, TokenType.COMMA, TokenType.RIGHT_BRACKET);
+            Value value = parser.getParser().parseExpression(tokens, TokenType.COMMA, TokenType.RIGHT_BRACKET);
 
             list.getValue().add(value);
 
-            stream.match(TokenType.COMMA, TokenType.RIGHT_BRACKET);
+            tokens.match(TokenType.COMMA, TokenType.RIGHT_BRACKET);
 
-            if (stream.current().getType() == TokenType.RIGHT_BRACKET) {
+            if (tokens.current().getType() == TokenType.RIGHT_BRACKET) {
                 break;
             } else {
-                stream.next();
+                tokens.next();
             }
         }
 

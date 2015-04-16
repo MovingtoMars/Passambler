@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import passambler.value.Value;
 import passambler.lexer.Token;
-import passambler.lexer.TokenStream;
+import passambler.lexer.TokenList;
 import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenType;
@@ -22,15 +22,15 @@ public class ExpressionParser {
 
     private Parser parser;
 
-    private TokenStream stream;
+    private TokenList tokens;
 
-    public ExpressionParser(Parser parser, TokenStream stream) {
-        this(parser, stream, false);
+    public ExpressionParser(Parser parser, TokenList tokens) {
+        this(parser, tokens, false);
     }
 
-    public ExpressionParser(Parser parser, TokenStream stream, boolean assignment) {
+    public ExpressionParser(Parser parser, TokenList tokens, boolean assignment) {
         this.parser = parser;
-        this.stream = stream;
+        this.tokens = tokens;
         this.assignment = assignment;
 
         features.add(new FunctionCallFeature());
@@ -47,28 +47,28 @@ public class ExpressionParser {
         return parser;
     }
 
-    public TokenStream getStream() {
-        return stream;
+    public TokenList getTokens() {
+        return tokens;
     }
 
     public boolean isAssignment() {
         return assignment;
     }
 
-    public ExpressionParser createParser(TokenStream stream) {
-        return new ExpressionParser(parser, stream, assignment);
+    public ExpressionParser createParser(TokenList tokens) {
+        return new ExpressionParser(parser, tokens, assignment);
     }
 
     public Value parse() throws EngineException {
-        List<Token> tokens = new ArrayList<>();
+        List<Token> expressionTokens = new ArrayList<>();
         List<ValueOperatorPair> values = new ArrayList<>();
 
         Token lastOperator = null;
 
         int depth = 0;
 
-        while (stream.hasNext()) {
-            Token token = stream.current();
+        while (tokens.hasNext()) {
+            Token token = tokens.current();
 
             if (token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
                 depth++;
@@ -76,23 +76,23 @@ public class ExpressionParser {
                 depth--;
             }
 
-            tokens.add(token);
+            expressionTokens.add(token);
 
-            if ((token.getType().isOperator() || stream.peek() == null) && depth == 0) {
+            if ((token.getType().isOperator() || tokens.peek() == null) && depth == 0) {
                 if (token.getType().isOperator()) {
-                    tokens.remove(tokens.size() - 1);
+                    expressionTokens.remove(expressionTokens.size() - 1);
                 }
 
-                if (tokens.isEmpty()) {
-                    stream.match(TokenType.MINUS, TokenType.PLUS);
+                if (expressionTokens.isEmpty()) {
+                    tokens.match(TokenType.MINUS, TokenType.PLUS);
 
-                    boolean negate = stream.current().getType() == TokenType.MINUS;
+                    boolean negate = tokens.current().getType() == TokenType.MINUS;
 
-                    stream.next();
+                    tokens.next();
 
-                    stream.match(TokenType.NUMBER);
+                    tokens.match(TokenType.NUMBER);
 
-                    BigDecimal number = new BigDecimal(stream.current().getValue());
+                    BigDecimal number = new BigDecimal(tokens.current().getValue());
 
                     if (negate) {
                         number = number.negate();
@@ -100,17 +100,17 @@ public class ExpressionParser {
                         number = number.plus();
                     }
 
-                    tokens.add(new Token(TokenType.NUMBER, number.toString(), stream.current().getPosition()));
+                    expressionTokens.add(new Token(TokenType.NUMBER, number.toString(), tokens.current().getPosition()));
                 }
 
-                values.add(new ValueOperatorPair(createParser(new TokenStream(tokens)).parseFeatures(), lastOperator));
+                values.add(new ValueOperatorPair(createParser(new TokenList(expressionTokens)).parseFeatures(), lastOperator));
 
-                tokens.clear();
+                expressionTokens.clear();
 
-                lastOperator = stream.current();
+                lastOperator = tokens.current();
             }
 
-            stream.next();
+            tokens.next();
         }
 
         Value value = null;
@@ -155,8 +155,8 @@ public class ExpressionParser {
 
         boolean not = false;
 
-        while (stream.hasNext()) {
-            if (stream.current().getType() == TokenType.NOT) {
+        while (tokens.hasNext()) {
+            if (tokens.current().getType() == TokenType.NOT) {
                 not = true;
             } else {
                 boolean performed = false;
@@ -172,16 +172,16 @@ public class ExpressionParser {
                 }
 
                 if (!performed) {
-                    throw new ParserException(ParserExceptionType.UNEXPECTED_TOKEN, stream.current().getPosition(), stream.current().getType());
+                    throw new ParserException(ParserExceptionType.UNEXPECTED_TOKEN, tokens.current().getPosition(), tokens.current().getType());
                 }
             }
 
-            stream.next();
+            tokens.next();
         }
 
         if (not) {
             if (!(currentValue instanceof BooleanValue)) {
-                throw new ParserException(ParserExceptionType.NOT_A_BOOLEAN, stream.first().getPosition());
+                throw new ParserException(ParserExceptionType.NOT_A_BOOLEAN, tokens.get(0).getPosition());
             }
 
             currentValue = new BooleanValue(!((BooleanValue) currentValue).getValue());

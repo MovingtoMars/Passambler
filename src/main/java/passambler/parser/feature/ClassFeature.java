@@ -5,7 +5,7 @@ import java.util.List;
 import passambler.exception.EngineException;
 import passambler.exception.ParserException;
 import passambler.exception.ParserExceptionType;
-import passambler.lexer.TokenStream;
+import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
 import passambler.parser.ArgumentDefinition;
 import passambler.parser.Parser;
@@ -15,33 +15,33 @@ import passambler.value.function.ClassInitializerFunction;
 
 public class ClassFeature implements Feature {
     @Override
-    public boolean canPerform(Parser parser, TokenStream stream) {
-        return stream.first().getType() == TokenType.CLASS;
+    public boolean canPerform(Parser parser, TokenList tokens) {
+        return tokens.get(0).getType() == TokenType.CLASS;
     }
 
     @Override
-    public Value perform(Parser parser, TokenStream stream) throws EngineException {
-        stream.next();
-        stream.match(TokenType.IDENTIFIER);
+    public Value perform(Parser parser, TokenList tokens) throws EngineException {
+        tokens.next();
+        tokens.match(TokenType.IDENTIFIER);
 
-        String name = stream.current().getValue();
+        String name = tokens.current().getValue();
 
-        stream.next();
+        tokens.next();
 
-        List<ArgumentDefinition> arguments = parser.parseArgumentDefinition(stream);
+        List<ArgumentDefinition> arguments = parser.parseArgumentDefinition(tokens);
 
-        stream.next();
+        tokens.next();
 
         List<ClassInitializerFunction> parents = new ArrayList<>();
 
-        if (stream.current().getType() == TokenType.COL) {
-            stream.next();
+        if (tokens.current().getType() == TokenType.COL) {
+            tokens.next();
 
-            while (stream.current().getType() != TokenType.LEFT_BRACE) {
-                Value expression = parser.parseExpression(stream, TokenType.COMMA, TokenType.RIGHT_PAREN, TokenType.LEFT_BRACE);
+            while (tokens.current().getType() != TokenType.LEFT_BRACE) {
+                Value expression = parser.parseExpression(tokens, TokenType.COMMA, TokenType.RIGHT_PAREN, TokenType.LEFT_BRACE);
 
                 if (!(expression instanceof ClassValue)) {
-                    throw new ParserException(ParserExceptionType.NOT_A_CLASS, stream.current().getPosition());
+                    throw new ParserException(ParserExceptionType.NOT_A_CLASS, tokens.current().getPosition());
                 }
 
                 // Here we add the class initializer (the name of the symbol is the name of the class expression)
@@ -49,7 +49,7 @@ public class ClassFeature implements Feature {
             }
         }
 
-        ClassInitializerFunction child = new ClassInitializerFunction(name, parser.parseBlock(stream), arguments);
+        ClassInitializerFunction child = new ClassInitializerFunction(name, parser.parseBlock(tokens), arguments);
 
         for (ClassInitializerFunction parent : parents) {
             child.addParent(parent);

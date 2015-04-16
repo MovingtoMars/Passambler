@@ -14,19 +14,19 @@ import passambler.value.Value;
 public class IndexAccessFeature implements Feature {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
-        return parser.getStream().current().getType() == TokenType.LEFT_BRACKET
+        return parser.getTokens().current().getType() == TokenType.LEFT_BRACKET
             && (currentValue instanceof ListValue || currentValue instanceof DictValue);
     }
 
     @Override
     public Value perform(ExpressionParser parser, Value currentValue) throws EngineException {
-        TokenPosition leftBracketPosition = parser.getStream().current().getPosition();
+        TokenPosition leftBracketPosition = parser.getTokens().current().getPosition();
 
-        parser.getStream().next();
+        parser.getTokens().next();
 
-        Value indexValue = parser.getParser().parseExpression(parser.getStream(), TokenType.RIGHT_BRACKET);
+        Value indexValue = parser.getParser().parseExpression(parser.getTokens(), TokenType.RIGHT_BRACKET);
 
-        parser.getStream().match(TokenType.RIGHT_BRACKET);
+        parser.getTokens().match(TokenType.RIGHT_BRACKET);
 
         if (indexValue instanceof NumberValue) {
             if (!(currentValue instanceof ListValue)) {

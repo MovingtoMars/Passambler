@@ -3,7 +3,7 @@ package passambler.parser.feature;
 import java.util.List;
 import passambler.exception.EngineException;
 import passambler.lexer.Token;
-import passambler.lexer.TokenStream;
+import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
 import passambler.parser.Block;
 import passambler.parser.expression.ExpressionParser;
@@ -13,26 +13,26 @@ import passambler.value.BooleanValue;
 
 public class WhileFeature implements Feature {
     @Override
-    public boolean canPerform(Parser parser, TokenStream stream) {
-        return stream.first().getType() == TokenType.WHILE;
+    public boolean canPerform(Parser parser, TokenList tokens) {
+        return tokens.get(0).getType() == TokenType.WHILE;
     }
 
     @Override
-    public Value perform(Parser parser, TokenStream stream) throws EngineException {
-        stream.next();
+    public Value perform(Parser parser, TokenList tokens) throws EngineException {
+        tokens.next();
 
-        stream.match(TokenType.LEFT_PAREN);
-        stream.next();
+        tokens.match(TokenType.LEFT_PAREN);
+        tokens.next();
 
-        List<Token> tokens = parser.parseExpressionTokens(stream, TokenType.RIGHT_PAREN);
+        List<Token> expressionTokens = parser.parseExpressionTokens(tokens, TokenType.RIGHT_PAREN);
 
-        stream.match(TokenType.RIGHT_PAREN);
+        tokens.match(TokenType.RIGHT_PAREN);
 
-        stream.next();
+        tokens.next();
 
-        Value value = new ExpressionParser(parser, new TokenStream(tokens)).parse();
+        Value value = new ExpressionParser(parser, new TokenList(expressionTokens)).parse();
 
-        Block callback = parser.parseBlock(stream);
+        Block callback = parser.parseBlock(tokens);
 
         while (((BooleanValue) value).getValue()) {
             Value result = callback.invoke();
@@ -41,7 +41,7 @@ public class WhileFeature implements Feature {
                 return result;
             }
 
-            value = new ExpressionParser(parser, new TokenStream(tokens)).parse();
+            value = new ExpressionParser(parser, new TokenList(expressionTokens)).parse();
         }
 
         return null;

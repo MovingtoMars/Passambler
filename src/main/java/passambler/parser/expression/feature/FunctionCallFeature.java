@@ -3,15 +3,13 @@ package passambler.parser.expression.feature;
 import java.util.ArrayList;
 import java.util.List;
 import passambler.exception.EngineException;
-import passambler.exception.ErrorException;
 import passambler.exception.ParserException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.Token;
-import passambler.lexer.TokenStream;
+import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
 import passambler.parser.ArgumentDefinition;
 import passambler.parser.expression.ExpressionParser;
-import passambler.value.ErrorValue;
 import passambler.value.Value;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
@@ -20,16 +18,16 @@ import passambler.value.function.UserFunction;
 public class FunctionCallFeature implements Feature {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
-        return parser.getStream().current().getType() == TokenType.LEFT_PAREN && currentValue instanceof Function;
+        return parser.getTokens().current().getType() == TokenType.LEFT_PAREN && currentValue instanceof Function;
     }
 
     @Override
     public Value perform(ExpressionParser parser, Value currentValue) throws EngineException {
-        parser.getStream().next();
+        parser.getTokens().next();
 
-        List<Token> tokens = parser.getParser().parseExpressionTokens(parser.getStream(), TokenType.RIGHT_PAREN);
+        List<Token> tokens = parser.getParser().parseExpressionTokens(parser.getTokens(), TokenType.RIGHT_PAREN);
 
-        List<Token> argumentTokens = new ArrayList<>();
+        List<Token> argumentTokenList = new ArrayList<>();
         List<Value> arguments = new ArrayList<>();
 
         boolean usedNamedArguments = false;
@@ -45,23 +43,23 @@ public class FunctionCallFeature implements Feature {
                 depth--;
             }
 
-            argumentTokens.add(token);
+            argumentTokenList.add(token);
 
             if (depth == 0 && (token.getType() == TokenType.COMMA || tokens.indexOf(token) == tokens.size() - 1)) {
                 if (token.getType() == TokenType.COMMA) {
-                    argumentTokens.remove(argumentTokens.size() - 1);
+                    argumentTokenList.remove(argumentTokenList.size() - 1);
                 }
 
-                TokenStream argumentTokenStream = new TokenStream(argumentTokens);
+                TokenList argumentTokens = new TokenList(argumentTokenList);
 
-                if (argumentTokenStream.current().getType() == TokenType.IDENTIFIER && argumentTokenStream.peek() != null && argumentTokenStream.peek().getType() == TokenType.ASSIGN) {
+                if (argumentTokens.current().getType() == TokenType.IDENTIFIER && argumentTokens.peek() != null && argumentTokens.peek().getType() == TokenType.ASSIGN) {
                     if (currentValue instanceof UserFunction) {
                         usedNamedArguments = true;
 
-                        String name = argumentTokenStream.current().getValue();
+                        String name = argumentTokens.current().getValue();
 
-                        argumentTokenStream.next();
-                        argumentTokenStream.next();
+                        argumentTokens.next();
+                        argumentTokens.next();
 
                         List<ArgumentDefinition> argumentDefinitions = ((UserFunction) currentFunction).getArgumentDefinitions();
 
@@ -77,7 +75,7 @@ public class FunctionCallFeature implements Feature {
                             } while (index != arguments.size() - 1);
                         }
 
-                        arguments.set(index, parser.createParser(argumentTokenStream.copyAtCurrentPosition()).parse());
+                        arguments.set(index, parser.createParser(argumentTokens.copyAtCurrentPosition()).parse());
                     } else {
                         throw new ParserException(ParserExceptionType.CANNOT_USE_NAMED_ARGUMENTS, token.getPosition());
                     }
@@ -86,10 +84,10 @@ public class FunctionCallFeature implements Feature {
                         throw new ParserException(ParserExceptionType.BAD_SYNTAX, token.getPosition(), "Cannot specify a normal argument after a specifying a named argument");
                     }
 
-                    arguments.add(parser.createParser(argumentTokenStream).parse());
+                    arguments.add(parser.createParser(argumentTokens).parse());
                 }
 
-                argumentTokens.clear();
+                argumentTokenList.clear();
             }
         }
 
@@ -111,16 +109,16 @@ public class FunctionCallFeature implements Feature {
         }
 
         if (currentFunction.getArguments() != -1 && currentFunction.getArguments() != arguments.size()) {
-            throw new ParserException(ParserExceptionType.INVALID_ARGUMENT_COUNT, parser.getStream().first().getPosition(), currentFunction.getArguments(), arguments.size());
+            throw new ParserException(ParserExceptionType.INVALID_ARGUMENT_COUNT, parser.getTokens().get(0).getPosition(), currentFunction.getArguments(), arguments.size());
         }
 
         if (arguments.stream().anyMatch(v -> v == null)) {
-            throw new ParserException(ParserExceptionType.INVALID_ARGUMENT_COUNT, parser.getStream().first().getPosition(), currentFunction.getArguments(), arguments.size() - arguments.stream().filter(v -> v == null).count());
+            throw new ParserException(ParserExceptionType.INVALID_ARGUMENT_COUNT, parser.getTokens().get(0).getPosition(), currentFunction.getArguments(), arguments.size() - arguments.stream().filter(v -> v == null).count());
         }
 
         for (int argument = 0; argument < arguments.size(); ++argument) {
             if (!currentFunction.isArgumentValid(arguments.get(argument), argument)) {
-                throw new ParserException(ParserExceptionType.INVALID_ARGUMENT, parser.getStream().first().getPosition(), argument + 1);
+                throw new ParserException(ParserExceptionType.INVALID_ARGUMENT, parser.getTokens().get(0).getPosition(), argument + 1);
             }
         }
 

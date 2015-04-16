@@ -5,7 +5,7 @@ import passambler.exception.EngineException;
 import passambler.exception.ParserException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.Token;
-import passambler.lexer.TokenStream;
+import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
 import passambler.parser.expression.ExpressionParser;
 import passambler.value.NumberValue;
@@ -15,16 +15,16 @@ import passambler.value.Value;
 public class SymbolFeature implements Feature {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
-        return parser.getStream().current().getType() == TokenType.IDENTIFIER
-            || parser.getStream().current().getType() == TokenType.NUMBER
-            || parser.getStream().current().getType() == TokenType.STRING;
+        return parser.getTokens().current().getType() == TokenType.IDENTIFIER
+            || parser.getTokens().current().getType() == TokenType.NUMBER
+            || parser.getTokens().current().getType() == TokenType.STRING;
     }
 
     @Override
     public Value perform(ExpressionParser parser, Value currentValue) throws EngineException {
-        TokenStream stream = parser.getStream();
+        TokenList tokens = parser.getTokens();
 
-        Token token = stream.current();
+        Token token = tokens.current();
 
         if (token.getType() == TokenType.STRING) {
             return new StringValue(token.getValue());
@@ -33,14 +33,14 @@ public class SymbolFeature implements Feature {
 
             number.append(token.getValue());
 
-            if (stream.peek() != null && stream.peek().getType() == TokenType.PERIOD) {
-                stream.next();
-                stream.next();
+            if (tokens.peek() != null && tokens.peek().getType() == TokenType.PERIOD) {
+                tokens.next();
+                tokens.next();
 
-                stream.match(TokenType.NUMBER);
+                tokens.match(TokenType.NUMBER);
 
                 number.append(".");
-                number.append(stream.current().getValue());
+                number.append(tokens.current().getValue());
             }
 
             return new NumberValue(new BigDecimal(number.toString()));
@@ -54,7 +54,7 @@ public class SymbolFeature implements Feature {
             }
 
             if (!parser.getParser().getScope().hasSymbol(token.getValue())) {
-                throw new ParserException(stream.peek() != null && stream.peek().getType() == TokenType.LEFT_PAREN ? ParserExceptionType.UNDEFINED_FUNCTION : ParserExceptionType.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());
+                throw new ParserException(tokens.peek() != null && tokens.peek().getType() == TokenType.LEFT_PAREN ? ParserExceptionType.UNDEFINED_FUNCTION : ParserExceptionType.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());
             }
 
             return parser.getParser().getScope().getSymbol(token.getValue());

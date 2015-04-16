@@ -16,7 +16,7 @@ public class Block {
     public Block(Scope scope) {
         this.rootScope = scope;
 
-        this.refreshParser();
+        refreshParser();
     }
 
     public void refreshParser() {

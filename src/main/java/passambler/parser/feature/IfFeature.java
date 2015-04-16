@@ -7,7 +7,7 @@ import passambler.exception.EngineException;
 import passambler.exception.ParserException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.Token;
-import passambler.lexer.TokenStream;
+import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
 import passambler.parser.Block;
 import passambler.parser.expression.ExpressionParser;
@@ -17,56 +17,56 @@ import passambler.value.BooleanValue;
 
 public class IfFeature implements Feature {
     @Override
-    public boolean canPerform(Parser parser, TokenStream stream) {
-        return stream.first().getType() == TokenType.IF;
+    public boolean canPerform(Parser parser, TokenList tokens) {
+        return tokens.get(0).getType() == TokenType.IF;
     }
 
     @Override
-    public Value perform(Parser parser, TokenStream stream) throws EngineException {
-        stream.next();
+    public Value perform(Parser parser, TokenList tokens) throws EngineException {
+        tokens.next();
 
         boolean elseCondition = false;
 
         Map<BooleanValue, Block> cases = new LinkedHashMap();
 
-        while (stream.hasNext()) {
+        while (tokens.hasNext()) {
             if (!elseCondition) {
-                stream.match(TokenType.LEFT_PAREN);
-                stream.next();
+                tokens.match(TokenType.LEFT_PAREN);
+                tokens.next();
 
-                List<Token> tokens = parser.parseExpressionTokens(stream, TokenType.RIGHT_PAREN);
+                List<Token> expressionTokens = parser.parseExpressionTokens(tokens, TokenType.RIGHT_PAREN);
 
-                stream.match(TokenType.RIGHT_PAREN);
+                tokens.match(TokenType.RIGHT_PAREN);
 
-                Value condition = new ExpressionParser(parser, new TokenStream(tokens)).parse();
+                Value condition = new ExpressionParser(parser, new TokenList(expressionTokens)).parse();
 
                 if (!(condition instanceof BooleanValue)) {
-                    throw new ParserException(ParserExceptionType.NOT_A_BOOLEAN, tokens.get(0).getPosition());
+                    throw new ParserException(ParserExceptionType.NOT_A_BOOLEAN, expressionTokens.get(0).getPosition());
                 }
 
-                stream.next();
+                tokens.next();
 
-                cases.put((BooleanValue) condition, parser.parseBlock(stream));
+                cases.put((BooleanValue) condition, parser.parseBlock(tokens));
 
-                tokens.clear();
+                expressionTokens.clear();
             } else {
-                cases.put(new BooleanValue(true), parser.parseBlock(stream));
+                cases.put(new BooleanValue(true), parser.parseBlock(tokens));
             }
 
-            stream.next();
+            tokens.next();
 
-            if (stream.current() != null) {
+            if (tokens.current() != null) {
                 if (elseCondition) {
-                    throw new ParserException(ParserExceptionType.BAD_SYNTAX, stream.first().getPosition(), "Else block should be the last statement");
+                    throw new ParserException(ParserExceptionType.BAD_SYNTAX, tokens.get(0).getPosition(), "Else block should be the last statement");
                 }
 
-                stream.match(TokenType.ELSE, TokenType.ELSEIF);
+                tokens.match(TokenType.ELSE, TokenType.ELSEIF);
 
-                if (stream.current().getType() == TokenType.ELSE) {
+                if (tokens.current().getType() == TokenType.ELSE) {
                     elseCondition = true;
                 }
 
-                stream.next();
+                tokens.next();
             }
         }
 

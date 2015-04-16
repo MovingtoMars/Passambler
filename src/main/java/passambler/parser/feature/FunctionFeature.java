@@ -2,7 +2,7 @@ package passambler.parser.feature;
 
 import java.util.List;
 import passambler.exception.EngineException;
-import passambler.lexer.TokenStream;
+import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
 import passambler.parser.ArgumentDefinition;
 import passambler.parser.Block;
@@ -12,28 +12,28 @@ import passambler.value.function.UserFunction;
 
 public class FunctionFeature implements Feature {
     @Override
-    public boolean canPerform(Parser parser, TokenStream stream) {
-        return stream.first().getType() == TokenType.FN;
+    public boolean canPerform(Parser parser, TokenList tokens) {
+        return tokens.get(0).getType() == TokenType.FN;
     }
 
     @Override
-    public Value perform(Parser parser, TokenStream stream) throws EngineException {
-        stream.next();
+    public Value perform(Parser parser, TokenList tokens) throws EngineException {
+        tokens.next();
 
-        stream.match(TokenType.IDENTIFIER);
+        tokens.match(TokenType.IDENTIFIER);
 
-        String name = stream.current().getValue();
+        String name = tokens.current().getValue();
 
-        stream.next();
+        tokens.next();
 
-        List<ArgumentDefinition> arguments = parser.parseArgumentDefinition(stream);
+        List<ArgumentDefinition> arguments = parser.parseArgumentDefinition(tokens);
 
-        if (stream.peek() == null) {
+        if (tokens.peek() == null) {
             parser.getScope().setSymbol(name, new UserFunction(null, arguments));
         } else {
-            stream.next();
+            tokens.next();
 
-            Block callback = parser.parseBlock(stream);
+            Block callback = parser.parseBlock(tokens);
 
             parser.getScope().setSymbol(name, new UserFunction(callback, arguments));
         }

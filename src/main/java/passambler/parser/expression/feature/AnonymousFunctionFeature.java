@@ -12,18 +12,18 @@ import passambler.value.function.UserFunction;
 public class AnonymousFunctionFeature implements Feature {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
-        return parser.getStream().current().getType() == TokenType.FN;
+        return parser.getTokens().current().getType() == TokenType.FN;
     }
 
     @Override
     public Value perform(ExpressionParser parser, Value currentValue) throws EngineException {
-        parser.getStream().next();
+        parser.getTokens().next();
 
-        List<ArgumentDefinition> arguments = parser.getParser().parseArgumentDefinition(parser.getStream());
+        List<ArgumentDefinition> arguments = parser.getParser().parseArgumentDefinition(parser.getTokens());
 
-        parser.getStream().next();
+        parser.getTokens().next();
 
-        Block callback = parser.getParser().parseBlock(parser.getStream());
+        Block callback = parser.getParser().parseBlock(parser.getTokens());
 
         return new UserFunction(callback, arguments);
     }

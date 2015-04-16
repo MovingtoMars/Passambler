@@ -5,12 +5,10 @@ import passambler.exception.ParserException;
 import passambler.exception.ErrorException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import passambler.lexer.Lexer;
 import passambler.lexer.Token;
-import passambler.lexer.TokenStream;
+import passambler.lexer.TokenList;
 import passambler.pack.Package;
 import passambler.pack.file.FilePackage;
 import passambler.pack.json.JsonPackage;
@@ -74,11 +72,11 @@ public class Parser {
         return scope;
     }
 
-    public Value parse(TokenStream stream) throws EngineException {
+    public Value parse(TokenList tokens) throws EngineException {
         try {
             for (Feature feature : features) {
-                if (feature.canPerform(this, stream)) {
-                    Value result = feature.perform(this, stream);
+                if (feature.canPerform(this, tokens)) {
+                    Value result = feature.perform(this, tokens);
 
                     if (result != null) {
                         return result;
@@ -132,7 +130,7 @@ public class Parser {
                 }
 
                 if (subTokens.size() > 0) {
-                    Value result = parse(new TokenStream(subTokens));
+                    Value result = parse(new TokenList(subTokens));
 
                     subTokens.clear();
 
@@ -154,19 +152,19 @@ public class Parser {
         return null;
     }
 
-    public Block parseBlock(TokenStream stream) throws EngineException {
+    public Block parseBlock(TokenList tokens) throws EngineException {
         Block block = new Block(scope);
 
-        stream.match(TokenType.LEFT_BRACE);
+        tokens.match(TokenType.LEFT_BRACE);
 
-        stream.next();
+        tokens.next();
 
         int braces = 1;
 
-        while (stream.hasNext()) {
-            if (stream.current().getType() == TokenType.LEFT_BRACE) {
+        while (tokens.hasNext()) {
+            if (tokens.current().getType() == TokenType.LEFT_BRACE) {
                 braces++;
-            } else if (stream.current().getType() == TokenType.RIGHT_BRACE) {
+            } else if (tokens.current().getType() == TokenType.RIGHT_BRACE) {
                 braces--;
 
                 if (braces == 0) {
@@ -174,23 +172,23 @@ public class Parser {
                 }
             }
 
-            block.getTokens().add(stream.current());
+            block.getTokens().add(tokens.current());
 
-            stream.next();
+            tokens.next();
         }
 
-        stream.match(TokenType.RIGHT_BRACE);
+        tokens.match(TokenType.RIGHT_BRACE);
 
         return block;
     }
 
-    public List<Token> parseExpressionTokens(TokenStream stream, TokenType... endingTokens) throws EngineException {
+    public List<Token> parseExpressionTokens(TokenList tokens, TokenType... endingTokens) throws EngineException {
         int depth = 0;
 
         List<Token> valueTokens = new ArrayList<>();
 
-        while (stream.hasNext()) {
-            Token token = stream.current();
+        while (tokens.hasNext()) {
+            Token token = tokens.current();
 
             if (Arrays.asList(endingTokens).contains(token.getType()) && depth == 0) {
                 break;
@@ -204,52 +202,52 @@ public class Parser {
 
             valueTokens.add(token);
 
-            stream.next();
+            tokens.next();
         }
 
         return valueTokens;
     }
 
-    public Value parseExpression(TokenStream stream, TokenType... endingTokens) throws EngineException {
-        return new ExpressionParser(this, new TokenStream(parseExpressionTokens(stream, endingTokens))).parse();
+    public Value parseExpression(TokenList tokens, TokenType... endingTokens) throws EngineException {
+        return new ExpressionParser(this, new TokenList(parseExpressionTokens(tokens, endingTokens))).parse();
     }
 
-    public List<ArgumentDefinition> parseArgumentDefinition(TokenStream stream) throws EngineException {
-        stream.match(TokenType.LEFT_PAREN);
+    public List<ArgumentDefinition> parseArgumentDefinition(TokenList tokens) throws EngineException {
+        tokens.match(TokenType.LEFT_PAREN);
 
-        stream.next();
+        tokens.next();
 
         List<ArgumentDefinition> arguments = new ArrayList<>();
 
-        while (stream.hasNext()) {
-            if (stream.current().getType() == TokenType.RIGHT_PAREN) {
+        while (tokens.hasNext()) {
+            if (tokens.current().getType() == TokenType.RIGHT_PAREN) {
                 break;
             } else {
-                stream.match(TokenType.IDENTIFIER);
+                tokens.match(TokenType.IDENTIFIER);
 
                 ArgumentDefinition definition = new ArgumentDefinition();
 
-                definition.setName(stream.current().getValue());
+                definition.setName(tokens.current().getValue());
 
-                stream.next();
+                tokens.next();
 
-                if (stream.current().getType() == TokenType.ASSIGN) {
-                    stream.next();
+                if (tokens.current().getType() == TokenType.ASSIGN) {
+                    tokens.next();
 
-                    definition.setDefaultValue(parseExpression(stream, TokenType.RIGHT_PAREN, TokenType.COMMA));
+                    definition.setDefaultValue(parseExpression(tokens, TokenType.RIGHT_PAREN, TokenType.COMMA));
                 }
 
-                if (stream.current().getType() != TokenType.RIGHT_PAREN) {
-                    stream.match(TokenType.COMMA);
+                if (tokens.current().getType() != TokenType.RIGHT_PAREN) {
+                    tokens.match(TokenType.COMMA);
 
-                    stream.next();
+                    tokens.next();
                 }
 
                 arguments.add(definition);
             }
         }
 
-        stream.match(TokenType.RIGHT_PAREN);
+        tokens.match(TokenType.RIGHT_PAREN);
 
         return arguments;
     }

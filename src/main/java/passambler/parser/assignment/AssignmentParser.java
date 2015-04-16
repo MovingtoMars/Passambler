@@ -5,7 +5,7 @@ import passambler.exception.ParserException;
 import java.util.ArrayList;
 import java.util.List;
 import passambler.lexer.Token;
-import passambler.lexer.TokenStream;
+import passambler.lexer.TokenList;
 import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenType;
@@ -18,40 +18,40 @@ import passambler.value.NumberValue;
 public class AssignmentParser {
     private Parser parser;
 
-    private TokenStream stream;
+    private TokenList tokens;
 
-    public AssignmentParser(Parser parser, TokenStream stream) {
+    public AssignmentParser(Parser parser, TokenList tokens) {
         this.parser = parser;
-        this.stream = stream;
+        this.tokens = tokens;
     }
 
     public void parse() throws EngineException {
-        List<Token> tokens = new ArrayList<>();
+        List<Token> leftTokenList = new ArrayList<>();
 
-        while (stream.hasNext()) {
-            if (stream.current().getType().isAssignmentOperator()) {
+        while (tokens.hasNext()) {
+            if (tokens.current().getType().isAssignmentOperator()) {
                 break;
             }
 
-            tokens.add(stream.current());
+            leftTokenList.add(tokens.current());
 
-            stream.next();
+            tokens.next();
         }
 
-        Token operator = stream.current();
+        Token operator = tokens.current();
 
-        stream.next();
+        tokens.next();
 
-        Value rightValue = new ExpressionParser(parser, new TokenStream(stream.rest()), true).parse();
+        Value rightValue = new ExpressionParser(parser, new TokenList(tokens.getTokensFromPosition()), true).parse();
         Value leftValue = new Value();
 
-        TokenStream leftStream = new TokenStream(tokens);
+        TokenList leftTokens = new TokenList(leftTokenList);
 
-        while (leftStream.hasNext()) {
-            Token token = leftStream.current();
+        while (leftTokens.hasNext()) {
+            Token token = leftTokens.current();
 
             if (token.getType() == TokenType.IDENTIFIER) {
-                if (leftStream.peek() == null) {
+                if (leftTokens.peek() == null) {
                     if (!parser.getScope().hasSymbol(token.getValue())) {
                         parser.getScope().setSymbol(token.getValue(), rightValue);
                     } else {
@@ -65,17 +65,17 @@ public class AssignmentParser {
                     leftValue = parser.getScope().getSymbol(token.getValue());
                 }
             } else if (token.getType() == TokenType.PERIOD) {
-                leftStream.next();
+                leftTokens.next();
 
-                leftStream.match(TokenType.IDENTIFIER);
+                leftTokens.match(TokenType.IDENTIFIER);
 
-                String name = leftStream.current().getValue();
+                String name = leftTokens.current().getValue();
 
                 if (!leftValue.hasProperty(name)) {
-                    throw new ParserException(ParserExceptionType.UNDEFINED_PROPERTY, stream.current().getPosition(), name);
+                    throw new ParserException(ParserExceptionType.UNDEFINED_PROPERTY, tokens.current().getPosition(), name);
                 }
 
-                if (leftStream.peek() == null) {
+                if (leftTokens.peek() == null) {
                     leftValue.setProperty(name, leftValue.getProperty(name).getValue().onOperator(rightValue, operator));
                 } else {
                     leftValue = leftValue.getProperty(name).getValue();
@@ -85,12 +85,12 @@ public class AssignmentParser {
 
                 List<Token> bracketTokens = new ArrayList<>();
 
-                leftStream.next();
+                leftTokens.next();
 
-                while (leftStream.hasNext()) {
-                    if (leftStream.current().getType() == TokenType.LEFT_BRACKET) {
+                while (leftTokens.hasNext()) {
+                    if (leftTokens.current().getType() == TokenType.LEFT_BRACKET) {
                         brackets++;
-                    } else if (leftStream.current().getType() == TokenType.RIGHT_BRACKET) {
+                    } else if (leftTokens.current().getType() == TokenType.RIGHT_BRACKET) {
                         brackets--;
 
                         if (brackets == 0) {
@@ -98,18 +98,18 @@ public class AssignmentParser {
                         }
                     }
 
-                    bracketTokens.add(leftStream.current());
+                    bracketTokens.add(leftTokens.current());
 
-                    leftStream.next();
+                    leftTokens.next();
                 }
 
-                leftStream.match(TokenType.RIGHT_BRACKET);
+                leftTokens.match(TokenType.RIGHT_BRACKET);
 
-                Value value = new ExpressionParser(parser, new TokenStream(bracketTokens)).parse();
+                Value value = new ExpressionParser(parser, new TokenList(bracketTokens)).parse();
 
                 if (value instanceof NumberValue) {
                     if (!(leftValue instanceof ListValue)) {
-                        throw new ParserException(ParserExceptionType.NOT_A_LIST, stream.current().getPosition());
+                        throw new ParserException(ParserExceptionType.NOT_A_LIST, tokens.current().getPosition());
                     }
 
                     ListValue list = (ListValue) leftValue;
@@ -117,10 +117,10 @@ public class AssignmentParser {
                     int index = ((NumberValue) value).getValue().intValue();
 
                     if (index < -list.getValue().size() || index > list.getValue().size() - 1) {
-                        throw new ParserException(ParserExceptionType.INDEX_OUT_OF_RANGE, stream.current().getPosition(), index, list.getValue().size());
+                        throw new ParserException(ParserExceptionType.INDEX_OUT_OF_RANGE, tokens.current().getPosition(), index, list.getValue().size());
                     }
 
-                    if (leftStream.peek() == null) {
+                    if (leftTokens.peek() == null) {
                         list.getValue().set(index, list.getValue().get(index).onOperator(rightValue, operator));
                     } else {
                         leftValue = list.getValue().get(index);
@@ -128,7 +128,7 @@ public class AssignmentParser {
                 } else if (leftValue instanceof DictValue) {
                     DictValue dict = (DictValue) leftValue;
 
-                    if (leftStream.peek() == null) {
+                    if (leftTokens.peek() == null) {
                         if (dict.getEntry(value) == null) {
                             dict.setEntry(value, rightValue);
                         } else {
@@ -140,19 +140,19 @@ public class AssignmentParser {
                 }
             }
 
-            leftStream.next();
+            leftTokens.next();
         }
     }
 
-    public static boolean isAssignment(TokenStream stream) {
-        while (stream.hasNext()) {
-            if (stream.current().getType() == TokenType.LEFT_BRACE || stream.current().getType() == TokenType.LEFT_PAREN) {
+    public static boolean isAssignment(TokenList tokens) {
+        while (tokens.hasNext()) {
+            if (tokens.current().getType() == TokenType.LEFT_BRACE || tokens.current().getType() == TokenType.LEFT_PAREN) {
                 return false;
-            } else if (stream.current().getType().isAssignmentOperator()) {
+            } else if (tokens.current().getType().isAssignmentOperator()) {
                 return true;
             }
 
-            stream.next();
+            tokens.next();
         }
 
         return false;

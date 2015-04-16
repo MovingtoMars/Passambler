@@ -1,7 +1,7 @@
 package passambler.parser.feature;
 
 import passambler.exception.EngineException;
-import passambler.lexer.TokenStream;
+import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
 import passambler.parser.Block;
 import passambler.parser.Parser;
@@ -9,33 +9,33 @@ import passambler.value.Value;
 
 public class TryFeature implements Feature {
     @Override
-    public boolean canPerform(Parser parser, TokenStream stream) {
-        return stream.first().getType() == TokenType.TRY;
+    public boolean canPerform(Parser parser, TokenList tokens) {
+        return tokens.get(0).getType() == TokenType.TRY;
     }
 
     @Override
-    public Value perform(Parser parser, TokenStream stream) throws EngineException {
-        stream.next();
+    public Value perform(Parser parser, TokenList tokens) throws EngineException {
+        tokens.next();
 
-        Block tryBlock = parser.parseBlock(stream);
+        Block tryBlock = parser.parseBlock(tokens);
 
-        stream.next();
+        tokens.next();
 
-        stream.match(TokenType.CATCH);
-        stream.next();
+        tokens.match(TokenType.CATCH);
+        tokens.next();
 
-        stream.match(TokenType.LEFT_PAREN);
-        stream.next();
+        tokens.match(TokenType.LEFT_PAREN);
+        tokens.next();
 
-        stream.match(TokenType.IDENTIFIER);
-        String name = stream.current().getValue();
+        tokens.match(TokenType.IDENTIFIER);
+        String name = tokens.current().getValue();
 
-        stream.next();
-        stream.match(TokenType.RIGHT_PAREN);
+        tokens.next();
+        tokens.match(TokenType.RIGHT_PAREN);
 
-        stream.next();
+        tokens.next();
 
-        tryBlock.getParser().setCatch(parser.parseBlock(stream), name);
+        tryBlock.getParser().setCatch(parser.parseBlock(tokens), name);
 
         Value result = tryBlock.invoke();
 
