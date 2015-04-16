@@ -117,8 +117,9 @@ public class ExpressionParser {
 
         doPrecedence(values, TokenType.EQUAL, TokenType.NEQUAL);
         doPrecedence(values, TokenType.RANGE);
+        doPrecedence(values, TokenType.COMPARE);
         doPrecedence(values, TokenType.GT, TokenType.GTE, TokenType.LT, TokenType.LTE);
-        doPrecedence(values, TokenType.POWER);
+        doPrecedence(values, TokenType.POWER, TokenType.MODULO);
         doPrecedence(values, TokenType.MULTIPLY, TokenType.DIVIDE);
 
         for (ValueOperatorPair pair : values) {
