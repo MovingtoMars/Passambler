@@ -29,6 +29,7 @@ Clone the repository and run Maven.
 ```
 mvn install
 ```
+You can find the jar-file in the `target` directory.
 
 ## License
 MIT license
