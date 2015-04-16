@@ -181,7 +181,7 @@ public class ExpressionParser {
 
         if (not) {
             if (!(currentValue instanceof BooleanValue)) {
-                throw new ParserException(ParserExceptionType.EXPECTED_A_BOOL, stream.first().getPosition());
+                throw new ParserException(ParserExceptionType.NOT_A_BOOLEAN, stream.first().getPosition());
             }
 
             currentValue = new BooleanValue(!((BooleanValue) currentValue).getValue());

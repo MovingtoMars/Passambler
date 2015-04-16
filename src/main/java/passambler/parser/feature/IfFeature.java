@@ -41,7 +41,7 @@ public class IfFeature implements Feature {
                 Value condition = new ExpressionParser(parser, new TokenStream(tokens)).parse();
 
                 if (!(condition instanceof BooleanValue)) {
-                    throw new ParserException(ParserExceptionType.EXPECTED_A_BOOL, tokens.get(0).getPosition());
+                    throw new ParserException(ParserExceptionType.NOT_A_BOOLEAN, tokens.get(0).getPosition());
                 }
 
                 stream.next();
