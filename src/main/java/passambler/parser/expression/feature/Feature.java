@@ -6,6 +6,6 @@ import passambler.value.Value;
 
 public interface Feature {
     public boolean canPerform(ExpressionParser parser, Value currentValue);
-    
+
     public Value perform(ExpressionParser parser, Value currentValue) throws EngineException;
 }

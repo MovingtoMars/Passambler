@@ -18,7 +18,7 @@ public class HttpPackage implements Package {
     public Package[] getChildren() {
         return null;
     }
-    
+
     @Override
     public void apply(Map<String, Value> symbols) {
         symbols.put("Handle", new HandleFunction(requestMapper));

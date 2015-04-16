@@ -16,7 +16,7 @@ public class OsPackage implements Package {
     public Package[] getChildren() {
         return null;
     }
-    
+
     @Override
     public void apply(Map<String, Value> symbols) {
         symbols.put("Exit", new ExitFunction());

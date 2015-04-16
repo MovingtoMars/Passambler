@@ -23,9 +23,9 @@ public class DictFeature implements Feature {
 
         while (stream.hasNext()) {
             Value key = parser.getParser().parseExpression(stream, TokenType.COL);
-            
+
             stream.next();
-            
+
             Value value = parser.getParser().parseExpression(stream, TokenType.COMMA, TokenType.RIGHT_BRACE);
 
             dict.setEntry(key, value);

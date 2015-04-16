@@ -16,7 +16,7 @@ public class NetPackage implements Package {
     public Package[] getChildren() {
         return new Package[] { new HttpPackage() };
     }
-    
+
     @Override
     public void apply(Map<String, Value> symbols) {
         symbols.put("Listen", new ListenFunction());

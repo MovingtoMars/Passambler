@@ -15,7 +15,7 @@ public class FilePackage implements Package {
     public Package[] getChildren() {
         return null;
     }
-    
+
     @Override
     public void apply(Map<String, Value> symbols) {
         symbols.put("Open", new OpenFunction());

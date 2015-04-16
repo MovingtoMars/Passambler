@@ -18,11 +18,11 @@ import passambler.value.StringValue;
 
 public class HandleFunction extends Value implements Function {
     private UriHttpRequestHandlerMapper mapper;
-    
+
     public HandleFunction(UriHttpRequestHandlerMapper mapper) {
         this.mapper = mapper;
     }
-    
+
     @Override
     public int getArguments() {
         return 2;

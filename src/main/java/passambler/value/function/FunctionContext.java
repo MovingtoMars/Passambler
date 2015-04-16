@@ -13,11 +13,11 @@ public class FunctionContext {
     public FunctionContext(Parser parser) {
         this(parser, new Value[] {});
     }
-    
+
     public FunctionContext(Parser parser, Value[] arguments) {
         this(parser, arguments, false);
     }
-    
+
     public FunctionContext(Parser parser, Value[] arguments, boolean assignment) {
         this.parser = parser;
         this.arguments = arguments;
@@ -31,7 +31,7 @@ public class FunctionContext {
     public Value[] getArguments() {
         return arguments;
     }
-    
+
     public Value getArgument(int i) {
         return arguments[i];
     }

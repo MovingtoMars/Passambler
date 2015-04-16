@@ -29,25 +29,25 @@ public class DecodeFunction extends Value implements Function {
     public Value invoke(FunctionContext context) throws EngineException {
         return parse(JSONValue.parse(((StringValue) context.getArgument(0)).getValue()));
     }
-    
+
     public Value parse(Object object) {
         if (object instanceof JSONArray) {
             ListValue list = new ListValue();
-            
+
             for (Object item : (JSONArray) object) {
                 list.getValue().add(parse(item));
             }
-            
+
             return list;
         } else if (object instanceof JSONObject) {
             DictValue dict = new DictValue();
-            
+
             for (Object item : ((JSONObject) object).entrySet()) {
-               Map.Entry entry = (Map.Entry) item;
-               
-               dict.getValue().put(parse(entry.getKey()), parse(entry.getValue()));
+                Map.Entry entry = (Map.Entry) item;
+
+                dict.getValue().put(parse(entry.getKey()), parse(entry.getValue()));
             }
-            
+
             return dict;
         } else if (object instanceof String) {
             return new StringValue(String.valueOf(object));
@@ -58,7 +58,7 @@ public class DecodeFunction extends Value implements Function {
         } else if (object instanceof Boolean) {
             return new BooleanValue((Boolean) object);
         }
-        
+
         return Value.VALUE_NIL;
     }
 }

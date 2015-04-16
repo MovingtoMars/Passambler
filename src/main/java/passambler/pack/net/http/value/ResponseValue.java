@@ -38,7 +38,7 @@ public class ResponseValue extends Value implements WriteableValue {
             return headers.toArray(new Header[headers.size()]);
         }
 
-        return new Header[]{};
+        return new Header[] {};
     }
 
     @Override
