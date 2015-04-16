@@ -1,5 +1,5 @@
 --TEST--
-Tests function and anonymous function declaration
+Tests function and anonymous function declaration.
 
 --INPUT--
 fn a() {
