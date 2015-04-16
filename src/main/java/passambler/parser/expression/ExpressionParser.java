@@ -115,12 +115,12 @@ public class ExpressionParser {
 
         Value value = null;
 
-        doPrecedence(values, TokenType.EQUAL, TokenType.NEQUAL);
-        doPrecedence(values, TokenType.RANGE);
-        doPrecedence(values, TokenType.COMPARE);
-        doPrecedence(values, TokenType.GT, TokenType.GTE, TokenType.LT, TokenType.LTE);
-        doPrecedence(values, TokenType.POWER, TokenType.MODULO);
-        doPrecedence(values, TokenType.MULTIPLY, TokenType.DIVIDE);
+        performPrecedence(values, TokenType.EQUAL, TokenType.NEQUAL);
+        performPrecedence(values, TokenType.RANGE);
+        performPrecedence(values, TokenType.COMPARE);
+        performPrecedence(values, TokenType.GT, TokenType.GTE, TokenType.LT, TokenType.LTE);
+        performPrecedence(values, TokenType.POWER, TokenType.MODULO);
+        performPrecedence(values, TokenType.MULTIPLY, TokenType.DIVIDE);
 
         for (ValueOperatorPair pair : values) {
             if (value == null) {
@@ -137,7 +137,7 @@ public class ExpressionParser {
         return value;
     }
 
-    private void doPrecedence(List<ValueOperatorPair> values, TokenType... types) throws EngineException {
+    private void performPrecedence(List<ValueOperatorPair> values, TokenType... types) throws EngineException {
         for (int i = 0; i < values.size(); ++i) {
             ValueOperatorPair current = values.get(i);
 
