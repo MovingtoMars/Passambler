@@ -6,10 +6,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import passambler.parser.Parser;
 import passambler.lexer.Lexer;
 import passambler.lexer.Token;
@@ -23,7 +23,7 @@ import passambler.value.Value;
 public class Main {
     public static final String VERSION = "DEV";
 
-    public static final Logger LOGGER = Logger.getLogger("Passambler");
+    public static final Logger LOGGER = LogManager.getLogger("Passambler");
 
     private OptionSet options;
 
@@ -33,17 +33,13 @@ public class Main {
         optionParser.accepts("v", "Show the version number");
         optionParser.accepts("h", "Show help");
         optionParser.accepts("a", "Run interactively");
-        optionParser.accepts("d", "Enables debug mode");
         optionParser.accepts("f", "Run one or multiple file(s)").withRequiredArg();
         optionParser.accepts("t", "Run a test (file(s) or a whole directory)").withRequiredArg();
 
         options = optionParser.parse(args);
 
-        LOGGER.setUseParentHandlers(false);
-        LOGGER.addHandler(new LogHandler(options.has("d")));
-
         if (options.has("v")) {
-            LOGGER.log(Level.INFO, String.format("Passambler %s", VERSION));
+            System.out.println("Passambler " + VERSION);
         }
 
         if (options.has("h") || !options.hasOptions()) {
@@ -73,7 +69,7 @@ public class Main {
 
             parser.parse(new Lexer(String.join("\n", Files.readAllLines(file))));
         } catch (EngineException e) {
-            LOGGER.log(Level.SEVERE, e.getName(), e);
+            LOGGER.fatal(e.getName(), e);
         }
     }
 
@@ -88,7 +84,7 @@ public class Main {
             files.add(testFile);
         }
 
-        LOGGER.log(Level.INFO, String.format("Running %d tests", files.size()));
+        LOGGER.info("Running " + files.size() + " tests");
 
         for (Path file : files) {
             try {
@@ -102,11 +98,11 @@ public class Main {
 
                 OutputRecorder.stop();
 
-                LOGGER.log(Level.INFO, String.format("Test '%s' passed", file.getFileName()));
+                LOGGER.info("Test '" + file.getFileName() + "' passed");
             } catch (EngineException e) {
                 OutputRecorder.stop();
 
-                LOGGER.log(Level.WARNING, String.format("Test '%s' failed", file.getFileName()), e);
+                LOGGER.error("Test '" + file.getFileName() + "' failed", e);
             }
         }
     }
@@ -134,7 +130,7 @@ public class Main {
                     tokens.clear();
                 }
             } catch (EngineException e) {
-                LOGGER.log(Level.WARNING, e.getName(), e);
+                LOGGER.error(e.getName(), e);
 
                 tokens.clear();
             }
