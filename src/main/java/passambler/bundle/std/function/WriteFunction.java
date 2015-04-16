@@ -29,26 +29,21 @@ public class WriteFunction extends Value implements Function {
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        WriteableValue handler = this.handler;
+        int x = 0;
+
+        WriteableValue writeable = this.handler;
 
         if (context.getArguments().length > 0 && context.getArgument(0) instanceof WriteableValue) {
-            handler = (WriteableValue) context.getArgument(0);
+            writeable = (WriteableValue) context.getArgument(0);
+            x++;
         }
 
-        for (Value argument : context.getArguments()) {
-            if (argument == context.getArgument(0) && argument instanceof WriteableValue) {
-                continue;
-            }
-
-            handler.write(argument);
-
-            if (argument != context.getArgument(context.getArguments().length - 1)) {
-                handler.write(new StringValue(" "));
-            }
+        for (int i = x; i < context.getArguments().length; ++i) {
+            writeable.write(context.getArgument(i));
         }
 
         if (newLine) {
-            handler.write(new StringValue("\n"));
+            writeable.write(new StringValue("\n"));
         }
 
         return null;
