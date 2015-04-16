@@ -9,14 +9,14 @@ import java.util.List;
 import passambler.lexer.Lexer;
 import passambler.lexer.Token;
 import passambler.lexer.TokenList;
-import passambler.pack.Package;
-import passambler.pack.file.FilePackage;
-import passambler.pack.json.JsonPackage;
-import passambler.pack.math.MathPackage;
-import passambler.pack.net.NetPackage;
-import passambler.pack.os.OsPackage;
-import passambler.pack.std.StdPackage;
-import passambler.pack.thread.ThreadPackage;
+import passambler.bundle.Bundle;
+import passambler.bundle.file.FileBundle;
+import passambler.bundle.json.JsonBundle;
+import passambler.bundle.math.MathBundle;
+import passambler.bundle.net.NetBundle;
+import passambler.bundle.os.OsBundle;
+import passambler.bundle.std.StdBundle;
+import passambler.bundle.thread.ThreadBundle;
 import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenType;
@@ -26,7 +26,7 @@ import passambler.value.ErrorValue;
 
 public class Parser {
     private List<Feature> features = new ArrayList<>();
-    private List<Package> packages = new ArrayList<>();
+    private List<Bundle> bundles = new ArrayList<>();
 
     private Block catchBlock;
     private String catchErrorName;
@@ -50,13 +50,13 @@ public class Parser {
         features.add(new AssignmentFeature());
         features.add(new ExpressionFeature());
 
-        packages.add(new StdPackage());
-        packages.add(new MathPackage());
-        packages.add(new FilePackage());
-        packages.add(new OsPackage());
-        packages.add(new NetPackage());
-        packages.add(new ThreadPackage());
-        packages.add(new JsonPackage());
+        bundles.add(new StdBundle());
+        bundles.add(new MathBundle());
+        bundles.add(new FileBundle());
+        bundles.add(new OsBundle());
+        bundles.add(new NetBundle());
+        bundles.add(new ThreadBundle());
+        bundles.add(new JsonBundle());
     }
 
     public void setCatch(Block block, String errorName) {
@@ -64,8 +64,8 @@ public class Parser {
         this.catchErrorName = errorName;
     }
 
-    public List<Package> getPackages() {
-        return packages;
+    public List<Bundle> getBundles() {
+        return bundles;
     }
 
     public Scope getScope() {

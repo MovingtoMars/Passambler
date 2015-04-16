@@ -1,5 +1,5 @@
 --TEST--
-Tests math package.
+Tests math bundle.
 
 --INPUT--
 using("math");

@@ -1,5 +1,5 @@
 --TEST--
-Tests std package.
+Tests std bundle.
 
 --INPUT--
 using("std", "std.Writeln");

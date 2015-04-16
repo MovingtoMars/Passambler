@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import passambler.value.Value;
 import passambler.value.StringValue;
-import passambler.pack.Package;
-import passambler.pack.FileSystemPackage;
+import passambler.bundle.Bundle;
+import passambler.bundle.FilesystemBundle;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
 import passambler.value.ErrorValue;
@@ -30,8 +30,8 @@ public class UsingFunction extends Value implements Function {
         ListValue array = new ListValue();
 
         for (Value value : context.getArguments()) {
-            Package currentPackage = null;
-            String currentPackageName = null;
+            Bundle currentBundle = null;
+            String currentBundleName = null;
 
             String valueName = null;
 
@@ -39,19 +39,19 @@ public class UsingFunction extends Value implements Function {
                 if (child.contains(".")) {
                     valueName = child.split(Pattern.quote("."))[1];
 
-                    currentPackageName = child.split(Pattern.quote("."))[0];
+                    currentBundleName = child.split(Pattern.quote("."))[0];
                 } else {
-                    currentPackageName = child;
+                    currentBundleName = child;
                 }
 
-                if (currentPackage == null) {
-                    currentPackage = getPackage(context.getParser().getPackages(), currentPackageName);
+                if (currentBundle == null) {
+                    currentBundle = getBundle(context.getParser().getBundles(), currentBundleName);
                 } else {
                     boolean found = false;
 
-                    for (Package childPackage : currentPackage.getChildren()) {
-                        if (childPackage.getId().equals(currentPackageName)) {
-                            currentPackage = childPackage;
+                    for (Bundle childBundle : currentBundle.getChildren()) {
+                        if (childBundle.getId().equals(currentBundleName)) {
+                            currentBundle = childBundle;
 
                             found = true;
 
@@ -60,28 +60,28 @@ public class UsingFunction extends Value implements Function {
                     }
 
                     if (!found) {
-                        throw new ErrorException(new ErrorValue("Undefined package: '%s'", currentPackageName));
+                        throw new ErrorException(new ErrorValue("Undefined bundle: '%s'", currentBundleName));
                     }
                 }
             }
 
-            if (currentPackage != null) {
+            if (currentBundle != null) {
                 Map<String, Value> symbols = new HashMap();
 
-                currentPackage.apply(symbols);
+                currentBundle.apply(symbols);
 
                 if (valueName == null) {
-                    Value packageValue = new Value();
+                    Value bundleValue = new Value();
 
                     for (Map.Entry<String, Value> symbol : symbols.entrySet()) {
-                        packageValue.setProperty(symbol.getKey(), symbol.getValue());
+                        bundleValue.setProperty(symbol.getKey(), symbol.getValue());
                     }
 
                     if (!context.isAssignment()) {
-                        context.getParser().getScope().setSymbol(currentPackageName, packageValue);
+                        context.getParser().getScope().setSymbol(currentBundleName, bundleValue);
                     }
 
-                    array.getValue().add(packageValue);
+                    array.getValue().add(bundleValue);
                 } else {
                     boolean found = false;
 
@@ -98,7 +98,7 @@ public class UsingFunction extends Value implements Function {
                     }
 
                     if (!found) {
-                        throw new ErrorException(new ErrorValue("Undefined package property: '%s'", valueName));
+                        throw new ErrorException(new ErrorValue("Undefined bundle property: '%s'", valueName));
                     }
                 }
             }
@@ -107,13 +107,13 @@ public class UsingFunction extends Value implements Function {
         return array.getValue().size() == 1 ? array.getValue().get(0) : array;
     }
 
-    private Package getPackage(List<Package> defaultPackages, String name) {
-        Package defaultPackage = defaultPackages.stream().filter(p -> p.getId().equals(name)).findFirst().orElse(null);
+    private Bundle getBundle(List<Bundle> bundles, String name) {
+        Bundle bundle = bundles.stream().filter(p -> p.getId().equals(name)).findFirst().orElse(null);
 
-        if (defaultPackage == null) {
-            return new FileSystemPackage(Paths.get(name));
+        if (bundle == null) {
+            return new FilesystemBundle(Paths.get(name));
         }
 
-        return defaultPackage;
+        return bundle;
     }
 }
