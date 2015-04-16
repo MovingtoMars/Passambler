@@ -22,6 +22,11 @@ public class DictFeature implements Feature {
         tokens.next();
 
         while (tokens.hasNext()) {
+            // Empty dicts
+            if (tokens.current().getType() == TokenType.RIGHT_BRACE) {
+                break;
+            }
+
             Value key = parser.getParser().parseExpression(tokens, TokenType.COL);
 
             tokens.next();
