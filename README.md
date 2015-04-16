@@ -1,11 +1,8 @@
 # Passambler
 Passambler is a simple general purpose language.
 
-It isn't finished yet, but the language is usable.
-
 ## Examples
 A simple Hello World program looks like this:
-
 ```
 using('std.Writeln');
 
@@ -26,3 +23,12 @@ for (x : 0..100) {
     }
 }
 ```
+
+## Building
+Clone the repository and run Maven.
+```
+mvn install
+```
+
+## License
+MIT license
