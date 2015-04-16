@@ -17,7 +17,7 @@ import passambler.value.BooleanValue;
 
 public class ExpressionParser {
     private List<Feature> features = new ArrayList<>();
-    
+
     private boolean assignment;
 
     private Parser parser;
@@ -115,9 +115,9 @@ public class ExpressionParser {
 
         Value value = null;
 
-        doPrecedence(values, TokenType.AND, TokenType.OR);
-        doPrecedence(values, TokenType.EQUAL, TokenType.NEQUAL, TokenType.GT, TokenType.GTE, TokenType.LT, TokenType.LTE);
+        doPrecedence(values, TokenType.EQUAL, TokenType.NEQUAL);
         doPrecedence(values, TokenType.RANGE);
+        doPrecedence(values, TokenType.GT, TokenType.GTE, TokenType.LT, TokenType.LTE);
         doPrecedence(values, TokenType.POWER);
         doPrecedence(values, TokenType.MULTIPLY, TokenType.DIVIDE);
 
@@ -152,7 +152,7 @@ public class ExpressionParser {
 
     public Value parseFeatures() throws EngineException {
         Value currentValue = null;
-        
+
         boolean not = false;
 
         while (stream.hasNext()) {
@@ -160,13 +160,13 @@ public class ExpressionParser {
                 not = true;
             } else {
                 boolean performed = false;
-                
+
                 for (Feature feature : features) {
                     if (feature.canPerform(this, currentValue)) {
                         currentValue = feature.perform(this, currentValue);
 
                         performed = true;
-                        
+
                         break;
                     }
                 }
