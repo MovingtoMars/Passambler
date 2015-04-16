@@ -2,10 +2,10 @@
 Tests errors.
 
 --INPUT--
-using('std.Writeln', 'std.ToStr');
+using('std.Writeln', 'std.Read', 'std.ToStr');
 
 try {
-    using('file.Read')('sdjfisdjfidsfjisd');
+    Read(using('file.Open')('sdjfisdjfidsfjisd'));
 } catch (x) {
     Writeln(x);
 }
