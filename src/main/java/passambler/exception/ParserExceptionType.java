@@ -12,7 +12,6 @@ public enum ParserExceptionType {
     UNDEFINED_PROPERTY("Undefined property '%s'"),
     UNDEFINED_CLASS("Undefined class '%s'"),
     UNDEFINED_DICT_ENTRY("Undefined dictionary entry '%s'"),
-    UNDEFINED_TYPEHINT("Typehint '%s' not found"),
     UNEXPECTED_EOF("Unexpected end of file"),
     UNEXPECTED_TOKEN("Unexpected token '%s'"),
     UNSUPPORTED_OPERATOR("Unsupported operator '%s'"),

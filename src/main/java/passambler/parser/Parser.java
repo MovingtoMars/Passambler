@@ -23,20 +23,12 @@ import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenType;
 import passambler.parser.feature.*;
-import passambler.parser.typehint.StandardTypehint;
-import passambler.parser.typehint.Typehint;
-import passambler.value.BooleanValue;
-import passambler.value.DictValue;
 import passambler.value.Value;
 import passambler.value.ErrorValue;
-import passambler.value.ListValue;
-import passambler.value.NumberValue;
-import passambler.value.StringValue;
 
 public class Parser {
     private List<Feature> features = new ArrayList<>();
     private List<Package> packages = new ArrayList<>();
-    private Map<String, Typehint> typehints = new HashMap();
 
     private Block catchBlock;
     private String catchErrorName;
@@ -67,13 +59,6 @@ public class Parser {
         packages.add(new NetPackage());
         packages.add(new ThreadPackage());
         packages.add(new JsonPackage());
-
-        typehints.put("num", new StandardTypehint(NumberValue.class));
-        typehints.put("str", new StandardTypehint(StringValue.class));
-        typehints.put("bool", new StandardTypehint(BooleanValue.class));
-        typehints.put("list", new StandardTypehint(ListValue.class));
-        typehints.put("dict", new StandardTypehint(DictValue.class));
-        typehints.put("err", new StandardTypehint(ErrorValue.class));
     }
 
     public void setCatch(Block block, String errorName) {
@@ -83,10 +68,6 @@ public class Parser {
 
     public List<Package> getPackages() {
         return packages;
-    }
-
-    public Map<String, Typehint> getTypehints() {
-        return typehints;
     }
 
     public Scope getScope() {
@@ -251,17 +232,6 @@ public class Parser {
                 definition.setName(stream.current().getValue());
 
                 stream.next();
-
-                if (stream.current().getType() == TokenType.IDENTIFIER) {
-                    if (!typehints.containsKey(definition.getName())) {
-                        throw new ParserException(ParserExceptionType.UNDEFINED_TYPEHINT, stream.current().getPosition(), definition.getName());
-                    }
-
-                    definition.setTypehint(typehints.get(definition.getName()));
-                    definition.setName(stream.current().getValue());
-
-                    stream.next();
-                }
 
                 if (stream.current().getType() == TokenType.ASSIGN) {
                     stream.next();
