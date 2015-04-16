@@ -1,5 +1,8 @@
 package passambler.value;
 
+import passambler.exception.EngineException;
+import passambler.value.function.Function;
+
 public class ClassValue extends Value {
     private String name;
 
@@ -13,6 +16,18 @@ public class ClassValue extends Value {
 
     @Override
     public String toString() {
+        if (hasProperty("ToStr")) {
+            Value strFunction = getProperty("ToStr").getValue();
+
+            if (strFunction instanceof Function && ((Function) strFunction).getArguments() == 0) {
+                try {
+                    return ((Function) strFunction).invoke(null).toString();
+                } catch (EngineException e) {
+
+                }
+            }
+        }
+
         return name;
     }
 }
