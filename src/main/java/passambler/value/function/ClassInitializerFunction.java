@@ -57,6 +57,10 @@ public class ClassInitializerFunction extends UserFunction {
         for (ClassInitializerFunction parent : parents) {
             for (Map.Entry<String, Value> symbol : parent.getBlock().getParser().getScope().getSymbols().entrySet()) {
                 self.setProperty(symbol.getKey(), symbol.getValue());
+
+                if (Lexer.isPublic(symbol.getKey())) {
+                    child.setProperty(symbol.getKey(), symbol.getValue());
+                }
             }
         }
 
