@@ -33,6 +33,7 @@ public class Lexer {
         tokenMap.put("for", TokenType.FOR);
 
         tokenMap.put("<=>", TokenType.COMPARE);
+        tokenMap.put("**=", TokenType.ASSIGN_POWER);
 
         tokenMap.put("fn", TokenType.FN);
         tokenMap.put("if", TokenType.IF);
@@ -51,7 +52,6 @@ public class Lexer {
         tokenMap.put("-=", TokenType.ASSIGN_MINUS);
         tokenMap.put("*=", TokenType.ASSIGN_MULTIPLY);
         tokenMap.put("/=", TokenType.ASSIGN_DIVIDE);
-        tokenMap.put("^=", TokenType.ASSIGN_POWER);
         tokenMap.put("%=", TokenType.ASSIGN_MODULO);
 
         tokenMap.put("=", TokenType.ASSIGN);
