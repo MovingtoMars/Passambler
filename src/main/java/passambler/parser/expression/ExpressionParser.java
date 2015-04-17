@@ -124,7 +124,7 @@ public class ExpressionParser {
         performPrecedence(pairs, TokenType.RANGE, TokenType.COMPARE);
         performPrecedence(pairs, TokenType.GT, TokenType.GTE, TokenType.LT, TokenType.LTE);
         performPrecedence(pairs, TokenType.EQUAL, TokenType.NEQUAL);
-        performPrecedence(pairs, TokenType.AND, TokenType.OR);
+        performPrecedence(pairs, TokenType.AND, TokenType.OR, TokenType.XOR);
 
         for (ValueOperatorPair pair : pairs) {
             if (value == null) {
