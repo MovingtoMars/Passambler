@@ -70,6 +70,7 @@ public class Lexer {
         tokenMap.put("-", TokenType.MINUS);
         tokenMap.put("*", TokenType.MULTIPLY);
         tokenMap.put("/", TokenType.DIVIDE);
+        tokenMap.put("^", TokenType.XOR);
         tokenMap.put(":", TokenType.COL);
         tokenMap.put(";", TokenType.SEMI_COL);
         tokenMap.put("%", TokenType.MODULO);
