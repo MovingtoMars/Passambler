@@ -14,11 +14,11 @@ And a FizzBuzz program is written like this:
 using('std.Writeln');
 
 for (x : 0..100) {
-    if ((x % 15) == 0) {
+    if (x % 15 == 0) {
         Writeln('FizzBuzz');
-    } elseif ((x % 3) == 0) {
+    } elseif (x % 3 == 0) {
         Writeln('Fizz');
-    } elseif ((x % 5) == 0) {
+    } elseif (x % 5 == 0) {
         Writeln('Buzz');
     }
 }
