@@ -60,8 +60,9 @@ public class ExpressionParser {
     }
 
     public Value parse() throws EngineException {
-        List<Token> expressionTokens = new ArrayList<>();
-        List<ValueOperatorPair> values = new ArrayList<>();
+        List<Token> expression = new ArrayList<>();
+
+        List<ValueOperatorPair> pairs = new ArrayList<>();
 
         Token lastOperator = null;
 
@@ -76,14 +77,14 @@ public class ExpressionParser {
                 depth--;
             }
 
-            expressionTokens.add(token);
+            expression.add(token);
 
             if ((token.getType().isOperator() || tokens.peek() == null) && depth == 0) {
                 if (token.getType().isOperator()) {
-                    expressionTokens.remove(expressionTokens.size() - 1);
+                    expression.remove(expression.size() - 1);
                 }
 
-                if (expressionTokens.isEmpty()) {
+                if (expression.isEmpty()) {
                     tokens.match(TokenType.MINUS, TokenType.PLUS);
 
                     boolean negate = tokens.current().getType() == TokenType.MINUS;
@@ -100,14 +101,14 @@ public class ExpressionParser {
                         number = number.plus();
                     }
 
-                    expressionTokens.add(new Token(TokenType.NUMBER, number.toString(), tokens.current().getPosition()));
+                    expression.add(new Token(TokenType.NUMBER, number.toString(), tokens.current().getPosition()));
 
                     tokens.next();
                 }
 
-                values.add(new ValueOperatorPair(createParser(new TokenList(expressionTokens)).parseFeatures(), lastOperator));
+                pairs.add(new ValueOperatorPair(createParser(new TokenList(expression)).parseFeatures(), lastOperator));
 
-                expressionTokens.clear();
+                expression.clear();
 
                 lastOperator = tokens.current();
             }
@@ -117,15 +118,15 @@ public class ExpressionParser {
 
         Value value = null;
 
-        performPrecedence(values, TokenType.POWER, TokenType.MODULO);
-        performPrecedence(values, TokenType.MULTIPLY, TokenType.DIVIDE);
-        performPrecedence(values, TokenType.PLUS, TokenType.MINUS);
-        performPrecedence(values, TokenType.RANGE, TokenType.COMPARE);
-        performPrecedence(values, TokenType.GT, TokenType.GTE, TokenType.LT, TokenType.LTE);
-        performPrecedence(values, TokenType.EQUAL, TokenType.NEQUAL);
-        performPrecedence(values, TokenType.AND, TokenType.OR);
+        performPrecedence(pairs, TokenType.POWER, TokenType.MODULO);
+        performPrecedence(pairs, TokenType.MULTIPLY, TokenType.DIVIDE);
+        performPrecedence(pairs, TokenType.PLUS, TokenType.MINUS);
+        performPrecedence(pairs, TokenType.RANGE, TokenType.COMPARE);
+        performPrecedence(pairs, TokenType.GT, TokenType.GTE, TokenType.LT, TokenType.LTE);
+        performPrecedence(pairs, TokenType.EQUAL, TokenType.NEQUAL);
+        performPrecedence(pairs, TokenType.AND, TokenType.OR);
 
-        for (ValueOperatorPair pair : values) {
+        for (ValueOperatorPair pair : pairs) {
             if (value == null) {
                 value = pair.getValue();
             } else {
@@ -140,16 +141,16 @@ public class ExpressionParser {
         return value;
     }
 
-    private void performPrecedence(List<ValueOperatorPair> values, TokenType... types) throws EngineException {
-        for (int i = 0; i < values.size(); ++i) {
-            ValueOperatorPair current = values.get(i);
+    private void performPrecedence(List<ValueOperatorPair> pairs, TokenType... types) throws EngineException {
+        for (int i = 0; i < pairs.size(); ++i) {
+            ValueOperatorPair current = pairs.get(i);
 
             if (i > 0 && current.getOperator() != null && Arrays.asList(types).contains(current.getOperator().getType())) {
-                ValueOperatorPair behind = values.get(i - 1);
+                ValueOperatorPair behind = pairs.get(i - 1);
 
                 behind.setValue(behind.getValue().onOperator(current.getValue(), current.getOperator()));
 
-                values.remove(current);
+                pairs.remove(current);
             }
         }
     }
