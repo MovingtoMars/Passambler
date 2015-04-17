@@ -44,6 +44,7 @@ public class Lexer {
 
         tokenMap.put("&&", TokenType.AND);
         tokenMap.put("||", TokenType.OR);
+        tokenMap.put("**", TokenType.POWER);
 
         tokenMap.put("..", TokenType.RANGE);
         tokenMap.put("+=", TokenType.ASSIGN_PLUS);
@@ -71,7 +72,6 @@ public class Lexer {
         tokenMap.put("/", TokenType.DIVIDE);
         tokenMap.put(":", TokenType.COL);
         tokenMap.put(";", TokenType.SEMI_COL);
-        tokenMap.put("^", TokenType.POWER);
         tokenMap.put("%", TokenType.MODULO);
     }
 
