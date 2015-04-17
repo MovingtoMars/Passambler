@@ -101,6 +101,8 @@ public class ExpressionParser {
                     }
 
                     expressionTokens.add(new Token(TokenType.NUMBER, number.toString(), tokens.current().getPosition()));
+
+                    tokens.next();
                 }
 
                 values.add(new ValueOperatorPair(createParser(new TokenList(expressionTokens)).parseFeatures(), lastOperator));
