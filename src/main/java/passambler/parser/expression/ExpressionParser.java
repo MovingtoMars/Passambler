@@ -115,11 +115,10 @@ public class ExpressionParser {
 
         Value value = null;
 
-        performPrecedence(values, TokenType.RANGE);
-        performPrecedence(values, TokenType.COMPARE);
         performPrecedence(values, TokenType.POWER, TokenType.MODULO);
         performPrecedence(values, TokenType.MULTIPLY, TokenType.DIVIDE);
         performPrecedence(values, TokenType.PLUS, TokenType.MINUS);
+        performPrecedence(values, TokenType.RANGE, TokenType.COMPARE);
         performPrecedence(values, TokenType.GT, TokenType.GTE, TokenType.LT, TokenType.LTE);
         performPrecedence(values, TokenType.EQUAL, TokenType.NEQUAL);
         performPrecedence(values, TokenType.AND, TokenType.OR);
