@@ -6,7 +6,7 @@ public enum TokenType {
     ASSIGN, ASSIGN_PLUS, ASSIGN_MINUS, ASSIGN_MULTIPLY, ASSIGN_DIVIDE, ASSIGN_POWER, ASSIGN_MODULO,
     PLUS, MINUS, MULTIPLY, DIVIDE, POWER, MODULO, COMPARE, RANGE,
     EQUAL, NEQUAL, GT, LT, GTE, LTE, NOT,
-    AND, OR,
+    AND, OR, XOR,
     WHILE, FOR, FN, RETURN, IF, ELSEIF, ELSE,
     CLASS,
     PERIOD, COMMA, SEMI_COL, COL,
@@ -16,7 +16,7 @@ public enum TokenType {
         return this == PLUS || this == MINUS || this == MULTIPLY || this == DIVIDE || this == POWER || this == MODULO
             || this == GT || this == LT || this == GTE || this == LTE
             || this == EQUAL || this == NEQUAL
-            || this == AND || this == OR
+            || this == AND || this == OR || this == XOR
             || this == COMPARE || this == RANGE;
     }
 
