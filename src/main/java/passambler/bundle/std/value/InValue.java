@@ -23,7 +23,7 @@ public class InValue extends Value implements ReadableValue {
             }
 
             if (data == null) {
-                throw new ErrorException(new ErrorValue("No console found"));
+                throw new ErrorException(new ErrorValue("Console not available"));
             }
 
             return new StringValue(data);
