@@ -53,8 +53,6 @@ public class Lexer {
         tokenMap.put("*=", TokenType.ASSIGN_MULTIPLY);
         tokenMap.put("/=", TokenType.ASSIGN_DIVIDE);
         tokenMap.put("%=", TokenType.ASSIGN_MODULO);
-        tokenMap.put("++", TokenType.UNARY_INCR);
-        tokenMap.put("--", TokenType.UNARY_DECR);
 
         tokenMap.put("=", TokenType.ASSIGN);
         tokenMap.put(">", TokenType.GT);
