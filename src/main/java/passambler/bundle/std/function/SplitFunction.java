@@ -1,5 +1,6 @@
 package passambler.bundle.std.function;
 
+import java.util.regex.Pattern;
 import passambler.exception.EngineException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
@@ -22,7 +23,7 @@ public class SplitFunction extends Value implements Function {
     public Value invoke(FunctionContext context) throws EngineException {
         ListValue list = new ListValue();
 
-        for (String part : ((StringValue) context.getArgument(0)).getValue().split(((StringValue) context.getArgument(1)).getValue())) {
+        for (String part : ((StringValue) context.getArgument(0)).getValue().split(Pattern.quote(((StringValue) context.getArgument(1)).getValue()))) {
             list.getValue().add(new StringValue(part));
         }
 
