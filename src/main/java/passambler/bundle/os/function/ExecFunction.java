@@ -26,7 +26,7 @@ public class ExecFunction extends Value implements Function {
         Process process;
 
         try {
-            process = Runtime.getRuntime().exec(((StringValue) context.getArgument(0)).getValue());
+            process = Runtime.getRuntime().exec(((StringValue) context.getArgument(0)).toString());
             process.waitFor();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));

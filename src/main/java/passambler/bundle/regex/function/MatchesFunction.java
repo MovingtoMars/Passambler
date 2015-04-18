@@ -20,6 +20,6 @@ public class MatchesFunction extends Value implements Function {
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        return new BooleanValue(((StringValue) context.getArgument(0)).getValue().matches(((StringValue) context.getArgument(1)).getValue()));
+        return new BooleanValue(((StringValue) context.getArgument(0)).toString().matches(((StringValue) context.getArgument(1)).toString()));
     }
 }

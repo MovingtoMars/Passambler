@@ -24,8 +24,8 @@ public class MoveFunction extends Value implements Function {
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
         try {
-            Path file = Paths.get(((StringValue) context.getArgument(0)).getValue());
-            Path destination = Paths.get(((StringValue) context.getArgument(1)).getValue());
+            Path file = Paths.get(((StringValue) context.getArgument(0)).toString());
+            Path destination = Paths.get(((StringValue) context.getArgument(1)).toString());
 
             Files.move(file, destination);
         } catch (Exception e) {

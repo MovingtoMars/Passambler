@@ -31,7 +31,7 @@ public class EncodeFunction extends Value implements Function {
 
     private Object parse(Value value) {
         if (value instanceof StringValue) {
-            return ((StringValue) value).getValue();
+            return ((StringValue) value).toString();
         } else if (value instanceof NumberValue) {
             return ((NumberValue) value).getValue();
         } else if (value instanceof BooleanValue) {

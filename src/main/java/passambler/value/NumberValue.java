@@ -80,7 +80,6 @@ public class NumberValue extends Value {
                     return new NumberValue(getValue().plus());
                 case UNARY_MINUS:
                     return new NumberValue(getValue().negate());
-
             }
         }
 

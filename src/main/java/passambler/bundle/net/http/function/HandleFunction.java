@@ -39,7 +39,7 @@ public class HandleFunction extends Value implements Function {
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        mapper.register(((StringValue) context.getArgument(0)).getValue(), context.getArgument(1) instanceof HttpRequestHandler ? (HttpRequestHandler) context.getArgument(1) : createHandlerFromFunction(context.getParser(), (Function) context.getArgument(1)));
+        mapper.register(((StringValue) context.getArgument(0)).toString(), context.getArgument(1) instanceof HttpRequestHandler ? (HttpRequestHandler) context.getArgument(1) : createHandlerFromFunction(context.getParser(), (Function) context.getArgument(1)));
 
         return null;
     }

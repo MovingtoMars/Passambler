@@ -23,7 +23,7 @@ public class SplitFunction extends Value implements Function {
     public Value invoke(FunctionContext context) throws EngineException {
         ListValue list = new ListValue();
 
-        for (String part : ((StringValue) context.getArgument(0)).getValue().split(Pattern.quote(((StringValue) context.getArgument(1)).getValue()))) {
+        for (String part : ((StringValue) context.getArgument(0)).toString().split(Pattern.quote(((StringValue) context.getArgument(1)).toString()))) {
             list.getValue().add(new StringValue(part));
         }
 

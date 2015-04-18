@@ -27,7 +27,7 @@ public class DecodeFunction extends Value implements Function {
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        return parse(JSONValue.parse(((StringValue) context.getArgument(0)).getValue()));
+        return parse(JSONValue.parse(((StringValue) context.getArgument(0)).toString()));
     }
 
     public Value parse(Object object) {

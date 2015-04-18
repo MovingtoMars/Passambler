@@ -20,6 +20,6 @@ public class QuoteFunction extends Value implements Function {
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        return new StringValue(Pattern.quote(((StringValue) context.getArgument(0)).getValue()));
+        return new StringValue(Pattern.quote(((StringValue) context.getArgument(0)).toString()));
     }
 }

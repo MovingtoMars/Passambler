@@ -35,7 +35,7 @@ public class UsingFunction extends Value implements Function {
 
             String valueName = null;
 
-            for (String child : ((StringValue) value).getValue().split("/")) {
+            for (String child : ((StringValue) value).toString().split("/")) {
                 if (child.contains(".")) {
                     valueName = child.split(Pattern.quote("."))[1];
 

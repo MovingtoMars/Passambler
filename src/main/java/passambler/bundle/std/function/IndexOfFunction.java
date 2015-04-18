@@ -20,6 +20,6 @@ public class IndexOfFunction extends Value implements Function {
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        return new NumberValue(((StringValue) context.getArgument(0)).getValue().indexOf(((StringValue) context.getArgument(1)).getValue()));
+        return new NumberValue(((StringValue) context.getArgument(0)).toString().indexOf(((StringValue) context.getArgument(1)).toString()));
     }
 }

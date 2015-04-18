@@ -20,6 +20,6 @@ public class EvalFunction extends Value implements Function {
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        return context.getParser().parse(new Lexer(((StringValue) context.getArgument(0)).getValue()).scan());
+        return context.getParser().parse(new Lexer(((StringValue) context.getArgument(0)).toString()).scan());
     }
 }

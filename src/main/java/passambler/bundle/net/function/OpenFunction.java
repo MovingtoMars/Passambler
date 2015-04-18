@@ -31,7 +31,7 @@ public class OpenFunction extends Value implements Function {
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
         try {
-            return new SocketValue(new Socket(((StringValue) context.getArgument(0)).getValue(), ((NumberValue) context.getArgument(1)).getValue().intValue()));
+            return new SocketValue(new Socket(((StringValue) context.getArgument(0)).toString(), ((NumberValue) context.getArgument(1)).getValue().intValue()));
         } catch (IOException e) {
             throw new ErrorException(e);
         }

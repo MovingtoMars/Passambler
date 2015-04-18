@@ -30,9 +30,9 @@ public class SubstrFunction extends Value implements Function {
         if (context.getArguments().length == 3) {
             int max = ((NumberValue) context.getArgument(2)).getValue().intValue();
 
-            return new StringValue(str.getValue().substring(min, max));
+            return new StringValue(str.toString().substring(min, max));
         } else {
-            return new StringValue(str.getValue().substring(min));
+            return new StringValue(str.toString().substring(min));
         }
     }
 }

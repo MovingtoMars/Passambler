@@ -32,7 +32,7 @@ public class JoinFunction extends Value implements Function {
             builder.append(value.toString());
 
             if (value != list.getValue().get(list.getValue().size() - 1)) {
-                builder.append(((StringValue) context.getArgument(1)).getValue());
+                builder.append(((StringValue) context.getArgument(1)).toString());
             }
         }
 

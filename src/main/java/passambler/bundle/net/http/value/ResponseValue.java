@@ -31,7 +31,7 @@ public class ResponseValue extends Value implements WriteableValue {
 
             for (Map.Entry<Value, Value> entry : ((DictValue) getProperty("Headers").getValue()).getValue().entrySet()) {
                 if (entry.getKey() instanceof StringValue && entry.getValue() instanceof StringValue) {
-                    headers.add(new BasicHeader(((StringValue) entry.getKey()).getValue(), ((StringValue) entry.getValue()).getValue()));
+                    headers.add(new BasicHeader(((StringValue) entry.getKey()).toString(), ((StringValue) entry.getValue()).toString()));
                 }
             }
 

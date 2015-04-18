@@ -25,9 +25,9 @@ public class ReplaceFunction extends Value implements Function {
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        String input = ((StringValue) context.getArgument(0)).getValue();
-        String regex = ((StringValue) context.getArgument(1)).getValue();
-        String replacement = ((StringValue) context.getArgument(2)).getValue();
+        String input = ((StringValue) context.getArgument(0)).toString();
+        String regex = ((StringValue) context.getArgument(1)).toString();
+        String replacement = ((StringValue) context.getArgument(2)).toString();
 
         return new StringValue(all ? input.replaceAll(regex, replacement) : input.replace(regex, replacement));
     }

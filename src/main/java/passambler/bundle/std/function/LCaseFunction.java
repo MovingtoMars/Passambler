@@ -19,6 +19,6 @@ public class LCaseFunction extends Value implements Function {
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
-        return new StringValue(((StringValue) context.getArgument(0)).getValue().toLowerCase());
+        return new StringValue(((StringValue) context.getArgument(0)).toString().toLowerCase());
     }
 }
