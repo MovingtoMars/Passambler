@@ -2,13 +2,11 @@
 Tests classes.
 
 --INPUT--
-using('std.Writeln');
-
 class Greeter(name, manner="Hello")
 {
     fn Greet()
     {
-        Writeln(self.manner + " " + self.name);
+        writeln(self.manner + " " + self.name);
     }
 }
 
@@ -20,27 +18,27 @@ a.Greet();
 
 g.Greet();
 
-Writeln(a);
+writeln(a);
 
-Writeln(g);
+writeln(g);
 
 class Sayer(msg="Hello world")
 {
     fn Say(n)
     {
-        Writeln(n + " " + self.msg);
+        writeln(n + " " + self.msg);
     }
 
     fn SayMore()
     {
         for (1..3) {
-            Writeln(self.msg);
+            writeln(self.msg);
         }
     }
 
     fn private()
     {
-        Writeln("private");
+        writeln("private");
     }
 }
 

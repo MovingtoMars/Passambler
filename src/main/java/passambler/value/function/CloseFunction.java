@@ -1,9 +1,7 @@
-package passambler.bundle.std.function;
+package passambler.value.function;
 
 import passambler.exception.EngineException;
 import passambler.value.CloseableValue;
-import passambler.value.function.Function;
-import passambler.value.function.FunctionContext;
 import passambler.value.Value;
 
 public class CloseFunction extends Value implements Function {

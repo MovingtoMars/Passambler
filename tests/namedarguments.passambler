@@ -2,10 +2,8 @@
 Tests named arguments.
 
 --INPUT--
-using('std.Writeln');
-
 fn s(a, b) {
-    Writeln(a - b);
+    writeln(a - b);
 }
 
 s(1, 1);

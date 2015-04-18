@@ -1,11 +1,9 @@
-using('std.Writeln');
-
 for (x : 0..100) {
     if (x % 15 == 0) {
-        Writeln('FizzBuzz');
+        writeln('FizzBuzz');
     } elseif (x % 3 == 0) {
-        Writeln('Fizz');
+        writeln('Fizz');
     } elseif (x % 5 == 0) {
-        Writeln('Buzz');
+        writeln('Buzz');
     }
 }

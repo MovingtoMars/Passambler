@@ -42,8 +42,8 @@ public class ResponseValue extends Value implements WriteableValue {
     }
 
     @Override
-    public void write(Value value) {
-        responseData.append(value.toString());
+    public void write(boolean line, Value value) {
+        responseData.append(value.toString()).append(line ? "\n" : "");
     }
 
     public String getResponseData() {

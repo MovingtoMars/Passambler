@@ -26,10 +26,6 @@ public class StdBundle implements Bundle {
 
     @Override
     public void apply(Map<String, Value> symbols) {
-        symbols.put("Write", new WriteFunction(new OutValue(), false));
-        symbols.put("Writeln", new WriteFunction(new OutValue(), true));
-        symbols.put("Read", new ReadFunction());
-        symbols.put("Close", new CloseFunction());
         symbols.put("ToStr", new ToStrFunction());
         symbols.put("ToNum", new ToNumFunction());
         symbols.put("ToBool", new ToBoolFunction());

@@ -28,18 +28,20 @@ public class SocketValue extends Value implements WriteableValue, ReadableValue,
     }
 
     @Override
-    public void write(Value value) throws EngineException {
+    public void write(boolean line, Value value) throws EngineException {
         try {
-            socket.getOutputStream().write(value.getValue().toString().getBytes());
+            socket.getOutputStream().write((value.getValue().toString() + (line ? "\n" : "")).getBytes());
         } catch (IOException e) {
             throw new ErrorException(e);
         }
     }
 
     @Override
-    public Value read() throws EngineException {
+    public Value read(boolean line) throws EngineException {
         try {
-            return new StringValue(new BufferedReader(new InputStreamReader(socket.getInputStream())).readLine());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            return new StringValue(line ? reader.readLine() : String.valueOf(Character.toChars(reader.read())));
         } catch (IOException e) {
             throw new ErrorException(e);
         }

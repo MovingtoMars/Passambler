@@ -34,7 +34,7 @@ public class ServerSocketValue extends Value implements ReadableValue, Closeable
     }
 
     @Override
-    public Value read() throws EngineException {
+    public Value read(boolean line) throws EngineException {
         try {
             return new SocketValue(socket.accept());
         } catch (IOException e) {

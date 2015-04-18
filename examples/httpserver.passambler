@@ -1,8 +1,7 @@
-using('std.Writeln');
 using('net/http');
 
 http.Handle('/', fn(request, response) {
-    Writeln(response, 'Hello World!');
+    writeln(response, 'Hello World!');
 });
 
 http.Serve(8080);

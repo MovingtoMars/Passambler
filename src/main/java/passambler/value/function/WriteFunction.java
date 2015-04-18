@@ -1,20 +1,17 @@
-package passambler.bundle.std.function;
+package passambler.value.function;
 
 import passambler.exception.EngineException;
-import passambler.value.function.Function;
-import passambler.value.function.FunctionContext;
 import passambler.value.Value;
-import passambler.value.StringValue;
 import passambler.value.WriteableValue;
 
 public class WriteFunction extends Value implements Function {
     private WriteableValue handler;
 
-    private boolean newLine;
+    private boolean line;
 
-    public WriteFunction(WriteableValue handler, boolean newLine) {
+    public WriteFunction(WriteableValue handler, boolean line) {
         this.handler = handler;
-        this.newLine = newLine;
+        this.line = line;
     }
 
     @Override
@@ -35,15 +32,12 @@ public class WriteFunction extends Value implements Function {
 
         if (context.getArguments().length > 0 && context.getArgument(0) instanceof WriteableValue) {
             writeable = (WriteableValue) context.getArgument(0);
+
             x++;
         }
 
         for (int i = x; i < context.getArguments().length; ++i) {
-            writeable.write(context.getArgument(i));
-        }
-
-        if (newLine) {
-            writeable.write(new StringValue("\n"));
+            writeable.write(line, context.getArgument(i));
         }
 
         return null;

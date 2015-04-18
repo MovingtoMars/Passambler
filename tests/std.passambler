@@ -2,7 +2,7 @@
 Tests std bundle.
 
 --INPUT--
-using("std", "std.Writeln");
+using("std");
 
 n = 1..10;
 std.Push(n, 20);
@@ -23,54 +23,54 @@ user = {"name" : "Raoul", "age" : 16};
 
 multipleUsers = [user, {"name": "Sonja", "age": 18}, {"name": "Geert", "age": 20}, {"name": "Monja", "age": 5}];
 
-Writeln(std.Empty([]));
-Writeln(std.Empty([1, 2, 3]));
-Writeln(std.Empty(""));
-Writeln(std.Empty("Raoul"));
+writeln(std.Empty([]));
+writeln(std.Empty([1, 2, 3]));
+writeln(std.Empty(""));
+writeln(std.Empty("Raoul"));
 
-Writeln(std.First("Raoul"));
-Writeln(std.First(1..3));
+writeln(std.First("Raoul"));
+writeln(std.First(1..3));
 
-Writeln(std.Last(1..3));
+writeln(std.Last(1..3));
 
-Writeln(n);
+writeln(n);
 
-Writeln(std.Size(50..100));
-Writeln(std.Size("Raoul"));
+writeln(std.Size(50..100));
+writeln(std.Size("Raoul"));
 
-Writeln(a);
-Writeln(b);
-Writeln(c);
-Writeln(d);
+writeln(a);
+writeln(b);
+writeln(c);
+writeln(d);
 
-Writeln(std.Slice(4..10, 1, 3));
+writeln(std.Slice(4..10, 1, 3));
 
-Writeln(std.Reverse(1..3));
-Writeln(std.Reverse("Raoul"));
+writeln(std.Reverse(1..3));
+writeln(std.Reverse("Raoul"));
 
-Writeln(std.Keys(user));
-Writeln(std.Values(user));
+writeln(std.Keys(user));
+writeln(std.Values(user));
 
-Writeln(std.Contains("i like cats", "bears"));
-Writeln(std.Contains("i like dogs", "dogs"));
+writeln(std.Contains("i like cats", "bears"));
+writeln(std.Contains("i like dogs", "dogs"));
 
-Writeln(std.IndexOf("hello world", "hello"));
+writeln(std.IndexOf("hello world", "hello"));
 
-Writeln(std.Lcase("HeLLo WoRLd!"));
-Writeln(std.Ucase("HeLLo WoRLd!"));
+writeln(std.Lcase("HeLLo WoRLd!"));
+writeln(std.Ucase("HeLLo WoRLd!"));
 
-Writeln(std.Replace("I like bears", "bears", "cats"));
-Writeln(std.Replace("I like cats", "cats", "dogs"));
+writeln(std.Replace("I like bears", "bears", "cats"));
+writeln(std.Replace("I like cats", "cats", "dogs"));
 
-Writeln(std.Split("My name is Raoul", " "));
+writeln(std.Split("My name is Raoul", " "));
 
-Writeln(std.ToNum("1") + std.ToNum(1));
-Writeln(std.ToBool(true) == std.ToBool("true"));
-Writeln(std.ToBool("true") == std.ToBool(false));
+writeln(std.ToNum("1") + std.ToNum(1));
+writeln(std.ToBool(true) == std.ToBool("true"));
+writeln(std.ToBool("true") == std.ToBool(false));
 
-Writeln(std.Join(["I", "like", "cats", "and", "dogs"], "-"));
+writeln(std.Join(["I", "like", "cats", "and", "dogs"], "-"));
 
-Writeln(std.Filter(multipleUsers, fn(a) {
+writeln(std.Filter(multipleUsers, fn(a) {
     return a['age'] >= 18;
 }));
 

@@ -4,22 +4,18 @@ Passambler is a simple general purpose language.
 ## Examples
 A simple Hello World program looks like this:
 ```
-using('std.Writeln');
-
-Writeln('Hello World');
+writeln('Hello World');
 ```
 
 And a FizzBuzz program is written like this:
 ```
-using('std.Writeln');
-
 for (x : 0..100) {
     if (x % 15 == 0) {
-        Writeln('FizzBuzz');
+        writeln('FizzBuzz');
     } elseif (x % 3 == 0) {
-        Writeln('Fizz');
+        writeln('Fizz');
     } elseif (x % 5 == 0) {
-        Writeln('Buzz');
+        writeln('Buzz');
     }
 }
 ```

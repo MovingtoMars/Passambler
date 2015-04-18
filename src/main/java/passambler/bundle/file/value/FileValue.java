@@ -22,7 +22,7 @@ public class FileValue extends Value implements ReadableValue, WriteableValue {
     }
 
     @Override
-    public Value read() throws EngineException {
+    public Value read(boolean line) throws EngineException {
         try {
             return new StringValue(String.join("\n", Files.readAllLines(getValue())));
         } catch (Exception e) {
@@ -31,9 +31,9 @@ public class FileValue extends Value implements ReadableValue, WriteableValue {
     }
 
     @Override
-    public void write(Value value) throws EngineException {
+    public void write(boolean line, Value value) throws EngineException {
         try {
-            Files.write(getValue(), value.toString().getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            Files.write(getValue(), (value.toString() + (line ? "\n" : "")).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (IOException e) {
             throw new ErrorException(e);
         }
