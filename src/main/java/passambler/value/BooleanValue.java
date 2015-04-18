@@ -23,6 +23,8 @@ public class BooleanValue extends Value {
                     return new BooleanValue(getValue() || ((BooleanValue) value).getValue());
                 case XOR:
                     return new BooleanValue(getValue() ^ ((BooleanValue) value).getValue());
+                case UNARY_NOT:
+                    return new BooleanValue(!getValue());
             }
         }
 

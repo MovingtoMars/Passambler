@@ -28,4 +28,17 @@ public class ValueOperatorPair {
     public void setOperator(Token operator) {
         this.operator = operator;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+
+        if (operator != null) {
+            builder.append(operator).append(" ");
+        }
+
+        builder.append(value);
+
+        return builder.toString();
+    }
 }

@@ -1,7 +1,6 @@
 package passambler.parser.expression;
 
 import passambler.exception.ParserException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +12,6 @@ import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenType;
 import passambler.parser.Parser;
 import passambler.parser.expression.feature.*;
-import passambler.value.BooleanValue;
 
 public class ExpressionParser {
     private List<Feature> features = new ArrayList<>();
@@ -79,31 +77,21 @@ public class ExpressionParser {
 
             expression.add(token);
 
+            if (expression.size() == 1 && (token.getType().isUnaryOperator() || token.getType() == TokenType.PLUS || token.getType() == TokenType.MINUS)) {
+                if (token.getType() == TokenType.PLUS) {
+                    token.setType(TokenType.UNARY_PLUS);
+                } else if (token.getType() == TokenType.MINUS) {
+                    token.setType(TokenType.UNARY_MINUS);
+                }
+
+                expression.remove(expression.size() - 1);
+
+                lastOperator = token;
+            }
+
             if ((token.getType().isOperator() || tokens.peek() == null) && depth == 0) {
                 if (token.getType().isOperator()) {
                     expression.remove(expression.size() - 1);
-                }
-
-                if (expression.isEmpty()) {
-                    tokens.match(TokenType.MINUS, TokenType.PLUS);
-
-                    boolean negate = tokens.current().getType() == TokenType.MINUS;
-
-                    tokens.next();
-
-                    tokens.match(TokenType.NUMBER);
-
-                    BigDecimal number = new BigDecimal(tokens.current().getValue());
-
-                    if (negate) {
-                        number = number.negate();
-                    } else {
-                        number = number.plus();
-                    }
-
-                    expression.add(new Token(TokenType.NUMBER, number.toString(), tokens.current().getPosition()));
-
-                    tokens.next();
                 }
 
                 pairs.add(new ValueOperatorPair(createParser(new TokenList(expression)).parseFeatures(), lastOperator));
@@ -118,6 +106,7 @@ public class ExpressionParser {
 
         Value value = null;
 
+        performUnary(pairs);
         performPrecedence(pairs, TokenType.POWER, TokenType.MODULO);
         performPrecedence(pairs, TokenType.MULTIPLY, TokenType.DIVIDE);
         performPrecedence(pairs, TokenType.PLUS, TokenType.MINUS);
@@ -141,6 +130,17 @@ public class ExpressionParser {
         return value;
     }
 
+    private void performUnary(List<ValueOperatorPair> pairs) throws EngineException {
+        for (int i = 0; i < pairs.size(); ++i) {
+            ValueOperatorPair current = pairs.get(i);
+
+            if (current.getOperator() != null && current.getOperator().getType().isUnaryOperator()) {
+                current.setValue(current.getValue().onOperator(current.getValue(), current.getOperator()));
+                current.setOperator(null);
+            }
+        }
+    }
+
     private void performPrecedence(List<ValueOperatorPair> pairs, TokenType... types) throws EngineException {
         for (int i = 0; i < pairs.size(); ++i) {
             ValueOperatorPair current = pairs.get(i);
@@ -158,38 +158,24 @@ public class ExpressionParser {
     public Value parseFeatures() throws EngineException {
         Value currentValue = null;
 
-        boolean not = false;
-
         while (tokens.hasNext()) {
-            if (tokens.current().getType() == TokenType.NOT) {
-                not = true;
-            } else {
-                boolean performed = false;
+            boolean performed = false;
 
-                for (Feature feature : features) {
-                    if (feature.canPerform(this, currentValue)) {
-                        currentValue = feature.perform(this, currentValue);
+            for (Feature feature : features) {
+                if (feature.canPerform(this, currentValue)) {
+                    currentValue = feature.perform(this, currentValue);
 
-                        performed = true;
+                    performed = true;
 
-                        break;
-                    }
+                    break;
                 }
+            }
 
-                if (!performed) {
-                    throw new ParserException(ParserExceptionType.UNEXPECTED_TOKEN, tokens.current().getPosition(), tokens.current().getType());
-                }
+            if (!performed) {
+                throw new ParserException(ParserExceptionType.UNEXPECTED_TOKEN, tokens.current().getPosition(), tokens.current().getType());
             }
 
             tokens.next();
-        }
-
-        if (not) {
-            if (!(currentValue instanceof BooleanValue)) {
-                throw new ParserException(ParserExceptionType.NOT_A_BOOLEAN, tokens.get(0).getPosition());
-            }
-
-            currentValue = new BooleanValue(!((BooleanValue) currentValue).getValue());
         }
 
         return currentValue;

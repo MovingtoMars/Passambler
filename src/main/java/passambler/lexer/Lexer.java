@@ -53,6 +53,8 @@ public class Lexer {
         tokenMap.put("*=", TokenType.ASSIGN_MULTIPLY);
         tokenMap.put("/=", TokenType.ASSIGN_DIVIDE);
         tokenMap.put("%=", TokenType.ASSIGN_MODULO);
+        tokenMap.put("++", TokenType.UNARY_INCR);
+        tokenMap.put("--", TokenType.UNARY_DECR);
 
         tokenMap.put("=", TokenType.ASSIGN);
         tokenMap.put(">", TokenType.GT);
@@ -63,7 +65,7 @@ public class Lexer {
         tokenMap.put(")", TokenType.RIGHT_PAREN);
         tokenMap.put("{", TokenType.LEFT_BRACE);
         tokenMap.put("}", TokenType.RIGHT_BRACE);
-        tokenMap.put("!", TokenType.NOT);
+        tokenMap.put("!", TokenType.UNARY_NOT);
         tokenMap.put(",", TokenType.COMMA);
         tokenMap.put(".", TokenType.PERIOD);
         tokenMap.put("+", TokenType.PLUS);
@@ -151,8 +153,6 @@ public class Lexer {
 
                 next();
             } else {
-                boolean matched = false;
-
                 StringBuilder identifierFound = new StringBuilder();
 
                 while (hasNext() && isIdentifier(current())) {
@@ -163,20 +163,18 @@ public class Lexer {
 
                 position -= identifierFound.length();
 
-                for (Map.Entry<String, TokenType> match : tokenMap.entrySet()) {
-                    for (int i = 0; i < match.getKey().length(); ++i) {
-                        char current = match.getKey().charAt(i);
+                Map.Entry<String, TokenType> match = null;
+
+                for (Map.Entry<String, TokenType> entry : tokenMap.entrySet()) {
+                    for (int i = 0; i < entry.getKey().length(); ++i) {
+                        char current = entry.getKey().charAt(i);
 
                         if (peek(i) != null && peek(i) == current) {
-                            // If we are on the last index from this match, first check if the
-                            // matches length is bigger or equal then the currently found identifier.
-                            // This is so that identifier "net" doesn't get identified as token "ne" + identifier "t".
-                            if (i == match.getKey().length() - 1 && match.getKey().length() >= identifierFound.length()) {
-                                position += match.getKey().length();
-
-                                tokens.add(createToken(match.getValue(), match.getKey()));
-
-                                matched = true;
+                            /* If we are on the last index from this match, first check if the
+                             matches length is bigger or equal then the currently found identifier.
+                             This is so that token "++" doesn't get identified as two "+" tokens. */
+                            if (i == entry.getKey().length() - 1 && entry.getKey().length() >= identifierFound.length()) {
+                                match = entry;
 
                                 break;
                             }
@@ -184,13 +182,23 @@ public class Lexer {
                             break;
                         }
                     }
+
+                    if (match != null) {
+                        break;
+                    }
                 }
 
-                if (!matched && identifierFound.length() > 0) {
+                if (match != null) {
+                    position += match.getKey().length();
+
+                    tokens.add(createToken(match.getValue(), match.getKey()));
+                }
+
+                if (match == null && identifierFound.length() > 0) {
                     tokens.add(createToken(Lexer.isNumber(identifierFound.toString()) ? TokenType.NUMBER : TokenType.IDENTIFIER, identifierFound.toString()));
 
                     position += identifierFound.length();
-                } else if (!matched) {
+                } else if (match == null) {
                     throw new LexerException(String.format("Unexpected character '%c'", current()), line, column);
                 }
             }

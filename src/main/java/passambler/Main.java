@@ -99,7 +99,7 @@ public class Main {
                 OutputRecorder.stop();
 
                 LOGGER.info("Test '" + file.getFileName() + "' passed");
-            } catch (EngineException e) {
+            } catch (Exception e) {
                 OutputRecorder.stop();
 
                 LOGGER.error("Test '" + file.getFileName() + "' failed", e);

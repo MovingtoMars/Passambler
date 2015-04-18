@@ -76,6 +76,15 @@ public class NumberValue extends Value {
                     return list;
                 case COMPARE:
                     return new NumberValue(getValue().compareTo(((NumberValue) value).getValue()));
+                case UNARY_PLUS:
+                    return new NumberValue(getValue().plus());
+                case UNARY_MINUS:
+                    return new NumberValue(getValue().negate());
+                case UNARY_INCR:
+                    return new NumberValue(getValue().add(new BigDecimal(1)));
+                case UNARY_DECR:
+                    return new NumberValue(getValue().min(new BigDecimal(1)));
+
             }
         }
 

@@ -5,7 +5,8 @@ public enum TokenType {
     LEFT_PAREN, RIGHT_PAREN, LEFT_BRACKET, RIGHT_BRACKET, LEFT_BRACE, RIGHT_BRACE,
     ASSIGN, ASSIGN_PLUS, ASSIGN_MINUS, ASSIGN_MULTIPLY, ASSIGN_DIVIDE, ASSIGN_POWER, ASSIGN_MODULO,
     PLUS, MINUS, MULTIPLY, DIVIDE, POWER, MODULO, COMPARE, RANGE,
-    EQUAL, NEQUAL, GT, LT, GTE, LTE, NOT,
+    UNARY_PLUS, UNARY_MINUS, UNARY_INCR, UNARY_DECR, UNARY_NOT,
+    EQUAL, NEQUAL, GT, LT, GTE, LTE,
     AND, OR, XOR,
     WHILE, FOR, FN, RETURN, IF, ELSEIF, ELSE,
     CLASS,
@@ -18,6 +19,12 @@ public enum TokenType {
             || this == EQUAL || this == NEQUAL
             || this == AND || this == OR || this == XOR
             || this == COMPARE || this == RANGE;
+    }
+
+    public boolean isUnaryOperator() {
+        return this == UNARY_PLUS || this == UNARY_MINUS
+            || this == UNARY_INCR || this == UNARY_DECR
+            || this == UNARY_NOT;
     }
 
     public boolean isAssignmentOperator() {
