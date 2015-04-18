@@ -136,7 +136,6 @@ public class ExpressionParser {
 
             if (current.getOperator() != null && current.getOperator().getType().isUnaryOperator()) {
                 current.setValue(current.getValue().onOperator(current.getValue(), current.getOperator()));
-                current.setOperator(null);
             }
         }
     }
