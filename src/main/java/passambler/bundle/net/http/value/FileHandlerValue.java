@@ -18,10 +18,10 @@ import org.apache.http.protocol.HttpRequestHandler;
 import passambler.value.Value;
 
 public class FileHandlerValue extends Value implements HttpRequestHandler {
-    private String docRoot;
+    private String location;
 
-    public FileHandlerValue(String docRoot) {
-        this.docRoot = docRoot;
+    public FileHandlerValue(String location) {
+        this.location = location;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class FileHandlerValue extends Value implements HttpRequestHandler {
 
         String target = request.getRequestLine().getUri();
 
-        File file = new File(docRoot, URLDecoder.decode(target, "UTF-8"));
+        File file = new File(location, URLDecoder.decode(target, "UTF-8"));
 
         if (!file.exists()) {
             StringEntity entity = new StringEntity("<html><body><h1>File " + file.getPath() + " not found</h1></body></html>", ContentType.create("text/html", "UTF-8"));
