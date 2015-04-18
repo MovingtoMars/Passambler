@@ -5,9 +5,10 @@ import java.net.ServerSocket;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
 import passambler.value.CloseableValue;
+import passambler.value.ReadableValue;
 import passambler.value.Value;
 
-public class ServerSocketValue extends Value implements CloseableValue {
+public class ServerSocketValue extends Value implements ReadableValue, CloseableValue {
     private ServerSocket socket;
 
     public ServerSocketValue(int port) throws IOException {
@@ -27,6 +28,15 @@ public class ServerSocketValue extends Value implements CloseableValue {
     public void close() throws EngineException {
         try {
             socket.close();
+        } catch (IOException e) {
+            throw new ErrorException(e);
+        }
+    }
+
+    @Override
+    public Value read() throws EngineException {
+        try {
+            return new SocketValue(socket.accept());
         } catch (IOException e) {
             throw new ErrorException(e);
         }

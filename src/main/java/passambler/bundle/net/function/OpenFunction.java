@@ -36,5 +36,4 @@ public class OpenFunction extends Value implements Function {
             throw new ErrorException(e);
         }
     }
-
 }

@@ -21,7 +21,5 @@ public class NetBundle implements Bundle {
     public void apply(Map<String, Value> symbols) {
         symbols.put("Listen", new ListenFunction());
         symbols.put("Open", new OpenFunction());
-        symbols.put("Accept", new AcceptFunction());
-        symbols.put("Close", new CloseFunction());
     }
 }
