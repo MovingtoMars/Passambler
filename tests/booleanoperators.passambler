@@ -1,5 +1,5 @@
 --TEST--
-Tests "and" and "or" operators.
+Tests boolean operators.
 
 --INPUT--
 return [
@@ -8,8 +8,12 @@ return [
     3 == 3 && 1 == 2,
     1 == 2 || 2 == 1,
     1 == 1 ^ 1 == 1,
-    2 == 2 ^ 1 == 2
+    2 == 2 ^ 1 == 2,
+    !true,
+    !false,
+    !(1 == 1),
+    !(2 == 3)
 ];
 
 --RESULT--
-[true, true, false, false, false, true]
+[true, true, false, false, false, true, false, true, false, true]
