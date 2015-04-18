@@ -21,5 +21,7 @@ public class RegexBundle implements Bundle {
         symbols.put("Matches", new MatchesFunction());
         symbols.put("Quote", new QuoteFunction());
         symbols.put("Split", new SplitFunction());
+        symbols.put("Replace", new ReplaceFunction(false));
+        symbols.put("ReplaceAll", new ReplaceFunction(true));
     }
 }
