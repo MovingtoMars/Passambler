@@ -3,6 +3,7 @@ package passambler.bundle.os;
 import java.util.Map;
 import passambler.bundle.Bundle;
 import passambler.bundle.os.function.*;
+import passambler.value.DictValue;
 import passambler.value.Value;
 import passambler.value.StringValue;
 
@@ -34,5 +35,17 @@ public class OsBundle implements Bundle {
         symbols.put("Name", new StringValue(System.getProperty("os.name")));
         symbols.put("Version", new StringValue(System.getProperty("os.version")));
         symbols.put("Arch", new StringValue(System.getProperty("os.arch")));
+
+        symbols.put("Env", getEnvDict());
+    }
+
+    private DictValue getEnvDict() {
+        DictValue value = new DictValue();
+
+        for (Map.Entry<String, String> entry : System.getenv().entrySet()) {
+            value.setEntry(new StringValue(entry.getKey()), new StringValue(entry.getValue()));
+        }
+
+        return value;
     }
 }
