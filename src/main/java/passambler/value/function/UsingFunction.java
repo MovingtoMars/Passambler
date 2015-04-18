@@ -11,7 +11,6 @@ import passambler.bundle.Bundle;
 import passambler.bundle.FilesystemBundle;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
-import passambler.value.ErrorValue;
 import passambler.value.ListValue;
 
 public class UsingFunction extends Value implements Function {
@@ -60,7 +59,7 @@ public class UsingFunction extends Value implements Function {
                     }
 
                     if (!found) {
-                        throw new ErrorException(new ErrorValue("Undefined bundle: '%s'", currentBundleName));
+                        throw new ErrorException("Undefined bundle '%s'", currentBundleName);
                     }
                 }
             }
@@ -98,7 +97,7 @@ public class UsingFunction extends Value implements Function {
                     }
 
                     if (!found) {
-                        throw new ErrorException(new ErrorValue("Undefined bundle property: '%s'", valueName));
+                        throw new ErrorException("Undefined bundle property '%s'", valueName);
                     }
                 }
             }

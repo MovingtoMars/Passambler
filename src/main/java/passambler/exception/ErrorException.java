@@ -11,6 +11,10 @@ public class ErrorException extends EngineException {
         this.error = new ErrorValue(value.toString());
     }
 
+    public ErrorException(String message, Object... args) {
+        this(new ErrorValue(String.format(message, args)));
+    }
+
     public ErrorException(Exception e) {
         this(new ErrorValue(e));
     }

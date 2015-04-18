@@ -3,7 +3,6 @@ package passambler.bundle.std.value;
 import java.io.IOException;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
-import passambler.value.ErrorValue;
 import passambler.value.ReadableValue;
 import passambler.value.StringValue;
 import passambler.value.Value;
@@ -23,7 +22,7 @@ public class InValue extends Value implements ReadableValue {
             }
 
             if (data == null) {
-                throw new ErrorException(new ErrorValue("Console not available"));
+                throw new ErrorException("Console not available");
             }
 
             return new StringValue(data);

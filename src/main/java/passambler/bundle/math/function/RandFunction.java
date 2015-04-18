@@ -6,7 +6,6 @@ import passambler.exception.ErrorException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
-import passambler.value.ErrorValue;
 import passambler.value.NumberValue;
 
 public class RandFunction extends Value implements Function {
@@ -26,7 +25,7 @@ public class RandFunction extends Value implements Function {
         int max = ((NumberValue) context.getArgument(1)).getValue().intValue();
 
         if (min > max) {
-            throw new ErrorException(new ErrorValue("Invalid bounds (%d > %d)", min, max));
+            throw new ErrorException("Invalid bounds (%d > %d)", min, max);
         }
 
         return new NumberValue(new Random().nextInt((max - min) + 1) + min);
