@@ -42,9 +42,9 @@ public class OsBundle implements Bundle {
     private DictValue getEnvDict() {
         DictValue value = new DictValue();
 
-        for (Map.Entry<String, String> entry : System.getenv().entrySet()) {
+        System.getenv().entrySet().stream().forEach((entry) -> {
             value.setEntry(new StringValue(entry.getKey()), new StringValue(entry.getValue()));
-        }
+        });
 
         return value;
     }
