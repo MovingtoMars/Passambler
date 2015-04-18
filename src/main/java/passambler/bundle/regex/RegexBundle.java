@@ -20,5 +20,6 @@ public class RegexBundle implements Bundle {
     public void apply(Map<String, Value> symbols) {
         symbols.put("Matches", new MatchesFunction());
         symbols.put("Quote", new QuoteFunction());
+        symbols.put("Split", new SplitFunction());
     }
 }
