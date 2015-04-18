@@ -2,6 +2,7 @@ package passambler.bundle.regex;
 
 import java.util.Map;
 import passambler.bundle.Bundle;
+import passambler.bundle.regex.function.PatternFunction;
 import passambler.value.Value;
 
 public class RegexBundle implements Bundle {
@@ -17,6 +18,6 @@ public class RegexBundle implements Bundle {
 
     @Override
     public void apply(Map<String, Value> symbols) {
-        /* @TODO */
+        symbols.put("Pattern", new PatternFunction());
     }
 }
