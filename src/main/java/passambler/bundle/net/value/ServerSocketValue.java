@@ -2,9 +2,12 @@ package passambler.bundle.net.value;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import passambler.exception.EngineException;
+import passambler.exception.ErrorException;
+import passambler.value.CloseableValue;
 import passambler.value.Value;
 
-public class ServerSocketValue extends Value {
+public class ServerSocketValue extends Value implements CloseableValue {
     private ServerSocket socket;
 
     public ServerSocketValue(int port) throws IOException {
@@ -18,5 +21,14 @@ public class ServerSocketValue extends Value {
     @Override
     public ServerSocket getValue() {
         return socket;
+    }
+
+    @Override
+    public void close() throws EngineException {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            throw new ErrorException(e);
+        }
     }
 }

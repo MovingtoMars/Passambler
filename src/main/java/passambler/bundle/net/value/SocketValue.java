@@ -6,12 +6,13 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
+import passambler.value.CloseableValue;
 import passambler.value.ReadableValue;
 import passambler.value.Value;
 import passambler.value.StringValue;
 import passambler.value.WriteableValue;
 
-public class SocketValue extends Value implements WriteableValue, ReadableValue {
+public class SocketValue extends Value implements WriteableValue, ReadableValue, CloseableValue {
     private Socket socket;
 
     public SocketValue(Socket socket) {
@@ -39,6 +40,15 @@ public class SocketValue extends Value implements WriteableValue, ReadableValue 
     public Value read() throws EngineException {
         try {
             return new StringValue(new BufferedReader(new InputStreamReader(socket.getInputStream())).readLine());
+        } catch (IOException e) {
+            throw new ErrorException(e);
+        }
+    }
+
+    @Override
+    public void close() throws EngineException {
+        try {
+            socket.close();
         } catch (IOException e) {
             throw new ErrorException(e);
         }
