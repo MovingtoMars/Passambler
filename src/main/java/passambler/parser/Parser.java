@@ -15,6 +15,7 @@ import passambler.bundle.json.JsonBundle;
 import passambler.bundle.math.MathBundle;
 import passambler.bundle.net.NetBundle;
 import passambler.bundle.os.OsBundle;
+import passambler.bundle.regex.RegexBundle;
 import passambler.bundle.std.StdBundle;
 import passambler.bundle.thread.ThreadBundle;
 import passambler.exception.EngineException;
@@ -57,6 +58,7 @@ public class Parser {
         bundles.add(new NetBundle());
         bundles.add(new ThreadBundle());
         bundles.add(new JsonBundle());
+        bundles.add(new RegexBundle());
     }
 
     public void setCatch(Block block, String errorName) {
