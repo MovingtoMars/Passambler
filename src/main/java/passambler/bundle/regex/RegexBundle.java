@@ -18,7 +18,7 @@ public class RegexBundle implements Bundle {
 
     @Override
     public void apply(Map<String, Value> symbols) {
-        symbols.put("Pattern", new PatternFunction());
+        symbols.put("Matches", new MatchesFunction());
         symbols.put("Quote", new QuoteFunction());
     }
 }
