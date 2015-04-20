@@ -4,29 +4,29 @@ Tests for statement.
 --INPUT--
 a = 0;
 
-for (1..10) {
+for 1..10 {
     a += 5;
 }
 
-for (x : 1..3) {
+for x : 1..3 {
     a *= x;
 }
 
-for (x, y : 100..105) {
+for x, y : 100..105 {
     a += x;
 }
 
 b = {1: 5, 2: 6, 3: 7};
 
-for (b) {
+for b {
     a += 1;
 }
 
-for (value : b) {
+for value : b {
     a -= value;
 }
 
-for (key, value : b) {
+for key, value : b {
     a += key;
 }
 

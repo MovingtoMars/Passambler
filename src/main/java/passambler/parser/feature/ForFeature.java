@@ -27,22 +27,17 @@ public class ForFeature implements Feature {
         List<String> arguments = new ArrayList<>();
 
         tokens.next();
-        tokens.match(TokenType.LEFT_PAREN);
 
-        tokens.next();
-
-        TokenList left = new TokenList(parser.parseExpressionTokens(tokens, TokenType.RIGHT_PAREN, TokenType.COL));
+        TokenList left = new TokenList(parser.parseExpressionTokens(tokens, TokenType.LEFT_BRACE, TokenType.COL));
         Value right = null;
 
         if (tokens.current().getType() == TokenType.COL) {
             tokens.next();
 
-            right = parser.parseExpression(tokens, TokenType.RIGHT_PAREN);
+            right = parser.parseExpression(tokens, TokenType.LEFT_BRACE);
 
-            tokens.match(TokenType.RIGHT_PAREN);
+            tokens.match(TokenType.LEFT_BRACE);
         }
-
-        tokens.next();
 
         Block callback = parser.parseBlock(tokens);
 
