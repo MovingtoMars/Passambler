@@ -12,6 +12,7 @@ import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenType;
 import passambler.parser.Parser;
 import passambler.parser.expression.feature.*;
+import passambler.value.BooleanValue;
 
 public class ExpressionParser {
     private List<Feature> features = new ArrayList<>();
@@ -113,12 +114,17 @@ public class ExpressionParser {
         performPrecedence(pairs, TokenType.RANGE, TokenType.COMPARE);
         performPrecedence(pairs, TokenType.GT, TokenType.GTE, TokenType.LT, TokenType.LTE);
         performPrecedence(pairs, TokenType.EQUAL, TokenType.NEQUAL);
-        performPrecedence(pairs, TokenType.AND, TokenType.OR, TokenType.XOR);
 
-        for (ValueOperatorPair pair : pairs) {
+        for (int i = 0; i < pairs.size(); ++i) {
+            ValueOperatorPair pair = pairs.get(i);
+
             if (value == null) {
                 value = pair.getValue();
             } else {
+                if (i > 0 && pair.getOperator().getType() == TokenType.AND && pairs.get(i - 1).getValue() instanceof BooleanValue && !((BooleanValue) pairs.get(i - 1).getValue()).getValue()) {
+                    return new BooleanValue(false);
+                }
+
                 value = value.onOperator(pair.getValue(), pair.getOperator());
 
                 if (value == null) {
