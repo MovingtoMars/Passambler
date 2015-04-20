@@ -73,6 +73,8 @@ public class ClassInitializerFunction extends UserFunction {
             if (Lexer.isPublic(symbol.getKey())) {
                 child.setProperty(symbol.getKey(), symbol.getValue());
             }
+
+            self.setProperty(symbol.getKey(), symbol.getValue());
         }
 
         // Invoke constructor

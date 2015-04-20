@@ -1,0 +1,42 @@
+// stack.passambler - Stack implementation in Passambler
+
+using('std');
+
+class Stack(elements=[])
+{
+    fn Size()
+    {
+        return std.Size(self.elements);
+    }
+    fn Push(o)
+    {
+        std.Push(self.elements, o);
+        return o;
+    }
+    fn Pop()
+    {
+        return std.Pop(self.elements);
+    }
+    fn Peek(i=0)
+    {
+        if (self.Size() - 1 - i) < 0
+        {
+            throw('Cannot reach beyond stack');
+        }
+        return self.elements[self.Size() - 1 - i];
+    }
+    fn IsEmpty()
+    {
+        return self.Size() == 0;
+    }
+}
+
+s = Stack([3,4]);
+s.Push(1);
+s.Push(2);
+writeln(s.Peek(4));
+writeln(s.Pop());
+writeln(s.Peek());
+writeln(s.IsEmpty());
+s.Pop();
+writeln(s.IsEmpty());
