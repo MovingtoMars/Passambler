@@ -8,10 +8,9 @@ user3 = {"name": "Raoul", "age": 16, "friends": [{"name": "Olegna", "age": 15}, 
 
 return [
     user["friends"][1]["friends"][0]["name"],
-    user3["test"],
     user == user2,
     user2 == user3
 ];
 
 --RESULT--
-[Reivilo, nil, true, false]
+[Reivilo, true, false]

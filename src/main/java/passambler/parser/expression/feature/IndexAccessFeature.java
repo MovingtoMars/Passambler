@@ -24,6 +24,8 @@ public class IndexAccessFeature implements Feature {
 
         parser.getTokens().next();
 
+        TokenPosition indexPosition = parser.getTokens().current().getPosition();
+
         Value indexValue = parser.getParser().parseExpression(parser.getTokens(), TokenType.RIGHT_BRACKET);
 
         parser.getTokens().match(TokenType.RIGHT_BRACKET);
@@ -38,7 +40,7 @@ public class IndexAccessFeature implements Feature {
             int index = ((NumberValue) indexValue).getValue().intValue();
 
             if (index < -list.getValue().size() || index > list.getValue().size() - 1) {
-                throw new ParserException(ParserExceptionType.INDEX_OUT_OF_RANGE, leftBracketPosition, index, list.getValue().size());
+                throw new ParserException(ParserExceptionType.INDEX_OUT_OF_RANGE, indexPosition, index, list.getValue().size());
             }
 
             if (index < 0) {
@@ -54,7 +56,7 @@ public class IndexAccessFeature implements Feature {
             DictValue dict = (DictValue) currentValue;
 
             if (dict.getEntry(indexValue) == null) {
-                return Value.VALUE_NIL;
+                throw new ParserException(ParserExceptionType.UNDEFINED_DICT_ENTRY, indexPosition, indexValue.toString());
             }
 
             return dict.getEntry(indexValue);
