@@ -31,20 +31,15 @@ public class IfFeature implements Feature {
 
         while (tokens.hasNext()) {
             if (!elseCondition) {
-                tokens.match(TokenType.LEFT_PAREN);
-                tokens.next();
+                List<Token> expressionTokens = parser.parseExpressionTokens(tokens, TokenType.LEFT_BRACE);
 
-                List<Token> expressionTokens = parser.parseExpressionTokens(tokens, TokenType.RIGHT_PAREN);
-
-                tokens.match(TokenType.RIGHT_PAREN);
+                tokens.match(TokenType.LEFT_BRACE);
 
                 Value condition = new ExpressionParser(parser, new TokenList(expressionTokens)).parse();
 
                 if (!(condition instanceof BooleanValue)) {
                     throw new ParserException(ParserExceptionType.NOT_A_BOOLEAN, expressionTokens.get(0).getPosition());
                 }
-
-                tokens.next();
 
                 cases.put((BooleanValue) condition, parser.parseBlock(tokens));
 
