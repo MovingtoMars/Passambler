@@ -8,7 +8,7 @@ public class ErrorException extends EngineException {
     public ErrorException(ErrorValue value) {
         super(value.toString());
 
-        this.error = new ErrorValue(value.toString());
+        this.error = value;
     }
 
     public ErrorException(String message, Object... args) {
