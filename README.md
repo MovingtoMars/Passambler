@@ -21,9 +21,7 @@ for x : 0..100 {
 ```
 
 ## Building
-Java 8 is required to build the language.
-
-Clone the repository and run Maven.
+Clone the repository and run Maven. Java 8 is required to build the language.
 ```
 mvn install
 ```
