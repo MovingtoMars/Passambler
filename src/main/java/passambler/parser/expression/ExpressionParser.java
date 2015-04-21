@@ -40,6 +40,7 @@ public class ExpressionParser {
         features.add(new SymbolFeature());
         features.add(new PropertyFeature());
         features.add(new AnonymousFunctionFeature());
+        features.add(new TernaryFeature());
     }
 
     public Parser getParser() {

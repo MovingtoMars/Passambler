@@ -74,6 +74,7 @@ public class Lexer {
         tokenMap.put(":", TokenType.COL);
         tokenMap.put(";", TokenType.SEMI_COL);
         tokenMap.put("%", TokenType.MODULO);
+        tokenMap.put("?", TokenType.TERNARY);
     }
 
     public Token createToken(TokenType type, String value) {
