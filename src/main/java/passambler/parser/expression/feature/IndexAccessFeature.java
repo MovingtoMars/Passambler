@@ -20,8 +20,6 @@ public class IndexAccessFeature implements Feature {
 
     @Override
     public Value perform(ExpressionParser parser, Value currentValue) throws EngineException {
-        TokenPosition leftBracketPosition = parser.getTokens().current().getPosition();
-
         parser.getTokens().next();
 
         TokenPosition indexPosition = parser.getTokens().current().getPosition();
@@ -30,11 +28,7 @@ public class IndexAccessFeature implements Feature {
 
         parser.getTokens().match(TokenType.RIGHT_BRACKET);
 
-        if (indexValue instanceof NumberValue) {
-            if (!(currentValue instanceof ListValue)) {
-                throw new ParserException(ParserExceptionType.NOT_A_LIST, leftBracketPosition);
-            }
-
+        if (indexValue instanceof NumberValue && currentValue instanceof ListValue) {
             ListValue list = (ListValue) currentValue;
 
             int index = ((NumberValue) indexValue).getValue().intValue();
@@ -49,10 +43,6 @@ public class IndexAccessFeature implements Feature {
                 return list.getValue().get(index);
             }
         } else {
-            if (!(currentValue instanceof DictValue)) {
-                throw new ParserException(ParserExceptionType.NOT_A_DICT, leftBracketPosition);
-            }
-
             DictValue dict = (DictValue) currentValue;
 
             if (dict.getEntry(indexValue) == null) {
