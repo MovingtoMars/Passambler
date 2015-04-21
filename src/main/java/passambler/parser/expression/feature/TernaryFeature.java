@@ -8,7 +8,6 @@ import passambler.value.BooleanValue;
 import passambler.value.Value;
 
 public class TernaryFeature implements Feature {
-
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
         return parser.getTokens().current().getType() == TokenType.TERNARY && currentValue instanceof BooleanValue;
@@ -29,5 +28,4 @@ public class TernaryFeature implements Feature {
 
         return ((BooleanValue) currentValue).getValue() ? ifTrue : ifFalse;
     }
-
 }
