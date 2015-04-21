@@ -28,7 +28,7 @@ public class WriteFunction extends Value implements Function {
     public Value invoke(FunctionContext context) throws EngineException {
         int x = 0;
 
-        WriteableValue writeable = this.handler;
+        WriteableValue writeable = handler;
 
         if (context.getArguments().length > 0 && context.getArgument(0) instanceof WriteableValue) {
             writeable = (WriteableValue) context.getArgument(0);
