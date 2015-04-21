@@ -161,15 +161,15 @@ public class Parser {
 
         tokens.next();
 
-        int braces = 1;
+        int depth = 1;
 
         while (tokens.hasNext()) {
             if (tokens.current().getType() == TokenType.LEFT_BRACE) {
-                braces++;
+                depth++;
             } else if (tokens.current().getType() == TokenType.RIGHT_BRACE) {
-                braces--;
+                depth--;
 
-                if (braces == 0) {
+                if (depth == 0) {
                     break;
                 }
             }
