@@ -39,18 +39,18 @@ public class SymbolFeature implements Feature {
 
                 tokens.match(TokenType.NUMBER);
 
-                number.append(".");
-                number.append(tokens.current().getValue());
+                number.append(".").append(tokens.current().getValue());
             }
 
             return new NumberValue(new BigDecimal(number.toString()));
         } else if (token.getType() == TokenType.IDENTIFIER) {
-            if (token.getValue().equals("true")) {
-                return Value.VALUE_TRUE;
-            } else if (token.getValue().equals("false")) {
-                return Value.VALUE_FALSE;
-            } else if (token.getValue().equals("nil")) {
-                return Value.VALUE_NIL;
+            switch (token.getValue()) {
+                case "true":
+                    return Value.VALUE_TRUE;
+                case "false":
+                    return Value.VALUE_FALSE;
+                case "nil":
+                    return Value.VALUE_NIL;
             }
 
             if (!parser.getParser().getScope().hasSymbol(token.getValue())) {
