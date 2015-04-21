@@ -95,6 +95,14 @@ public class ExpressionParser {
                     expression.remove(expression.size() - 1);
                 }
 
+                if (lastOperator != null && lastOperator.getType() == TokenType.AND) {
+                    Value result = parsePairs(pairs);
+
+                    if (result instanceof BooleanValue && !((BooleanValue) result).getValue()) {
+                        return new BooleanValue(false);
+                    }
+                }
+
                 pairs.add(new ValueOperatorPair(createParser(new TokenList(expression)).parseFeatures(), lastOperator));
 
                 expression.clear();
@@ -105,6 +113,10 @@ public class ExpressionParser {
             tokens.next();
         }
 
+        return parsePairs(pairs);
+    }
+
+    private Value parsePairs(List<ValueOperatorPair> pairs) throws EngineException {
         Value value = null;
 
         performUnary(pairs);
@@ -114,6 +126,7 @@ public class ExpressionParser {
         performPrecedence(pairs, TokenType.RANGE, TokenType.COMPARE);
         performPrecedence(pairs, TokenType.GT, TokenType.GTE, TokenType.LT, TokenType.LTE);
         performPrecedence(pairs, TokenType.EQUAL, TokenType.NEQUAL);
+        performPrecedence(pairs, TokenType.AND, TokenType.OR, TokenType.XOR);
 
         for (int i = 0; i < pairs.size(); ++i) {
             ValueOperatorPair pair = pairs.get(i);
@@ -121,10 +134,6 @@ public class ExpressionParser {
             if (value == null) {
                 value = pair.getValue();
             } else {
-                if (i > 0 && pair.getOperator().getType() == TokenType.AND && pairs.get(i - 1).getValue() instanceof BooleanValue && !((BooleanValue) pairs.get(i - 1).getValue()).getValue()) {
-                    return new BooleanValue(false);
-                }
-
                 value = value.onOperator(pair.getValue(), pair.getOperator());
 
                 if (value == null) {
