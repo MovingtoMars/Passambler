@@ -143,18 +143,4 @@ public class AssignmentParser {
             leftTokens.next();
         }
     }
-
-    public static boolean isAssignment(TokenList tokens) {
-        while (tokens.hasNext()) {
-            if (tokens.current().getType() == TokenType.LEFT_BRACE || tokens.current().getType() == TokenType.LEFT_PAREN) {
-                return false;
-            } else if (tokens.current().getType().isAssignmentOperator()) {
-                return true;
-            }
-
-            tokens.next();
-        }
-
-        return false;
-    }
 }
