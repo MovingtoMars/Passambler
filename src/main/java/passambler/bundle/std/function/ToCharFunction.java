@@ -6,7 +6,7 @@ import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
 
-public class ToCharacterFunction extends Value implements Function {
+public class ToCharFunction extends Value implements Function {
     @Override
     public int getArguments() {
         return 1;

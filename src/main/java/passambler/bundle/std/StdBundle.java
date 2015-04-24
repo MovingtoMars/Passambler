@@ -30,14 +30,14 @@ public class StdBundle implements Bundle {
         symbols.put("ToStr", new ToStrFunction());
         symbols.put("ToNum", new ToNumFunction());
         symbols.put("ToBool", new ToBoolFunction());
-        symbols.put("ToCharacter", new ToCharacterFunction());
+        symbols.put("ToChar", new ToCharFunction());
         symbols.put("IsStr", new IsFunction(StringValue.class));
         symbols.put("IsNum", new IsFunction(NumberValue.class));
         symbols.put("IsBool", new IsFunction(BooleanValue.class));
         symbols.put("IsList", new IsFunction(ListValue.class));
         symbols.put("IsDict", new IsFunction(DictValue.class));
         symbols.put("IsClass", new IsFunction(ClassValue.class));
-        symbols.put("IsCharacter", new IsFunction(CharacterValue.class));
+        symbols.put("IsChar", new IsFunction(CharacterValue.class));
         symbols.put("IsErr", new IsFunction(ErrorValue.class));
         symbols.put("Lcase", new LCaseFunction());
         symbols.put("Ucase", new UCaseFunction());
