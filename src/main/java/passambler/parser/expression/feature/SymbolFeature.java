@@ -8,6 +8,7 @@ import passambler.lexer.Token;
 import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
 import passambler.parser.expression.ExpressionParser;
+import passambler.value.CharacterValue;
 import passambler.value.NumberValue;
 import passambler.value.StringValue;
 import passambler.value.Value;
@@ -17,7 +18,8 @@ public class SymbolFeature implements Feature {
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
         return parser.getTokens().current().getType() == TokenType.IDENTIFIER
             || parser.getTokens().current().getType() == TokenType.NUMBER
-            || parser.getTokens().current().getType() == TokenType.STRING;
+            || parser.getTokens().current().getType() == TokenType.STRING
+            || parser.getTokens().current().getType() == TokenType.CHARACTER;
     }
 
     @Override
@@ -28,6 +30,8 @@ public class SymbolFeature implements Feature {
 
         if (token.getType() == TokenType.STRING) {
             return new StringValue(token.getValue());
+        } else if (token.getType() == TokenType.CHARACTER) {
+            return new CharacterValue(token.getValue().toCharArray()[0]);
         } else if (token.getType() == TokenType.NUMBER) {
             StringBuilder number = new StringBuilder();
 

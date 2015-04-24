@@ -22,7 +22,8 @@ public enum ParserExceptionType {
     NOT_A_LIST("Value is not a list"),
     NOT_A_DICT("Value is not a dictionary"),
     NOT_A_CLASS("Value is not a class"),
-    NOT_A_BOOLEAN("Value is not a boolean expression");
+    NOT_A_BOOLEAN("Value is not a boolean expression"),
+    NOT_A_CHARACTER("Value is not a character");
 
     String message;
 

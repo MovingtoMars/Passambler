@@ -144,6 +144,18 @@ public class Lexer {
                 }
 
                 next();
+            } else if (current() == '\'') {
+                next();
+
+                tokens.add(createToken(TokenType.CHARACTER, String.valueOf(current())));
+
+                next();
+
+                if (current() != '\'') {
+                    throw new LexerException(String.format("Expected character closing symbol, got '%c'", current()), line, column);
+                }
+
+                next();
             } else if (current() == ' ' || current() == '\t') {
                 next();
             } else if (current() == '/' && peek() != null && (peek() == '/' || peek() == '*')) {

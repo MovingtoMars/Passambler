@@ -10,10 +10,12 @@ import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenType;
 import passambler.parser.Parser;
+import passambler.value.CharacterValue;
 import passambler.value.Value;
 import passambler.value.DictValue;
 import passambler.value.ListValue;
 import passambler.value.NumberValue;
+import passambler.value.StringValue;
 
 public class AssignmentParser {
     private Parser parser;
@@ -110,6 +112,10 @@ public class AssignmentParser {
                 if (value instanceof NumberValue) {
                     if (!(leftValue instanceof ListValue)) {
                         throw new ParserException(ParserExceptionType.NOT_A_LIST, tokens.current().getPosition());
+                    }
+
+                    if (leftValue instanceof StringValue && !(rightValue instanceof CharacterValue)) {
+                        throw new ParserException(ParserExceptionType.NOT_A_CHARACTER, tokens.current().getPosition());
                     }
 
                     ListValue list = (ListValue) leftValue;
