@@ -7,7 +7,7 @@ import passambler.exception.ParserException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
-import passambler.parser.ArgumentDefinition;
+import passambler.parser.Argument;
 import passambler.parser.Parser;
 import passambler.value.Value;
 import passambler.value.ClassValue;
@@ -28,7 +28,7 @@ public class ClassFeature implements Feature {
 
         tokens.next();
 
-        List<ArgumentDefinition> arguments = parser.parseArgumentDefinition(tokens);
+        List<Argument> arguments = parser.parseArgumentDefinition(tokens);
 
         tokens.next();
 

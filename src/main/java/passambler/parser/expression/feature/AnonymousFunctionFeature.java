@@ -3,7 +3,7 @@ package passambler.parser.expression.feature;
 import java.util.List;
 import passambler.exception.EngineException;
 import passambler.lexer.TokenType;
-import passambler.parser.ArgumentDefinition;
+import passambler.parser.Argument;
 import passambler.parser.Block;
 import passambler.parser.expression.ExpressionParser;
 import passambler.value.Value;
@@ -19,7 +19,7 @@ public class AnonymousFunctionFeature implements Feature {
     public Value perform(ExpressionParser parser, Value currentValue) throws EngineException {
         parser.getTokens().next();
 
-        List<ArgumentDefinition> arguments = parser.getParser().parseArgumentDefinition(parser.getTokens());
+        List<Argument> arguments = parser.getParser().parseArgumentDefinition(parser.getTokens());
 
         parser.getTokens().next();
 

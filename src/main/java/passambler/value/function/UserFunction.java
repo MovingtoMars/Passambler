@@ -1,16 +1,16 @@
 package passambler.value.function;
 
 import java.util.List;
-import passambler.parser.ArgumentDefinition;
+import passambler.parser.Argument;
 import passambler.parser.Block;
 import passambler.exception.EngineException;
 import passambler.value.Value;
 
 public class UserFunction extends Value implements Function {
     private Block block;
-    private List<ArgumentDefinition> arguments;
+    private List<Argument> arguments;
 
-    public UserFunction(Block block, List<ArgumentDefinition> arguments) {
+    public UserFunction(Block block, List<Argument> arguments) {
         this.block = block;
         this.arguments = arguments;
     }
@@ -19,7 +19,7 @@ public class UserFunction extends Value implements Function {
         return block;
     }
 
-    public List<ArgumentDefinition> getArgumentDefinitions() {
+    public List<Argument> getArgumentDefinitions() {
         return arguments;
     }
 

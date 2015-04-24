@@ -2,7 +2,7 @@ package passambler.parser;
 
 import passambler.value.Value;
 
-public class ArgumentDefinition {
+public class Argument {
     private String name;
 
     private Value defaultValue;

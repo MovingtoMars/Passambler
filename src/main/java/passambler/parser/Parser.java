@@ -214,12 +214,12 @@ public class Parser {
         return new ExpressionParser(this, new TokenList(parseExpressionTokens(tokens, endingTokens))).parse();
     }
 
-    public List<ArgumentDefinition> parseArgumentDefinition(TokenList tokens) throws EngineException {
+    public List<Argument> parseArgumentDefinition(TokenList tokens) throws EngineException {
         tokens.match(TokenType.LEFT_PAREN);
 
         tokens.next();
 
-        List<ArgumentDefinition> arguments = new ArrayList<>();
+        List<Argument> arguments = new ArrayList<>();
 
         while (tokens.hasNext()) {
             if (tokens.current().getType() == TokenType.RIGHT_PAREN) {
@@ -227,7 +227,7 @@ public class Parser {
             } else {
                 tokens.match(TokenType.IDENTIFIER);
 
-                ArgumentDefinition definition = new ArgumentDefinition();
+                Argument definition = new Argument();
 
                 definition.setName(tokens.current().getValue());
 

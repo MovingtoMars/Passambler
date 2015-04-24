@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import passambler.lexer.Lexer;
-import passambler.parser.ArgumentDefinition;
+import passambler.parser.Argument;
 import passambler.parser.Block;
 import passambler.exception.EngineException;
 import passambler.value.Property;
@@ -16,7 +16,7 @@ public class ClassInitializerFunction extends UserFunction {
 
     private List<ClassInitializerFunction> parents = new ArrayList<>();
 
-    public ClassInitializerFunction(String name, Block block, List<ArgumentDefinition> argumentDefinitions) {
+    public ClassInitializerFunction(String name, Block block, List<Argument> argumentDefinitions) {
         super(block, argumentDefinitions);
 
         this.name = name;

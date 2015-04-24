@@ -4,7 +4,7 @@ import java.util.List;
 import passambler.exception.EngineException;
 import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
-import passambler.parser.ArgumentDefinition;
+import passambler.parser.Argument;
 import passambler.parser.Block;
 import passambler.parser.Parser;
 import passambler.value.Value;
@@ -26,7 +26,7 @@ public class FunctionFeature implements Feature {
 
         tokens.next();
 
-        List<ArgumentDefinition> arguments = parser.parseArgumentDefinition(tokens);
+        List<Argument> arguments = parser.parseArgumentDefinition(tokens);
 
         if (tokens.peek() == null) {
             parser.getScope().setSymbol(name, new UserFunction(null, arguments));

@@ -8,7 +8,7 @@ import passambler.exception.ParserExceptionType;
 import passambler.lexer.Token;
 import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
-import passambler.parser.ArgumentDefinition;
+import passambler.parser.Argument;
 import passambler.parser.expression.ExpressionParser;
 import passambler.value.Value;
 import passambler.value.function.Function;
@@ -61,7 +61,7 @@ public class FunctionCallFeature implements Feature {
                         argumentTokens.next();
                         argumentTokens.next();
 
-                        List<ArgumentDefinition> argumentDefinitions = ((UserFunction) currentFunction).getArgumentDefinitions();
+                        List<Argument> argumentDefinitions = ((UserFunction) currentFunction).getArgumentDefinitions();
 
                         int index = argumentDefinitions.indexOf(argumentDefinitions.stream().filter(a -> a.getName().equals(name)).findFirst().get());
 
@@ -92,7 +92,7 @@ public class FunctionCallFeature implements Feature {
         }
 
         if (currentFunction instanceof UserFunction) {
-            List<ArgumentDefinition> definitions = ((UserFunction) currentFunction).getArgumentDefinitions();
+            List<Argument> definitions = ((UserFunction) currentFunction).getArgumentDefinitions();
 
             for (int i = 0; i < definitions.size(); ++i) {
                 if (i >= arguments.size()) {
