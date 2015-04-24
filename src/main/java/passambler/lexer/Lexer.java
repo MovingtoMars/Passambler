@@ -131,23 +131,13 @@ public class Lexer {
             } else if (inString) {
                 Token token = tokens.get(tokens.size() - 1);
 
-                if (current() == '\\' && peek() != null) {
-                    next();
-
-                    if (!escapeSequences.containsKey(current())) {
-                        throw new LexerException(String.format("Escape sequence '%c' not found", current()), line, column);
-                    }
-
-                    token.setValue(token.getValue() + escapeSequences.get(current()));
-                } else {
-                    token.setValue(token.getValue() + current());
-                }
+                token.setValue(token.getValue() + parseCharacter());
 
                 next();
             } else if (current() == '\'') {
                 next();
 
-                tokens.add(createToken(TokenType.CHARACTER, String.valueOf(current())));
+                tokens.add(createToken(TokenType.CHARACTER, parseCharacter()));
 
                 next();
 
@@ -221,6 +211,20 @@ public class Lexer {
         }
 
         return tokens;
+    }
+
+    private String parseCharacter() throws LexerException {
+        if (current() == '\\' && peek() != null) {
+            next();
+
+            if (!escapeSequences.containsKey(current())) {
+                throw new LexerException(String.format("Escape sequence '%c' not found", current()), line, column);
+            }
+
+            return escapeSequences.get(current());
+        } else {
+            return String.valueOf(current());
+        }
     }
 
     public char current() {
