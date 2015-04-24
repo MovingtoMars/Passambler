@@ -1,7 +1,7 @@
-using('net/http');
+using("net/http");
 
-http.Handle('/', fn(request, response) {
-    writeln(response, 'Hello World!');
+http.Handle("/", fn(request, response) {
+    writeln(response, "Hello World!");
 });
 
 http.Serve(8080);

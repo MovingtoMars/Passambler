@@ -2,16 +2,16 @@
 Tests assignment parser.
 
 --INPUT--
-names = ['Raoul', 'Niels', 'Kyron'];
-names[1] = 'Sander';
+names = ["Raoul", "Niels", "Kyron"];
+names[1] = "Sander";
 names[2] = [0, 1, 2, 3];
 names[2][3] += 97;
 
-user = {'name': 'Raoul', 'friends': ['Niels', 'Kyron', 'Sander', 10]};
-user['friends'][0] = 'Poes';
-user['friends'][1] = 'Hond';
-user['friends'][2] = 'Robin';
-user['friends'][3] += 5;
+user = {"name": "Raoul", "friends": ["Niels", "Kyron", "Sander", 10]};
+user["friends"][0] = "Poes";
+user["friends"][1] = "Hond";
+user["friends"][2] = "Robin";
+user["friends"][3] += 5;
 
 return [
     names,

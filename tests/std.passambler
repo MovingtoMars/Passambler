@@ -71,7 +71,7 @@ writeln(std.ToBool("true") == std.ToBool(false));
 writeln(std.Join(["I", "like", "cats", "and", "dogs"], "-"));
 
 writeln(std.Filter(multipleUsers, fn(a) {
-    return a['age'] >= 18;
+    return a["age"] >= 18;
 }));
 
 --OUTPUT--

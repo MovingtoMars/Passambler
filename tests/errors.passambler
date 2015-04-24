@@ -2,24 +2,24 @@
 Tests errors.
 
 --INPUT--
-using('std.ToStr');
+using("std.ToStr");
 
 try {
-    read(using('file.Open')('sdjfisdjfidsfjisd'));
+    read(using("file.Open")("sdjfisdjfidsfjisd"));
 } catch (x) {
     writeln(x);
 }
 
 try {
-    writeln('no problem');
+    writeln("no problem");
 } catch (y) {
-    writeln('nope, not any problem');
+    writeln("nope, not any problem");
 }
 
 try {
     writeln("Now a problem should occur");
     throw("Problem!!");
-    writeln('not ran');
+    writeln("not ran");
 } catch (z) {
     writeln("problem found: " + ToStr(z));
 }

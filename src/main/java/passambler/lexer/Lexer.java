@@ -2,12 +2,14 @@ package passambler.lexer;
 
 import passambler.exception.LexerException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Lexer {
     private Map<String, TokenType> tokenMap = new LinkedHashMap();
+    private Map<Character, String> escapeSequences = new HashMap();
 
     private int line = 1, column = 1;
 
@@ -75,6 +77,14 @@ public class Lexer {
         tokenMap.put(";", TokenType.SEMI_COL);
         tokenMap.put("%", TokenType.MODULO);
         tokenMap.put("?", TokenType.TERNARY);
+
+        escapeSequences.put('t', "\t");
+        escapeSequences.put('b', "\b");
+        escapeSequences.put('n', "\n");
+        escapeSequences.put('r', "\r");
+        escapeSequences.put('f', "\f");
+        escapeSequences.put('"', "\"");
+        escapeSequences.put('\\', "\\");
     }
 
     public Token createToken(TokenType type, String value) {
@@ -88,7 +98,6 @@ public class Lexer {
     public List<Token> scan() throws LexerException {
         List<Token> tokens = new ArrayList<>();
 
-        char stringChar = 0;
         boolean inString = false, inComment = false, multiLineComment = false;
 
         while (hasNext()) {
@@ -111,24 +120,10 @@ public class Lexer {
                 }
 
                 next();
-            } else if ((current() == '\'' || current() == '"') && (!inString || current() == stringChar)) {
-                if (current() == stringChar && tokens.size() > 1) {
-                    Token value = tokens.get(tokens.size() - 1);
-
-                    if (value.getValue().length() > 0 && value.getValue().charAt(value.getValue().length() - 1) == '\\') {
-                        value.setValue(value.getValue().substring(0, value.getValue().length() - 1) + current());
-
-                        next();
-
-                        continue;
-                    }
-                }
-
+            } else if (current() == '"') {
                 inString = !inString;
 
                 if (inString) {
-                    stringChar = current();
-
                     tokens.add(createToken(TokenType.STRING, ""));
                 }
 
@@ -136,7 +131,17 @@ public class Lexer {
             } else if (inString) {
                 Token token = tokens.get(tokens.size() - 1);
 
-                token.setValue(tokens.get(tokens.size() - 1).getValue() + current());
+                if (current() == '\\' && peek() != null) {
+                    next();
+
+                    if (!escapeSequences.containsKey(current())) {
+                        throw new LexerException(String.format("Escape sequence '%c' not found", current()), line, column);
+                    }
+
+                    token.setValue(token.getValue() + escapeSequences.get(current()));
+                } else {
+                    token.setValue(token.getValue() + current());
+                }
 
                 next();
             } else if (current() == ' ' || current() == '\t') {

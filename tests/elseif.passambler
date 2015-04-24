@@ -2,7 +2,7 @@
 Tests elseif statements.
 
 --INPUT--
-using('std.Push');
+using("std.Push");
 
 a = [];
 
