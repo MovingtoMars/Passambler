@@ -32,12 +32,13 @@ public class ExpressionParser {
         this.tokens = tokens;
         this.assignment = assignment;
 
+        features.add(new LiteralFeature());
+        features.add(new LookupFeature());
         features.add(new FunctionCallFeature());
         features.add(new ParenFeature());
         features.add(new DictFeature());
         features.add(new IndexAccessFeature());
         features.add(new ListFeature());
-        features.add(new SymbolFeature());
         features.add(new PropertyFeature());
         features.add(new AnonymousFunctionFeature());
         features.add(new TernaryFeature());
