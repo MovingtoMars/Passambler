@@ -61,7 +61,7 @@ public class AssignmentParser {
                     }
                 } else {
                     if (!parser.getScope().hasSymbol(token.getValue())) {
-                        throw new ParserException(ParserExceptionType.UNDEFINED_VARIABLE, token.getPosition(), token.getValue());
+                        throw new ParserException(ParserExceptionType.UNDEFINED_VARIABLE, leftTokens.current().getPosition(), token.getValue());
                     }
 
                     leftValue = parser.getScope().getSymbol(token.getValue());
@@ -74,7 +74,7 @@ public class AssignmentParser {
                 String name = leftTokens.current().getValue();
 
                 if (!leftValue.hasProperty(name)) {
-                    throw new ParserException(ParserExceptionType.UNDEFINED_PROPERTY, tokens.current().getPosition(), name);
+                    throw new ParserException(ParserExceptionType.UNDEFINED_PROPERTY, leftTokens.current().getPosition(), name);
                 }
 
                 if (leftTokens.peek() == null) {
@@ -83,27 +83,9 @@ public class AssignmentParser {
                     leftValue = leftValue.getProperty(name).getValue();
                 }
             } else if (token.getType() == TokenType.LEFT_BRACKET) {
-                int brackets = 1;
-
-                List<Token> bracketTokens = new ArrayList<>();
-
                 leftTokens.next();
 
-                while (leftTokens.hasNext()) {
-                    if (leftTokens.current().getType() == TokenType.LEFT_BRACKET) {
-                        brackets++;
-                    } else if (leftTokens.current().getType() == TokenType.RIGHT_BRACKET) {
-                        brackets--;
-
-                        if (brackets == 0) {
-                            break;
-                        }
-                    }
-
-                    bracketTokens.add(leftTokens.current());
-
-                    leftTokens.next();
-                }
+                List<Token> bracketTokens = parser.parseExpressionTokens(leftTokens, TokenType.RIGHT_BRACKET);
 
                 leftTokens.match(TokenType.RIGHT_BRACKET);
 
@@ -111,11 +93,11 @@ public class AssignmentParser {
 
                 if (value instanceof NumberValue) {
                     if (!(leftValue instanceof ListValue)) {
-                        throw new ParserException(ParserExceptionType.NOT_A_LIST, tokens.current().getPosition());
+                        throw new ParserException(ParserExceptionType.NOT_A_LIST, leftTokens.current().getPosition());
                     }
 
                     if (leftValue instanceof StringValue && !(rightValue instanceof CharacterValue)) {
-                        throw new ParserException(ParserExceptionType.NOT_A_CHARACTER, tokens.current().getPosition());
+                        throw new ParserException(ParserExceptionType.NOT_A_CHARACTER, leftTokens.current().getPosition());
                     }
 
                     ListValue list = (ListValue) leftValue;
@@ -123,7 +105,7 @@ public class AssignmentParser {
                     int index = ((NumberValue) value).getValue().intValue();
 
                     if (index < -list.getValue().size() || index > list.getValue().size() - 1) {
-                        throw new ParserException(ParserExceptionType.INDEX_OUT_OF_RANGE, tokens.current().getPosition(), index, list.getValue().size());
+                        throw new ParserException(ParserExceptionType.INDEX_OUT_OF_RANGE, leftTokens.current().getPosition(), index, list.getValue().size());
                     }
 
                     if (leftTokens.peek() == null) {
