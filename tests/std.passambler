@@ -67,6 +67,7 @@ writeln(std.Split("My name is Raoul", " "));
 writeln(std.ToNum("1") + std.ToNum(1));
 writeln(std.ToBool(true) == std.ToBool("true"));
 writeln(std.ToBool("true") == std.ToBool(false));
+writeln(std.ToChar("hello"));
 
 writeln(std.Join(["I", "like", "cats", "and", "dogs"], "-"));
 
@@ -105,5 +106,6 @@ I like dogs
 2
 true
 false
+h
 I-like-cats-and-dogs
 [{name=Sonja, age=18}, {name=Geert, age=20}]
