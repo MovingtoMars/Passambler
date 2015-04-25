@@ -5,7 +5,9 @@ import passambler.exception.ParserException;
 import passambler.exception.ErrorException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import passambler.lexer.Lexer;
 import passambler.lexer.Token;
 import passambler.lexer.TokenList;
@@ -17,6 +19,7 @@ import passambler.bundle.net.NetBundle;
 import passambler.bundle.os.OsBundle;
 import passambler.bundle.regex.RegexBundle;
 import passambler.bundle.std.StdBundle;
+import passambler.bundle.std.value.OutValue;
 import passambler.bundle.thread.ThreadBundle;
 import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
@@ -24,10 +27,16 @@ import passambler.lexer.TokenType;
 import passambler.parser.feature.*;
 import passambler.value.Value;
 import passambler.value.ErrorValue;
+import passambler.value.function.CloseFunction;
+import passambler.value.function.ReadFunction;
+import passambler.value.function.ThrowFunction;
+import passambler.value.function.UsingFunction;
+import passambler.value.function.WriteFunction;
 
 public class Parser {
     private List<Feature> features = new ArrayList<>();
     private List<Bundle> bundles = new ArrayList<>();
+    private Map<String, Value> globals = new HashMap();
 
     private Block catchBlock;
     private String catchErrorName;
@@ -59,6 +68,17 @@ public class Parser {
         bundles.add(new ThreadBundle());
         bundles.add(new JsonBundle());
         bundles.add(new RegexBundle());
+
+        globals.put("true", Value.VALUE_TRUE);
+        globals.put("false", Value.VALUE_FALSE);
+        globals.put("nil", Value.VALUE_NIL);
+        globals.put("using", new UsingFunction());
+        globals.put("throw", new ThrowFunction());
+        globals.put("write", new WriteFunction(new OutValue(), false));
+        globals.put("writeln", new WriteFunction(new OutValue(), true));
+        globals.put("read", new ReadFunction(false));
+        globals.put("readln", new ReadFunction(true));
+        globals.put("close", new CloseFunction());
     }
 
     public void setCatch(Block block, String errorName) {
@@ -68,6 +88,10 @@ public class Parser {
 
     public List<Bundle> getBundles() {
         return bundles;
+    }
+
+    public Map<String, Value> getGlobals() {
+        return globals;
     }
 
     public Scope getScope() {

@@ -48,13 +48,8 @@ public class SymbolFeature implements Feature {
 
             return new NumberValue(new BigDecimal(number.toString()));
         } else if (token.getType() == TokenType.IDENTIFIER) {
-            switch (token.getValue()) {
-                case "true":
-                    return Value.VALUE_TRUE;
-                case "false":
-                    return Value.VALUE_FALSE;
-                case "nil":
-                    return Value.VALUE_NIL;
+            if (parser.getParser().getGlobals().containsKey(token.getValue())) {
+                return parser.getParser().getGlobals().get(token.getValue());
             }
 
             if (!parser.getParser().getScope().hasSymbol(token.getValue())) {
