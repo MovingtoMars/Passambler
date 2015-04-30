@@ -6,7 +6,6 @@ import passambler.lexer.Token;
 import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
 import passambler.parser.expression.ExpressionParser;
-import passambler.value.CharacterValue;
 import passambler.value.NumberValue;
 import passambler.value.StringValue;
 import passambler.value.Value;
@@ -15,8 +14,7 @@ public class LiteralFeature implements Feature {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
         return parser.getTokens().current().getType() == TokenType.NUMBER
-            || parser.getTokens().current().getType() == TokenType.STRING
-            || parser.getTokens().current().getType() == TokenType.CHARACTER;
+            || parser.getTokens().current().getType() == TokenType.STRING;
     }
 
     @Override
@@ -28,8 +26,6 @@ public class LiteralFeature implements Feature {
         switch (token.getType()) {
             case STRING:
                 return new StringValue(token.getValue());
-            case CHARACTER:
-                return new CharacterValue(token.getValue().toCharArray()[0]);
             case NUMBER:
                 StringBuilder number = new StringBuilder();
 

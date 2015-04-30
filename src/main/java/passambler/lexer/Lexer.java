@@ -120,7 +120,7 @@ public class Lexer {
                 }
 
                 next();
-            } else if (current() == '"') {
+            } else if (current() == '"' || current() == '\'') {
                 inString = !inString;
 
                 if (inString) {
@@ -132,18 +132,6 @@ public class Lexer {
                 Token token = tokens.get(tokens.size() - 1);
 
                 token.setValue(token.getValue() + parseCharacter());
-
-                next();
-            } else if (current() == '\'') {
-                next();
-
-                tokens.add(createToken(TokenType.CHARACTER, parseCharacter()));
-
-                next();
-
-                if (current() != '\'') {
-                    throw new LexerException(String.format("Expected character closing symbol, got '%c'", current()), line, column);
-                }
 
                 next();
             } else if (current() == ' ' || current() == '\t') {
