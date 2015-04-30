@@ -84,6 +84,7 @@ public class Lexer {
         escapeSequences.put('r', "\r");
         escapeSequences.put('f', "\f");
         escapeSequences.put('"', "\"");
+        escapeSequences.put('\'', "'");
         escapeSequences.put('\\', "\\");
     }
 
