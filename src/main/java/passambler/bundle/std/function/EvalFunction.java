@@ -22,7 +22,7 @@ public class EvalFunction extends Value implements Function {
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
         try {
-            return context.getParser().parse(new Lexer(((StringValue) context.getArgument(0)).toString()).scan());
+            return context.getParser().parse(new Lexer(((StringValue) context.getArgument(0)).toString()).tokenize());
         } catch (EngineException e) {
             throw new ErrorException(e);
         }

@@ -127,7 +127,7 @@ public class Parser {
     }
 
     public Value parse(Lexer lexer) throws EngineException {
-        return parse(lexer.scan());
+        return parse(lexer.tokenize());
     }
 
     public Value parse(List<Token> tokens) throws EngineException {

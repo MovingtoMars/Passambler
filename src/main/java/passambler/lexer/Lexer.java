@@ -97,7 +97,7 @@ public class Lexer {
         return createToken(type, null);
     }
 
-    public List<Token> scan() throws LexerException {
+    public List<Token> tokenize() throws LexerException {
         List<Token> tokens = new ArrayList<>();
 
         boolean inString = false, inComment = false, multiLineComment = false;

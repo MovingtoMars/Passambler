@@ -116,7 +116,7 @@ public class Main {
 
         while ((input = System.console().readLine("> ")) != null) {
             try {
-                tokens.addAll(new Lexer(input).scan());
+                tokens.addAll(new Lexer(input).tokenize());
 
                 long depth = tokens.stream().filter(t -> t.getType() == TokenType.LEFT_BRACE).count() - tokens.stream().filter(t -> t.getType() == TokenType.RIGHT_BRACE).count();
 

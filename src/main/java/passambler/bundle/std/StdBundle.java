@@ -58,6 +58,7 @@ public class StdBundle implements Bundle {
         symbols.put("Values", new ValuesFunction());
         symbols.put("Entries", new EntriesFunction());
         symbols.put("Eval", new EvalFunction());
+        symbols.put("Tokenize", new TokenizeFunction());
         symbols.put("Join", new JoinFunction());
         symbols.put("Filter", new FilterFunction());
         symbols.put("Substr", new SubstrFunction());
