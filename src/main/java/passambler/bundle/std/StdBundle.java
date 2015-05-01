@@ -6,6 +6,7 @@ import passambler.bundle.std.function.*;
 import passambler.bundle.std.value.*;
 import passambler.value.BooleanValue;
 import passambler.value.CharacterValue;
+import passambler.value.ClassValue;
 import passambler.value.DictValue;
 import passambler.value.ErrorValue;
 import passambler.value.ListValue;
@@ -35,6 +36,7 @@ public class StdBundle implements Bundle {
         symbols.put("IsBool", new IsFunction(BooleanValue.class));
         symbols.put("IsList", new IsFunction(ListValue.class));
         symbols.put("IsDict", new IsFunction(DictValue.class));
+        symbols.put("IsClass", new IsFunction(ClassValue.class));
         symbols.put("IsChar", new IsFunction(CharacterValue.class));
         symbols.put("IsErr", new IsFunction(ErrorValue.class));
         symbols.put("Lcase", new LCaseFunction());

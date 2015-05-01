@@ -8,7 +8,7 @@ public enum TokenType {
     UNARY_PLUS, UNARY_MINUS, UNARY_NOT,
     EQUAL, NEQUAL, GT, LT, GTE, LTE,
     AND, OR, XOR,
-    WHILE, FOR, FN, RETURN, IF, ELSEIF, ELSE, TRY, CATCH,
+    WHILE, FOR, FN, RETURN, IF, ELSEIF, ELSE, CLASS, TRY, CATCH,
     PERIOD, COMMA, SEMI_COL, COL;
 
     public boolean isOperator() {
