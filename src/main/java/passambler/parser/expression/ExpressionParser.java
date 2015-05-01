@@ -187,7 +187,8 @@ public class ExpressionParser {
                 }
             }
 
-            if (!performed) {
+            // Ignore semicolons
+            if (!performed && tokens.current().getType() != TokenType.SEMI_COL) {
                 throw new ParserException(ParserExceptionType.UNEXPECTED_TOKEN, tokens.current().getPosition(), tokens.current().getType());
             }
 

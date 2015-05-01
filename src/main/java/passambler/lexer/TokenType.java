@@ -8,6 +8,7 @@ public enum TokenType {
     UNARY_PLUS, UNARY_MINUS, UNARY_NOT,
     EQUAL, NEQUAL, GT, LT, GTE, LTE,
     AND, OR, XOR,
+    EQUAL_ARROW,
     WHILE, FOR, FN, RETURN, IF, ELSEIF, ELSE, CLASS, TRY, CATCH,
     PERIOD, COMMA, SEMI_COL, COL;
 
@@ -32,6 +33,7 @@ public enum TokenType {
     public boolean isLineInsensitive() {
         return this == ELSE || this == ELSEIF
             || this == CATCH
+            || this == EQUAL_ARROW
             || isOperator();
     }
 }

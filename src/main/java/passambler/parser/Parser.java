@@ -151,10 +151,6 @@ public class Parser {
                     continue;
                 }
 
-                if (token.getType() == TokenType.SEMI_COL) {
-                    subTokens.remove(subTokens.size() - 1);
-                }
-
                 if (subTokens.size() > 0) {
                     Value result = parse(new TokenList(subTokens));
 
@@ -181,20 +177,24 @@ public class Parser {
     public Block parseBlock(TokenList tokens) throws EngineException {
         Block block = new Block(scope);
 
-        tokens.match(TokenType.LEFT_BRACE);
+        tokens.match(TokenType.LEFT_BRACE, TokenType.EQUAL_ARROW);
+
+        boolean equalArrow = tokens.current().getType() == TokenType.EQUAL_ARROW;
 
         tokens.next();
 
         int depth = 1;
 
         while (tokens.hasNext()) {
-            if (tokens.current().getType() == TokenType.LEFT_BRACE) {
-                depth++;
-            } else if (tokens.current().getType() == TokenType.RIGHT_BRACE) {
-                depth--;
+            if (!equalArrow) {
+                if (tokens.current().getType() == TokenType.LEFT_BRACE) {
+                    depth++;
+                } else if (tokens.current().getType() == TokenType.RIGHT_BRACE) {
+                    depth--;
 
-                if (depth == 0) {
-                    break;
+                    if (depth == 0) {
+                        break;
+                    }
                 }
             }
 
@@ -203,7 +203,9 @@ public class Parser {
             tokens.next();
         }
 
-        tokens.match(TokenType.RIGHT_BRACE);
+        if (!equalArrow) {
+            tokens.match(TokenType.RIGHT_BRACE);
+        }
 
         return block;
     }

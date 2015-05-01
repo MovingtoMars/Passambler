@@ -31,9 +31,7 @@ public class IfFeature implements Feature {
 
         while (tokens.hasNext()) {
             if (!elseCondition) {
-                List<Token> expressionTokens = parser.parseExpressionTokens(tokens, TokenType.LEFT_BRACE);
-
-                tokens.match(TokenType.LEFT_BRACE);
+                List<Token> expressionTokens = parser.parseExpressionTokens(tokens, TokenType.LEFT_BRACE, TokenType.EQUAL_ARROW);
 
                 Value condition = new ExpressionParser(parser, new TokenList(expressionTokens)).parse();
 
@@ -42,8 +40,6 @@ public class IfFeature implements Feature {
                 }
 
                 cases.put((BooleanValue) condition, parser.parseBlock(tokens));
-
-                expressionTokens.clear();
             } else {
                 cases.put(new BooleanValue(true), parser.parseBlock(tokens));
             }
@@ -67,13 +63,7 @@ public class IfFeature implements Feature {
 
         for (Map.Entry<BooleanValue, Block> entry : cases.entrySet()) {
             if (entry.getKey().getValue() == true) {
-                Value result = entry.getValue().invoke();
-
-                if (result != null) {
-                    return result;
-                }
-
-                break;
+                return entry.getValue().invoke();
             }
         }
 
