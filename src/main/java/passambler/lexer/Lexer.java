@@ -25,7 +25,6 @@ public class Lexer {
         tokenMap.put("return", TokenType.RETURN);
         tokenMap.put("elseif", TokenType.ELSEIF);
 
-        tokenMap.put("class", TokenType.CLASS);
         tokenMap.put("catch", TokenType.CATCH);
         tokenMap.put("while", TokenType.WHILE);
 
