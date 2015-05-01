@@ -114,7 +114,7 @@ public class Main {
 
         String input = "";
 
-        while ((input = System.console().readLine("-> ")) != null) {
+        while ((input = System.console().readLine("> ")) != null) {
             try {
                 tokens.addAll(new Lexer(input).scan());
 
