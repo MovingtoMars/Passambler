@@ -31,7 +31,7 @@ public class IfFeature implements Feature {
 
         while (tokens.hasNext()) {
             if (!elseCondition) {
-                List<Token> expressionTokens = parser.parseExpressionTokens(tokens, TokenType.LEFT_BRACE, TokenType.EQUAL_ARROW);
+                List<Token> expressionTokens = parser.parseExpressionTokens(tokens, TokenType.LEFT_BRACE, TokenType.DOUBLE_ARROW);
 
                 Value condition = new ExpressionParser(parser, new TokenList(expressionTokens)).parse();
 

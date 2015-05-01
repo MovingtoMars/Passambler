@@ -39,7 +39,7 @@ public class Lexer {
 
         tokenMap.put("fn", TokenType.FN);
         tokenMap.put("if", TokenType.IF);
-        tokenMap.put("=>", TokenType.EQUAL_ARROW);
+        tokenMap.put("=>", TokenType.DOUBLE_ARROW);
 
         tokenMap.put("==", TokenType.EQUAL);
         tokenMap.put("!=", TokenType.NEQUAL);

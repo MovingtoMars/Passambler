@@ -177,9 +177,9 @@ public class Parser {
     public Block parseBlock(TokenList tokens) throws EngineException {
         Block block = new Block(scope);
 
-        tokens.match(TokenType.LEFT_BRACE, TokenType.EQUAL_ARROW);
+        tokens.match(TokenType.LEFT_BRACE, TokenType.DOUBLE_ARROW);
 
-        boolean equalArrow = tokens.current().getType() == TokenType.EQUAL_ARROW;
+        boolean equalArrow = tokens.current().getType() == TokenType.DOUBLE_ARROW;
 
         tokens.next();
 
