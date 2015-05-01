@@ -1,0 +1,33 @@
+using('std');
+
+data = '';
+depth = 0;
+
+while true {
+    write('> ');
+
+    x = readln(std.In);
+
+    data += x;
+
+    for token : std.Tokenize(x) {
+        if token['name'] == 'LEFT_BRACE' || token['name'] == 'LEFT_PAREN' || token['name'] == 'LEFT_BRACKET' {
+            depth += 1;
+        } elseif token['name'] == 'RIGHT_BRACE' || token['name'] == 'RIGHT_PAREN' || token['name'] == 'RIGHT_BRACKET'  {
+            depth -= 1;
+        }
+    }
+
+    if depth <= 0 {
+        try {
+            result = std.Eval(data);
+
+            if result != nil => writeln(result);
+        } catch (e) {
+            writeln('[Error: ' + std.ToStr(e) + ']');
+        }
+
+        data = '';
+        depth = 0;
+    }
+}

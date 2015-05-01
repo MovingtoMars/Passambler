@@ -12,13 +12,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import passambler.parser.Parser;
 import passambler.lexer.Lexer;
-import passambler.lexer.Token;
 import passambler.exception.EngineException;
 import passambler.tests.OutputRecorder;
-import passambler.lexer.TokenType;
 import passambler.tests.TestParser;
 import passambler.tests.TestRunner;
-import passambler.value.Value;
 
 public class Main {
     public static final String VERSION = "DEV";
@@ -32,7 +29,6 @@ public class Main {
 
         optionParser.accepts("v", "Show the version number");
         optionParser.accepts("h", "Show help");
-        optionParser.accepts("a", "Run interactively");
         optionParser.accepts("f", "Run one or multiple file(s)").withRequiredArg();
         optionParser.accepts("t", "Run a test (file(s) or a whole directory)").withRequiredArg();
 
@@ -56,10 +52,6 @@ public class Main {
             for (String file : options.valueOf("t").toString().split(",")) {
                 runTestFile(Paths.get(file));
             }
-        }
-
-        if (options.has("a")) {
-            runInteractiveMode();
         }
     }
 
@@ -103,36 +95,6 @@ public class Main {
                 OutputRecorder.stop();
 
                 LOGGER.error("Test '" + file.getFileName() + "' failed", e);
-            }
-        }
-    }
-
-    public void runInteractiveMode() {
-        Parser parser = new Parser();
-
-        List<Token> tokens = new ArrayList<>();
-
-        String input = "";
-
-        while ((input = System.console().readLine("> ")) != null) {
-            try {
-                tokens.addAll(new Lexer(input).tokenize());
-
-                long depth = tokens.stream().filter(t -> t.getType() == TokenType.LEFT_BRACE).count() - tokens.stream().filter(t -> t.getType() == TokenType.RIGHT_BRACE).count();
-
-                if (depth == 0) {
-                    Value result = parser.parse(tokens);
-
-                    if (result != null) {
-                        System.out.println(result);
-                    }
-
-                    tokens.clear();
-                }
-            } catch (EngineException e) {
-                LOGGER.error(e.getName(), e);
-
-                tokens.clear();
             }
         }
     }

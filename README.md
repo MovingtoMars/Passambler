@@ -25,7 +25,7 @@ Clone the repository and run Maven. Java 8 is required to build the language.
 ```
 mvn install
 ```
-You will find the jar file in the `target` directory.
+You will find the jar file and the REPL in the `target` directory.
 
 ## License
 MIT license
