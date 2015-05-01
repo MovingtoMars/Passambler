@@ -100,6 +100,7 @@ public class Lexer {
     public List<Token> tokenize() throws LexerException {
         List<Token> tokens = new ArrayList<>();
 
+        char stringChar = 0;
         boolean inString = false, inComment = false, multiLineComment = false;
 
         while (hasNext()) {
@@ -122,10 +123,12 @@ public class Lexer {
                 }
 
                 next();
-            } else if (current() == '"' || current() == '\'') {
+            } else if ((!inString && (current() == '"' || current() == '\'')) || (inString && current() == stringChar)) {
                 inString = !inString;
 
                 if (inString) {
+                    stringChar = current();
+
                     tokens.add(createToken(TokenType.STRING, ""));
                 }
 
