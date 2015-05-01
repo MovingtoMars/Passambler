@@ -1,5 +1,5 @@
 --TEST--
-Tests expression bodies.
+Tests expression blocks.
 
 --INPUT--
 if 1 + 1 == 2 => writeln("hello");
