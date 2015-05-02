@@ -32,6 +32,15 @@ public class TryFeature implements Feature {
 
         Block catchBlock = parser.parseBlock(tokens);
 
+        Block finallyBlock = null;
+
+        if (tokens.peek() != null && tokens.peek().getType() == TokenType.FINALLY) {
+            tokens.next();
+            tokens.next();
+
+            finallyBlock = parser.parseBlock(tokens);
+        }
+
         try {
             Value result = tryBlock.invoke();
 
@@ -48,6 +57,6 @@ public class TryFeature implements Feature {
             }
         }
 
-        return null;
+        return finallyBlock != null ? finallyBlock.invoke() : null;
     }
 }

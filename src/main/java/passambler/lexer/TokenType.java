@@ -9,7 +9,7 @@ public enum TokenType {
     EQUAL, NEQUAL, GT, LT, GTE, LTE,
     AND, OR, XOR,
     DOUBLE_ARROW,
-    WHILE, FOR, FN, RETURN, IF, ELSEIF, ELSE, CLASS, TRY, CATCH,
+    WHILE, FOR, FN, RETURN, IF, ELSEIF, ELSE, CLASS, TRY, CATCH, FINALLY,
     PERIOD, COMMA, SEMI_COL, COL;
 
     public boolean isOperator() {
@@ -32,7 +32,7 @@ public enum TokenType {
 
     public boolean isLineInsensitive() {
         return this == ELSE || this == ELSEIF
-            || this == CATCH
+            || this == CATCH || this == FINALLY
             || this == DOUBLE_ARROW
             || isOperator();
     }

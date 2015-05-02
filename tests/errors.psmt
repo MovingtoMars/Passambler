@@ -22,6 +22,16 @@ try {
     writeln("not ran");
 } catch z {
     writeln("problem found: " + ToStr(z));
+} finally {
+    writeln("DONE");
+}
+
+try {
+    writeln("try / catch without error");
+} catch e {
+    writeln("Error on a try catch block without error?!");
+} finally {
+    writeln("Done");
 }
 
 --OUTPUT--
@@ -29,3 +39,6 @@ java.nio.file.NoSuchFileException: sdjfisdjfidsfjisd
 no problem
 Now a problem should occur
 problem found: Problem!!
+DONE
+try / catch without error
+Done

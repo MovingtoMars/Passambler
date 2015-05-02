@@ -20,6 +20,7 @@ public class Lexer {
     public Lexer(String input) {
         this.input = input;
 
+        tokenMap.put("finally", TokenType.FINALLY);
         tokenMap.put("else if", TokenType.ELSEIF);
 
         tokenMap.put("return", TokenType.RETURN);
