@@ -1,5 +1,9 @@
 using('std');
 
+fn error(e) {
+    writeln('[Error: ' + std.ToStr(e) + ']');
+}
+
 data = '';
 depth = 0;
 
@@ -10,24 +14,26 @@ while true {
 
     data += x;
 
-    for token : std.Tokenize(x) {
-        if token['name'] == 'LEFT_BRACE' || token['name'] == 'LEFT_PAREN' || token['name'] == 'LEFT_BRACKET' {
-            depth += 1;
-        } elseif token['name'] == 'RIGHT_BRACE' || token['name'] == 'RIGHT_PAREN' || token['name'] == 'RIGHT_BRACKET'  {
-            depth -= 1;
+    try {
+        for token : std.Tokenize(x) {
+            if token['name'] == 'LEFT_BRACE' || token['name'] == 'LEFT_PAREN' || token['name'] == 'LEFT_BRACKET' {
+                depth += 1;
+            } elseif token['name'] == 'RIGHT_BRACE' || token['name'] == 'RIGHT_PAREN' || token['name'] == 'RIGHT_BRACKET' {
+                depth -= 1;
+            }
         }
-    }
 
-    if depth <= 0 {
-        try {
+        if depth <= 0 {
             result = std.Eval(data);
 
             if result != nil => writeln(result);
-        } catch (e) {
-            writeln('[Error: ' + std.ToStr(e) + ']');
         }
-
-        data = '';
-        depth = 0;
+    } catch e {
+        error(e);
+    } finally {
+        if depth <= 0 {
+            data = '';
+            depth = 0;
+        }
     }
 }
