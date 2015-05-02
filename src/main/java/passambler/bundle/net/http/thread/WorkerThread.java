@@ -25,7 +25,6 @@ public class WorkerThread extends Thread {
                 httpService.handleRequest(connection, context);
             }
         } catch (IOException | HttpException e) {
-            e.printStackTrace();
         } finally {
             try {
                 connection.shutdown();
