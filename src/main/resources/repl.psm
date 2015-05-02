@@ -26,10 +26,8 @@ while true {
         }
     } catch e {
         writeln('[Error: ' + std.ToStr(e) + ']');
-    } finally {
-        if depth <= 0 {
-            data = '';
-            depth = 0;
-        }
+    } finally if depth <= 0 {
+        data = '';
+        depth = 0;
     }
 }

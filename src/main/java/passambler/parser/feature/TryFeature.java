@@ -16,6 +16,8 @@ public class TryFeature implements Feature {
 
     @Override
     public Value perform(Parser parser, TokenList tokens) throws EngineException {
+        boolean mayCatch = true, mayFinally = true;
+
         tokens.next();
 
         Block tryBlock = parser.parseBlock(tokens);
@@ -29,6 +31,11 @@ public class TryFeature implements Feature {
         String name = tokens.current().getValue();
 
         tokens.next();
+        if (tokens.current().getType() == TokenType.IF) {
+            tokens.next();
+
+            mayCatch = parser.parseBooleanExpression(tokens, TokenType.LEFT_BRACE).getValue();
+        }
 
         Block catchBlock = parser.parseBlock(tokens);
 
@@ -37,6 +44,12 @@ public class TryFeature implements Feature {
         if (tokens.peek() != null && tokens.peek().getType() == TokenType.FINALLY) {
             tokens.next();
             tokens.next();
+
+            if (tokens.current().getType() == TokenType.IF) {
+                tokens.next();
+
+                mayFinally = parser.parseBooleanExpression(tokens, TokenType.LEFT_BRACE).getValue();
+            }
 
             finallyBlock = parser.parseBlock(tokens);
         }
@@ -48,15 +61,17 @@ public class TryFeature implements Feature {
                 return result;
             }
         } catch (ErrorException e) {
-            catchBlock.getParser().getScope().setSymbol(name, e.getError());
+            if (mayCatch) {
+                catchBlock.getParser().getScope().setSymbol(name, e.getError());
 
-            Value result = catchBlock.invoke();
+                Value result = catchBlock.invoke();
 
-            if (result != null) {
-                return result;
+                if (result != null) {
+                    return result;
+                }
             }
         }
 
-        return finallyBlock != null ? finallyBlock.invoke() : null;
+        return finallyBlock != null && mayFinally ? finallyBlock.invoke() : null;
     }
 }

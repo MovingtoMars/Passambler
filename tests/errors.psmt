@@ -34,6 +34,34 @@ try {
     writeln("Done");
 }
 
+a = 10;
+
+try {
+    writeln("test");
+} catch e {
+    writeln("error");
+} finally if a == 10 {
+    writeln("done");
+}
+
+try {
+    throw("error");
+} catch e if a == 15 {
+    writeln("catched the error");
+} finally if a == 10 {
+    writeln("finally");
+}
+
+try {
+    throw("error 2");
+} catch e if a == 10 {
+    writeln("catched it!");
+} finally {
+    writeln("done");
+}
+
+writeln("hello");
+
 --OUTPUT--
 java.nio.file.NoSuchFileException: sdjfisdjfidsfjisd
 no problem
@@ -42,3 +70,9 @@ problem found: Problem!!
 DONE
 try / catch without error
 Done
+test
+done
+finally
+catched it!
+done
+hello

@@ -24,8 +24,10 @@ import passambler.bundle.std.value.OutValue;
 import passambler.bundle.thread.ThreadBundle;
 import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
+import passambler.lexer.TokenPosition;
 import passambler.lexer.TokenType;
 import passambler.parser.feature.*;
+import passambler.value.BooleanValue;
 import passambler.value.Value;
 import passambler.value.ErrorValue;
 import passambler.value.function.CloseFunction;
@@ -214,6 +216,18 @@ public class Parser {
 
     public Value parseExpression(TokenList tokens, TokenType... endingTokens) throws EngineException {
         return new ExpressionParser(this, new TokenList(parseExpressionTokens(tokens, endingTokens))).parse();
+    }
+
+    public BooleanValue parseBooleanExpression(TokenList tokens, TokenType... endingTokens) throws EngineException {
+        TokenPosition position = tokens.current().getPosition();
+
+        Value value = parseExpression(tokens, endingTokens);
+
+        if (!(value instanceof BooleanValue)) {
+            throw new ParserException(ParserExceptionType.NOT_A_BOOLEAN, position);
+        }
+
+        return (BooleanValue) value;
     }
 
     public List<Argument> parseArgumentDefinition(TokenList tokens) throws EngineException {

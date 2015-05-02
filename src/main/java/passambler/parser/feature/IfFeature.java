@@ -1,16 +1,13 @@
 package passambler.parser.feature;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import passambler.exception.EngineException;
 import passambler.exception.ParserException;
 import passambler.exception.ParserExceptionType;
-import passambler.lexer.Token;
 import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
 import passambler.parser.Block;
-import passambler.parser.expression.ExpressionParser;
 import passambler.parser.Parser;
 import passambler.value.Value;
 import passambler.value.BooleanValue;
@@ -31,15 +28,7 @@ public class IfFeature implements Feature {
 
         while (tokens.hasNext()) {
             if (!elseCondition) {
-                List<Token> expressionTokens = parser.parseExpressionTokens(tokens, TokenType.LEFT_BRACE, TokenType.DOUBLE_ARROW);
-
-                Value condition = new ExpressionParser(parser, new TokenList(expressionTokens)).parse();
-
-                if (!(condition instanceof BooleanValue)) {
-                    throw new ParserException(ParserExceptionType.NOT_A_BOOLEAN, expressionTokens.get(0).getPosition());
-                }
-
-                cases.put((BooleanValue) condition, parser.parseBlock(tokens));
+                cases.put((BooleanValue) parser.parseBooleanExpression(tokens, TokenType.LEFT_BRACE, TokenType.DOUBLE_ARROW), parser.parseBlock(tokens));
             } else {
                 cases.put(new BooleanValue(true), parser.parseBlock(tokens));
             }
