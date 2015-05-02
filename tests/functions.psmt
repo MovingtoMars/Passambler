@@ -32,7 +32,9 @@ fn zz()
 
 }
 
-return [a(), b(5), c(4, 3), aa(), bb(10), cc(5, 10), dd(), zz()];
+fn ee();
+
+return [a(), b(5), c(4, 3), aa(), bb(10), cc(5, 10), dd(), zz(), ee()];
 
 --RESULT--
-[nil, 7, 7, nil, 12, 15, nil, nil]
+[nil, 7, 7, nil, 12, 15, nil, nil, nil]
