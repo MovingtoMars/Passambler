@@ -247,16 +247,6 @@ public class Lexer {
         return Character.isUpperCase(string.charAt(0));
     }
 
-    public static boolean isConstant(String string) {
-        for (char c : string.toCharArray()) {
-            if (!Character.isUpperCase(c) && !Character.isDigit(c) && c != '_') {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public static boolean isNumber(String string) {
         for (int c : string.chars().toArray()) {
             if (!Character.isDigit(c)) {

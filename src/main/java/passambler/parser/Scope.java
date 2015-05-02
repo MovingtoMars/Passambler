@@ -2,7 +2,6 @@ package passambler.parser;
 
 import java.util.HashMap;
 import java.util.Map;
-import passambler.lexer.Lexer;
 import passambler.value.Value;
 
 public class Scope {
@@ -22,14 +21,6 @@ public class Scope {
         if (parent != null && parent.hasSymbol(key)) {
             parent.setSymbol(key, value);
         } else {
-            if (symbols.containsKey(key) && symbols.get(key).isConstant()) {
-                throw new RuntimeException(String.format("Cannot modify constant '%s'", key));
-            }
-
-            if (Lexer.isConstant(key)) {
-                value.setConstant(true);
-            }
-
             symbols.put(key, value);
         }
     }

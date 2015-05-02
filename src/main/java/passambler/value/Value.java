@@ -16,19 +16,9 @@ public class Value {
         }
     };
 
-    protected boolean constant = false;
-
     protected Map<String, Property> properties = new HashMap();
 
-    protected Object value;
-
-    public void setConstant(boolean constant) {
-        this.constant = constant;
-    }
-
-    public boolean isConstant() {
-        return constant;
-    }
+    protected Object value = Value.VALUE_NIL;
 
     public Object getValue() {
         return value;
@@ -94,7 +84,7 @@ public class Value {
 
     @Override
     public String toString() {
-        return value == null ? VALUE_NIL.toString() : value.toString();
+        return value.toString();
     }
 
     public static Value toValue(Object object) {
