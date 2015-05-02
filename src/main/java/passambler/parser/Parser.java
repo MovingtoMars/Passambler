@@ -12,6 +12,7 @@ import passambler.lexer.Lexer;
 import passambler.lexer.Token;
 import passambler.lexer.TokenList;
 import passambler.bundle.Bundle;
+import passambler.bundle.db.DbBundle;
 import passambler.bundle.file.FileBundle;
 import passambler.bundle.json.JsonBundle;
 import passambler.bundle.math.MathBundle;
@@ -65,6 +66,7 @@ public class Parser {
         bundles.add(new ThreadBundle());
         bundles.add(new JsonBundle());
         bundles.add(new RegexBundle());
+        bundles.add(new DbBundle());
 
         globals.put("true", Value.VALUE_TRUE);
         globals.put("false", Value.VALUE_FALSE);
