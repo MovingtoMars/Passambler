@@ -1,6 +1,7 @@
 package passambler.parser.feature;
 
 import passambler.exception.EngineException;
+import passambler.exception.ErrorException;
 import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
 import passambler.parser.Block;
@@ -29,12 +30,22 @@ public class TryFeature implements Feature {
 
         tokens.next();
 
-        tryBlock.getParser().setCatch(parser.parseBlock(tokens), name);
+        Block catchBlock = parser.parseBlock(tokens);
 
-        Value result = tryBlock.invoke();
+        try {
+            Value result = tryBlock.invoke();
 
-        if (result != null && result != Value.VALUE_NIL) {
-            return result;
+            if (result != null) {
+                return result;
+            }
+        } catch (ErrorException e) {
+            catchBlock.getParser().getScope().setSymbol(name, e.getError());
+
+            Value result = catchBlock.invoke();
+
+            if (result != null) {
+                return result;
+            }
         }
 
         return null;

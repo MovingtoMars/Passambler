@@ -38,9 +38,6 @@ public class Parser {
     private List<Bundle> bundles = new ArrayList<>();
     private Map<String, Value> globals = new HashMap();
 
-    private Block catchBlock;
-    private String catchErrorName;
-
     private Scope scope;
 
     public Parser() {
@@ -81,11 +78,6 @@ public class Parser {
         globals.put("close", new CloseFunction());
     }
 
-    public void setCatch(Block block, String errorName) {
-        this.catchBlock = block;
-        this.catchErrorName = errorName;
-    }
-
     public List<Bundle> getBundles() {
         return bundles;
     }
@@ -99,27 +91,9 @@ public class Parser {
     }
 
     public Value parse(TokenList tokens) throws EngineException {
-        try {
-            for (Feature feature : features) {
-                if (feature.canPerform(this, tokens)) {
-                    Value result = feature.perform(this, tokens);
-
-                    if (result != null) {
-                        return result;
-                    }
-
-                    break;
-                }
-            }
-        } catch (ErrorException e) {
-            if (catchBlock != null) {
-                catchBlock.getParser().getScope().setSymbol(catchErrorName, e.getError());
-
-                Value catchResult = catchBlock.invoke();
-
-                return catchResult == null ? Value.VALUE_NIL : catchResult;
-            } else {
-                return e.getError();
+        for (Feature feature : features) {
+            if (feature.canPerform(this, tokens)) {
+                return feature.perform(this, tokens);
             }
         }
 
