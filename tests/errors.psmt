@@ -6,13 +6,13 @@ using("std.ToStr");
 
 try {
     read(using("file.Open")("sdjfisdjfidsfjisd"));
-} catch (x) {
+} catch x {
     writeln(x);
 }
 
 try {
     writeln("no problem");
-} catch (y) {
+} catch y {
     writeln("nope, not any problem");
 }
 
@@ -20,7 +20,7 @@ try {
     writeln("Now a problem should occur");
     throw("Problem!!");
     writeln("not ran");
-} catch (z) {
+} catch z {
     writeln("problem found: " + ToStr(z));
 }
 

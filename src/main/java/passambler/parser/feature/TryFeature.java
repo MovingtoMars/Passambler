@@ -24,14 +24,8 @@ public class TryFeature implements Feature {
         tokens.match(TokenType.CATCH);
         tokens.next();
 
-        tokens.match(TokenType.LEFT_PAREN);
-        tokens.next();
-
         tokens.match(TokenType.IDENTIFIER);
         String name = tokens.current().getValue();
-
-        tokens.next();
-        tokens.match(TokenType.RIGHT_PAREN);
 
         tokens.next();
 
