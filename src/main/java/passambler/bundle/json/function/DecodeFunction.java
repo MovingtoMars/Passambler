@@ -8,10 +8,8 @@ import passambler.exception.EngineException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
-import passambler.value.BooleanValue;
 import passambler.value.DictValue;
 import passambler.value.ListValue;
-import passambler.value.NumberValue;
 import passambler.value.StringValue;
 
 public class DecodeFunction extends Value implements Function {
@@ -49,16 +47,8 @@ public class DecodeFunction extends Value implements Function {
             }
 
             return dict;
-        } else if (object instanceof String) {
-            return new StringValue(String.valueOf(object));
-        } else if (object instanceof Long) {
-            return new NumberValue((Long) object);
-        } else if (object instanceof Double) {
-            return new NumberValue((Double) object);
-        } else if (object instanceof Boolean) {
-            return new BooleanValue((Boolean) object);
         }
 
-        return Value.VALUE_NIL;
+        return Value.toValue(object);
     }
 }

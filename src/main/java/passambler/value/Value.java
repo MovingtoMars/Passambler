@@ -1,5 +1,6 @@
 package passambler.value;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import passambler.lexer.Token;
@@ -94,5 +95,21 @@ public class Value {
     @Override
     public String toString() {
         return value == null ? VALUE_NIL.toString() : value.toString();
+    }
+
+    public static Value toValue(Object object) {
+        if (object instanceof String || object instanceof Date) {
+            return new StringValue(String.valueOf(object));
+        } else if (object instanceof Long) {
+            return new NumberValue((Long) object);
+        } else if (object instanceof Double) {
+            return new NumberValue((Double) object);
+        } else if (object instanceof Integer) {
+            return new NumberValue((Integer) object);
+        } else if (object instanceof Boolean) {
+            return new BooleanValue((Boolean) object);
+        }
+
+        return Value.VALUE_NIL;
     }
 }
