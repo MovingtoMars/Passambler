@@ -28,7 +28,7 @@ public class FunctionFeature implements Feature {
 
         List<Argument> arguments = parser.parseArgumentDefinition(tokens);
 
-        if (tokens.peek() == null) {
+        if (tokens.peek() != null && tokens.peek().getType() == TokenType.SEMI_COL) {
             parser.getScope().setSymbol(name, new UserFunction(null, arguments));
         } else {
             tokens.next();
