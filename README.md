@@ -1,5 +1,5 @@
 # Passambler
-Passambler is a simple general purpose language.
+Passambler is a simple general purpose programming language.
 
 ## Examples
 A simple Hello World program looks like this:
