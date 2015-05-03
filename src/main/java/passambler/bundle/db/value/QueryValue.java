@@ -8,6 +8,7 @@ public class QueryValue extends Value {
         setValue(query);
     }
 
+    @Override
     public Query getValue() {
         return (Query) value;
     }
