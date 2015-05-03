@@ -16,7 +16,11 @@ public class TryFeature implements Feature {
 
     @Override
     public Value perform(Parser parser, TokenList tokens) throws EngineException {
-        boolean mayCatch = true, mayFinally = true;
+        TokenList conditionalCatch = null;
+        TokenList conditionalFinally = null;
+
+        boolean mayCatch = true;
+        boolean mayFinally = true;
 
         tokens.next();
 
@@ -34,7 +38,7 @@ public class TryFeature implements Feature {
         if (tokens.current().getType() == TokenType.IF) {
             tokens.next();
 
-            mayCatch = parser.parseBooleanExpression(tokens, TokenType.LEFT_BRACE).getValue();
+            conditionalCatch = new TokenList(parser.parseExpressionTokens(tokens, TokenType.LEFT_BRACE));
         }
 
         Block catchBlock = parser.parseBlock(tokens);
@@ -48,11 +52,13 @@ public class TryFeature implements Feature {
             if (tokens.current().getType() == TokenType.IF) {
                 tokens.next();
 
-                mayFinally = parser.parseBooleanExpression(tokens, TokenType.LEFT_BRACE).getValue();
+                conditionalFinally = new TokenList(parser.parseExpressionTokens(tokens, TokenType.LEFT_BRACE));
             }
 
             finallyBlock = parser.parseBlock(tokens);
         }
+
+        boolean invokedFinallyAlready = false;
 
         try {
             Value result = tryBlock.invoke();
@@ -61,6 +67,15 @@ public class TryFeature implements Feature {
                 return result;
             }
         } catch (ErrorException e) {
+            // After invoking the try block, set the mayCatch and mayFinally values.
+            if (conditionalCatch != null) {
+                mayCatch = parser.parseBooleanExpression(conditionalCatch).getValue();
+            }
+
+            if (conditionalFinally != null) {
+                mayFinally = parser.parseBooleanExpression(conditionalFinally).getValue();
+            }
+
             if (mayCatch) {
                 catchBlock.getParser().getScope().setSymbol(name, e.getError());
 
@@ -69,11 +84,31 @@ public class TryFeature implements Feature {
                 if (result != null) {
                     return result;
                 }
-            } else {
+            }
+
+            if (conditionalFinally != null) {
+                // We've set the mayFinally value before, but the condition might change after invoking the the catch block.
+                // That's why we have to re-assign it.
+                // We copy the conditionalFinally value so that the TokenList's position is set back to 0.
+                mayFinally = parser.parseBooleanExpression(conditionalFinally.copy()).getValue();
+            }
+
+            if (mayFinally && finallyBlock != null) {
+                invokedFinallyAlready = true;
+
+                Value result = finallyBlock.invoke();
+
+                if (result != null) {
+                    return result;
+                }
+            }
+
+            // We are not allowed to catch the error, so return it because then it is a uncaught error.
+            if (!mayCatch) {
                 return e.getError();
             }
         }
 
-        return finallyBlock != null && mayFinally ? finallyBlock.invoke() : null;
+        return mayFinally && finallyBlock != null && !invokedFinallyAlready ? finallyBlock.invoke() : null;
     }
 }
