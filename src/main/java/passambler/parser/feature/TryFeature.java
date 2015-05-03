@@ -69,6 +69,8 @@ public class TryFeature implements Feature {
                 if (result != null) {
                     return result;
                 }
+            } else {
+                return e.getError();
             }
         }
 
