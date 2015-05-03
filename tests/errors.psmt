@@ -45,22 +45,26 @@ try {
 }
 
 try {
-    throw("error");
-} catch e if a == 15 {
-    writeln("catched the error");
-} finally if a == 10 {
-    writeln("finally");
+    try {
+        throw("error");
+    } catch e if a == 15 {
+        writeln("catched the error");
+    } finally if a == 10 {
+        writeln("finally");
+    }
+} catch x {
+    writeln("error was not catched thanks to the conditional catch");
 }
 
 try {
     throw("error 2");
 } catch e if a == 10 {
     writeln("catched it!");
-} finally {
+} finally if a == 10 {
     writeln("done");
 }
 
-writeln("hello");
+writeln("hello"); // I have to do this because the test parser is buggy
 
 --OUTPUT--
 java.nio.file.NoSuchFileException: sdjfisdjfidsfjisd
@@ -72,7 +76,7 @@ try / catch without error
 Done
 test
 done
-finally
+error was not catched thanks to the conditional catch
 catched it!
 done
 hello
