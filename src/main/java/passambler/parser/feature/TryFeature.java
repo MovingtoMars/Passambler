@@ -109,6 +109,12 @@ public class TryFeature implements Feature {
             }
         }
 
+        // Maybe nothing has to be catched and a finally condition has been changed!
+        // So, we have to reset the condition here as well.
+        if (conditionalFinally != null) {
+            mayFinally = parser.parseBooleanExpression(conditionalFinally.copy()).getValue();
+        }
+
         return mayFinally && finallyBlock != null && !invokedFinallyAlready ? finallyBlock.invoke() : null;
     }
 }
