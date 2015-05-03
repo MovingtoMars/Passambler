@@ -11,20 +11,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import passambler.parser.Parser;
 import passambler.lexer.Lexer;
 import passambler.exception.EngineException;
-import passambler.tests.OutputRecorder;
+import passambler.util.OutputRecorder;
 import passambler.tests.TestParser;
 import passambler.tests.TestRunner;
+import passambler.util.PathWatcher;
+import static passambler.util.Constants.VERSION;
+import static passambler.util.Constants.LOGGER;
 
 public class Main {
-    public static final String VERSION = "DEV";
-
-    public static final Logger LOGGER = LogManager.getLogger("Passambler");
-
     private OptionSet options;
 
     public Main(String[] args) throws IOException {
@@ -66,7 +63,7 @@ public class Main {
     public void runWatchedFile(Path file, int watchTime) {
         Timer timer = new Timer();
 
-        TimerTask task = new FileWatcher(file) {
+        TimerTask task = new PathWatcher(file) {
             @Override
             public void onChange() {
                 LOGGER.info("Watched file '" + file.getFileName() + "' is reloaded");
@@ -126,32 +123,5 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         Main main = new Main(args);
-    }
-
-    abstract class FileWatcher extends TimerTask {
-        private long lastChangeTime;
-
-        private Path file;
-
-        public FileWatcher(Path file) {
-            this.file = file;
-        }
-
-        @Override
-        public void run() {
-            try {
-                long time = Files.getLastModifiedTime(file).toMillis();
-
-                if (lastChangeTime != time) {
-                    lastChangeTime = time;
-
-                    onChange();
-                }
-            } catch (IOException e) {
-                LOGGER.error("Failed to get last file modification date", e);
-            }
-        }
-
-        public abstract void onChange();
     }
 }

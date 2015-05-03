@@ -31,22 +31,22 @@ public class DictValue extends Value {
     }
 
     @Override
-    public boolean equals(Value value) {
-        if (value instanceof DictValue) {
+    public boolean equals(Object object) {
+        if (object instanceof DictValue) {
             List valuesLeft = new ArrayList<>(getValue().values());
-            List valuesRight = new ArrayList<>(((DictValue) value).getValue().values());
+            List valuesRight = new ArrayList<>(((DictValue) object).getValue().values());
 
             if (!valuesLeft.equals(valuesRight)) {
                 return false;
             } else {
                 List keysLeft = new ArrayList<>(getValue().keySet());
-                List keysRight = new ArrayList<>(((DictValue) value).getValue().keySet());
+                List keysRight = new ArrayList<>(((DictValue) object).getValue().keySet());
 
                 return keysLeft.equals(keysRight);
             }
         }
 
-        return super.equals(value);
+        return super.equals(object);
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 import passambler.exception.EngineException;
+import passambler.util.Constants;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
@@ -54,6 +55,6 @@ public class EncodeFunction extends Value implements Function {
             return object;
         }
 
-        return Value.VALUE_NIL;
+        return Constants.VALUE_NIL;
     }
 }

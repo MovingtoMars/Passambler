@@ -27,6 +27,7 @@ import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenPosition;
 import passambler.lexer.TokenType;
 import passambler.parser.feature.*;
+import passambler.util.Constants;
 import passambler.value.BooleanValue;
 import passambler.value.Value;
 import passambler.value.ErrorValue;
@@ -70,9 +71,9 @@ public class Parser {
         bundles.add(new RegexBundle());
         bundles.add(new DbBundle());
 
-        globals.put("true", Value.VALUE_TRUE);
-        globals.put("false", Value.VALUE_FALSE);
-        globals.put("nil", Value.VALUE_NIL);
+        globals.put("true", Constants.VALUE_TRUE);
+        globals.put("false", Constants.VALUE_FALSE);
+        globals.put("nil", Constants.VALUE_NIL);
         globals.put("using", new UsingFunction());
         globals.put("throw", new ThrowFunction());
         globals.put("write", new WriteFunction(new OutValue(), false));

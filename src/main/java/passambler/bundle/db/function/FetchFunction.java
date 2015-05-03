@@ -5,6 +5,8 @@ import org.sql2o.data.Table;
 import passambler.bundle.db.value.QueryValue;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
+import passambler.util.Constants;
+import passambler.util.ValueUtil;
 import passambler.value.DictValue;
 import passambler.value.ListValue;
 import passambler.value.StringValue;
@@ -40,7 +42,7 @@ public class FetchFunction extends Value implements Function {
                 DictValue item = new DictValue();
 
                 table.columns().stream().forEach((column) -> {
-                    item.setEntry(new StringValue(column.getName()), Value.toValue(row.getObject(column.getName())));
+                    item.setEntry(new StringValue(column.getName()), ValueUtil.toValue(row.getObject(column.getName())));
                 });
 
                 results.getValue().add(item);
@@ -49,6 +51,6 @@ public class FetchFunction extends Value implements Function {
             throw new ErrorException(e);
         }
 
-        return one ? (results.getValue().size() > 0 ? results.getValue().get(0) : Value.VALUE_NIL) : results;
+        return one ? (results.getValue().size() > 0 ? results.getValue().get(0) : Constants.VALUE_NIL) : results;
     }
 }

@@ -12,9 +12,9 @@ public class ListValue extends Value {
     }
 
     @Override
-    public boolean equals(Value value) {
-        if (value instanceof ListValue) {
-            ListValue givenList = (ListValue) value;
+    public boolean equals(Object object) {
+        if (object instanceof ListValue) {
+            ListValue givenList = (ListValue) object;
 
             if (givenList.getValue().size() != list.size()) {
                 return false;
@@ -32,7 +32,7 @@ public class ListValue extends Value {
             return true;
         }
 
-        return super.equals(value);
+        return super.equals(object);
     }
 
     @Override

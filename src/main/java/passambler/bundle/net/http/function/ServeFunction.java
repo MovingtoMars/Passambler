@@ -8,7 +8,7 @@ import org.apache.http.protocol.ResponseContent;
 import org.apache.http.protocol.ResponseDate;
 import org.apache.http.protocol.ResponseServer;
 import org.apache.http.protocol.UriHttpRequestHandlerMapper;
-import passambler.Main;
+import passambler.util.Constants;
 import passambler.exception.ErrorException;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
@@ -39,7 +39,7 @@ public class ServeFunction extends Value implements Function {
         try {
             HttpProcessor httpProcessor = HttpProcessorBuilder.create()
                 .add(new ResponseDate())
-                .add(new ResponseServer("Passambler/" + Main.VERSION))
+                .add(new ResponseServer("Passambler/" + Constants.VERSION))
                 .add(new ResponseContent())
                 .add(new ResponseConnControl()).build();
 

@@ -1,4 +1,4 @@
-package passambler.tests;
+package passambler.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

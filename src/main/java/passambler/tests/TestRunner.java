@@ -1,5 +1,6 @@
 package passambler.tests;
 
+import passambler.util.OutputRecorder;
 import passambler.exception.TestException;
 import passambler.lexer.Lexer;
 import passambler.parser.Parser;

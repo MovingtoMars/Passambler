@@ -5,6 +5,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import passambler.exception.EngineException;
+import passambler.util.ValueUtil;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.Value;
@@ -49,6 +50,6 @@ public class DecodeFunction extends Value implements Function {
             return dict;
         }
 
-        return Value.toValue(object);
+        return ValueUtil.toValue(object);
     }
 }

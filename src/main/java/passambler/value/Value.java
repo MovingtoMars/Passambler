@@ -1,24 +1,16 @@
 package passambler.value;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import passambler.lexer.Token;
 import passambler.exception.ParserException;
+import passambler.util.Constants;
+import passambler.util.ValueUtil;
 
 public class Value {
-    public static final BooleanValue VALUE_TRUE = new BooleanValue(true);
-    public static final BooleanValue VALUE_FALSE = new BooleanValue(false);
-    public static final Value VALUE_NIL = new Value() {
-        @Override
-        public String toString() {
-            return "nil";
-        }
-    };
-
     protected Map<String, Property> properties = new HashMap();
 
-    protected Object value = Value.VALUE_NIL;
+    protected Object value = Constants.VALUE_NIL;
 
     public Object getValue() {
         return value;
@@ -61,22 +53,10 @@ public class Value {
         return null;
     }
 
-    public boolean equals(Value value) {
-        if (getValue() == null && value.getValue() == null) {
-            return true;
-        }
-
-        if ((getValue() != null && value.getValue() == null) || (getValue() == null && value.getValue() != null)) {
-            return false;
-        }
-
-        return getValue().equals(value.getValue());
-    }
-
     @Override
     public boolean equals(Object object) {
         if (object instanceof Value) {
-            return equals((Value) object);
+            return ValueUtil.compare(this, (Value) object);
         }
 
         return super.equals(object);
@@ -85,21 +65,5 @@ public class Value {
     @Override
     public String toString() {
         return value.toString();
-    }
-
-    public static Value toValue(Object object) {
-        if (object instanceof String || object instanceof Date) {
-            return new StringValue(String.valueOf(object));
-        } else if (object instanceof Long) {
-            return new NumberValue((Long) object);
-        } else if (object instanceof Double) {
-            return new NumberValue((Double) object);
-        } else if (object instanceof Integer) {
-            return new NumberValue((Integer) object);
-        } else if (object instanceof Boolean) {
-            return new BooleanValue((Boolean) object);
-        }
-
-        return Value.VALUE_NIL;
     }
 }
