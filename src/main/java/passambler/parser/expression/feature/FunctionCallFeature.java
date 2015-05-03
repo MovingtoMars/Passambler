@@ -10,7 +10,7 @@ import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
 import passambler.parser.Argument;
 import passambler.parser.expression.ExpressionParser;
-import passambler.util.Constants;
+import passambler.util.ValueConstants;
 import passambler.value.Value;
 import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
@@ -125,6 +125,6 @@ public class FunctionCallFeature implements Feature {
 
         Value result = currentFunction.invoke(new FunctionContext(parser.getParser(), arguments.toArray(new Value[arguments.size()]), parser.isAssignment()));
 
-        return result == null ? Constants.VALUE_NIL : result;
+        return result == null ? ValueConstants.NIL : result;
     }
 }

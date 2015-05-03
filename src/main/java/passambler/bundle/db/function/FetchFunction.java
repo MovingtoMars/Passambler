@@ -5,7 +5,7 @@ import org.sql2o.data.Table;
 import passambler.bundle.db.value.QueryValue;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
-import passambler.util.Constants;
+import passambler.util.ValueConstants;
 import passambler.util.ValueUtil;
 import passambler.value.DictValue;
 import passambler.value.ListValue;
@@ -51,6 +51,6 @@ public class FetchFunction extends Value implements Function {
             throw new ErrorException(e);
         }
 
-        return one ? (results.getValue().size() > 0 ? results.getValue().get(0) : Constants.VALUE_NIL) : results;
+        return one ? (results.getValue().size() > 0 ? results.getValue().get(0) : ValueConstants.NIL) : results;
     }
 }

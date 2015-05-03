@@ -11,7 +11,7 @@ import org.apache.http.HttpRequest;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
-import passambler.util.Constants;
+import passambler.util.ValueConstants;
 import passambler.value.Property;
 import passambler.value.Value;
 import passambler.value.DictValue;
@@ -40,7 +40,7 @@ public class RequestValue extends Value {
                 HttpEntityEnclosingRequest enclosingRequest = (HttpEntityEnclosingRequest) request;
 
                 URLEncodedUtils.parse(enclosingRequest.getEntity()).stream().forEach((pair) -> {
-                    form.setEntry(new StringValue(pair.getName()), pair.getValue().trim().isEmpty() ? Constants.VALUE_NIL : new StringValue(pair.getValue()));
+                    form.setEntry(new StringValue(pair.getName()), pair.getValue().trim().isEmpty() ? ValueConstants.NIL : new StringValue(pair.getValue()));
                 });
             }
 

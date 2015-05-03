@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import passambler.lexer.Token;
 import passambler.exception.ParserException;
-import passambler.util.Constants;
+import passambler.util.ValueConstants;
 import passambler.util.ValueUtil;
 
 public class Value {
     protected Map<String, Property> properties = new HashMap();
 
-    protected Object value = Constants.VALUE_NIL;
+    protected Object value = ValueConstants.NIL;
 
     public Object getValue() {
         return value;

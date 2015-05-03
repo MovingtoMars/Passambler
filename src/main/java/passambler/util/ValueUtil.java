@@ -20,7 +20,7 @@ public class ValueUtil {
             return new BooleanValue((Boolean) object);
         }
 
-        return Constants.VALUE_NIL;
+        return ValueConstants.NIL;
     }
 
     public static boolean compare(Value value1, Value value2) {
