@@ -1,6 +1,6 @@
 package passambler.tests;
 
-import passambler.util.OutputRecorder;
+import passambler.util.OutputInterceptor;
 import passambler.exception.TestException;
 import passambler.lexer.Lexer;
 import passambler.parser.Parser;
@@ -23,8 +23,8 @@ public class TestRunner {
 
         Value result = parser.parse(new Lexer(test.getInput()));
 
-        if (test.getOutput() != null && !test.getOutput().equals(OutputRecorder.getOutput())) {
-            throw new TestException("Unexpected output, expected '%s' but got '%s'", test.getOutput(), OutputRecorder.getOutput());
+        if (test.getOutput() != null && !test.getOutput().equals(OutputInterceptor.getOutput())) {
+            throw new TestException("Unexpected output, expected '%s' but got '%s'", test.getOutput(), OutputInterceptor.getOutput());
         }
 
         if (test.getResult() != null) {

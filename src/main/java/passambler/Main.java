@@ -14,7 +14,7 @@ import joptsimple.OptionSet;
 import passambler.parser.Parser;
 import passambler.lexer.Lexer;
 import passambler.exception.EngineException;
-import passambler.util.OutputRecorder;
+import passambler.util.OutputInterceptor;
 import passambler.tests.TestParser;
 import passambler.tests.TestRunner;
 import passambler.util.PathWatcher;
@@ -106,15 +106,15 @@ public class Main {
 
                 TestRunner runner = new TestRunner(parser.parse());
 
-                OutputRecorder.record();
+                OutputInterceptor.start();
 
                 runner.run();
 
-                OutputRecorder.stop();
+                OutputInterceptor.stop();
 
                 LOGGER.info("Test '" + file.getFileName() + "' passed");
             } catch (Exception e) {
-                OutputRecorder.stop();
+                OutputInterceptor.stop();
 
                 LOGGER.error("Test '" + file.getFileName() + "' failed", e);
             }
