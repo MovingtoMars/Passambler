@@ -4,10 +4,13 @@ import java.util.Map;
 import passambler.bundle.Bundle;
 import passambler.bundle.os.function.*;
 import passambler.value.DictValue;
+import passambler.value.ListValue;
 import passambler.value.Value;
 import passambler.value.StringValue;
 
 public class OsBundle implements Bundle {
+    public static ListValue args = new ListValue();
+
     @Override
     public String getId() {
         return "os";
@@ -37,6 +40,8 @@ public class OsBundle implements Bundle {
         symbols.put("Arch", new StringValue(System.getProperty("os.arch")));
 
         symbols.put("Env", getEnvDict());
+
+        symbols.put("Args", args);
     }
 
     private DictValue getEnvDict() {

@@ -13,8 +13,8 @@ public class StringValue extends ListValue {
             list.add(new CharacterValue(character));
         }
 
-        cachedList = list.hashCode();
         cached = data;
+        cachedList = list.hashCode();
     }
 
     @Override
@@ -34,6 +34,7 @@ public class StringValue extends ListValue {
             getValue().stream().forEach((item) -> builder.append(item.toString()));
 
             cached = builder.toString();
+            cachedList = list.hashCode();
         }
 
         return cached;

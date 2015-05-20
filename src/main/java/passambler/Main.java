@@ -11,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
+import passambler.bundle.os.OsBundle;
 import passambler.parser.Parser;
 import passambler.lexer.Lexer;
 import passambler.exception.EngineException;
@@ -20,6 +21,7 @@ import passambler.tests.TestRunner;
 import passambler.util.PathWatcher;
 import static passambler.util.Constants.VERSION;
 import static passambler.util.Constants.LOGGER;
+import passambler.value.StringValue;
 
 public class Main {
     public Main(String[] args) throws IOException {
@@ -32,11 +34,17 @@ public class Main {
 
         OptionSet options = optionParser.parse(args);
 
-        for (Object file : options.nonOptionArguments()) {
+        if (!options.nonOptionArguments().isEmpty()) {
+            String fileName = String.valueOf(options.nonOptionArguments().get(0));
+
+            for (int i = 1; i < options.nonOptionArguments().size(); ++i) {
+                OsBundle.args.getValue().add(new StringValue(String.valueOf(options.nonOptionArguments().get(i))));
+            }
+
             if (options.has("w")) {
-                runWatchedFile(Paths.get(String.valueOf(file)), Integer.valueOf((String) options.valueOf("w")));
+                runWatchedFile(Paths.get(String.valueOf(fileName)), Integer.valueOf((String) options.valueOf("w")));
             } else {
-                runFile(Paths.get(String.valueOf(file)));
+                runFile(Paths.get(String.valueOf(fileName)));
             }
         }
 
