@@ -1,9 +1,9 @@
 package passambler.bundle.std.value;
 
 import passambler.value.Value;
-import passambler.value.WriteableValue;
+import passambler.value.Writeable;
 
-public class OutValue extends Value implements WriteableValue {
+public class OutValue extends Value implements Writeable {
     @Override
     public void write(boolean line, Value value) {
         System.out.print(value + (line ? "\n" : ""));

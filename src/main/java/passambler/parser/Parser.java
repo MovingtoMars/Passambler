@@ -20,6 +20,7 @@ import passambler.bundle.net.NetBundle;
 import passambler.bundle.os.OsBundle;
 import passambler.bundle.regex.RegexBundle;
 import passambler.bundle.std.StdBundle;
+import passambler.bundle.std.value.InValue;
 import passambler.bundle.std.value.OutValue;
 import passambler.bundle.thread.ThreadBundle;
 import passambler.exception.EngineException;
@@ -78,8 +79,8 @@ public class Parser {
         globals.put("throw", new ThrowFunction());
         globals.put("write", new WriteFunction(new OutValue(), false));
         globals.put("writeln", new WriteFunction(new OutValue(), true));
-        globals.put("read", new ReadFunction(false));
-        globals.put("readln", new ReadFunction(true));
+        globals.put("read", new ReadFunction(new InValue(), false));
+        globals.put("readln", new ReadFunction(new InValue(), true));
         globals.put("close", new CloseFunction());
     }
 

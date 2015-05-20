@@ -6,12 +6,12 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
-import passambler.value.ReadableValue;
+import passambler.value.Readable;
 import passambler.value.StringValue;
 import passambler.value.Value;
-import passambler.value.WriteableValue;
+import passambler.value.Writeable;
 
-public class FileValue extends Value implements ReadableValue, WriteableValue {
+public class FileValue extends Value implements Readable, Writeable {
     public FileValue(Path file) {
         setValue(file);
     }

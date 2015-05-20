@@ -7,12 +7,12 @@ import java.net.Socket;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
 import passambler.value.CloseableValue;
-import passambler.value.ReadableValue;
+import passambler.value.Readable;
 import passambler.value.Value;
 import passambler.value.StringValue;
-import passambler.value.WriteableValue;
+import passambler.value.Writeable;
 
-public class SocketValue extends Value implements WriteableValue, ReadableValue, CloseableValue {
+public class SocketValue extends Value implements Writeable, Readable, CloseableValue {
     private Socket socket;
 
     public SocketValue(Socket socket) {

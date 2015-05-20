@@ -2,6 +2,6 @@ package passambler.value;
 
 import passambler.exception.EngineException;
 
-public interface ReadableValue {
+public interface Readable {
     public Value read(boolean line) throws EngineException;
 }

@@ -5,10 +5,10 @@ import java.net.ServerSocket;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
 import passambler.value.CloseableValue;
-import passambler.value.ReadableValue;
+import passambler.value.Readable;
 import passambler.value.Value;
 
-public class ServerSocketValue extends Value implements ReadableValue, CloseableValue {
+public class ServerSocketValue extends Value implements Readable, CloseableValue {
     private ServerSocket socket;
 
     public ServerSocketValue(int port) throws IOException {

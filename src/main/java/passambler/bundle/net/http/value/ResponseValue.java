@@ -11,9 +11,9 @@ import passambler.value.Value;
 import passambler.value.DictValue;
 import passambler.value.NumberValue;
 import passambler.value.StringValue;
-import passambler.value.WriteableValue;
+import passambler.value.Writeable;
 
-public class ResponseValue extends Value implements WriteableValue {
+public class ResponseValue extends Value implements Writeable {
     private StringBuilder responseData = new StringBuilder();
 
     public ResponseValue(HttpContext context, HttpResponse response) {

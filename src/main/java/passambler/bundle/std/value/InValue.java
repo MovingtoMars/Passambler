@@ -3,11 +3,11 @@ package passambler.bundle.std.value;
 import java.io.IOException;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
-import passambler.value.ReadableValue;
+import passambler.value.Readable;
 import passambler.value.StringValue;
 import passambler.value.Value;
 
-public class InValue extends Value implements ReadableValue {
+public class InValue extends Value implements Readable {
     @Override
     public Value read(boolean line) throws EngineException {
         try {
