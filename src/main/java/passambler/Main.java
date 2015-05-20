@@ -22,8 +22,6 @@ import static passambler.util.Constants.VERSION;
 import static passambler.util.Constants.LOGGER;
 
 public class Main {
-    private OptionSet options;
-
     public Main(String[] args) throws IOException {
         OptionParser optionParser = new OptionParser();
 
@@ -32,7 +30,7 @@ public class Main {
         optionParser.accepts("w", "Watches the file being run").withOptionalArg().defaultsTo("1000");
         optionParser.accepts("t", "Run a test (file(s) or a whole directory)").withRequiredArg();
 
-        options = optionParser.parse(args);
+        OptionSet options = optionParser.parse(args);
 
         for (Object file : options.nonOptionArguments()) {
             if (options.has("w")) {
