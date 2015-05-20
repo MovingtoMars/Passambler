@@ -12,6 +12,7 @@ import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenType;
 import passambler.parser.Parser;
 import passambler.parser.expression.feature.*;
+import passambler.util.ValueConstants;
 import passambler.value.BooleanValue;
 
 public class ExpressionParser {
@@ -101,7 +102,7 @@ public class ExpressionParser {
                     Value result = parsePairs(pairs);
 
                     if (result instanceof BooleanValue && !((BooleanValue) result).getValue()) {
-                        return new BooleanValue(false);
+                        return ValueConstants.FALSE;
                     }
                 }
 
