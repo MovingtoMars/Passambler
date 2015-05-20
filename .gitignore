@@ -1,9 +1,9 @@
-nbproject/
-build/
+/nbproject/
+/build/
+/target/
+/local/
 manifest.mf
 build.xml
 nb-configuration.xml
 nbactions.xml
 Thumbs.db
-/target/
-/local/
