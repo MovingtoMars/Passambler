@@ -28,8 +28,8 @@ public class ConnectFunction extends Value implements Function {
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
         bundle.setConnection(new Sql2o(((StringValue) context.getArgument(0)).toString(),
-            ((StringValue) context.getArgument(1)).toString(),
-            ((StringValue) context.getArgument(2)).toString()));
+                ((StringValue) context.getArgument(1)).toString(),
+                ((StringValue) context.getArgument(2)).toString()));
 
         return null;
     }

@@ -29,28 +29,25 @@ public class Main {
 
         optionParser.accepts("v", "Show the version number");
         optionParser.accepts("h", "Show help");
-        optionParser.accepts("f", "Run one or multiple file(s)").withRequiredArg();
         optionParser.accepts("w", "Watches the file being run").withOptionalArg().defaultsTo("1000");
         optionParser.accepts("t", "Run a test (file(s) or a whole directory)").withRequiredArg();
 
         options = optionParser.parse(args);
 
+        for (Object file : options.nonOptionArguments()) {
+            if (options.has("w")) {
+                runWatchedFile(Paths.get(String.valueOf(file)), Integer.valueOf((String) options.valueOf("w")));
+            } else {
+                runFile(Paths.get(String.valueOf(file)));
+            }
+        }
+
         if (options.has("v")) {
             System.out.println("Passambler " + VERSION);
         }
 
-        if (options.has("h") || !options.hasOptions()) {
+        if (options.has("h") || (!options.hasOptions() && options.nonOptionArguments().isEmpty())) {
             optionParser.printHelpOn(System.out);
-        }
-
-        if (options.has("f")) {
-            for (String file : options.valueOf("f").toString().split(",")) {
-                if (options.has("w")) {
-                    runWatchedFile(Paths.get(file), Integer.valueOf((String) options.valueOf("w")));
-                } else {
-                    runFile(Paths.get(file));
-                }
-            }
         }
 
         if (options.has("t")) {

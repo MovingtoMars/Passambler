@@ -31,7 +31,7 @@ public class FilterFunction extends Value implements Function {
         ListValue filteredList = new ListValue();
 
         for (int i = 0; i < list.getValue().size(); ++i) {
-            Value value = callback.invoke(new FunctionContext(context.getParser(), new Value[] { list.getValue().get(i) }));
+            Value value = callback.invoke(new FunctionContext(context.getParser(), new Value[]{list.getValue().get(i)}));
 
             if (value instanceof BooleanValue && ((BooleanValue) value).getValue() == true) {
                 filteredList.getValue().add(list.getValue().get(i));

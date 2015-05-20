@@ -15,7 +15,7 @@ public class IndexAccessFeature implements Feature {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
         return parser.getTokens().current().getType() == TokenType.LEFT_BRACKET
-            && (currentValue instanceof ListValue || currentValue instanceof DictValue);
+                && (currentValue instanceof ListValue || currentValue instanceof DictValue);
     }
 
     @Override

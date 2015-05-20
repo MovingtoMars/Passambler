@@ -11,7 +11,7 @@ public class FunctionContext {
     private boolean assignment;
 
     public FunctionContext(Parser parser) {
-        this(parser, new Value[] {});
+        this(parser, new Value[]{});
     }
 
     public FunctionContext(Parser parser, Value[] arguments) {

@@ -14,26 +14,26 @@ public enum TokenType {
 
     public boolean isOperator() {
         return this == PLUS || this == MINUS || this == MULTIPLY || this == DIVIDE || this == POWER || this == MODULO
-            || this == GT || this == LT || this == GTE || this == LTE
-            || this == EQUAL || this == NEQUAL
-            || this == AND || this == OR || this == XOR
-            || this == COMPARE || this == RANGE;
+                || this == GT || this == LT || this == GTE || this == LTE
+                || this == EQUAL || this == NEQUAL
+                || this == AND || this == OR || this == XOR
+                || this == COMPARE || this == RANGE;
     }
 
     public boolean isUnaryOperator() {
         return this == UNARY_PLUS || this == UNARY_MINUS
-            || this == UNARY_NOT;
+                || this == UNARY_NOT;
     }
 
     public boolean isAssignmentOperator() {
         return this == ASSIGN
-            || this == ASSIGN_PLUS || this == ASSIGN_MINUS || this == ASSIGN_MULTIPLY || this == ASSIGN_DIVIDE || this == ASSIGN_POWER || this == ASSIGN_MODULO;
+                || this == ASSIGN_PLUS || this == ASSIGN_MINUS || this == ASSIGN_MULTIPLY || this == ASSIGN_DIVIDE || this == ASSIGN_POWER || this == ASSIGN_MODULO;
     }
 
     public boolean isLineInsensitive() {
         return this == ELSE || this == ELSEIF
-            || this == CATCH || this == FINALLY
-            || this == DOUBLE_ARROW
-            || isOperator();
+                || this == CATCH || this == FINALLY
+                || this == DOUBLE_ARROW
+                || isOperator();
     }
 }

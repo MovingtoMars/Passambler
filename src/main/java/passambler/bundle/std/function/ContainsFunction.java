@@ -21,14 +21,14 @@ public class ContainsFunction extends Value implements Function {
         if (argument == 0) {
             return value instanceof ListValue || value instanceof DictValue || value instanceof StringValue;
         }
-        
+
         return true;
     }
 
     @Override
     public Value invoke(FunctionContext context) throws EngineException {
         Value value = context.getArgument(0);
-        
+
         if (value instanceof StringValue) {
             return new BooleanValue(((StringValue) value).toString().contains(context.getArgument(1).toString()));
         } else if (value instanceof ListValue) {
@@ -41,7 +41,7 @@ public class ContainsFunction extends Value implements Function {
             }
             return ValueConstants.FALSE;
         }
-        
+
         return null;
     }
 }
