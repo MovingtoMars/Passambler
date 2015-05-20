@@ -3,7 +3,6 @@ package passambler.bundle.net;
 import java.util.Map;
 import passambler.bundle.Bundle;
 import passambler.bundle.net.function.*;
-import passambler.bundle.net.http.HttpBundle;
 import passambler.value.Value;
 
 public class NetBundle implements Bundle {
@@ -14,7 +13,7 @@ public class NetBundle implements Bundle {
 
     @Override
     public Bundle[] getChildren() {
-        return new Bundle[] { new HttpBundle() };
+        return null;
     }
 
     @Override
