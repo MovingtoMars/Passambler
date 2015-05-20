@@ -5,7 +5,7 @@ import java.util.Map;
 import passambler.lexer.Token;
 import passambler.exception.ParserException;
 import passambler.util.ValueConstants;
-import passambler.util.ValueUtil;
+import passambler.util.ValueUtils;
 
 public class Value {
     protected Map<String, Property> properties = new HashMap();
@@ -56,7 +56,7 @@ public class Value {
     @Override
     public boolean equals(Object object) {
         if (object instanceof Value) {
-            return ValueUtil.compare(this, (Value) object);
+            return ValueUtils.compare(this, (Value) object);
         }
 
         return super.equals(object);

@@ -6,7 +6,7 @@ import passambler.value.NumberValue;
 import passambler.value.StringValue;
 import passambler.value.Value;
 
-public class ValueUtil {
+public class ValueUtils {
     public static Value toValue(Object object) {
         if (object instanceof String || object instanceof Date) {
             return new StringValue(String.valueOf(object));
