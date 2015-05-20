@@ -53,6 +53,10 @@ writeln(std.Values(user));
 
 writeln(std.Contains("i like cats", "bears"));
 writeln(std.Contains("i like dogs", "dogs"));
+writeln(std.Contains(multipleUsers[1], "Sonja"));
+writeln(std.Contains(multipleUsers[2], "Angelo"));
+writeln(std.Contains(multipleUsers, user));
+writeln(std.Contains(multipleUsers, 20));
 
 writeln(std.IndexOf("hello world", "hello"));
 
@@ -97,6 +101,10 @@ R
 [Raoul, 16]
 false
 true
+true
+false
+true
+false
 0
 hello world!
 HELLO WORLD!
