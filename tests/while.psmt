@@ -10,7 +10,20 @@ while a < 10 {
     b += 1;
 }
 
-return [a, b];
+x = 0;
+while x < 15 {
+    x += 1;
+
+    if x == 5 {
+        continue;
+    } elseif x == 6 {
+        x += 2;
+    } elseif x == 9 {
+        break;
+    }
+}
+
+return [a, b, x];
 
 --RESULT--
-[10, 5]
+[10, 5, 9]

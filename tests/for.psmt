@@ -30,7 +30,17 @@ for key, value : b {
     a += key;
 }
 
+for i : 1..10 {
+    a += 1;
+    if i == 5 {
+        continue;
+    } elseif i == 8 {
+        break;
+    }
+    a += 1;
+}
+
 return a;
 
 --RESULT--
-306
+320

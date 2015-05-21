@@ -11,6 +11,7 @@ import passambler.lexer.TokenType;
 import passambler.parser.Block;
 import passambler.parser.expression.ExpressionParser;
 import passambler.parser.Parser;
+import passambler.util.ValueConstants;
 import passambler.value.Value;
 import passambler.value.DictValue;
 import passambler.value.ListValue;
@@ -73,7 +74,11 @@ public class ForFeature implements Feature {
                 Value result = callback.invoke();
 
                 if (result != null) {
-                    return result;
+                    if (result == ValueConstants.BREAK) {
+                        break;
+                    } else if (result != ValueConstants.CONTINUE) {
+                        return result;
+                    }
                 }
             }
         } else if (value instanceof DictValue) {
@@ -92,7 +97,11 @@ public class ForFeature implements Feature {
                 Value result = callback.invoke();
 
                 if (result != null) {
-                    return result;
+                    if (result == ValueConstants.BREAK) {
+                        break;
+                    } else if (result != ValueConstants.CONTINUE) {
+                        return result;
+                    }
                 }
             }
         } else {

@@ -8,6 +8,7 @@ import passambler.lexer.TokenType;
 import passambler.parser.Block;
 import passambler.parser.expression.ExpressionParser;
 import passambler.parser.Parser;
+import passambler.util.ValueConstants;
 import passambler.value.Value;
 import passambler.value.BooleanValue;
 
@@ -31,7 +32,13 @@ public class WhileFeature implements Feature {
             Value result = callback.invoke();
 
             if (result != null) {
-                return result;
+                if (result == ValueConstants.CONTINUE) {
+                    continue;
+                } else if (result == ValueConstants.BREAK) {
+                    break;
+                } else {
+                    return result;
+                }
             }
 
             value = new ExpressionParser(parser, new TokenList(expressionTokens)).parse();
