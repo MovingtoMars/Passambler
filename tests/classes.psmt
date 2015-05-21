@@ -4,7 +4,7 @@ Tests classes.
 --INPUT--
 class Greeter(name, manner="Hello")
 {
-    fn Greet()
+    func Greet()
     {
         writeln(self.manner + " " + self.name);
     }
@@ -24,19 +24,19 @@ writeln(g);
 
 class Sayer(msg="Hello world")
 {
-    fn Say(n)
+    func Say(n)
     {
         writeln(n + " " + self.msg);
     }
 
-    fn SayMore()
+    func SayMore()
     {
         for (1..3) {
             writeln(self.msg);
         }
     }
 
-    fn private()
+    func private()
     {
         writeln("private");
     }
@@ -53,7 +53,7 @@ y.Say("Raoul");
 
 class Sayer2() : Sayer("How are you?")
 {
-    fn Say2(x)
+    func Say2(x)
     {
         self.Say(x);
         self.private();

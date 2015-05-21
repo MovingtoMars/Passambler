@@ -7,7 +7,7 @@ if 2 + 2 == 5 -> writeln("not hello");
 
 for i : 0..3 -> writeln(i);
 
-fn hello() -> writeln("hello world");
+func hello() -> writeln("hello world");
 
 hello();
 

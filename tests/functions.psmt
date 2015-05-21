@@ -2,37 +2,37 @@
 Tests function and anonymous function declaration.
 
 --INPUT--
-fn a() {
+func a() {
     return;
 }
 
-fn b(x) {
+func b(x) {
     return x + 2;
 }
 
-fn c(x, y) {
+func c(x, y) {
     return x + y;
 }
 
-aa = fn() {
+aa = func() {
     return;
 }
 
-bb = fn(x) {
+bb = func(x) {
     return x + 2;
 }
 
-cc = fn(x, y) {
+cc = func(x, y) {
     return x + y;
 }
 
-fn dd() {}
-fn zz()
+func dd() {}
+func zz()
 {
 
 }
 
-fn ee();
+func ee();
 
 return [a(), b(5), c(4, 3), aa(), bb(10), cc(5, 10), dd(), zz(), ee()];
 

@@ -75,7 +75,7 @@ writeln(std.ToChar("hello"));
 
 writeln(std.Join(["I", "like", "cats", "and", "dogs"], "-"));
 
-writeln(std.Filter(multipleUsers, fn(a) {
+writeln(std.Filter(multipleUsers, func(a) {
     return a["age"] >= 18;
 }));
 

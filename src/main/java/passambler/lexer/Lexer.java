@@ -30,6 +30,7 @@ public class Lexer {
         tokenMap.put("catch", TokenType.CATCH);
         tokenMap.put("while", TokenType.WHILE);
 
+        tokenMap.put("func", TokenType.FUNC);
         tokenMap.put("else", TokenType.ELSE);
 
         tokenMap.put("try", TokenType.TRY);
@@ -38,7 +39,6 @@ public class Lexer {
         tokenMap.put("<=>", TokenType.COMPARE);
         tokenMap.put("**=", TokenType.ASSIGN_POWER);
 
-        tokenMap.put("fn", TokenType.FN);
         tokenMap.put("if", TokenType.IF);
         tokenMap.put("->", TokenType.ARROW);
 

@@ -12,7 +12,7 @@ import passambler.value.function.UserFunction;
 public class AnonymousFunctionFeature implements Feature {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
-        return parser.getTokens().current().getType() == TokenType.FN;
+        return parser.getTokens().current().getType() == TokenType.FUNC;
     }
 
     @Override
