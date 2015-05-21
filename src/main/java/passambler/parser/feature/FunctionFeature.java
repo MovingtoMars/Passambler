@@ -13,7 +13,7 @@ import passambler.value.function.UserFunction;
 public class FunctionFeature implements Feature {
     @Override
     public boolean canPerform(Parser parser, TokenList tokens) {
-        return tokens.get(0).getType() == TokenType.FN;
+        return tokens.get(0).getType() == TokenType.FN && tokens.get(1).getType() == TokenType.IDENTIFIER;
     }
 
     @Override
