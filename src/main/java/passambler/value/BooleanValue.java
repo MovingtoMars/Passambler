@@ -18,7 +18,7 @@ public class BooleanValue extends Value {
         if (value instanceof BooleanValue) {
             switch (operatorToken.getType()) {
                 case AND:
-                    return new BooleanValue(getValue() == ((BooleanValue) value).getValue());
+                    return new BooleanValue(getValue() && ((BooleanValue) value).getValue());
                 case OR:
                     return new BooleanValue(getValue() || ((BooleanValue) value).getValue());
                 case XOR:
