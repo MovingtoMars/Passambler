@@ -5,6 +5,7 @@ import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
 import passambler.parser.expression.ExpressionParser;
 import passambler.parser.Parser;
+import passambler.util.ValueConstants;
 import passambler.value.Value;
 
 public class ReturnFeature implements Feature {
@@ -17,6 +18,8 @@ public class ReturnFeature implements Feature {
     public Value perform(Parser parser, TokenList tokens) throws EngineException {
         tokens.next();
 
-        return new ExpressionParser(parser, tokens.copyAtCurrentPosition()).parse();
+        Value result = new ExpressionParser(parser, tokens.copyAtCurrentPosition()).parse();
+
+        return result == null ? ValueConstants.NIL : result;
     }
 }
