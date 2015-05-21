@@ -42,9 +42,9 @@ public class Main {
             }
 
             if (options.has("w")) {
-                runWatchedFile(Paths.get(String.valueOf(fileName)), Integer.valueOf((String) options.valueOf("w")));
+                runWatchedFile(Paths.get(fileName), Integer.valueOf((String) options.valueOf("w")));
             } else {
-                runFile(Paths.get(String.valueOf(fileName)));
+                runFile(Paths.get(fileName));
             }
         }
 
