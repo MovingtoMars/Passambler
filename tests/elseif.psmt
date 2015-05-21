@@ -2,24 +2,24 @@
 Tests elseif statements.
 
 --INPUT--
-using("std.Push");
+using("std.push");
 
 a = [];
 
 if 5 > 10 {
-    Push(a, 1);
+    push(a, 1);
 } elseif 10 < 5 {
-    Push(a, 2);
+    push(a, 2);
 } elseif 10 == 10 {
-    Push(a, 3);
+    push(a, 3);
 }
 
 if 5 > 10 {
-    Push(a, 1);
+    push(a, 1);
 } else if 10 < 5 {
-    Push(a, 2);
+    push(a, 2);
 } else if 10 == 10 {
-    Push(a, 3);
+    push(a, 3);
 }
 
 return a;

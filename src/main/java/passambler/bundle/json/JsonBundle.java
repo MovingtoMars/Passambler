@@ -18,7 +18,7 @@ public class JsonBundle implements Bundle {
 
     @Override
     public void apply(Map<String, Value> symbols) {
-        symbols.put("Encode", new EncodeFunction());
-        symbols.put("Decode", new DecodeFunction());
+        symbols.put("encode", new EncodeFunction());
+        symbols.put("decode", new DecodeFunction());
     }
 }

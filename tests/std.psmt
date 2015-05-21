@@ -5,77 +5,77 @@ Tests std bundle.
 using("std");
 
 n = 1..10;
-std.Push(n, 20);
-std.Push(n, 30);
+std.push(n, 20);
+std.push(n, 30);
 
 a = 1..4;
-b = std.Shift(a);
-std.Shift(a);
+b = std.shift(a);
+std.shift(a);
 
 c = 10..20;
 d = [];
 
 for (0..5) {
-    std.Push(d, std.Pop(c));
+    std.push(d, std.pop(c));
 }
 
 user = {"name" : "Raoul", "age" : 16};
 
 multipleUsers = [user, {"name": "Sonja", "age": 18}, {"name": "Geert", "age": 20}, {"name": "Monja", "age": 5}];
 
-writeln(std.Empty([]));
-writeln(std.Empty([1, 2, 3]));
-writeln(std.Empty(""));
-writeln(std.Empty("Raoul"));
+writeln(std.empty([]));
+writeln(std.empty([1, 2, 3]));
+writeln(std.empty(""));
+writeln(std.empty("Raoul"));
 
-writeln(std.First("Raoul"));
-writeln(std.First(1..3));
+writeln(std.first("Raoul"));
+writeln(std.first(1..3));
 
-writeln(std.Last(1..3));
+writeln(std.last(1..3));
 
 writeln(n);
 
-writeln(std.Size(50..100));
-writeln(std.Size("Raoul"));
+writeln(std.size(50..100));
+writeln(std.size("Raoul"));
 
 writeln(a);
 writeln(b);
 writeln(c);
 writeln(d);
 
-writeln(std.Slice(4..10, 1, 3));
+writeln(std.slice(4..10, 1, 3));
 
-writeln(std.Reverse(1..3));
-writeln(std.Reverse("Raoul"));
+writeln(std.reverse(1..3));
+writeln(std.reverse("Raoul"));
 
-writeln(std.Keys(user));
-writeln(std.Values(user));
+writeln(std.keys(user));
+writeln(std.values(user));
 
-writeln(std.Contains("i like cats", "bears"));
-writeln(std.Contains("i like dogs", "dogs"));
-writeln(std.Contains(multipleUsers[1], "Sonja"));
-writeln(std.Contains(multipleUsers[2], "Angelo"));
-writeln(std.Contains(multipleUsers, user));
-writeln(std.Contains(multipleUsers, 20));
+writeln(std.contains("i like cats", "bears"));
+writeln(std.contains("i like dogs", "dogs"));
+writeln(std.contains(multipleUsers[1], "Sonja"));
+writeln(std.contains(multipleUsers[2], "Angelo"));
+writeln(std.contains(multipleUsers, user));
+writeln(std.contains(multipleUsers, 20));
 
-writeln(std.IndexOf("hello world", "hello"));
+writeln(std.index_of("hello world", "hello"));
 
-writeln(std.Lcase("HeLLo WoRLd!"));
-writeln(std.Ucase("HeLLo WoRLd!"));
+writeln(std.lcase("HeLLo WoRLd!"));
+writeln(std.ucase("HeLLo WoRLd!"));
 
-writeln(std.Replace("I like bears", "bears", "cats"));
-writeln(std.Replace("I like cats", "cats", "dogs"));
+writeln(std.replace("I like bears", "bears", "cats"));
+writeln(std.replace("I like cats", "cats", "dogs"));
 
-writeln(std.Split("My name is Raoul", " "));
+writeln(std.split("My name is Raoul", " "));
 
-writeln(std.ToNum("1") + std.ToNum(1));
-writeln(std.ToBool(true) == std.ToBool("true"));
-writeln(std.ToBool("true") == std.ToBool(false));
-writeln(std.ToChar("hello"));
+writeln(std.to_num("1") + std.to_num(1));
+writeln(std.to_bool(true) == std.to_bool("true"));
+writeln(std.to_bool("true") == std.to_bool(false));
+writeln(std.to_char("hello"));
 
-writeln(std.Join(["I", "like", "cats", "and", "dogs"], "-"));
+writeln(std.join(["I", "like", "cats", "and", "dogs"], "-"));
 
-writeln(std.Filter(multipleUsers, func(a) {
+writeln(std.filter(multipleUsers, func(a) {
     return a["age"] >= 18;
 }));
 

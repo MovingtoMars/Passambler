@@ -18,7 +18,7 @@ public class NetBundle implements Bundle {
 
     @Override
     public void apply(Map<String, Value> symbols) {
-        symbols.put("Listen", new ListenFunction());
-        symbols.put("Open", new OpenFunction());
+        symbols.put("listen", new ListenFunction());
+        symbols.put("open", new OpenFunction());
     }
 }

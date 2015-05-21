@@ -18,10 +18,10 @@ public class RegexBundle implements Bundle {
 
     @Override
     public void apply(Map<String, Value> symbols) {
-        symbols.put("Matches", new MatchesFunction());
-        symbols.put("Quote", new QuoteFunction());
-        symbols.put("Split", new SplitFunction());
-        symbols.put("Replace", new ReplaceFunction(false));
-        symbols.put("ReplaceAll", new ReplaceFunction(true));
+        symbols.put("matches", new MatchesFunction());
+        symbols.put("quote", new QuoteFunction());
+        symbols.put("split", new SplitFunction());
+        symbols.put("replace", new ReplaceFunction(false));
+        symbols.put("replace_all", new ReplaceFunction(true));
     }
 }

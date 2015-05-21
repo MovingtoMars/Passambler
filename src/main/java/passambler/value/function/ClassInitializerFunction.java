@@ -3,7 +3,6 @@ package passambler.value.function;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import passambler.lexer.Lexer;
 import passambler.parser.Argument;
 import passambler.parser.Block;
 import passambler.exception.EngineException;
@@ -50,7 +49,14 @@ public class ClassInitializerFunction extends UserFunction {
 
         // Constructor arguments
         for (int i = 0; i < getArguments(); ++i) {
-            self.setProperty(getArgumentDefinitions().get(i).getName(), context.getArgument(i));
+            Argument argument = getArgumentDefinitions().get(i);
+
+            self.setProperty(argument.getName(), context.getArgument(i));
+
+            // If the constructor argument is public, add it as an property to the child
+            if (argument.isPublic()) {
+                child.setProperty(argument.getName(), context.getArgument(i));
+            }
         }
 
         // Apply symbols from parents
@@ -58,7 +64,7 @@ public class ClassInitializerFunction extends UserFunction {
             for (Map.Entry<String, Value> symbol : parent.getBlock().getParser().getScope().getSymbols().entrySet()) {
                 self.setProperty(symbol.getKey(), symbol.getValue());
 
-                if (Lexer.isPublic(symbol.getKey())) {
+                if (getBlock().getParser().getScope().isPublic(symbol.getKey())) {
                     child.setProperty(symbol.getKey(), symbol.getValue());
                 }
             }
@@ -70,7 +76,7 @@ public class ClassInitializerFunction extends UserFunction {
 
         // Apply all the symbols to the class
         for (Map.Entry<String, Value> symbol : getBlock().getParser().getScope().getSymbols().entrySet()) {
-            if (Lexer.isPublic(symbol.getKey())) {
+            if (getBlock().getParser().getScope().isPublic(symbol.getKey())) {
                 child.setProperty(symbol.getKey(), symbol.getValue());
             }
 

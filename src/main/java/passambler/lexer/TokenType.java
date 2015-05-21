@@ -10,7 +10,7 @@ public enum TokenType {
     AND, OR, XOR,
     ARROW,
     RETURN, BREAK, CONTINUE,
-    WHILE, FOR, FUNC, IF, ELSEIF, ELSE, CLASS, TRY, CATCH, FINALLY,
+    WHILE, FOR, FUNC, IF, ELSEIF, ELSE, CLASS, TRY, CATCH, FINALLY, PUB,
     PERIOD, COMMA, SEMI_COL, COL;
 
     public boolean isOperator() {

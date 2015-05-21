@@ -38,7 +38,7 @@ public class Lexer {
 
         tokenMap.put("try", TokenType.TRY);
         tokenMap.put("for", TokenType.FOR);
-
+        tokenMap.put("pub", TokenType.PUB);
         tokenMap.put("<=>", TokenType.COMPARE);
         tokenMap.put("**=", TokenType.ASSIGN_POWER);
 
@@ -244,10 +244,6 @@ public class Lexer {
 
     public Character peek(int amount) {
         return position + amount > input.length() - 1 ? null : input.charAt(position + amount);
-    }
-
-    public static boolean isPublic(String string) {
-        return Character.isUpperCase(string.charAt(0));
     }
 
     public static boolean isNumber(String string) {

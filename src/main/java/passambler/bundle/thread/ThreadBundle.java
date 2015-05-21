@@ -18,7 +18,7 @@ public class ThreadBundle implements Bundle {
 
     @Override
     public void apply(Map<String, Value> symbols) {
-        symbols.put("Start", new StartFunction());
-        symbols.put("Sleep", new SleepFunction());
+        symbols.put("start", new StartFunction());
+        symbols.put("sleep", new SleepFunction());
     }
 }

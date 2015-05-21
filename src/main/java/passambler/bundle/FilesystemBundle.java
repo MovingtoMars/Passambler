@@ -70,7 +70,7 @@ public class FilesystemBundle implements Bundle {
         }
 
         for (Map.Entry<String, Value> symbol : parser.getScope().getSymbols().entrySet()) {
-            if (Lexer.isPublic(symbol.getKey())) {
+            if (parser.getScope().isPublic(symbol.getKey())) {
                 symbols.put(symbol.getKey(), symbol.getValue());
             }
         }

@@ -2,10 +2,10 @@
 Tests errors.
 
 --INPUT--
-using("std.ToStr");
+using("std.to_str");
 
 try {
-    read(using("file.Open")("sdjfisdjfidsfjisd"));
+    read(using("file.open")("sdjfisdjfidsfjisd"));
 } catch x {
     writeln(x);
 }
@@ -21,7 +21,7 @@ try {
     throw("Problem!!");
     writeln("not ran");
 } catch z {
-    writeln("problem found: " + ToStr(z));
+    writeln("problem found: " + to_str(z));
 } finally {
     writeln("DONE");
 }

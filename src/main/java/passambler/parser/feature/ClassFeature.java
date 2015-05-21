@@ -16,30 +16,37 @@ import passambler.value.function.ClassInitializerFunction;
 public class ClassFeature implements Feature {
     @Override
     public boolean canPerform(Parser parser, TokenList tokens) {
-        return tokens.get(0).getType() == TokenType.CLASS;
+        return tokens.peek(tokens.current().getType() == TokenType.PUB ? 1 : 0).getType() == TokenType.CLASS;
     }
-
+    
     @Override
     public Value perform(Parser parser, TokenList tokens) throws EngineException {
+        boolean visible = tokens.current().getType() == TokenType.PUB;
+        
+        if (visible) {
+            tokens.next();
+        }
+        
         tokens.next();
+        
         tokens.match(TokenType.IDENTIFIER);
-
+        
         String name = tokens.current().getValue();
-
+        
         tokens.next();
-
+        
         List<Argument> arguments = parser.parseArgumentDefinition(tokens);
-
+        
         tokens.next();
-
+        
         List<ClassInitializerFunction> parents = new ArrayList<>();
-
+        
         if (tokens.current().getType() == TokenType.COL) {
             tokens.next();
-
+            
             while (tokens.current().getType() != TokenType.LEFT_BRACE) {
                 Value expression = parser.parseExpression(tokens, TokenType.COMMA, TokenType.RIGHT_PAREN, TokenType.LEFT_BRACE);
-
+                
                 if (!(expression instanceof ClassValue)) {
                     throw new ParserException(ParserExceptionType.NOT_A_CLASS, tokens.current().getPosition());
                 }
@@ -48,15 +55,19 @@ public class ClassFeature implements Feature {
                 parents.add((ClassInitializerFunction) parser.getScope().getSymbol(((ClassValue) expression).getName()));
             }
         }
-
+        
         ClassInitializerFunction child = new ClassInitializerFunction(name, parser.parseBlock(tokens), arguments);
-
+        
         for (ClassInitializerFunction parent : parents) {
             child.addParent(parent);
         }
-
+        
         parser.getScope().setSymbol(name, child);
-
+        
+        if (visible) {
+            parser.getScope().setPublic(name);
+        }
+        
         return null;
     }
 }

@@ -2,21 +2,22 @@
 Tests classes.
 
 --INPUT--
-class Greeter(name, manner="Hello")
+class Greeter(pub name, manner="Hello")
 {
-    func Greet()
+    pub func greet()
     {
         writeln(self.manner + " " + self.name);
     }
 }
 
 g = Greeter("Raoul");
-g.Greet();
+g.greet();
+writeln(g.name);
 
 a = Greeter(manner="Goodmorning", name="Passambler");
-a.Greet();
+a.greet();
 
-g.Greet();
+g.greet();
 
 writeln(a);
 
@@ -24,12 +25,12 @@ writeln(g);
 
 class Sayer(msg="Hello world")
 {
-    func Say(n)
+    pub func say(n)
     {
         writeln(n + " " + self.msg);
     }
 
-    func SayMore()
+    pub func sayMore()
     {
         for (1..3) {
             writeln(self.msg);
@@ -43,28 +44,29 @@ class Sayer(msg="Hello world")
 }
 
 s = Sayer("test");
-s.Say("Raoul");
+s.say("Raoul");
 
 x = Sayer();
-x.Say("Raoul");
+x.say("Raoul");
 
 y = Sayer(msg="test 2");
-y.Say("Raoul");
+y.say("Raoul");
 
 class Sayer2() : Sayer("How are you?")
 {
-    func Say2(x)
+    pub func say2(x)
     {
-        self.Say(x);
+        self.say(x);
         self.private();
     }
 }
 
 z = Sayer2();
-z.Say2("Raoul");
+z.say2("Raoul");
 
 --OUTPUT--
 Hello Raoul
+Raoul
 Goodmorning Passambler
 Hello Raoul
 Greeter

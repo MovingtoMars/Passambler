@@ -30,12 +30,16 @@ public class AssignmentParser {
     public void parse() throws EngineException {
         List<Token> leftTokenList = new ArrayList<>();
 
+        boolean visible = false;
+
         while (tokens.hasNext()) {
             if (tokens.current().getType().isAssignmentOperator()) {
                 break;
+            } else if (tokens.current().getType() == TokenType.PUB) {
+                visible = true;
+            } else {
+                leftTokenList.add(tokens.current());
             }
-
-            leftTokenList.add(tokens.current());
 
             tokens.next();
         }
@@ -58,6 +62,10 @@ public class AssignmentParser {
                         parser.getScope().setSymbol(token.getValue(), rightValue);
                     } else {
                         parser.getScope().setSymbol(token.getValue(), parser.getScope().getSymbol(token.getValue()).onOperator(rightValue, operator));
+                    }
+
+                    if (visible) {
+                        parser.getScope().setPublic(token.getValue());
                     }
                 } else {
                     if (!parser.getScope().hasSymbol(token.getValue())) {
