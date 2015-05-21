@@ -2,12 +2,12 @@
 Tests expression blocks.
 
 --INPUT--
-if 1 + 1 == 2 => writeln("hello");
-if 2 + 2 == 5 => writeln("not hello");
+if 1 + 1 == 2 -> writeln("hello");
+if 2 + 2 == 5 -> writeln("not hello");
 
-for i : 0..3 => writeln(i);
+for i : 0..3 -> writeln(i);
 
-fn hello() => writeln("hello world");
+fn hello() -> writeln("hello world");
 
 hello();
 

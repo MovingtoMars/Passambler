@@ -21,7 +21,7 @@ public class WhileFeature implements Feature {
     public Value perform(Parser parser, TokenList tokens) throws EngineException {
         tokens.next();
 
-        List<Token> expressionTokens = parser.parseExpressionTokens(tokens, TokenType.LEFT_BRACE, TokenType.DOUBLE_ARROW);
+        List<Token> expressionTokens = parser.parseExpressionTokens(tokens, TokenType.LEFT_BRACE, TokenType.ARROW);
 
         Value value = new ExpressionParser(parser, new TokenList(expressionTokens)).parse();
 

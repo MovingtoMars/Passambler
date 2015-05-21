@@ -157,16 +157,16 @@ public class Parser {
     public Block parseBlock(TokenList tokens) throws EngineException {
         Block block = new Block(scope);
 
-        tokens.match(TokenType.LEFT_BRACE, TokenType.DOUBLE_ARROW);
+        tokens.match(TokenType.LEFT_BRACE, TokenType.ARROW);
 
-        boolean equalArrow = tokens.current().getType() == TokenType.DOUBLE_ARROW;
+        boolean arrow = tokens.current().getType() == TokenType.ARROW;
 
         tokens.next();
 
         int depth = 1;
 
         while (tokens.hasNext()) {
-            if (!equalArrow) {
+            if (!arrow) {
                 if (tokens.current().getType() == TokenType.LEFT_BRACE) {
                     depth++;
                 } else if (tokens.current().getType() == TokenType.RIGHT_BRACE) {
@@ -183,7 +183,7 @@ public class Parser {
             tokens.next();
         }
 
-        if (!equalArrow) {
+        if (!arrow) {
             tokens.match(TokenType.RIGHT_BRACE);
         }
 

@@ -28,13 +28,13 @@ public class ForFeature implements Feature {
 
         tokens.next();
 
-        TokenList left = new TokenList(parser.parseExpressionTokens(tokens, TokenType.LEFT_BRACE, TokenType.DOUBLE_ARROW, TokenType.COL));
+        TokenList left = new TokenList(parser.parseExpressionTokens(tokens, TokenType.LEFT_BRACE, TokenType.ARROW, TokenType.COL));
         Value right = null;
 
         if (tokens.current().getType() == TokenType.COL) {
             tokens.next();
 
-            right = parser.parseExpression(tokens, TokenType.LEFT_BRACE, TokenType.DOUBLE_ARROW);
+            right = parser.parseExpression(tokens, TokenType.LEFT_BRACE, TokenType.ARROW);
         }
 
         Block callback = parser.parseBlock(tokens);

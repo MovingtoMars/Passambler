@@ -28,7 +28,7 @@ public class IfFeature implements Feature {
 
         while (tokens.hasNext()) {
             if (!elseCondition) {
-                cases.put((BooleanValue) parser.parseBooleanExpression(tokens, TokenType.LEFT_BRACE, TokenType.DOUBLE_ARROW), parser.parseBlock(tokens));
+                cases.put((BooleanValue) parser.parseBooleanExpression(tokens, TokenType.LEFT_BRACE, TokenType.ARROW), parser.parseBlock(tokens));
             } else {
                 cases.put(new BooleanValue(true), parser.parseBlock(tokens));
             }
