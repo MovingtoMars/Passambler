@@ -8,20 +8,22 @@ class Greeter(pub name, manner="Hello")
     {
         writeln(self.manner + " " + self.name);
     }
+
+    pub func to_str()
+    {
+        return "String repr: " + self.name;
+    }
 }
 
 g = Greeter("Raoul");
 g.greet();
 writeln(g.name);
+writeln(g);
 
 a = Greeter(manner="Goodmorning", name="Passambler");
 a.greet();
 
 g.greet();
-
-writeln(a);
-
-writeln(g);
 
 class Sayer(msg="Hello world")
 {
@@ -64,15 +66,19 @@ class Sayer2() : Sayer("How are you?")
 z = Sayer2();
 z.say2("Raoul");
 
+writeln(s);
+writeln(z);
+
 --OUTPUT--
 Hello Raoul
 Raoul
+String repr: Raoul
 Goodmorning Passambler
 Hello Raoul
-Greeter
-Greeter
 Raoul test
 Raoul Hello world
 Raoul test 2
 Raoul How are you?
 private
+Sayer
+Sayer2
