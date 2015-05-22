@@ -13,8 +13,7 @@ import passambler.value.Value;
 public class LiteralFeature implements Feature {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
-        return parser.getTokens().current().getType() == TokenType.NUMBER
-                || parser.getTokens().current().getType() == TokenType.STRING;
+        return parser.getTokens().current().getType() == TokenType.NUMBER || parser.getTokens().current().getType() == TokenType.STRING;
     }
 
     @Override
