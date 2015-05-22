@@ -20,7 +20,7 @@ import passambler.value.NumberValue;
 public class ForFeature implements Feature {
     @Override
     public boolean canPerform(Parser parser, TokenList tokens) {
-        return tokens.get(0).getType() == TokenType.FOR;
+        return tokens.current().getType() == TokenType.FOR;
     }
 
     @Override

@@ -11,7 +11,7 @@ import passambler.value.Value;
 public class LeaveFeature implements Feature {
     @Override
     public boolean canPerform(Parser parser, TokenList tokens) {
-        return tokens.get(0).getType() == TokenType.RETURN || tokens.get(0).getType() == TokenType.BREAK || tokens.get(0).getType() == TokenType.CONTINUE;
+        return tokens.current().getType() == TokenType.RETURN || tokens.current().getType() == TokenType.BREAK || tokens.current().getType() == TokenType.CONTINUE;
     }
 
     @Override

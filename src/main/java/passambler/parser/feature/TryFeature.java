@@ -11,7 +11,7 @@ import passambler.value.Value;
 public class TryFeature implements Feature {
     @Override
     public boolean canPerform(Parser parser, TokenList tokens) {
-        return tokens.get(0).getType() == TokenType.TRY;
+        return tokens.current().getType() == TokenType.TRY;
     }
 
     @Override

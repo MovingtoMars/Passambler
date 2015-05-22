@@ -13,13 +13,9 @@ import passambler.value.function.UserFunction;
 public class FunctionFeature implements Feature {
     @Override
     public boolean canPerform(Parser parser, TokenList tokens) {
-        int i = 0;
+        int offset = tokens.current().getType() == TokenType.PUB ? 1 : 0;
 
-        if (tokens.current().getType() == TokenType.PUB) {
-            i++;
-        }
-
-        return tokens.peek(i).getType() == TokenType.FUNC && tokens.peek(i + 1).getType() == TokenType.IDENTIFIER;
+        return tokens.peek(offset).getType() == TokenType.FUNC && tokens.peek(offset + 1).getType() == TokenType.IDENTIFIER;
     }
 
     @Override

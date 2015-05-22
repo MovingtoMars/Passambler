@@ -15,7 +15,7 @@ import passambler.value.BooleanValue;
 public class WhileFeature implements Feature {
     @Override
     public boolean canPerform(Parser parser, TokenList tokens) {
-        return tokens.get(0).getType() == TokenType.WHILE;
+        return tokens.current().getType() == TokenType.WHILE;
     }
 
     @Override

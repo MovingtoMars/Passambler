@@ -15,7 +15,7 @@ import passambler.value.BooleanValue;
 public class IfFeature implements Feature {
     @Override
     public boolean canPerform(Parser parser, TokenList tokens) {
-        return tokens.get(0).getType() == TokenType.IF;
+        return tokens.current().getType() == TokenType.IF;
     }
 
     @Override
