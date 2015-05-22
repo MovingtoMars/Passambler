@@ -16,8 +16,8 @@ public class ClassValue extends Value {
 
     @Override
     public String toString() {
-        if (hasProperty("ToStr")) {
-            Value strFunction = getProperty("ToStr").getValue();
+        if (hasProperty("to_str")) {
+            Value strFunction = getProperty("to_str").getValue();
 
             if (strFunction instanceof Function && ((Function) strFunction).getArguments() == 0) {
                 try {
