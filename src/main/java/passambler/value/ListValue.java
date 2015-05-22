@@ -12,30 +12,6 @@ public class ListValue extends Value {
     }
 
     @Override
-    public boolean equals(Object object) {
-        if (object instanceof ListValue) {
-            ListValue givenList = (ListValue) object;
-
-            if (givenList.getValue().size() != list.size()) {
-                return false;
-            }
-
-            for (int i = 0; i < list.size(); ++i) {
-                Value valueInCurrentList = list.get(i);
-                Value valueInList = givenList.getValue().get(i);
-
-                if (!valueInCurrentList.equals(valueInList)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        return super.equals(object);
-    }
-
-    @Override
     public String toString() {
         return list.toString();
     }

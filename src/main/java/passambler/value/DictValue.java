@@ -1,8 +1,6 @@
 package passambler.value;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class DictValue extends Value {
@@ -28,25 +26,6 @@ public class DictValue extends Value {
 
     public void setEntry(Value key, Value value) {
         dict.put(key, value);
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (object instanceof DictValue) {
-            List valuesLeft = new ArrayList<>(getValue().values());
-            List valuesRight = new ArrayList<>(((DictValue) object).getValue().values());
-
-            if (!valuesLeft.equals(valuesRight)) {
-                return false;
-            } else {
-                List keysLeft = new ArrayList<>(getValue().keySet());
-                List keysRight = new ArrayList<>(((DictValue) object).getValue().keySet());
-
-                return keysLeft.equals(keysRight);
-            }
-        }
-
-        return super.equals(object);
     }
 
     @Override
