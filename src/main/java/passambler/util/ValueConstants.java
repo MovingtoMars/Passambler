@@ -12,6 +12,6 @@ public class ValueConstants {
             return "nil";
         }
     };
-    public static final Value BREAK = new Value();
-    public static final Value CONTINUE = new Value();
+    public static final Value STOP = new Value();
+    public static final Value SKIP = new Value();
 }

@@ -11,7 +11,7 @@ import passambler.value.Value;
 public class LeaveFeature implements Feature {
     @Override
     public boolean canPerform(Parser parser, TokenList tokens) {
-        return tokens.current().getType() == TokenType.RETURN || tokens.current().getType() == TokenType.BREAK || tokens.current().getType() == TokenType.CONTINUE;
+        return tokens.current().getType() == TokenType.RETURN || tokens.current().getType() == TokenType.STOP || tokens.current().getType() == TokenType.SKIP;
     }
 
     @Override
@@ -24,10 +24,10 @@ public class LeaveFeature implements Feature {
             Value result = new ExpressionParser(parser, tokens.copyAtCurrentPosition()).parse();
 
             return result == null ? ValueConstants.NIL : result;
-        } else if (type == TokenType.BREAK) {
-            return ValueConstants.BREAK;
-        } else if (type == TokenType.CONTINUE) {
-            return ValueConstants.CONTINUE;
+        } else if (type == TokenType.STOP) {
+            return ValueConstants.STOP;
+        } else if (type == TokenType.SKIP) {
+            return ValueConstants.SKIP;
         }
 
         return null;

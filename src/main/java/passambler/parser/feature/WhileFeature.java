@@ -32,9 +32,9 @@ public class WhileFeature implements Feature {
             Value result = callback.invoke();
 
             if (result != null) {
-                if (result == ValueConstants.CONTINUE) {
+                if (result == ValueConstants.SKIP) {
                     continue;
-                } else if (result == ValueConstants.BREAK) {
+                } else if (result == ValueConstants.STOP) {
                     break;
                 } else {
                     return result;

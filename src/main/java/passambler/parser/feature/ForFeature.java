@@ -74,9 +74,9 @@ public class ForFeature implements Feature {
                 Value result = callback.invoke();
 
                 if (result != null) {
-                    if (result == ValueConstants.BREAK) {
+                    if (result == ValueConstants.STOP) {
                         break;
-                    } else if (result != ValueConstants.CONTINUE) {
+                    } else if (result != ValueConstants.SKIP) {
                         return result;
                     }
                 }
@@ -97,9 +97,9 @@ public class ForFeature implements Feature {
                 Value result = callback.invoke();
 
                 if (result != null) {
-                    if (result == ValueConstants.BREAK) {
+                    if (result == ValueConstants.STOP) {
                         break;
-                    } else if (result != ValueConstants.CONTINUE) {
+                    } else if (result != ValueConstants.SKIP) {
                         return result;
                     }
                 }

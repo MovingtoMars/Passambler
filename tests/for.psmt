@@ -33,9 +33,9 @@ for key, value : b {
 for i : 1..10 {
     a += 1;
     if i == 5 {
-        continue;
+        skip;
     } elseif i == 8 {
-        break;
+        stop;
     }
     a += 1;
 }

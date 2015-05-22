@@ -20,8 +20,6 @@ public class Lexer {
     public Lexer(String input) {
         this.input = input;
 
-        tokenMap.put("continue", TokenType.CONTINUE);
-
         tokenMap.put("finally", TokenType.FINALLY);
         tokenMap.put("else if", TokenType.ELSEIF);
 
@@ -31,8 +29,9 @@ public class Lexer {
         tokenMap.put("class", TokenType.CLASS);
         tokenMap.put("catch", TokenType.CATCH);
         tokenMap.put("while", TokenType.WHILE);
-        tokenMap.put("break", TokenType.BREAK);
 
+        tokenMap.put("stop", TokenType.STOP);
+        tokenMap.put("skip", TokenType.SKIP);
         tokenMap.put("func", TokenType.FUNC);
         tokenMap.put("else", TokenType.ELSE);
 
