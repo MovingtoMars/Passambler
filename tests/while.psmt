@@ -23,7 +23,18 @@ while x < 15 {
     }
 }
 
-return [a, b, x];
+y = 0;
+while {
+    y += 1;
+    if y == 9 {
+        skip;
+    } elseif y == 16 {
+        stop;
+    }
+    y += 1;
+}
+
+return [a, b, x, y];
 
 --RESULT--
-[10, 5, 9]
+[10, 5, 9, 16]

@@ -28,7 +28,7 @@ public class WhileFeature implements Feature {
 
         Block callback = parser.parseBlock(tokens);
 
-        while (((BooleanValue) value).getValue()) {
+        while (expressionTokens.isEmpty() || ((BooleanValue) value).getValue()) {
             Value result = callback.invoke();
 
             if (result != null) {
@@ -41,7 +41,9 @@ public class WhileFeature implements Feature {
                 }
             }
 
-            value = new ExpressionParser(parser, new TokenList(expressionTokens)).parse();
+            if (!expressionTokens.isEmpty()) {
+                value = new ExpressionParser(parser, new TokenList(expressionTokens)).parse();
+            }
         }
 
         return null;
