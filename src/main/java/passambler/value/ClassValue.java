@@ -17,13 +17,17 @@ public class ClassValue extends Value {
     @Override
     public String toString() {
         if (hasProperty("to_str")) {
-            Value strFunction = getProperty("to_str").getValue();
+            Value function = getProperty("to_str").getValue();
 
-            if (strFunction instanceof Function && ((Function) strFunction).getArguments() == 0) {
+            if (function instanceof Function && ((Function) function).getArguments() == 0) {
                 try {
-                    return ((Function) strFunction).invoke(null).toString();
-                } catch (EngineException e) {
+                    Value result = ((Function) function).invoke(null);
 
+                    if (result != null) {
+                        return result.toString();
+                    }
+                } catch (EngineException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
