@@ -6,6 +6,7 @@ public enum ParserExceptionType {
     INVALID_ARGUMENT("Invalid argument %d"),
     INVALID_ARGUMENT_COUNT("%d arguments expected, %d given"),
     INVALID_TOKEN("Token %s expected, %s found"),
+    INVALID_PUB_CONTEXT("Invalid pub context"),
     UNDEFINED_FUNCTION("Undefined function '%s'"),
     UNDEFINED_ARGUMENT("Undefined argument '%s'"),
     UNDEFINED_VARIABLE("Undefined variable '%s'"),
