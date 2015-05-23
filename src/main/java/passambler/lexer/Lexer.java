@@ -29,6 +29,7 @@ public class Lexer {
         tokenMap.put("class", TokenType.CLASS);
         tokenMap.put("catch", TokenType.CATCH);
         tokenMap.put("while", TokenType.WHILE);
+        tokenMap.put("defer", TokenType.DEFER);
 
         tokenMap.put("stop", TokenType.STOP);
         tokenMap.put("skip", TokenType.SKIP);

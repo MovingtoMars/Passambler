@@ -42,6 +42,7 @@ public class Parser {
     private List<Feature> features = new ArrayList<>();
     private List<Bundle> bundles = new ArrayList<>();
     private Map<String, Value> globals = new HashMap();
+    private List<List<Token>> defers = new ArrayList<>();
 
     private Scope scope;
 
@@ -59,6 +60,7 @@ public class Parser {
         features.add(new FunctionFeature());
         features.add(new ClassFeature());
         features.add(new TryFeature());
+        features.add(new DeferFeature());
         features.add(new AssignmentFeature());
         features.add(new ExpressionFeature());
 
@@ -90,6 +92,10 @@ public class Parser {
 
     public Map<String, Value> getGlobals() {
         return globals;
+    }
+
+    public List<List<Token>> getDefers() {
+        return defers;
     }
 
     public Scope getScope() {
