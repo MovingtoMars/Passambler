@@ -30,6 +30,7 @@ public class Main {
         optionParser.accepts("v", "Show the version number");
         optionParser.accepts("h", "Show help");
         optionParser.accepts("w", "Watches the file being run").withOptionalArg().defaultsTo("1000");
+        optionParser.accepts("r", "Run a code snippet").withRequiredArg();
         optionParser.accepts("t", "Run a test (file(s) or a whole directory)").withRequiredArg();
 
         OptionSet options = optionParser.parse(args);
@@ -61,6 +62,10 @@ public class Main {
                 runTestFile(Paths.get(file));
             }
         }
+
+        if (options.has("r")) {
+            runCode(String.valueOf(options.valueOf("r")));
+        }
     }
 
     public void runWatchedFile(Path file, int watchTime) {
@@ -87,6 +92,14 @@ public class Main {
             LOGGER.fatal(e.getName(), e);
         } catch (IOException e) {
             LOGGER.error(e);
+        }
+    }
+
+    public void runCode(String code) {
+        try {
+            new Parser().parse(new Lexer(String.join("\n", code)));
+        } catch (EngineException e) {
+            LOGGER.fatal(e.getName(), e);
         }
     }
 
