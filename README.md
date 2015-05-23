@@ -23,7 +23,9 @@ for x : 0..100 {
 ## Building
 Clone the repository and run Maven.
 ```
-mvn install
+$ git clone https://github.com/raoulvdberge/Passambler.git
+$ cd Passambler
+$ mvn install
 ```
 You will find the jar file and the REPL in the `target` directory.
 
