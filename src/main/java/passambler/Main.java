@@ -49,14 +49,6 @@ public class Main {
             }
         }
 
-        if (options.has("v")) {
-            System.out.println("Passambler " + VERSION);
-        }
-
-        if (options.has("h") || (!options.hasOptions() && options.nonOptionArguments().isEmpty())) {
-            optionParser.printHelpOn(System.out);
-        }
-
         if (options.has("t")) {
             for (String file : options.valueOf("t").toString().split(",")) {
                 runTestFile(Paths.get(file));
@@ -65,6 +57,14 @@ public class Main {
 
         if (options.has("r")) {
             runCode(String.valueOf(options.valueOf("r")));
+        }
+
+        if (options.has("v")) {
+            System.out.println("Passambler " + VERSION);
+        }
+
+        if (options.has("h") || (!options.hasOptions() && options.nonOptionArguments().isEmpty())) {
+            optionParser.printHelpOn(System.out);
         }
     }
 
@@ -85,11 +85,7 @@ public class Main {
 
     public void runFile(Path file) {
         try {
-            Parser parser = new Parser();
-
-            parser.parse(new Lexer(String.join("\n", Files.readAllLines(file))));
-        } catch (EngineException e) {
-            LOGGER.fatal(e.getName(), e);
+            runCode(String.join("\n", Files.readAllLines(file)));
         } catch (IOException e) {
             LOGGER.error(e);
         }
@@ -97,7 +93,7 @@ public class Main {
 
     public void runCode(String code) {
         try {
-            new Parser().parse(new Lexer(String.join("\n", code)));
+            new Parser().parse(new Lexer(code));
         } catch (EngineException e) {
             LOGGER.fatal(e.getName(), e);
         }
@@ -119,7 +115,6 @@ public class Main {
         for (Path file : files) {
             try {
                 TestParser parser = new TestParser(file);
-
                 TestRunner runner = new TestRunner(parser.parse());
 
                 OutputInterceptor.start();
