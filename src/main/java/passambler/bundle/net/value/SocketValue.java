@@ -30,7 +30,7 @@ public class SocketValue extends Value implements Writeable, Readable, Closeable
     @Override
     public void write(boolean line, Value value) throws EngineException {
         try {
-            socket.getOutputStream().write((value.getValue().toString() + (line ? "\n" : "")).getBytes());
+            socket.getOutputStream().write((value.toString() + (line ? "\n" : "")).getBytes());
         } catch (IOException e) {
             throw new ErrorException(e);
         }
