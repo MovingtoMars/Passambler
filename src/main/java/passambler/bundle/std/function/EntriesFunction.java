@@ -25,8 +25,8 @@ public class EntriesFunction extends Value implements Function {
         ((DictValue) context.getArgument(0)).getValue().entrySet().stream().forEach((set) -> {
             Value value = new Value();
 
-            value.setProperty("Key", set.getKey());
-            value.setProperty("Value", set.getValue());
+            value.setProperty("key", set.getKey());
+            value.setProperty("value", set.getValue());
 
             list.getValue().add(value);
         });
