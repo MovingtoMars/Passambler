@@ -29,10 +29,10 @@ public class ForFeature implements Feature {
 
         tokens.next();
 
-        TokenList left = new TokenList(parser.parseExpressionTokens(tokens, TokenType.LEFT_BRACE, TokenType.ARROW, TokenType.COL));
+        TokenList left = new TokenList(parser.parseExpressionTokens(tokens, TokenType.LEFT_BRACE, TokenType.ARROW, TokenType.IN));
         Value right = null;
 
-        if (tokens.current().getType() == TokenType.COL) {
+        if (tokens.current().getType() == TokenType.IN) {
             tokens.next();
 
             right = parser.parseExpression(tokens, TokenType.LEFT_BRACE, TokenType.ARROW);

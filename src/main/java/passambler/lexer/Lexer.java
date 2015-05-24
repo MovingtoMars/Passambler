@@ -42,6 +42,7 @@ public class Lexer {
         tokenMap.put("<=>", TokenType.COMPARE);
         tokenMap.put("**=", TokenType.ASSIGN_POWER);
 
+        tokenMap.put("in", TokenType.IN);
         tokenMap.put("if", TokenType.IF);
         tokenMap.put("->", TokenType.ARROW);
 

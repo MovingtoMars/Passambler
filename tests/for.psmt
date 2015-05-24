@@ -8,29 +8,29 @@ for 1..10 {
     a += 5;
 }
 
-for x : 1..3 {
+for x in 1..3 {
     a *= x;
 }
 
-for x, y : 100..105 {
+for x, y in 100..105 {
     a += x;
 }
 
-b = {1: 5, 2: 6, 3: 7};
+b = { 1: 5, 2: 6, 3: 7 };
 
 for b {
     a += 1;
 }
 
-for value : b {
+for value in b {
     a -= value;
 }
 
-for key, value : b {
+for key, value in b {
     a += key;
 }
 
-for i : 1..10 {
+for i in 1..10 {
     a += 1;
     if i == 5 {
         skip;
