@@ -1,0 +1,13 @@
+using('net', 'os', 'std');
+
+server = net.listen(std.to_num(os.args[0]));
+
+while {
+    client = read(server);
+
+    message = readln(client);
+
+    writeln(client, message);
+
+    close(client);
+}
