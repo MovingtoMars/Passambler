@@ -1,9 +1,0 @@
---TEST--
-Tests escape sequences in strings.
-
---INPUT--
-return ["hello\nworld", "hello \"raoul\"!", "hello 'raoul'!", 'hello "raoul"!', 'hello \'raoul\'!'];
-
---RESULT--
-[hello
-world, hello "raoul"!, hello 'raoul'!, hello "raoul"!, hello 'raoul'!]

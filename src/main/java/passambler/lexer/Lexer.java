@@ -105,61 +105,65 @@ public class Lexer {
     public List<Token> tokenize() throws LexerException {
         List<Token> tokens = new ArrayList<>();
 
-        char stringChar = 0;
-        boolean inString = false, inComment = false, multiLineComment = false;
-
-        while (hasNext()) {
-            if (current() == '\n') {
-                line++;
-                column = 0;
-
-                if (inComment && !multiLineComment) {
-                    inComment = false;
-                }
+        while (current() != null) {
+            if (current() == '"' || current() == '\'') {
+                char stringChar = current();
+                Token string = createToken(TokenType.STRING, "");
 
                 next();
-            } else if (inComment) {
-                if (current() == '*' && peek() != null && peek() == '/') {
-                    inComment = false;
-                    multiLineComment = false;
 
-                    next();
+                while (current() != null) {
+                    if (current() == stringChar) {
+                        break;
+                    }
+
+                    string.setValue(string.getValue() + parseCharacter());
                     next();
                 }
 
                 next();
-            } else if ((!inString && (current() == '"' || current() == '\'')) || (inString && current() == stringChar)) {
-                inString = !inString;
 
-                if (inString) {
-                    stringChar = current();
+                tokens.add(string);
+            } else if (current() == ' ' || current() == '\t' || current() == '\n') {
+                next();
+            } else if (current() == '/' && peek() != null && peek() == '/') {
+                next();
+                next();
 
-                    tokens.add(createToken(TokenType.STRING, ""));
+                while (current() != '\n') {
+                    next();
+                }
+            } else if (current() == '/' && peek() != null && peek() == '*') {
+                next();
+                next();
+
+                while (current() != null) {
+                    next();
+
+                    if (current() == '*' && peek() != null && peek() == '/') {
+                        next();
+                        next();
+
+                        break;
+                    }
+                }
+            } else if (Character.isDigit(current())) {
+                Token number = createToken(TokenType.NUMBER, "");
+
+                while (current() != null && Character.isDigit(current())) {
+                    number.setValue(number.getValue() + current());
+                    next();
+
+                    if (current() == '_') {
+                        next();
+                    }
                 }
 
-                next();
-            } else if (inString) {
-                Token token = tokens.get(tokens.size() - 1);
-
-                token.setValue(token.getValue() + parseCharacter());
-
-                next();
-            } else if (current() == ' ' || current() == '\t') {
-                next();
-            } else if (current() == '/' && peek() != null && (peek() == '/' || peek() == '*')) {
-                inComment = true;
-
-                next();
-
-                if (current() == '*') {
-                    multiLineComment = true;
-                }
-
-                next();
+                tokens.add(number);
             } else {
                 StringBuilder identifierFound = new StringBuilder();
 
-                while (hasNext() && isIdentifier(current())) {
+                while (current() != null && isIdentifier(current())) {
                     identifierFound.append(current());
 
                     next();
@@ -199,7 +203,7 @@ public class Lexer {
                 }
 
                 if (match == null && identifierFound.length() > 0) {
-                    tokens.add(createToken(Lexer.isNumber(identifierFound.toString()) ? TokenType.NUMBER : TokenType.IDENTIFIER, identifierFound.toString()));
+                    tokens.add(createToken(TokenType.IDENTIFIER, identifierFound.toString()));
 
                     position += identifierFound.length();
                 } else if (match == null) {
@@ -225,18 +229,19 @@ public class Lexer {
         }
     }
 
-    public char current() {
-        return input.charAt(position);
+    public Character current() {
+        return position < 0 || position > input.length() - 1 ? null : input.charAt(position);
     }
 
     public void next() {
         position++;
 
-        column++;
-    }
+        if (current() != null && current() == '\n') {
+            line++;
+            column = 0;
+        }
 
-    public boolean hasNext() {
-        return position < input.length();
+        column++;
     }
 
     public Character peek() {
@@ -244,17 +249,7 @@ public class Lexer {
     }
 
     public Character peek(int amount) {
-        return position + amount > input.length() - 1 ? null : input.charAt(position + amount);
-    }
-
-    public static boolean isNumber(String string) {
-        for (int c : string.chars().toArray()) {
-            if (!Character.isDigit(c)) {
-                return false;
-            }
-        }
-
-        return true;
+        return position + amount < 0 || position + amount > input.length() - 1 ? null : input.charAt(position + amount);
     }
 
     public static boolean isIdentifier(char c) {
