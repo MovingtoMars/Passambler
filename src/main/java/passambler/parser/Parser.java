@@ -58,7 +58,6 @@ public class Parser {
         features.add(new ForFeature());
         features.add(new LeaveFeature());
         features.add(new FunctionFeature());
-        features.add(new ClassFeature());
         features.add(new TryFeature());
         features.add(new DeferFeature());
         features.add(new AssignmentFeature());
