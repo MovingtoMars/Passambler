@@ -41,7 +41,7 @@ public class ExpressionParser {
         features.add(new IndexAccessFeature());
         features.add(new ListFeature());
         features.add(new PropertyFeature());
-        features.add(new AnonymousFunctionFeature());
+        features.add(new FunctionFeature());
         features.add(new TernaryFeature());
     }
 

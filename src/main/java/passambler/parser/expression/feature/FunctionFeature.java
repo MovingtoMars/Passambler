@@ -9,7 +9,7 @@ import passambler.parser.expression.ExpressionParser;
 import passambler.value.Value;
 import passambler.value.function.UserFunction;
 
-public class AnonymousFunctionFeature implements Feature {
+public class FunctionFeature implements Feature {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
         return parser.getTokens().current().getType() == TokenType.FUNC;

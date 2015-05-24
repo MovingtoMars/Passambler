@@ -2,7 +2,7 @@
 Tests defer.
 
 --INPUT--
-func hello() {
+hello = func() {
     defer writeln('world');
     defer writeln('my friend');
     writeln('hello');

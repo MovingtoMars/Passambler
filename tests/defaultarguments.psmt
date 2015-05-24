@@ -2,11 +2,11 @@
 Tests default arguments.
 
 --INPUT--
-func s(a, b=1) {
+s = func(a, b=1) {
     return a + b;
 }
 
-func x(a=1, b) {
+x = func(a=1, b) {
     return a + b;
 }
 
