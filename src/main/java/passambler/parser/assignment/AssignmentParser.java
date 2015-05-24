@@ -58,7 +58,7 @@ public class AssignmentParser {
 
             if (pub != null) {
                 if (token.getType() == TokenType.IDENTIFIER && leftTokens.peek() == null) {
-                    parser.getScope().setPublic(token.getValue());
+                    parser.getScope().setVisible(token.getValue());
                 } else {
                     throw new ParserException(ParserExceptionType.INVALID_PUB_CONTEXT, pub.getPosition());
                 }

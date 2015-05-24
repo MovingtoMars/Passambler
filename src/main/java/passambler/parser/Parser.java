@@ -247,18 +247,11 @@ public class Parser {
             if (tokens.current().getType() == TokenType.RIGHT_PAREN) {
                 break;
             } else {
-                tokens.match(TokenType.IDENTIFIER, TokenType.PUB);
-
-                boolean visible = tokens.current().getType() == TokenType.PUB;
-
-                if (visible) {
-                    tokens.next();
-                }
+                tokens.match(TokenType.IDENTIFIER);
 
                 Argument definition = new Argument();
 
                 definition.setName(tokens.current().getValue());
-                definition.setPublic(visible);
 
                 tokens.next();
 

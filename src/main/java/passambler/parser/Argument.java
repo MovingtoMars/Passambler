@@ -7,8 +7,6 @@ public class Argument {
 
     private Value defaultValue;
 
-    private boolean visible;
-
     public String getName() {
         return name;
     }
@@ -23,13 +21,5 @@ public class Argument {
 
     public void setDefaultValue(Value defaultValue) {
         this.defaultValue = defaultValue;
-    }
-
-    public void setPublic(boolean visible) {
-        this.visible = visible;
-    }
-
-    public boolean isPublic() {
-        return visible;
     }
 }

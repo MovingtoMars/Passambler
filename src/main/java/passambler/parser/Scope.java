@@ -46,11 +46,11 @@ public class Scope {
         return symbols;
     }
 
-    public void setPublic(String name) {
+    public void setVisible(String name) {
         visibles.add(name);
     }
 
-    public boolean isPublic(String name) {
+    public boolean isVisible(String name) {
         return visibles.contains(name);
     }
 }
