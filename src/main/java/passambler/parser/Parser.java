@@ -244,32 +244,28 @@ public class Parser {
 
         List<Argument> arguments = new ArrayList<>();
 
-        while (tokens.hasNext()) {
-            if (tokens.current().getType() == TokenType.RIGHT_PAREN) {
-                break;
-            } else {
-                tokens.match(TokenType.IDENTIFIER);
+        while (tokens.current() != null && tokens.current().getType() != TokenType.RIGHT_PAREN) {
+            tokens.match(TokenType.IDENTIFIER);
 
-                Argument definition = new Argument();
+            Argument definition = new Argument();
 
-                definition.setName(tokens.current().getValue());
+            definition.setName(tokens.current().getValue());
 
+            tokens.next();
+
+            if (tokens.current().getType() == TokenType.ASSIGN) {
                 tokens.next();
 
-                if (tokens.current().getType() == TokenType.ASSIGN) {
-                    tokens.next();
-
-                    definition.setDefaultValue(parseExpression(tokens, TokenType.RIGHT_PAREN, TokenType.COMMA));
-                }
-
-                if (tokens.current().getType() != TokenType.RIGHT_PAREN) {
-                    tokens.match(TokenType.COMMA);
-
-                    tokens.next();
-                }
-
-                arguments.add(definition);
+                definition.setDefaultValue(parseExpression(tokens, TokenType.RIGHT_PAREN, TokenType.COMMA));
             }
+
+            if (tokens.current().getType() != TokenType.RIGHT_PAREN) {
+                tokens.match(TokenType.COMMA);
+
+                tokens.next();
+            }
+
+            arguments.add(definition);
         }
 
         tokens.match(TokenType.RIGHT_PAREN);
