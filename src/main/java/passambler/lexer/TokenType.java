@@ -3,7 +3,7 @@ package passambler.lexer;
 public enum TokenType {
     IDENTIFIER, STRING, NUMBER,
     LEFT_PAREN, RIGHT_PAREN, LEFT_BRACKET, RIGHT_BRACKET, LEFT_BRACE, RIGHT_BRACE,
-    PLUS, MINUS, MULTIPLY, DIVIDE, POWER, MODULO, COMPARE, RANGE, TERNARY,
+    PLUS, MINUS, MULTIPLY, DIVIDE, POWER, MODULO, COMPARE, RANGE, INCLUSIVE_RANGE, TERNARY,
     ASSIGN, ASSIGN_PLUS, ASSIGN_MINUS, ASSIGN_MULTIPLY, ASSIGN_DIVIDE, ASSIGN_POWER, ASSIGN_MODULO,
     UNARY_PLUS, UNARY_MINUS, UNARY_NOT,
     EQUAL, NEQUAL, GT, LT, GTE, LTE,
@@ -18,7 +18,7 @@ public enum TokenType {
                 || this == GT || this == LT || this == GTE || this == LTE
                 || this == EQUAL || this == NEQUAL
                 || this == AND || this == OR || this == XOR
-                || this == COMPARE || this == RANGE;
+                || this == COMPARE || this == RANGE || this == INCLUSIVE_RANGE;
     }
 
     public boolean isUnaryOperator() {

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import passambler.lexer.Token;
 import passambler.exception.ParserException;
 import passambler.exception.ParserExceptionType;
+import passambler.lexer.TokenType;
 
 public class NumberValue extends Value {
     public NumberValue(double data) {
@@ -58,18 +59,33 @@ public class NumberValue extends Value {
                 case LTE:
                     return new BooleanValue(getValue().compareTo(((NumberValue) value).getValue()) <= 0);
                 case RANGE:
+                case INCLUSIVE_RANGE:
                     ListValue list = new ListValue();
+
+                    boolean inclusive = operatorToken.getType() == TokenType.INCLUSIVE_RANGE;
 
                     int min = getValue().intValue();
                     int max = ((NumberValue) value).getValue().intValue();
 
                     if (max > min) {
-                        for (int i = min; i <= max; ++i) {
-                            list.getValue().add(new NumberValue(i));
+                        if (inclusive) {
+                            for (int i = min; i <= max; ++i) {
+                                list.getValue().add(new NumberValue(i));
+                            }
+                        } else {
+                            for (int i = min; i < max; ++i) {
+                                list.getValue().add(new NumberValue(i));
+                            }
                         }
                     } else {
-                        for (int i = min; i >= max; --i) {
-                            list.getValue().add(new NumberValue(i));
+                        if (inclusive) {
+                            for (int i = min; i >= max; --i) {
+                                list.getValue().add(new NumberValue(i));
+                            }
+                        } else {
+                            for (int i = min; i > max; --i) {
+                                list.getValue().add(new NumberValue(i));
+                            }
                         }
                     }
 

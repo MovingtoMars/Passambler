@@ -2,7 +2,7 @@
 Tests list access.
 
 --INPUT--
-a = 0..5;
+a = 0...5;
 
 return [
     a[0],

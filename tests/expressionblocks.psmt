@@ -5,7 +5,7 @@ Tests expression blocks.
 if 1 + 1 == 2 -> writeln("hello");
 if 2 + 2 == 5 -> writeln("not hello");
 
-for i in 0..3 -> writeln(i);
+for i in 0...3 -> writeln(i);
 
 hello = func() -> writeln("hello world");
 
