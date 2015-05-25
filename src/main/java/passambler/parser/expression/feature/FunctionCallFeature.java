@@ -46,6 +46,7 @@ public class FunctionCallFeature implements Feature {
 
             argumentTokenList.add(token);
 
+            // If we reach the next argument, or if we are at the end of all the arguments
             if (depth == 0 && (token.getType() == TokenType.COMMA || tokens.indexOf(token) == tokens.size() - 1)) {
                 if (token.getType() == TokenType.COMMA) {
                     argumentTokenList.remove(argumentTokenList.size() - 1);
@@ -53,6 +54,7 @@ public class FunctionCallFeature implements Feature {
 
                 TokenList argumentTokens = new TokenList(argumentTokenList);
 
+                // If we have an identifier and assign token, use named arguments
                 if (argumentTokens.current().getType() == TokenType.IDENTIFIER && argumentTokens.peek() != null && argumentTokens.peek().getType() == TokenType.ASSIGN) {
                     if (currentValue instanceof UserFunction) {
                         usedNamedArguments = true;
@@ -62,6 +64,7 @@ public class FunctionCallFeature implements Feature {
                         argumentTokens.next();
                         argumentTokens.next();
 
+                        // Get the exact position of the specific argument in the function definition
                         List<Argument> argumentDefinitions = ((UserFunction) currentFunction).getArgumentDefinitions();
 
                         int index = argumentDefinitions.indexOf(argumentDefinitions.stream().filter(a -> a.getName().equals(name)).findFirst().get());
@@ -70,10 +73,12 @@ public class FunctionCallFeature implements Feature {
                             throw new ParserException(ParserExceptionType.UNDEFINED_ARGUMENT, token.getPosition(), name);
                         }
 
+                        // If the position is bigger than our current size
+                        // just append nulls to make it bigger.
                         if (index >= arguments.size()) {
-                            do {
+                            while (index != arguments.size() - 1) {
                                 arguments.add(null);
-                            } while (index != arguments.size() - 1);
+                            }
                         }
 
                         arguments.set(index, parser.createParser(argumentTokens.copyAtCurrentPosition()).parse());
@@ -95,11 +100,12 @@ public class FunctionCallFeature implements Feature {
         if (currentFunction instanceof UserFunction) {
             List<Argument> definitions = ((UserFunction) currentFunction).getArgumentDefinitions();
 
+            // Here we set the default values of arguments
             for (int i = 0; i < definitions.size(); ++i) {
                 if (i >= arguments.size()) {
-                    do {
+                    while (arguments.size() != definitions.size()) {
                         arguments.add(null);
-                    } while (arguments.size() != definitions.size());
+                    }
                 }
 
                 if (arguments.get(i) == null) {
