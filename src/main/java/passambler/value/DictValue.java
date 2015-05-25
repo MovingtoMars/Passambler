@@ -25,6 +25,12 @@ public class DictValue extends Value {
     }
 
     public void setEntry(Value key, Value value) {
+        for (Map.Entry<Value, Value> entry : dict.entrySet()) {
+            if (entry.getKey().getValue().equals(key.getValue())) {
+                dict.remove(entry.getKey());
+            }
+        }
+
         dict.put(key, value);
     }
 
