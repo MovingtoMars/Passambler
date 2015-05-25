@@ -9,7 +9,7 @@ writeln("Hello World");
 
 And a FizzBuzz program is written like this:
 ```
-for x : 0...100 {
+for x in 0...100 {
     if x % 15 == 0 {
         writeln("FizzBuzz");
     } elseif x % 3 == 0 {
