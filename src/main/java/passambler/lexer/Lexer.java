@@ -163,7 +163,7 @@ public class Lexer {
             } else {
                 StringBuilder identifierFound = new StringBuilder();
 
-                while (current() != null && isIdentifier(current())) {
+                while (current() != null && (Character.isLetterOrDigit(current()) || current() == '_')) {
                     identifierFound.append(current());
 
                     next();
@@ -178,9 +178,11 @@ public class Lexer {
                         char current = entry.getKey().charAt(i);
 
                         if (peek(i) != null && peek(i) == current) {
-                            /* If we are on the last index from this match, first check if the
-                             matches length is bigger or equal then the currently found identifier.
-                             This is so that token "++" doesn't get identified as two "+" tokens. */
+                            /* 
+                             * If we are on the last index from this match, first check if the
+                             * matches length is bigger or equal then the currently found identifier.
+                             * This is so that token "++" doesn't get identified as two "+" tokens.
+                             */
                             if (i == entry.getKey().length() - 1 && entry.getKey().length() >= identifierFound.length()) {
                                 match = entry;
 
@@ -250,9 +252,5 @@ public class Lexer {
 
     public Character peek(int amount) {
         return position + amount < 0 || position + amount > input.length() - 1 ? null : input.charAt(position + amount);
-    }
-
-    public static boolean isIdentifier(char c) {
-        return Character.isLetterOrDigit(c) || c == '_';
     }
 }

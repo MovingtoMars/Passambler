@@ -73,7 +73,8 @@ public class ExpressionParser {
         while (tokens.hasNext()) {
             Token token = tokens.current();
 
-            /* The reason I'm checking for the ARROW and SEMI_COL tokens here is because if I don't, expressions like:
+            /*
+             * The reason I'm checking for the ARROW and SEMI_COL tokens here is because if I don't, expressions like:
              *      func(x) -> x * x;
              * would parse to following tokens:
              *      func(x) -> x
@@ -99,7 +100,7 @@ public class ExpressionParser {
                 lastOperator = token;
             }
 
-            if ((token.getType().isOperator() || tokens.peek() == null) && depth <= 0) {
+            if (depth <= 0 && (token.getType().isOperator() || tokens.peek() == null)) {
                 if (token.getType().isOperator()) {
                     expression.remove(expression.size() - 1);
                 }
