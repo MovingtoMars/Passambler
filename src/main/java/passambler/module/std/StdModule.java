@@ -51,6 +51,7 @@ public class StdModule implements Module {
         symbols.put("empty", new EmptyFunction());
         symbols.put("push", new PushFunction());
         symbols.put("pop", new PopFunction());
+        symbols.put("delete", new DeleteFunction());
         symbols.put("shift", new ShiftFunction());
         symbols.put("slice", new SliceFunction());
         symbols.put("reverse", new ReverseFunction());
