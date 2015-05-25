@@ -25,6 +25,8 @@ public class DictValue extends Value {
     }
 
     public void setEntry(Value key, Value value) {
+        // If we already have a key with the same value,
+        // remove that entry so that the value is overridden.
         for (Map.Entry<Value, Value> entry : dict.entrySet()) {
             if (entry.getKey().getValue().equals(key.getValue())) {
                 dict.remove(entry.getKey());
