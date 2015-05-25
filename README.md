@@ -19,6 +19,7 @@ for x : 0...100 {
     }
 }
 ```
+For more examples, see the `examples` directory.
 
 ## Building
 Clone the repository and run Maven.
