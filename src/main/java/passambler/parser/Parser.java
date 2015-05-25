@@ -11,18 +11,18 @@ import java.util.Map;
 import passambler.lexer.Lexer;
 import passambler.lexer.Token;
 import passambler.lexer.TokenList;
-import passambler.bundle.Bundle;
-import passambler.bundle.db.DbBundle;
-import passambler.bundle.file.FileBundle;
-import passambler.bundle.json.JsonBundle;
-import passambler.bundle.math.MathBundle;
-import passambler.bundle.net.NetBundle;
-import passambler.bundle.os.OsBundle;
-import passambler.bundle.regex.RegexBundle;
-import passambler.bundle.std.StdBundle;
-import passambler.bundle.std.value.InValue;
-import passambler.bundle.std.value.OutValue;
-import passambler.bundle.thread.ThreadBundle;
+import passambler.module.Module;
+import passambler.module.db.DbModule;
+import passambler.module.file.FileModule;
+import passambler.module.json.JsonModule;
+import passambler.module.math.MathModule;
+import passambler.module.net.NetModule;
+import passambler.module.os.OsModule;
+import passambler.module.regex.RegexModule;
+import passambler.module.std.StdModule;
+import passambler.module.std.value.InValue;
+import passambler.module.std.value.OutValue;
+import passambler.module.thread.ThreadModule;
 import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenPosition;
@@ -40,7 +40,7 @@ import passambler.value.function.WriteFunction;
 
 public class Parser {
     private List<Feature> features = new ArrayList<>();
-    private List<Bundle> bundles = new ArrayList<>();
+    private List<Module> modules = new ArrayList<>();
     private Map<String, Value> globals = new HashMap();
     private List<List<Token>> defers = new ArrayList<>();
 
@@ -62,15 +62,15 @@ public class Parser {
         features.add(new AssignmentFeature());
         features.add(new ExpressionFeature());
 
-        bundles.add(new StdBundle());
-        bundles.add(new MathBundle());
-        bundles.add(new FileBundle());
-        bundles.add(new OsBundle());
-        bundles.add(new NetBundle());
-        bundles.add(new ThreadBundle());
-        bundles.add(new JsonBundle());
-        bundles.add(new RegexBundle());
-        bundles.add(new DbBundle());
+        modules.add(new StdModule());
+        modules.add(new MathModule());
+        modules.add(new FileModule());
+        modules.add(new OsModule());
+        modules.add(new NetModule());
+        modules.add(new ThreadModule());
+        modules.add(new JsonModule());
+        modules.add(new RegexModule());
+        modules.add(new DbModule());
 
         globals.put("true", ValueConstants.TRUE);
         globals.put("false", ValueConstants.FALSE);
@@ -84,8 +84,8 @@ public class Parser {
         globals.put("close", new CloseFunction());
     }
 
-    public List<Bundle> getBundles() {
-        return bundles;
+    public List<Module> getModules() {
+        return modules;
     }
 
     public Map<String, Value> getGlobals() {

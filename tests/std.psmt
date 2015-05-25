@@ -1,5 +1,5 @@
 --TEST--
-Tests std bundle.
+Tests std module.
 
 --INPUT--
 using("std");

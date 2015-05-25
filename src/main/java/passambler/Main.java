@@ -11,7 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import passambler.bundle.os.OsBundle;
+import passambler.module.os.OsModule;
 import passambler.parser.Parser;
 import passambler.lexer.Lexer;
 import passambler.exception.EngineException;
@@ -39,7 +39,7 @@ public class Main {
             String fileName = String.valueOf(options.nonOptionArguments().get(0));
 
             for (int i = 1; i < options.nonOptionArguments().size(); ++i) {
-                OsBundle.args.getValue().add(new StringValue(String.valueOf(options.nonOptionArguments().get(i))));
+                OsModule.args.getValue().add(new StringValue(String.valueOf(options.nonOptionArguments().get(i))));
             }
 
             if (options.has("w")) {

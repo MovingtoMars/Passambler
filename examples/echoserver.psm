@@ -1,4 +1,4 @@
-using('net', 'os', 'std');
+using("net", "os", "std");
 
 server = net.listen(std.to_num(os.args[0]));
 

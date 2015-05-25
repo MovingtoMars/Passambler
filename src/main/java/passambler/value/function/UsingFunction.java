@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import passambler.value.Value;
 import passambler.value.StringValue;
-import passambler.bundle.Bundle;
-import passambler.bundle.FilesystemBundle;
+import passambler.module.Module;
+import passambler.module.FilesystemModule;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
 import passambler.value.ListValue;
@@ -29,8 +29,8 @@ public class UsingFunction extends Value implements Function {
         ListValue array = new ListValue();
 
         for (Value value : context.getArguments()) {
-            Bundle currentBundle = null;
-            String currentBundleName = null;
+            Module currentModule = null;
+            String currentModuleName = null;
 
             String valueName = null;
 
@@ -38,19 +38,19 @@ public class UsingFunction extends Value implements Function {
                 if (child.contains(".")) {
                     valueName = child.split(Pattern.quote("."))[1];
 
-                    currentBundleName = child.split(Pattern.quote("."))[0];
+                    currentModuleName = child.split(Pattern.quote("."))[0];
                 } else {
-                    currentBundleName = child;
+                    currentModuleName = child;
                 }
 
-                if (currentBundle == null) {
-                    currentBundle = getBundle(context.getParser().getBundles(), currentBundleName);
+                if (currentModule == null) {
+                    currentModule = getModule(context.getParser().getModules(), currentModuleName);
                 } else {
                     boolean found = false;
 
-                    for (Bundle childBundle : currentBundle.getChildren()) {
-                        if (childBundle.getId().equals(currentBundleName)) {
-                            currentBundle = childBundle;
+                    for (Module childModule : currentModule.getChildren()) {
+                        if (childModule.getId().equals(currentModuleName)) {
+                            currentModule = childModule;
 
                             found = true;
 
@@ -59,28 +59,28 @@ public class UsingFunction extends Value implements Function {
                     }
 
                     if (!found) {
-                        throw new ErrorException("Undefined bundle '%s'", currentBundleName);
+                        throw new ErrorException("Undefined module '%s'", currentModuleName);
                     }
                 }
             }
 
-            if (currentBundle != null) {
+            if (currentModule != null) {
                 Map<String, Value> symbols = new HashMap();
 
-                currentBundle.apply(symbols);
+                currentModule.apply(symbols);
 
                 if (valueName == null) {
-                    Value bundleValue = new Value();
+                    Value moduleValue = new Value();
 
                     for (Map.Entry<String, Value> symbol : symbols.entrySet()) {
-                        bundleValue.setProperty(symbol.getKey(), symbol.getValue());
+                        moduleValue.setProperty(symbol.getKey(), symbol.getValue());
                     }
 
                     if (!context.isAssignment()) {
-                        context.getParser().getScope().setSymbol(currentBundleName, bundleValue);
+                        context.getParser().getScope().setSymbol(currentModuleName, moduleValue);
                     }
 
-                    array.getValue().add(bundleValue);
+                    array.getValue().add(moduleValue);
                 } else {
                     boolean found = false;
 
@@ -97,7 +97,7 @@ public class UsingFunction extends Value implements Function {
                     }
 
                     if (!found) {
-                        throw new ErrorException("Undefined bundle property '%s'", valueName);
+                        throw new ErrorException("Undefined module property '%s'", valueName);
                     }
                 }
             }
@@ -106,13 +106,13 @@ public class UsingFunction extends Value implements Function {
         return array.getValue().size() == 1 ? array.getValue().get(0) : array;
     }
 
-    private Bundle getBundle(List<Bundle> bundles, String name) {
-        Bundle bundle = bundles.stream().filter(p -> p.getId().equals(name)).findFirst().orElse(null);
+    private Module getModule(List<Module> modules, String name) {
+        Module module = modules.stream().filter(p -> p.getId().equals(name)).findFirst().orElse(null);
 
-        if (bundle == null) {
-            return new FilesystemBundle(Paths.get(name));
+        if (module == null) {
+            return new FilesystemModule(Paths.get(name));
         }
 
-        return bundle;
+        return module;
     }
 }
