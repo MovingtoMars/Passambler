@@ -115,12 +115,12 @@ public class Parser {
     }
 
     public Value parse(List<Token> tokens) throws EngineException {
-        List<Token> subTokens = new ArrayList<>();
+        List<Token> section = new ArrayList<>();
 
         int depth = 0;
 
-        for (Token token : tokens) {
-            Token peekToken = tokens.indexOf(token) == tokens.size() - 1 ? null : tokens.get(tokens.indexOf(token) + 1);
+        for (int i = 0; i < tokens.size(); ++i) {
+            Token token = tokens.get(i);
 
             if (token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
                 depth++;
@@ -128,19 +128,20 @@ public class Parser {
                 depth--;
             }
 
-            subTokens.add(token);
+            section.add(token);
 
             if (depth == 0 && (token.getType() == TokenType.SEMI_COL || token.getType() == TokenType.RIGHT_BRACE)) {
-                if (peekToken != null && peekToken.getType().isLineInsensitive()) {
+                if (i + 1 < tokens.size() && tokens.get(i + 1).getType().isAfterRightBrace()) {
                     continue;
                 }
 
-                if (subTokens.size() > 0) {
-                    Value result = parse(new TokenList(subTokens));
+                if (section.size() > 0) {
+                    Value result = parse(new TokenList(section));
 
-                    subTokens.clear();
+                    section.clear();
 
                     if (result != null) {
+                        // Unhandled error
                         if (result instanceof ErrorValue) {
                             throw new ErrorException((ErrorValue) result);
                         }
@@ -151,7 +152,7 @@ public class Parser {
             }
         }
 
-        if (!subTokens.isEmpty()) {
+        if (!section.isEmpty()) {
             throw new ParserException(ParserExceptionType.UNEXPECTED_EOF);
         }
 
