@@ -34,7 +34,6 @@ public enum TokenType {
     public boolean isLineInsensitive() {
         return this == ELSE || this == ELSEIF
                 || this == CATCH || this == FINALLY
-                || this == ARROW
                 || isOperator();
     }
 }

@@ -9,7 +9,13 @@ for i in 0...3 -> writeln(i);
 
 hello = func() -> writeln("hello world");
 
+square = func(x) -> return x * x;
+sum = func(x, y, z) -> return (x + y) + z;
+
 hello();
+
+writeln(square(5));
+writeln(sum(1, 2, 3));
 
 --OUTPUT--
 hello
@@ -18,3 +24,5 @@ hello
 2
 3
 hello world
+25
+6

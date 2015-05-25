@@ -3,7 +3,6 @@ package passambler.parser.feature;
 import passambler.exception.EngineException;
 import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
-import passambler.parser.expression.ExpressionParser;
 import passambler.parser.Parser;
 import passambler.util.ValueConstants;
 import passambler.value.Value;
@@ -21,7 +20,7 @@ public class LeaveFeature implements Feature {
         tokens.next();
 
         if (type == TokenType.RETURN) {
-            Value result = new ExpressionParser(parser, tokens.copyAtCurrentPosition()).parse();
+            Value result = parser.parseExpression(tokens);
 
             return result == null ? ValueConstants.NIL : result;
         } else if (type == TokenType.STOP) {

@@ -73,9 +73,15 @@ public class ExpressionParser {
         while (tokens.hasNext()) {
             Token token = tokens.current();
 
-            if (token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
+            /* The reason I'm checking for the ARROW and SEMI_COL tokens here is because if I don't, expressions like:
+             *      func(x) -> x * x;
+             * would parse to following tokens:
+             *      func(x) -> x
+             * As you can see, it would stop at the first operator, and we don't want that.
+             */
+            if (token.getType() == TokenType.ARROW || token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
                 depth++;
-            } else if (token.getType() == TokenType.RIGHT_BRACE || token.getType() == TokenType.RIGHT_PAREN || token.getType() == TokenType.RIGHT_BRACKET) {
+            } else if (token.getType() == TokenType.SEMI_COL || token.getType() == TokenType.RIGHT_BRACE || token.getType() == TokenType.RIGHT_PAREN || token.getType() == TokenType.RIGHT_BRACKET) {
                 depth--;
             }
 
@@ -93,7 +99,7 @@ public class ExpressionParser {
                 lastOperator = token;
             }
 
-            if ((token.getType().isOperator() || tokens.peek() == null) && depth == 0) {
+            if ((token.getType().isOperator() || tokens.peek() == null) && depth <= 0) {
                 if (token.getType().isOperator()) {
                     expression.remove(expression.size() - 1);
                 }

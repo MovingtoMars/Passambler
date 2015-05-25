@@ -22,4 +22,9 @@ public class Argument {
     public void setDefaultValue(Value defaultValue) {
         this.defaultValue = defaultValue;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
