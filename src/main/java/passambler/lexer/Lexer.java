@@ -12,7 +12,6 @@ public class Lexer {
     private Map<Character, String> escapeSequences = new HashMap();
 
     private int line = 1, column = 1;
-
     private int position;
 
     private final String input;

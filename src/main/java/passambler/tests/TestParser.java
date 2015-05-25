@@ -11,7 +11,6 @@ import java.util.Map;
 
 public class TestParser {
     private List<String> lines;
-
     private Map<String, StringBuilder> sections = new HashMap();
 
     public TestParser(Path file) throws IOException {

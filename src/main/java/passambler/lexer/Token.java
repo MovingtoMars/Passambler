@@ -2,9 +2,7 @@ package passambler.lexer;
 
 public class Token {
     private TokenType type;
-
     private TokenPosition position;
-
     private String value;
 
     public Token(TokenType type, TokenPosition position) {

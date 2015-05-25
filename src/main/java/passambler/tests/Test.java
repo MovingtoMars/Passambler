@@ -2,11 +2,8 @@ package passambler.tests;
 
 public class Test {
     private String description;
-
     private String input;
-
     private String output;
-
     private String result;
 
     public Test(String description, String input, String output, String result) {
