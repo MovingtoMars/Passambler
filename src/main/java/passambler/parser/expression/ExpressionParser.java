@@ -69,6 +69,7 @@ public class ExpressionParser {
         Token lastOperator = null;
 
         int depth = 0;
+        boolean arrow = false;
 
         while (tokens.hasNext()) {
             Token token = tokens.current();
@@ -80,9 +81,15 @@ public class ExpressionParser {
              *      func(x) -> x
              * As you can see, it would stop at the first operator, and we don't want that.
              */
-            if (token.getType() == TokenType.ARROW || token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
+            if (token.getType() == TokenType.ARROW) {
                 depth++;
-            } else if (token.getType() == TokenType.SEMI_COL || token.getType() == TokenType.RIGHT_BRACE || token.getType() == TokenType.RIGHT_PAREN || token.getType() == TokenType.RIGHT_BRACKET) {
+                arrow = true;
+            } else if (token.getType() == TokenType.SEMI_COL && arrow) {
+                depth--;
+                arrow = false;
+            } else if (token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
+                depth++;
+            } else if (token.getType() == TokenType.RIGHT_BRACE || token.getType() == TokenType.RIGHT_PAREN || token.getType() == TokenType.RIGHT_BRACKET) {
                 depth--;
             }
 
