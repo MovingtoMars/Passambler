@@ -12,10 +12,13 @@ hello = func() -> writeln("hello world");
 square = func(x) -> return x * x;
 sum = func(x, y, z) -> return (x + y) + z;
 
+test = func(y) -> if y != 10 -> if y == 5 -> return 30;
+
 hello();
 
 writeln(square(5));
 writeln(sum(1, 2, 3));
+writeln(test(5));
 
 --OUTPUT--
 hello
@@ -26,3 +29,4 @@ hello
 hello world
 25
 6
+30

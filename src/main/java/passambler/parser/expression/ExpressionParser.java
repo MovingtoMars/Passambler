@@ -81,7 +81,7 @@ public class ExpressionParser {
              *      func(x) -> x
              * As you can see, it would stop at the first operator, and we don't want that.
              */
-            if (token.getType() == TokenType.ARROW) {
+            if (token.getType() == TokenType.ARROW && !arrow) {
                 depth++;
                 arrow = true;
             } else if (token.getType() == TokenType.SEMI_COL && arrow) {
