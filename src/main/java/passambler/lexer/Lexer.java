@@ -129,21 +129,32 @@ public class Lexer {
                 next();
                 next();
 
-                while (current() != '\n') {
+                while (current() != null && current() != '\n') {
                     next();
                 }
             } else if (current() == '/' && peek() != null && peek() == '*') {
                 next();
                 next();
 
+                int depth = 1;
+
                 while (current() != null) {
                     next();
 
-                    if (current() == '*' && peek() != null && peek() == '/') {
+                    if (current() == '/' && peek() != null && peek() == '*') {
                         next();
                         next();
 
-                        break;
+                        depth++;
+                    } else if (current() == '*' && peek() != null && peek() == '/') {
+                        next();
+                        next();
+
+                        depth--;
+
+                        if (depth == 0) {
+                            break;
+                        }
                     }
                 }
             } else if (Character.isDigit(current())) {
