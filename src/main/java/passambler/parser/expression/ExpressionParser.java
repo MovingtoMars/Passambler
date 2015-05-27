@@ -75,8 +75,8 @@ public class ExpressionParser {
             Token token = tokens.current();
 
             /*
-             * The reason I'm checking for the ARROW and SEMI_COL tokens here is because if I don't, expressions like:
-             *      func(x) -> x * x;
+             * The reason I'm checking for the ARROW and NEW_LINE tokens here is because if I don't, expressions like:
+             *      func(x) -> x * x
              * would parse to following tokens:
              *      func(x) -> x
              * As you can see, it would stop at the first operator, and we don't want that.
