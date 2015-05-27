@@ -35,7 +35,6 @@ import passambler.value.ErrorValue;
 import passambler.value.function.CloseFunction;
 import passambler.value.function.ReadFunction;
 import passambler.value.function.ThrowFunction;
-import passambler.value.function.UsingFunction;
 import passambler.value.function.WriteFunction;
 
 public class Parser {
@@ -59,6 +58,7 @@ public class Parser {
         features.add(new LeaveFeature());
         features.add(new TryFeature());
         features.add(new DeferFeature());
+        features.add(new ImportFeature());
         features.add(new AssignmentFeature());
         features.add(new ExpressionFeature());
 
@@ -75,7 +75,6 @@ public class Parser {
         globals.put("true", ValueConstants.TRUE);
         globals.put("false", ValueConstants.FALSE);
         globals.put("nil", ValueConstants.NIL);
-        globals.put("using", new UsingFunction());
         globals.put("throw", new ThrowFunction());
         globals.put("write", new WriteFunction(new OutValue(), false));
         globals.put("writeln", new WriteFunction(new OutValue(), true));

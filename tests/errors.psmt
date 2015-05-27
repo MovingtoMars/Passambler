@@ -2,10 +2,11 @@
 Tests errors.
 
 --INPUT--
-using("std.to_str")
+import 'std'
+import 'file'
 
 try {
-    read(using("file.open")("sdjfisdjfidsfjisd"))
+    read(file.open("sdjfisdjfidsfjisd"))
 } catch x {
     writeln(x)
 }
@@ -21,7 +22,7 @@ try {
     throw("Problem!!")
     writeln("not ran")
 } catch z {
-    writeln("problem found: " + to_str(z))
+    writeln("problem found: " + std.to_str(z))
 } finally {
     writeln("DONE")
 }

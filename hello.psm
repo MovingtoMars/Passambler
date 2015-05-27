@@ -1,0 +1,3 @@
+pub greet = func() {
+    writeln('Hello')
+}

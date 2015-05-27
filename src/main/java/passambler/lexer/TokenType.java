@@ -10,8 +10,8 @@ public enum TokenType {
     AND, OR, XOR,
     ARROW,
     RETURN, STOP, SKIP,
-    WHILE, FOR, FUNC, IF, ELSEIF, ELSE, DEFER, TRY, CATCH, FINALLY, PUB, IN,
-    PERIOD, COMMA, NEW_LINE, COL;
+    WHILE, FOR, FUNC, IF, ELSEIF, ELSE, DEFER, TRY, CATCH, FINALLY, PUB, IN, IMPORT,
+    PERIOD, COMMA, NEW_LINE, COL, AS;
 
     public boolean isOperator() {
         return this == PLUS || this == MINUS || this == MULTIPLY || this == DIVIDE || this == POWER || this == MODULO

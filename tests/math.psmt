@@ -2,7 +2,7 @@
 Tests math module.
 
 --INPUT--
-using("math")
+import 'math'
 
 return [
     math.abs(-100),

@@ -2,24 +2,24 @@
 Tests elseif statements.
 
 --INPUT--
-using("std.push")
+import 'std'
 
 a = []
 
 if 5 > 10 {
-    push(a, 1)
+    std.push(a, 1)
 } elseif 10 < 5 {
-    push(a, 2)
+    std.push(a, 2)
 } elseif 10 == 10 {
-    push(a, 3)
+    std.push(a, 3)
 }
 
 if 5 > 10 {
-    push(a, 1)
+    std.push(a, 1)
 } else if 10 < 5 {
-    push(a, 2)
+    std.push(a, 2)
 } else if 10 == 10 {
-    push(a, 3)
+    std.push(a, 3)
 }
 
 return a
