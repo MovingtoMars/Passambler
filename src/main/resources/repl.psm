@@ -1,4 +1,4 @@
-using('std')
+import 'std'
 
 data = ''
 depth = 0
