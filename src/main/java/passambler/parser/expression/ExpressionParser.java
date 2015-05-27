@@ -18,20 +18,13 @@ import passambler.value.BooleanValue;
 public class ExpressionParser {
     private List<Feature> features = new ArrayList<>();
 
-    private boolean assignment;
-
     private Parser parser;
 
     private TokenList tokens;
 
     public ExpressionParser(Parser parser, TokenList tokens) {
-        this(parser, tokens, false);
-    }
-
-    public ExpressionParser(Parser parser, TokenList tokens, boolean assignment) {
         this.parser = parser;
         this.tokens = tokens;
-        this.assignment = assignment;
 
         features.add(new LiteralFeature());
         features.add(new LookupFeature());
@@ -51,14 +44,6 @@ public class ExpressionParser {
 
     public TokenList getTokens() {
         return tokens;
-    }
-
-    public boolean isAssignment() {
-        return assignment;
-    }
-
-    public ExpressionParser createParser(TokenList tokens) {
-        return new ExpressionParser(parser, tokens, assignment);
     }
 
     public Value parse() throws EngineException {
@@ -120,7 +105,7 @@ public class ExpressionParser {
                     }
                 }
 
-                pairs.add(new ValueOperatorPair(createParser(new TokenList(expression)).parseFeatures(), lastOperator));
+                pairs.add(new ValueOperatorPair(new ExpressionParser(parser, new TokenList(expression)).parseFeatures(), lastOperator));
 
                 expression.clear();
 

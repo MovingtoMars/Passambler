@@ -81,7 +81,7 @@ public class FunctionCallFeature implements Feature {
                             }
                         }
 
-                        arguments.set(index, parser.createParser(argumentTokens.copyAtCurrentPosition()).parse());
+                        arguments.set(index, new ExpressionParser(parser.getParser(), argumentTokens.copyAtCurrentPosition()).parse());
                     } else {
                         throw new ParserException(ParserExceptionType.CANNOT_USE_NAMED_ARGUMENTS, token.getPosition());
                     }
@@ -90,7 +90,7 @@ public class FunctionCallFeature implements Feature {
                         throw new ParserException(ParserExceptionType.BAD_SYNTAX, token.getPosition(), "Cannot specify a normal argument after a specifying a named argument");
                     }
 
-                    arguments.add(parser.createParser(argumentTokens).parse());
+                    arguments.add(new ExpressionParser(parser.getParser(), argumentTokens).parse());
                 }
 
                 argumentTokenList.clear();
@@ -129,7 +129,7 @@ public class FunctionCallFeature implements Feature {
             }
         }
 
-        Value result = currentFunction.invoke(new FunctionContext(parser.getParser(), arguments.toArray(new Value[arguments.size()]), parser.isAssignment()));
+        Value result = currentFunction.invoke(new FunctionContext(parser.getParser(), arguments.toArray(new Value[arguments.size()])));
 
         return result == null ? ValueConstants.NIL : result;
     }

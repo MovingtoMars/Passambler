@@ -48,7 +48,7 @@ public class AssignmentParser {
 
         tokens.next();
 
-        Value rightValue = new ExpressionParser(parser, new TokenList(tokens.getTokensFromPosition()), true).parse();
+        Value rightValue = new ExpressionParser(parser, new TokenList(tokens.getTokensFromPosition())).parse();
         Value leftValue = new Value();
 
         TokenList leftTokens = new TokenList(leftTokenList);

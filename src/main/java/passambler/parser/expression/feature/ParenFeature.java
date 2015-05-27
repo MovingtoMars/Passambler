@@ -16,6 +16,6 @@ public class ParenFeature implements Feature {
     public Value perform(ExpressionParser parser, Value currentValue) throws EngineException {
         parser.getTokens().next();
 
-        return parser.createParser(new TokenList(parser.getParser().parseExpressionTokens(parser.getTokens(), TokenType.RIGHT_PAREN))).parse();
+        return new ExpressionParser(parser.getParser(), new TokenList(parser.getParser().parseExpressionTokens(parser.getTokens(), TokenType.RIGHT_PAREN))).parse();
     }
 }
