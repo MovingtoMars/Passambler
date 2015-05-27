@@ -19,7 +19,6 @@ public class ExpressionParser {
     private List<Feature> features = new ArrayList<>();
 
     private Parser parser;
-
     private TokenList tokens;
 
     public ExpressionParser(Parser parser, TokenList tokens) {
@@ -55,62 +54,67 @@ public class ExpressionParser {
         Token lastOperator = null;
 
         int depth = 0;
-        boolean arrow = false;
+
+        boolean escapeOperator = false;
 
         while (tokens.hasNext()) {
             Token token = tokens.current();
 
             /*
-             * The reason I'm checking for the ARROW and NEW_LINE tokens here is because if I don't, expressions like:
-             *      func(x) -> x * x
-             * would parse to following tokens:
-             *      func(x) -> x
-             * As you can see, it would stop at the first operator, and we don't want that.
+             * The reason I am doing special checks here is to make sure expressions as:
+             *      x = 5 + 5
+             *      x = func(y) return y + y
+             * .. don't get parsed as:
+             *      x = 5
+             *      x = func(y) return y
+             * just because there is an operator.
              */
-            if (token.getType() == TokenType.ARROW && !arrow) {
-                depth++;
-                arrow = true;
-            } else if (token.getType() == TokenType.NEW_LINE && arrow) {
-                depth--;
-                arrow = false;
-            } else if (token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
+            if (token.getType().isAssignmentOperator() || token.getType() == TokenType.ARROW) {
+                escapeOperator = true;
+            }
+
+            if (token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
                 depth++;
             } else if (token.getType() == TokenType.RIGHT_BRACE || token.getType() == TokenType.RIGHT_PAREN || token.getType() == TokenType.RIGHT_BRACKET) {
                 depth--;
             }
 
-            expression.add(token);
+            if (token.getType().isOperator() && escapeOperator) {
+                expression.add(token);
+            } else {
+                expression.add(token);
 
-            if (expression.size() == 1 && (token.getType().isUnaryOperator() || token.getType() == TokenType.PLUS || token.getType() == TokenType.MINUS)) {
-                if (token.getType() == TokenType.PLUS) {
-                    token.setType(TokenType.UNARY_PLUS);
-                } else if (token.getType() == TokenType.MINUS) {
-                    token.setType(TokenType.UNARY_MINUS);
-                }
-
-                expression.remove(expression.size() - 1);
-
-                lastOperator = token;
-            }
-
-            if (depth <= 0 && (token.getType().isOperator() || tokens.peek() == null)) {
-                if (token.getType().isOperator()) {
-                    expression.remove(expression.size() - 1);
-                }
-
-                if (lastOperator != null && lastOperator.getType() == TokenType.AND) {
-                    Value result = parsePairs(pairs);
-
-                    if (result instanceof BooleanValue && !((BooleanValue) result).getValue()) {
-                        return ValueConstants.FALSE;
+                if (expression.size() == 1 && (token.getType().isUnaryOperator() || token.getType() == TokenType.PLUS || token.getType() == TokenType.MINUS)) {
+                    if (token.getType() == TokenType.PLUS) {
+                        token.setType(TokenType.UNARY_PLUS);
+                    } else if (token.getType() == TokenType.MINUS) {
+                        token.setType(TokenType.UNARY_MINUS);
                     }
+
+                    expression.remove(expression.size() - 1);
+
+                    lastOperator = token;
                 }
 
-                pairs.add(new ValueOperatorPair(new ExpressionParser(parser, new TokenList(expression)).parseFeatures(), lastOperator));
+                if (depth <= 0 && (token.getType().isOperator() || tokens.peek() == null)) {
+                    if (token.getType().isOperator()) {
+                        expression.remove(expression.size() - 1);
+                    }
 
-                expression.clear();
+                    if (lastOperator != null && lastOperator.getType() == TokenType.AND) {
+                        Value result = parsePairs(pairs);
 
-                lastOperator = tokens.current();
+                        if (result instanceof BooleanValue && !((BooleanValue) result).getValue()) {
+                            return ValueConstants.FALSE;
+                        }
+                    }
+
+                    pairs.add(new ValueOperatorPair(new ExpressionParser(parser, new TokenList(expression)).parseFeatures(), lastOperator));
+
+                    expression.clear();
+
+                    lastOperator = tokens.current();
+                }
             }
 
             tokens.next();
