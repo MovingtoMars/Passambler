@@ -1,5 +1,5 @@
 --TEST--
-Tests if statements.
+Tests if statements and if/else if/else expressions.
 
 --INPUT--
 a = 1
