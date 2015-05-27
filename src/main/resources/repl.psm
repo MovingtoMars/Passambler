@@ -1,33 +1,33 @@
-using('std');
+using('std')
 
-data = '';
-depth = 0;
+data = ''
+depth = 0
 
 while true {
-    write('> ');
+    write('> ')
 
-    x = readln();
+    x = readln()
 
-    data += x;
+    data += x + "\n"
 
     try {
-        for token : std.tokenize(x) {
+        for token in std.tokenize(x) {
             if token['name'] == 'LEFT_BRACE' || token['name'] == 'LEFT_PAREN' || token['name'] == 'LEFT_BRACKET' {
-                depth += 1;
+                depth += 1
             } elseif token['name'] == 'RIGHT_BRACE' || token['name'] == 'RIGHT_PAREN' || token['name'] == 'RIGHT_BRACKET' {
-                depth -= 1;
+                depth -= 1
             }
         }
 
         if depth <= 0 {
-            result = std.eval(data);
+            result = std.eval(data)
 
-            if result != nil => writeln(result);
+            if result != nil -> writeln(result)
         }
     } catch e {
-        writeln('[Error: ' + std.to_str(e) + ']');
+        writeln('[Error: ' + std.to_str(e) + ']')
     } finally if depth <= 0 {
-        data = '';
-        depth = 0;
+        data = ''
+        depth = 0
     }
 }
