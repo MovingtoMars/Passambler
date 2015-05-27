@@ -26,6 +26,7 @@ public class ExpressionParser {
         this.parser = parser;
         this.tokens = tokens;
 
+        features.add(new AssignmentFeature());
         features.add(new LiteralFeature());
         features.add(new LookupFeature());
         features.add(new FunctionCallFeature());
