@@ -64,7 +64,7 @@ public class ExpressionParser {
              * The reason I am doing special checks here is to make sure expressions as:
              *      x = 5 + 5
              *      x = func(y) return y + y
-             * .. don't get parsed as:
+             * .. doesn't get parsed as:
              *      x = 5
              *      x = func(y) return y
              * just because there is an operator.
