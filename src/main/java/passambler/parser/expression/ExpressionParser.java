@@ -55,7 +55,7 @@ public class ExpressionParser {
 
         int depth = 0;
 
-        boolean escapeOperator = false;
+        boolean blockOpening = false;
 
         while (tokens.hasNext()) {
             Token token = tokens.current();
@@ -69,8 +69,8 @@ public class ExpressionParser {
              *      x = func(y) return y
              * just because there is an operator.
              */
-            if (token.getType().isAssignmentOperator() || token.getType() == TokenType.ARROW) {
-                escapeOperator = true;
+            if (token.getType().isTreatedAsBlockOpeningInExpression()) {
+                blockOpening = true;
             }
 
             if (token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
@@ -79,7 +79,7 @@ public class ExpressionParser {
                 depth--;
             }
 
-            if (token.getType().isOperator() && escapeOperator) {
+            if (token.getType().isOperator() && blockOpening) {
                 expression.add(token);
             } else {
                 expression.add(token);

@@ -36,11 +36,11 @@ public class AssignmentFeature implements Feature {
 
     @Override
     public Value perform(ExpressionParser parser, Value currentValue) throws EngineException {
-        List<Token> leftTokenList = new ArrayList<>();
-
         Token pub = null;
 
         TokenList tokens = parser.getTokens();
+
+        TokenList leftTokens = new TokenList(new ArrayList<>());
 
         while (tokens.hasNext()) {
             if (tokens.current().getType().isAssignmentOperator()) {
@@ -48,7 +48,7 @@ public class AssignmentFeature implements Feature {
             } else if (tokens.current().getType() == TokenType.PUB) {
                 pub = tokens.current();
             } else {
-                leftTokenList.add(tokens.current());
+                leftTokens.getTokens().add(tokens.current());
             }
 
             tokens.next();
@@ -60,8 +60,6 @@ public class AssignmentFeature implements Feature {
 
         Value rightValue = new ExpressionParser(parser.getParser(), tokens).parse();
         Value leftValue = new Value();
-
-        TokenList leftTokens = new TokenList(leftTokenList);
 
         while (leftTokens.hasNext()) {
             Token token = leftTokens.current();
