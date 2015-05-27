@@ -38,6 +38,7 @@ public enum TokenType {
 
     public boolean isTreatedAsBlockOpeningInExpression() {
         return this == ARROW
+                || this == IF
                 || isAssignmentOperator();
     }
 }

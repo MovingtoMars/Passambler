@@ -33,6 +33,7 @@ public class ExpressionParser {
         features.add(new DictFeature());
         features.add(new IndexAccessFeature());
         features.add(new ListFeature());
+        features.add(new IfFeature());
         features.add(new PropertyFeature());
         features.add(new FunctionFeature());
         features.add(new TernaryFeature());
