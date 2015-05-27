@@ -3,23 +3,23 @@ Tests functions.
 
 --INPUT--
 a = func() {
-    return;
+    return
 }
 
 b = func(x) {
-    return x + 2;
+    return x + 2
 }
 
 c = func(x, y) {
-    return x + y;
+    return x + y
 }
 
 aa = func() {
-    return;
+    return
 }
 
 bb = func(x) {
-    return b(x) + 2;
+    return b(x) + 2
 }
 
 dd = func() {
@@ -32,7 +32,7 @@ return [
     aa(),
     bb(2),
     dd()
-];
+]
 
 --RESULT--
 [nil, 4, 11, nil, 6, nil]

@@ -2,39 +2,39 @@
 Tests while statement.
 
 --INPUT--
-a = 5;
-b = 0;
+a = 5
+b = 0
 
 while a < 10 {
-    a += 1;
-    b += 1;
+    a += 1
+    b += 1
 }
 
-x = 0;
+x = 0
 while x < 15 {
-    x += 1;
+    x += 1
 
     if x == 5 {
-        skip;
+        skip
     } elseif x == 6 {
-        x += 2;
+        x += 2
     } elseif x == 9 {
-        stop;
+        stop
     }
 }
 
-y = 0;
+y = 0
 while {
-    y += 1;
+    y += 1
     if y == 9 {
-        skip;
+        skip
     } elseif y == 16 {
-        stop;
+        stop
     }
-    y += 1;
+    y += 1
 }
 
-return [a, b, x, y];
+return [a, b, x, y]
 
 --RESULT--
 [10, 5, 9, 16]

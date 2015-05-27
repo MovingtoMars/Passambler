@@ -1,13 +1,13 @@
-using("net", "os", "std");
+using("net", "os", "std")
 
-server = net.listen(std.to_num(os.args[0]));
+server = net.listen(std.to_num(os.args[0]))
 
 while {
-    client = read(server);
+    client = read(server)
 
-    message = readln(client);
+    message = readln(client)
 
-    writeln(client, message);
+    writeln(client, message)
 
-    close(client);
+    close(client)
 }

@@ -121,6 +121,7 @@ public class Parser {
 
         for (int i = 0; i < tokens.size(); ++i) {
             Token token = tokens.get(i);
+            Token peek = i + 1 < tokens.size() ? tokens.get(i + 1) : null;
 
             if (token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
                 depth++;
@@ -130,8 +131,8 @@ public class Parser {
 
             section.add(token);
 
-            if (depth == 0 && (token.getType() == TokenType.SEMI_COL || token.getType() == TokenType.RIGHT_BRACE)) {
-                if (i + 1 < tokens.size() && tokens.get(i + 1).getType().isAfterRightBrace()) {
+            if (depth == 0 && (token.getType() == TokenType.NEW_LINE || token.getType() == TokenType.RIGHT_BRACE || peek == null)) {
+                if (peek != null && peek.getType().isAfterRightBrace()) {
                     continue;
                 }
 

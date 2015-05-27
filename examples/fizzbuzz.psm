@@ -1,9 +1,9 @@
 for x in 0...100 {
     if x % 15 == 0 {
-        writeln("FizzBuzz");
+        writeln("FizzBuzz")
     } elseif x % 3 == 0 {
-        writeln("Fizz");
+        writeln("Fizz")
     } elseif x % 5 == 0 {
-        writeln("Buzz");
+        writeln("Buzz")
     }
 }

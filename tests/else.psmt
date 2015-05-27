@@ -3,16 +3,16 @@ Tests else statements.
 
 --INPUT--
 if 5 > 10 {
-    return 1;
+    return 1
 } elseif 10 < 5 {
-    return 2;
+    return 2
 } elseif 10 != 10 {
-    return 3;
+    return 3
 } else {
-    return 4;
+    return 4
 }
 
-return 5;
+return 5
 
 --RESULT--
 4

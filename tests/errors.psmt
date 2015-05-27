@@ -2,71 +2,71 @@
 Tests errors.
 
 --INPUT--
-using("std.to_str");
+using("std.to_str")
 
 try {
-    read(using("file.open")("sdjfisdjfidsfjisd"));
+    read(using("file.open")("sdjfisdjfidsfjisd"))
 } catch x {
-    writeln(x);
+    writeln(x)
 }
 
 try {
-    writeln("no problem");
+    writeln("no problem")
 } catch y {
-    writeln("nope, not any problem");
+    writeln("nope, not any problem")
 }
 
 try {
-    writeln("Now a problem should occur");
-    throw("Problem!!");
-    writeln("not ran");
+    writeln("Now a problem should occur")
+    throw("Problem!!")
+    writeln("not ran")
 } catch z {
-    writeln("problem found: " + to_str(z));
+    writeln("problem found: " + to_str(z))
 } finally {
-    writeln("DONE");
+    writeln("DONE")
 }
 
 try {
-    writeln("try / catch without error");
+    writeln("try / catch without error")
 } catch e {
-    writeln("Error on a try catch block without error?!");
+    writeln("Error on a try catch block without error?!")
 } finally {
-    writeln("Done");
+    writeln("Done")
 }
 
-a = 10;
+a = 10
 
 try {
-    writeln("test");
+    writeln("test")
 } catch e {
-    writeln("error");
+    writeln("error")
 } finally if a == 10 {
-    writeln("done");
+    writeln("done")
 }
 
 try {
     try {
-        throw("error");
+        throw("error")
     } catch e if a == 15 {
-        writeln("catched the error");
+        writeln("catched the error")
     } finally if a == 10 {
-        writeln("finally");
+        writeln("finally")
     }
 } catch x {
-    writeln("error was not catched thanks to the conditional catch");
+    writeln("error was not catched thanks to the conditional catch")
 }
 
 try {
-    a = 20;
-    throw("error 2");
+    a = 20
+    throw("error 2")
 } catch e if a == 20 {
-    writeln("catched it!");
-    a = 25;
+    writeln("catched it!")
+    a = 25
 } finally if a == 25 {
-    writeln("done");
+    writeln("done")
 }
 
-writeln("hello"); // I have to do this because the test parser is buggy
+writeln("hello") // I have to do this because the test parser is buggy
 
 --OUTPUT--
 java.nio.file.NoSuchFileException: sdjfisdjfidsfjisd

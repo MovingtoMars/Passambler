@@ -2,7 +2,7 @@
 Tests math module.
 
 --INPUT--
-using("math");
+using("math")
 
 return [
     math.abs(-100),
@@ -11,7 +11,7 @@ return [
     math.floor(0.5),
     math.log10(100),
     math.sqrt(25)
-];
+]
 
 --RESULT--
 [100, 100, 1, 0, 2, 5]

@@ -84,7 +84,7 @@ public class ExpressionParser {
             if (token.getType() == TokenType.ARROW && !arrow) {
                 depth++;
                 arrow = true;
-            } else if (token.getType() == TokenType.SEMI_COL && arrow) {
+            } else if (token.getType() == TokenType.NEW_LINE && arrow) {
                 depth--;
                 arrow = false;
             } else if (token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
@@ -203,7 +203,7 @@ public class ExpressionParser {
             }
 
             // Ignore semicolons
-            if (!performed && tokens.current().getType() != TokenType.SEMI_COL) {
+            if (!performed && tokens.current().getType() != TokenType.NEW_LINE) {
                 throw new ParserException(ParserExceptionType.UNEXPECTED_TOKEN, tokens.current().getPosition(), tokens.current().getType());
             }
 

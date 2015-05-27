@@ -2,23 +2,23 @@
 Tests expression blocks.
 
 --INPUT--
-if 1 + 1 == 2 -> writeln("hello");
-if 2 + 2 == 5 -> writeln("not hello");
+if 1 + 1 == 2 -> writeln("hello")
+if 2 + 2 == 5 -> writeln("not hello")
 
-for i in 0...3 -> writeln(i);
+for i in 0...3 -> writeln(i)
 
-hello = func() -> writeln("hello world");
+hello = func() -> writeln("hello world")
 
-square = func(x) -> return x * x;
-sum = func(x, y, z) -> return (x + y) + z;
+square = func(x) -> return x * x
+sum = func(x, y, z) -> return (x + y) + z
 
-test = func(y) -> if y != 10 -> if y == 5 -> return 30;
+test = func(y) -> if y != 10 -> if y == 5 -> return 30
 
-hello();
+hello()
 
-writeln(square(5));
-writeln(sum(1, 2, 3));
-writeln(test(5));
+writeln(square(5))
+writeln(sum(1, 2, 3))
+writeln(test(5))
 
 --OUTPUT--
 hello

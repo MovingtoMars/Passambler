@@ -3,16 +3,16 @@ Tests defer.
 
 --INPUT--
 hello = func() {
-    defer writeln('world');
-    defer writeln('my friend');
-    writeln('hello');
-    defer writeln('!');
+    defer writeln('world')
+    defer writeln('my friend')
+    writeln('hello')
+    defer writeln('!')
 }
 
-hello();
-hello();
+hello()
+hello()
 
-writeln('end'); // buggy test parser
+writeln('end') // buggy test parser
 
 --OUTPUT--
 hello

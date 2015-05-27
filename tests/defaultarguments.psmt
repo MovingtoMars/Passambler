@@ -3,18 +3,18 @@ Tests default arguments.
 
 --INPUT--
 s = func(a, b=1) {
-    return a + b;
+    return a + b
 }
 
 x = func(a=1, b) {
-    return a + b;
+    return a + b
 }
 
 return [
     s(1),
     s(1, b=2),
     x(b=1)
-];
+]
 
 --RESULT--
 [2, 3, 2]

@@ -3,12 +3,12 @@ Tests named arguments.
 
 --INPUT--
 s = func(a, b) {
-    writeln(a - b);
+    writeln(a - b)
 }
 
-s(1, 1);
-s(10, b=5);
-s(b=10, a=5);
+s(1, 1)
+s(10, b=5)
+s(b=10, a=5)
 
 --OUTPUT--
 0

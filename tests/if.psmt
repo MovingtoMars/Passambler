@@ -2,17 +2,17 @@
 Tests if statements.
 
 --INPUT--
-a = 1;
+a = 1
 
 if (5 > 10) {
-    a = 2;
+    a = 2
 }
 
 if (5 == 5) {
-    a = 3;
+    a = 3
 }
 
-return a;
+return a
 
 --RESULT--
 3
