@@ -169,7 +169,7 @@ public class Lexer {
                     number.setValue(number.getValue() + current());
                     next();
 
-                    if (current() == '_') {
+                    if (current() != null && current() == '_') {
                         next();
                     }
                 }
