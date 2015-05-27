@@ -2,7 +2,7 @@
 Tests elseif statements.
 
 --INPUT--
-import 'std'
+import "std"
 
 a = []
 

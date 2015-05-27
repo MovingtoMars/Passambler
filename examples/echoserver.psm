@@ -1,4 +1,6 @@
-using("net", "os", "std")
+import "net"
+import "os"
+import "std"
 
 server = net.listen(std.to_num(os.args[0]))
 

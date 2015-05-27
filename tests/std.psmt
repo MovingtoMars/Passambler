@@ -2,7 +2,7 @@
 Tests std module.
 
 --INPUT--
-import 'std'
+import "std"
 
 n = 1...10
 std.push(n, 20)

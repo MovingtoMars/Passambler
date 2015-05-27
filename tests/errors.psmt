@@ -2,8 +2,8 @@
 Tests errors.
 
 --INPUT--
-import 'std'
-import 'file'
+import "std"
+import "file"
 
 try {
     read(file.open("sdjfisdjfidsfjisd"))
