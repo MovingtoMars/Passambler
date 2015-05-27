@@ -3,7 +3,7 @@ using('std')
 data = ''
 depth = 0
 
-while true {
+while {
     write('> ')
 
     x = readln()
