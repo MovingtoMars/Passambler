@@ -126,6 +126,7 @@ public class Lexer {
                 if (current() == '\n') {
                     tokens.add(createToken(TokenType.NEW_LINE, "\n"));
                 }
+
                 next();
             } else if (current() == '/' && peek() != null && peek() == '/') {
                 next();
@@ -211,7 +212,9 @@ public class Lexer {
                 }
 
                 if (match != null) {
-                    position += match.getKey().length();
+                    for (int i = 0; i < match.getKey().length(); ++i) {
+                        next();
+                    }
 
                     tokens.add(createToken(match.getValue(), match.getKey()));
                 }
@@ -219,7 +222,9 @@ public class Lexer {
                 if (match == null && identifierFound.length() > 0) {
                     tokens.add(createToken(TokenType.IDENTIFIER, identifierFound.toString()));
 
-                    position += identifierFound.length();
+                    for (int i = 0; i < identifierFound.length(); ++i) {
+                        next();
+                    }
                 } else if (match == null) {
                     throw new LexerException(String.format("Unexpected character '%c'", current()), line, column);
                 }

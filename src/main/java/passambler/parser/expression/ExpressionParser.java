@@ -202,7 +202,7 @@ public class ExpressionParser {
                 }
             }
 
-            // Ignore semicolons
+            // Ignore new lines
             if (!performed && tokens.current().getType() != TokenType.NEW_LINE) {
                 throw new ParserException(ParserExceptionType.UNEXPECTED_TOKEN, tokens.current().getPosition(), tokens.current().getType());
             }
