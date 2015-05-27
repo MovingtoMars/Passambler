@@ -27,14 +27,16 @@ public class ImportFeature implements Feature {
         tokens.next();
 
         Value value = parser.parseExpression(tokens, TokenType.AS);
-
-        String alias = null;
+        Value alias = null;
 
         if (tokens.current() != null && tokens.current().getType() == TokenType.AS) {
             tokens.next();
-            tokens.match(TokenType.IDENTIFIER);
 
-            alias = tokens.current().getValue();
+            alias = parser.parseExpression(tokens);
+
+            if (!(alias instanceof StringValue)) {
+                throw new ParserException(ParserExceptionType.NOT_A_STRING, tokens.current().getPosition());
+            }
         }
 
         if (value instanceof StringValue) {
@@ -67,7 +69,7 @@ public class ImportFeature implements Feature {
 
             symbols.entrySet().stream().forEach((symbol) -> moduleValue.setProperty(symbol.getKey(), new Property(symbol.getValue())));
 
-            parser.getScope().setSymbol(alias != null ? alias : moduleName, moduleValue);
+            parser.getScope().setSymbol(alias != null ? ((StringValue) alias).toString() : moduleName, moduleValue);
         } else {
             throw new ParserException(ParserExceptionType.NOT_A_STRING, tokens.current().getPosition());
         }

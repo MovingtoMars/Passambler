@@ -1,0 +1,15 @@
+--TEST--
+Tests import.
+
+--INPUT--
+import "std"
+
+writeln(std.ucase("hello"))
+
+import "math" as "x"
+
+writeln(x.ceil(5.5))
+
+--OUTPUT--
+HELLO
+6
