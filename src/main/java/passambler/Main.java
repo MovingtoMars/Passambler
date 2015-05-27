@@ -50,9 +50,7 @@ public class Main {
         }
 
         if (options.has("t")) {
-            for (String file : options.valueOf("t").toString().split(",")) {
-                runTestFile(Paths.get(file));
-            }
+            runTestFile(Paths.get(String.valueOf(options.valueOf("t"))));
         }
 
         if (options.has("r")) {
