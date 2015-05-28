@@ -3,6 +3,7 @@ package passambler.parser.expression;
 import passambler.exception.EngineException;
 import passambler.exception.ParserException;
 import passambler.exception.ParserExceptionType;
+import passambler.lexer.Token;
 import passambler.lexer.TokenPosition;
 import passambler.lexer.TokenType;
 import passambler.value.DictValue;
@@ -20,34 +21,58 @@ public class IndexAccessExpression implements Expression {
     public Value perform(ExpressionParser parser, Value currentValue) throws EngineException {
         parser.getTokens().next();
 
-        TokenPosition indexPosition = parser.getTokens().current().getPosition();
+        TokenPosition leftPosition = parser.getTokens().current().getPosition();
 
-        Value indexValue = parser.getParser().parseExpression(parser.getTokens(), TokenType.RIGHT_BRACKET);
+        Value left = parser.getParser().parseExpression(parser.getTokens(), TokenType.RIGHT_BRACKET, TokenType.INCLUSIVE_SLICE, TokenType.EXCLUSIVE_SLICE);
+        Value right = null;
+        boolean inclusiveRight = false;
+
+        // We can only use slice syntax on lists
+        if ((parser.getTokens().current().getType() == TokenType.EXCLUSIVE_SLICE || parser.getTokens().current().getType() == TokenType.INCLUSIVE_SLICE) && currentValue instanceof ListValue) {
+            Token rightToken = parser.getTokens().current();
+
+            parser.getTokens().next();
+
+            right = parser.getParser().parseExpression(parser.getTokens(), TokenType.RIGHT_BRACKET);
+
+            if (!(right instanceof NumberValue)) {
+                throw new ParserException(ParserExceptionType.NOT_A_NUMBER, rightToken.getPosition());
+            }
+
+            inclusiveRight = rightToken.getType() == TokenType.INCLUSIVE_SLICE;
+        }
 
         parser.getTokens().match(TokenType.RIGHT_BRACKET);
 
-        if (indexValue instanceof NumberValue && currentValue instanceof ListValue) {
+        if (left instanceof NumberValue && currentValue instanceof ListValue) {
             ListValue list = (ListValue) currentValue;
 
-            int index = ((NumberValue) indexValue).getValue().intValue();
+            ListValue data = new ListValue();
 
-            if (index < -list.getValue().size() || index > list.getValue().size() - 1) {
-                throw new ParserException(ParserExceptionType.INDEX_OUT_OF_RANGE, indexPosition, index, list.getValue().size());
+            int leftIndex = ((NumberValue) left).getValue().intValue();
+            int rightIndex = right != null ? ((NumberValue) right).getValue().intValue() : leftIndex + 1;
+
+            for (int i = leftIndex; i < rightIndex + (inclusiveRight ? 1 : 0); ++i) {
+                if (i < -list.getValue().size() || i > list.getValue().size() - 1) {
+                    throw new ParserException(ParserExceptionType.INDEX_OUT_OF_RANGE, leftPosition, i, list.getValue().size());
+                }
+
+                if (i < 0) {
+                    data.getValue().add(list.getValue().get(list.getValue().size() - Math.abs(i)));
+                } else {
+                    data.getValue().add(list.getValue().get(i));
+                }
             }
 
-            if (index < 0) {
-                return list.getValue().get(list.getValue().size() - Math.abs(index));
-            } else {
-                return list.getValue().get(index);
-            }
+            return data.getValue().size() == 1 ? data.getValue().get(0) : data;
         } else {
             DictValue dict = (DictValue) currentValue;
 
-            if (dict.getEntry(indexValue) == null) {
-                throw new ParserException(ParserExceptionType.UNDEFINED_DICT_ENTRY, indexPosition, indexValue.toString());
+            if (dict.getEntry(left) == null) {
+                throw new ParserException(ParserExceptionType.UNDEFINED_DICT_ENTRY, leftPosition, left.toString());
             }
 
-            return dict.getEntry(indexValue);
+            return dict.getEntry(left);
         }
     }
 }
