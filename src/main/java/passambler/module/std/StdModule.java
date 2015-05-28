@@ -62,7 +62,6 @@ public class StdModule implements Module {
         symbols.put("tokenize", new TokenizeFunction());
         symbols.put("join", new JoinFunction());
         symbols.put("filter", new FilterFunction());
-        symbols.put("substr", new SubstrFunction());
 
         symbols.put("out", new OutValue());
         symbols.put("in", new InValue());

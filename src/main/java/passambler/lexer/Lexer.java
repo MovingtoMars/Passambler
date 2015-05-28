@@ -62,6 +62,7 @@ public class Lexer {
         tokenMap.put("*=", TokenType.ASSIGN_MULTIPLY);
         tokenMap.put("/=", TokenType.ASSIGN_DIVIDE);
         tokenMap.put("%=", TokenType.ASSIGN_MODULO);
+        tokenMap.put("::", TokenType.INCLUSIVE_SLICE);
 
         tokenMap.put("=", TokenType.ASSIGN);
         tokenMap.put(">", TokenType.GT);
@@ -80,7 +81,7 @@ public class Lexer {
         tokenMap.put("*", TokenType.MULTIPLY);
         tokenMap.put("/", TokenType.DIVIDE);
         tokenMap.put("^", TokenType.XOR);
-        tokenMap.put(":", TokenType.COL);
+        tokenMap.put(":", TokenType.EXCLUSIVE_SLICE);
         tokenMap.put("%", TokenType.MODULO);
         tokenMap.put("?", TokenType.TERNARY);
 

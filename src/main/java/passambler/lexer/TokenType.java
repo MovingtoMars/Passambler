@@ -11,7 +11,7 @@ public enum TokenType {
     ARROW,
     RETURN, STOP, SKIP,
     WHILE, FOR, FUNC, IF, ELSEIF, ELSE, DEFER, TRY, CATCH, FINALLY, PUB, IN, IMPORT,
-    PERIOD, COMMA, NEW_LINE, COL, AS;
+    PERIOD, COMMA, NEW_LINE, EXCLUSIVE_SLICE, INCLUSIVE_SLICE, AS;
 
     public boolean isOperator() {
         return this == PLUS || this == MINUS || this == MULTIPLY || this == DIVIDE || this == POWER || this == MODULO

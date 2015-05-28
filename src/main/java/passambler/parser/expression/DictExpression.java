@@ -27,7 +27,7 @@ public class DictExpression implements Expression {
                 break;
             }
 
-            Value key = parser.getParser().parseExpression(tokens, TokenType.COL);
+            Value key = parser.getParser().parseExpression(tokens, TokenType.EXCLUSIVE_SLICE);
 
             tokens.next();
 

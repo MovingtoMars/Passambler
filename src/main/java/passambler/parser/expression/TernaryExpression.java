@@ -19,9 +19,9 @@ public class TernaryExpression implements Expression {
 
         tokens.next();
 
-        Value ifTrue = parser.getParser().parseExpression(tokens, TokenType.COL);
+        Value ifTrue = parser.getParser().parseExpression(tokens, TokenType.EXCLUSIVE_SLICE);
 
-        tokens.match(TokenType.COL);
+        tokens.match(TokenType.EXCLUSIVE_SLICE);
         tokens.next();
 
         Value ifFalse = parser.getParser().parseExpression(tokens);

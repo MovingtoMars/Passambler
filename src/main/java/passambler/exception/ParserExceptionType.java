@@ -24,7 +24,8 @@ public enum ParserExceptionType {
     NOT_A_CLASS("Value is not a class"),
     NOT_A_BOOLEAN("Value is not a boolean expression"),
     NOT_A_CHARACTER("Value is not a character"),
-    NOT_A_STRING("Value is not a string");
+    NOT_A_STRING("Value is not a string"),
+    NOT_A_NUMBER("Value is not a number");
 
     String message;
 
