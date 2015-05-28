@@ -1,4 +1,4 @@
-package passambler.parser.expression.feature;
+package passambler.parser.expression;
 
 import java.util.List;
 import passambler.exception.EngineException;
@@ -9,7 +9,7 @@ import passambler.parser.expression.ExpressionParser;
 import passambler.value.Value;
 import passambler.value.function.UserFunction;
 
-public class FunctionFeature implements Feature {
+public class FunctionExpression implements Expression {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
         return parser.getTokens().current().getType() == TokenType.FUNC;

@@ -1,5 +1,13 @@
 package passambler.parser;
 
+import passambler.parser.statement.WhileStatement;
+import passambler.parser.statement.LeaveStatement;
+import passambler.parser.statement.IfStatement;
+import passambler.parser.statement.TryStatement;
+import passambler.parser.statement.ImportStatement;
+import passambler.parser.statement.ForStatement;
+import passambler.parser.statement.Statement;
+import passambler.parser.statement.DeferStatement;
 import passambler.parser.expression.ExpressionParser;
 import passambler.exception.ParserException;
 import passambler.exception.ErrorException;
@@ -27,7 +35,6 @@ import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenPosition;
 import passambler.lexer.TokenType;
-import passambler.parser.feature.*;
 import passambler.util.ValueConstants;
 import passambler.value.BooleanValue;
 import passambler.value.Value;
@@ -38,7 +45,7 @@ import passambler.value.function.ThrowFunction;
 import passambler.value.function.WriteFunction;
 
 public class Parser {
-    private List<Feature> features = new ArrayList<>();
+    private List<Statement> statements = new ArrayList<>();
     private List<Module> modules = new ArrayList<>();
     private Map<String, Value> globals = new HashMap();
     private List<List<Token>> defers = new ArrayList<>();
@@ -52,14 +59,13 @@ public class Parser {
     public Parser(Scope scope) {
         this.scope = scope;
 
-        features.add(new IfFeature());
-        features.add(new WhileFeature());
-        features.add(new ForFeature());
-        features.add(new LeaveFeature());
-        features.add(new TryFeature());
-        features.add(new DeferFeature());
-        features.add(new ImportFeature());
-        features.add(new ExpressionFeature());
+        statements.add(new IfStatement());
+        statements.add(new WhileStatement());
+        statements.add(new ForStatement());
+        statements.add(new LeaveStatement());
+        statements.add(new TryStatement());
+        statements.add(new DeferStatement());
+        statements.add(new ImportStatement());
 
         modules.add(new StdModule());
         modules.add(new MathModule());
@@ -99,11 +105,13 @@ public class Parser {
     }
 
     public Value parse(TokenList tokens) throws EngineException {
-        for (Feature feature : features) {
-            if (feature.canPerform(this, tokens)) {
-                return feature.perform(this, tokens);
+        for (Statement statement : statements) {
+            if (statement.canPerform(this, tokens)) {
+                return statement.perform(this, tokens);
             }
         }
+
+        new ExpressionParser(this, tokens).parse();
 
         return null;
     }

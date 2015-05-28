@@ -1,4 +1,4 @@
-package passambler.parser.feature;
+package passambler.parser.statement;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ import passambler.parser.Parser;
 import passambler.value.Value;
 import passambler.value.BooleanValue;
 
-public class IfFeature implements Feature {
+public class IfStatement implements Statement {
     @Override
     public boolean canPerform(Parser parser, TokenList tokens) {
         return tokens.current().getType() == TokenType.IF;

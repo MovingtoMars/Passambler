@@ -1,4 +1,4 @@
-package passambler.parser.expression.feature;
+package passambler.parser.expression;
 
 import passambler.exception.EngineException;
 import passambler.exception.ParserException;
@@ -11,7 +11,7 @@ import passambler.value.ListValue;
 import passambler.value.NumberValue;
 import passambler.value.Value;
 
-public class IndexAccessFeature implements Feature {
+public class IndexAccessExpression implements Expression {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
         return parser.getTokens().current().getType() == TokenType.LEFT_BRACKET && (currentValue instanceof ListValue || currentValue instanceof DictValue);

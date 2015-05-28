@@ -1,4 +1,4 @@
-package passambler.parser.expression;
+package passambler.parser;
 
 import passambler.lexer.Token;
 import passambler.value.Value;

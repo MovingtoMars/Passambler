@@ -1,4 +1,4 @@
-package passambler.parser.feature;
+package passambler.parser.statement;
 
 import passambler.exception.EngineException;
 import passambler.lexer.TokenList;
@@ -6,7 +6,7 @@ import passambler.lexer.TokenType;
 import passambler.parser.Parser;
 import passambler.value.Value;
 
-public class DeferFeature implements Feature {
+public class DeferStatement implements Statement {
     @Override
     public boolean canPerform(Parser parser, TokenList tokens) {
         return tokens.current().getType() == TokenType.DEFER;

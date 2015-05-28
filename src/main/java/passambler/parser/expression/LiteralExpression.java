@@ -1,4 +1,4 @@
-package passambler.parser.expression.feature;
+package passambler.parser.expression;
 
 import java.math.BigDecimal;
 import passambler.exception.EngineException;
@@ -10,7 +10,7 @@ import passambler.value.NumberValue;
 import passambler.value.StringValue;
 import passambler.value.Value;
 
-public class LiteralFeature implements Feature {
+public class LiteralExpression implements Expression {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
         return parser.getTokens().current().getType() == TokenType.NUMBER || parser.getTokens().current().getType() == TokenType.STRING;

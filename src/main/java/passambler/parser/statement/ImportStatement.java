@@ -1,4 +1,4 @@
-package passambler.parser.feature;
+package passambler.parser.statement;
 
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -16,7 +16,7 @@ import passambler.value.Property;
 import passambler.value.StringValue;
 import passambler.value.Value;
 
-public class ImportFeature implements Feature {
+public class ImportStatement implements Statement {
     @Override
     public boolean canPerform(Parser parser, TokenList tokens) {
         return tokens.current().getType() == TokenType.IMPORT;

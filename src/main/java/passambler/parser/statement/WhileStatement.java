@@ -1,4 +1,4 @@
-package passambler.parser.feature;
+package passambler.parser.statement;
 
 import java.util.List;
 import passambler.exception.EngineException;
@@ -12,7 +12,7 @@ import passambler.util.ValueConstants;
 import passambler.value.Value;
 import passambler.value.BooleanValue;
 
-public class WhileFeature implements Feature {
+public class WhileStatement implements Statement {
     @Override
     public boolean canPerform(Parser parser, TokenList tokens) {
         return tokens.current().getType() == TokenType.WHILE;

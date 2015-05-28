@@ -1,4 +1,4 @@
-package passambler.parser.feature;
+package passambler.parser.statement;
 
 import passambler.exception.EngineException;
 import passambler.lexer.TokenList;
@@ -7,7 +7,7 @@ import passambler.parser.Parser;
 import passambler.util.ValueConstants;
 import passambler.value.Value;
 
-public class LeaveFeature implements Feature {
+public class LeaveStatement implements Statement {
     @Override
     public boolean canPerform(Parser parser, TokenList tokens) {
         return tokens.current().getType() == TokenType.RETURN || tokens.current().getType() == TokenType.STOP || tokens.current().getType() == TokenType.SKIP;

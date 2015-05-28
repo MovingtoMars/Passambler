@@ -1,4 +1,4 @@
-package passambler.parser.expression.feature;
+package passambler.parser.expression;
 
 import passambler.exception.EngineException;
 import passambler.lexer.TokenList;
@@ -7,7 +7,7 @@ import passambler.parser.expression.ExpressionParser;
 import passambler.value.BooleanValue;
 import passambler.value.Value;
 
-public class TernaryFeature implements Feature {
+public class TernaryExpression implements Expression {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
         return parser.getTokens().current().getType() == TokenType.TERNARY && currentValue instanceof BooleanValue;

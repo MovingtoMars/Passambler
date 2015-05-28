@@ -1,4 +1,4 @@
-package passambler.parser.feature;
+package passambler.parser.statement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import passambler.value.DictValue;
 import passambler.value.ListValue;
 import passambler.value.NumberValue;
 
-public class ForFeature implements Feature {
+public class ForStatement implements Statement {
     @Override
     public boolean canPerform(Parser parser, TokenList tokens) {
         return tokens.current().getType() == TokenType.FOR;

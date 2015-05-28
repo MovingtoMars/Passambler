@@ -1,5 +1,6 @@
 package passambler.parser.expression;
 
+import passambler.parser.ValueOperatorPair;
 import passambler.exception.ParserException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,13 +12,11 @@ import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenType;
 import passambler.parser.Parser;
-import passambler.parser.expression.feature.*;
 import passambler.util.ValueConstants;
 import passambler.value.BooleanValue;
 
 public class ExpressionParser {
-    private List<Feature> features = new ArrayList<>();
-
+    private List<Expression> expressions = new ArrayList<>();
     private Parser parser;
     private TokenList tokens;
 
@@ -25,18 +24,18 @@ public class ExpressionParser {
         this.parser = parser;
         this.tokens = tokens;
 
-        features.add(new AssignmentFeature());
-        features.add(new LiteralFeature());
-        features.add(new LookupFeature());
-        features.add(new FunctionCallFeature());
-        features.add(new ParenFeature());
-        features.add(new DictFeature());
-        features.add(new IndexAccessFeature());
-        features.add(new ListFeature());
-        features.add(new IfFeature());
-        features.add(new PropertyFeature());
-        features.add(new FunctionFeature());
-        features.add(new TernaryFeature());
+        expressions.add(new AssignmentExpression());
+        expressions.add(new LiteralExpression());
+        expressions.add(new LookupExpression());
+        expressions.add(new FunctionCallExpression());
+        expressions.add(new ParenExpression());
+        expressions.add(new DictExpression());
+        expressions.add(new IndexAccessExpression());
+        expressions.add(new ListExpression());
+        expressions.add(new IfExpression());
+        expressions.add(new PropertyAccessExpression());
+        expressions.add(new FunctionExpression());
+        expressions.add(new TernaryExpression());
     }
 
     public Parser getParser() {
@@ -110,7 +109,7 @@ public class ExpressionParser {
                         }
                     }
 
-                    pairs.add(new ValueOperatorPair(new ExpressionParser(parser, new TokenList(expression)).parseFeatures(), lastOperator));
+                    pairs.add(new ValueOperatorPair(new ExpressionParser(parser, new TokenList(expression)).parsePrimary(), lastOperator));
 
                     expression.clear();
 
@@ -177,15 +176,15 @@ public class ExpressionParser {
         }
     }
 
-    public Value parseFeatures() throws EngineException {
+    public Value parsePrimary() throws EngineException {
         Value currentValue = null;
 
         while (tokens.hasNext()) {
             boolean performed = false;
 
-            for (Feature feature : features) {
-                if (feature.canPerform(this, currentValue)) {
-                    currentValue = feature.perform(this, currentValue);
+            for (Expression expression : expressions) {
+                if (expression.canPerform(this, currentValue)) {
+                    currentValue = expression.perform(this, currentValue);
 
                     performed = true;
 

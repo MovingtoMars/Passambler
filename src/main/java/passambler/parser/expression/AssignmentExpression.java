@@ -1,4 +1,4 @@
-package passambler.parser.expression.feature;
+package passambler.parser.expression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import passambler.value.NumberValue;
 import passambler.value.StringValue;
 import passambler.value.Value;
 
-public class AssignmentFeature implements Feature {
+public class AssignmentExpression implements Expression {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
         TokenList list = parser.getTokens().copyAtCurrentPosition();

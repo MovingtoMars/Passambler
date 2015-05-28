@@ -1,4 +1,4 @@
-package passambler.parser.expression.feature;
+package passambler.parser.expression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import passambler.value.function.Function;
 import passambler.value.function.FunctionContext;
 import passambler.value.function.UserFunction;
 
-public class FunctionCallFeature implements Feature {
+public class FunctionCallExpression implements Expression {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
         return parser.getTokens().current().getType() == TokenType.LEFT_PAREN && currentValue instanceof Function;

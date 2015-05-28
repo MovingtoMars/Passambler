@@ -1,4 +1,4 @@
-package passambler.parser.expression.feature;
+package passambler.parser.expression;
 
 import passambler.exception.EngineException;
 import passambler.exception.ParserException;
@@ -7,7 +7,7 @@ import passambler.lexer.TokenType;
 import passambler.parser.expression.ExpressionParser;
 import passambler.value.Value;
 
-public class PropertyFeature implements Feature {
+public class PropertyAccessExpression implements Expression {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
         return parser.getTokens().current().getType() == TokenType.PERIOD;

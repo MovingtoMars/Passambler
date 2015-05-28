@@ -1,4 +1,4 @@
-package passambler.parser.feature;
+package passambler.parser.statement;
 
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
@@ -8,7 +8,7 @@ import passambler.parser.Block;
 import passambler.parser.Parser;
 import passambler.value.Value;
 
-public class TryFeature implements Feature {
+public class TryStatement implements Statement {
     @Override
     public boolean canPerform(Parser parser, TokenList tokens) {
         return tokens.current().getType() == TokenType.TRY;

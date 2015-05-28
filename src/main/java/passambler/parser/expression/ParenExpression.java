@@ -1,4 +1,4 @@
-package passambler.parser.expression.feature;
+package passambler.parser.expression;
 
 import passambler.exception.EngineException;
 import passambler.lexer.TokenList;
@@ -6,7 +6,7 @@ import passambler.lexer.TokenType;
 import passambler.parser.expression.ExpressionParser;
 import passambler.value.Value;
 
-public class ParenFeature implements Feature {
+public class ParenExpression implements Expression {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
         return parser.getTokens().current().getType() == TokenType.LEFT_PAREN;
