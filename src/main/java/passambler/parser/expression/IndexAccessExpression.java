@@ -25,7 +25,9 @@ public class IndexAccessExpression implements Expression {
 
         Value left = parser.getParser().parseExpression(parser.getTokens(), TokenType.RIGHT_BRACKET, TokenType.INCLUSIVE_SLICE, TokenType.EXCLUSIVE_SLICE);
         Value right = null;
+
         boolean inclusiveRight = false;
+        boolean noRight = false;
 
         // We can only use slice syntax on lists
         if ((parser.getTokens().current().getType() == TokenType.EXCLUSIVE_SLICE || parser.getTokens().current().getType() == TokenType.INCLUSIVE_SLICE) && currentValue instanceof ListValue) {
@@ -33,13 +35,17 @@ public class IndexAccessExpression implements Expression {
 
             parser.getTokens().next();
 
-            right = parser.getParser().parseExpression(parser.getTokens(), TokenType.RIGHT_BRACKET);
+            if (parser.getTokens().current().getType() == TokenType.RIGHT_BRACKET) {
+                noRight = true;
+            } else {
+                right = parser.getParser().parseExpression(parser.getTokens(), TokenType.RIGHT_BRACKET);
 
-            if (!(right instanceof NumberValue)) {
-                throw new ParserException(ParserExceptionType.NOT_A_NUMBER, rightToken.getPosition());
+                if (!(right instanceof NumberValue)) {
+                    throw new ParserException(ParserExceptionType.NOT_A_NUMBER, rightToken.getPosition());
+                }
+
+                inclusiveRight = rightToken.getType() == TokenType.INCLUSIVE_SLICE;
             }
-
-            inclusiveRight = rightToken.getType() == TokenType.INCLUSIVE_SLICE;
         }
 
         parser.getTokens().match(TokenType.RIGHT_BRACKET);
@@ -52,7 +58,7 @@ public class IndexAccessExpression implements Expression {
             int leftIndex = ((NumberValue) left).getValue().intValue();
             int rightIndex = right != null ? ((NumberValue) right).getValue().intValue() : leftIndex + 1;
 
-            for (int i = leftIndex; i < rightIndex + (inclusiveRight ? 1 : 0); ++i) {
+            for (int i = leftIndex; i < (noRight ? list.getValue().size() : rightIndex + (inclusiveRight ? 1 : 0)); ++i) {
                 if (i < -list.getValue().size() || i > list.getValue().size() - 1) {
                     throw new ParserException(ParserExceptionType.INDEX_OUT_OF_RANGE, leftPosition, i, list.getValue().size());
                 }
