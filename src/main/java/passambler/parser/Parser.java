@@ -111,6 +111,7 @@ public class Parser {
             }
         }
 
+        // Fall back to an expression
         new ExpressionParser(this, tokens).parse();
 
         return null;
