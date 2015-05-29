@@ -12,8 +12,6 @@ import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenType;
 import passambler.parser.Parser;
-import passambler.util.ValueConstants;
-import passambler.value.BooleanValue;
 
 public class ExpressionParser {
     private List<Expression> expressions = new ArrayList<>();
@@ -99,14 +97,6 @@ public class ExpressionParser {
                 if (depth <= 0 && (token.getType().isOperator() || tokens.peek() == null)) {
                     if (token.getType().isOperator()) {
                         expression.remove(expression.size() - 1);
-                    }
-
-                    if (lastOperator != null && lastOperator.getType() == TokenType.AND) {
-                        Value result = parsePairs(pairs);
-
-                        if (result instanceof BooleanValue && !((BooleanValue) result).getValue()) {
-                            return ValueConstants.FALSE;
-                        }
                     }
 
                     pairs.add(new ValueOperatorPair(new ExpressionParser(parser, new TokenList(expression)).parsePrimary(), lastOperator));
