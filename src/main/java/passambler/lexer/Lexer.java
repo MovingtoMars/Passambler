@@ -127,7 +127,7 @@ public class Lexer {
                 tokens.add(string);
             } else if (current() == ' ' || current() == '\t' || current() == '\n') {
                 if (current() == '\n') {
-                    tokens.add(createToken(TokenType.NEW_LINE, "\n"));
+                    tokens.add(createToken(TokenType.NEW_LINE));
                 }
 
                 next();
