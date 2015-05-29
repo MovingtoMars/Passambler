@@ -82,7 +82,9 @@ public class ExpressionParser {
             } else {
                 expression.add(token);
 
-                if (expression.size() == 1 && (token.getType().isUnaryOperator() || token.getType() == TokenType.PLUS || token.getType() == TokenType.MINUS)) {
+                int size = (int) expression.stream().filter(t -> t.getType() != TokenType.NEW_LINE).count();
+
+                if (size == 1 && (token.getType().isUnaryOperator() || token.getType() == TokenType.PLUS || token.getType() == TokenType.MINUS)) {
                     if (token.getType() == TokenType.PLUS) {
                         token.setType(TokenType.UNARY_PLUS);
                     } else if (token.getType() == TokenType.MINUS) {
