@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.TimerTask;
+import java.util.logging.Level;
 import static passambler.util.Constants.LOGGER;
 
 public abstract class PathWatcher extends TimerTask {
@@ -26,7 +27,7 @@ public abstract class PathWatcher extends TimerTask {
                 onChange();
             }
         } catch (IOException e) {
-            LOGGER.error("Failed to get last file modification date", e);
+            LOGGER.log(Level.WARNING, "Failed to get last file modification date", e);
         }
     }
 

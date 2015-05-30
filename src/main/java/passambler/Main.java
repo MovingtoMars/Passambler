@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import passambler.module.os.OsModule;
@@ -18,6 +19,7 @@ import passambler.exception.EngineException;
 import passambler.util.OutputInterceptor;
 import passambler.tests.TestParser;
 import passambler.tests.TestRunner;
+import passambler.util.Constants;
 import passambler.util.PathWatcher;
 import static passambler.util.Constants.VERSION;
 import static passambler.util.Constants.LOGGER;
@@ -58,7 +60,7 @@ public class Main {
         }
 
         if (options.has("v")) {
-            System.out.println("Passambler " + VERSION);
+            System.err.println("Passambler " + VERSION);
         }
 
         if (options.has("h") || (!options.hasOptions() && options.nonOptionArguments().isEmpty())) {
@@ -72,7 +74,7 @@ public class Main {
         TimerTask task = new PathWatcher(file) {
             @Override
             public void onChange() {
-                LOGGER.info("Watched file '" + file.getFileName() + "' is reloaded");
+                LOGGER.log(Level.INFO, "Watched file `" + file.getFileName() + "` is reloaded");
 
                 runFile(file);
             }
@@ -85,7 +87,7 @@ public class Main {
         try {
             runCode(String.join("\n", Files.readAllLines(file)));
         } catch (IOException e) {
-            LOGGER.error(e);
+            LOGGER.log(Level.SEVERE, "IO error", e);
         }
     }
 
@@ -93,7 +95,7 @@ public class Main {
         try {
             new Parser().parse(new Lexer(code));
         } catch (EngineException e) {
-            LOGGER.fatal(e.getName(), e);
+            LOGGER.log(Level.SEVERE, e.getName(), e);
         }
     }
 
@@ -108,8 +110,6 @@ public class Main {
             files.add(testFile);
         }
 
-        LOGGER.info("Running " + files.size() + " tests");
-
         for (Path file : files) {
             try {
                 TestParser parser = new TestParser(file);
@@ -121,11 +121,11 @@ public class Main {
 
                 OutputInterceptor.stop();
 
-                LOGGER.info("Test '" + file.getFileName() + "' passed");
+                LOGGER.log(Level.INFO, "Test `" + file.getFileName() + "` " + Constants.ANSI_GREEN + "passed" + Constants.ANSI_RESET);
             } catch (Exception e) {
                 OutputInterceptor.stop();
 
-                LOGGER.error("Test '" + file.getFileName() + "' failed", e);
+                LOGGER.log(Level.INFO, "Test `" + file.getFileName() + "` " + Constants.ANSI_RED + "failed" + Constants.ANSI_RESET, e);
             }
         }
     }

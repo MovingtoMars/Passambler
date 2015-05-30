@@ -6,10 +6,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import passambler.exception.EngineException;
 import passambler.lexer.Lexer;
 import passambler.parser.Parser;
-import passambler.util.Constants;
+import static passambler.util.Constants.LOGGER;
 import passambler.value.Value;
 
 public class FilesystemModule implements Module {
@@ -52,7 +53,7 @@ public class FilesystemModule implements Module {
         try {
             parser.parse(new Lexer(String.join("\n", Files.readAllLines(path))));
         } catch (IOException | EngineException e) {
-            Constants.LOGGER.fatal("Error while loading module", e);
+            LOGGER.log(Level.SEVERE, "Error while loading module", e);
         }
 
         symbols.putAll(parser.getScope().getSymbols());

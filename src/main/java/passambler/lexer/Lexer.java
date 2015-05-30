@@ -229,7 +229,7 @@ public class Lexer {
                         next();
                     }
                 } else if (match == null) {
-                    throw new LexerException(String.format("Unexpected character '%c'", current()), line, column);
+                    throw new LexerException(String.format("Unexpected character `%c`", current()), line, column);
                 }
             }
         }
@@ -242,7 +242,7 @@ public class Lexer {
             next();
 
             if (!escapeSequences.containsKey(current())) {
-                throw new LexerException(String.format("Escape sequence '%c' not found", current()), line, column);
+                throw new LexerException(String.format("Escape sequence `%c` not found", current()), line, column);
             }
 
             return escapeSequences.get(current());

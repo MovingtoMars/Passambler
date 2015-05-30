@@ -24,14 +24,14 @@ public class TestRunner {
         Value result = parser.parse(new Lexer(test.getInput()));
 
         if (test.getOutput() != null && !test.getOutput().equals(OutputInterceptor.getOutput())) {
-            throw new TestException("Unexpected output, expected '%s' but got '%s'", test.getOutput(), OutputInterceptor.getOutput());
+            throw new TestException("Unexpected output, expected `%s` but got `%s`", test.getOutput(), OutputInterceptor.getOutput());
         }
 
         if (test.getResult() != null) {
             if (result == null) {
-                throw new TestException("Unexpected result, expected '%s'", test.getResult());
+                throw new TestException("Unexpected result, expected `%s`", test.getResult());
             } else if (!test.getResult().equals(result.toString())) {
-                throw new TestException("Unexpected result, expected '%s' but got '%s'", test.getResult(), result.toString());
+                throw new TestException("Unexpected result, expected `%s` but got `%s`", test.getResult(), result.toString());
             }
         }
     }
