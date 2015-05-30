@@ -1,0 +1,25 @@
+--TEST--
+Tests string comparison.
+
+--INPUT--
+x = "hello"
+y = "h"
+
+z = "test"
+a = "test"
+b = "world"
+
+return [
+	x[0] == y,
+	x[0] == y[0],
+	"hello" == "hello",
+	z == a,
+	x[1] == y,
+	x[1] == y[0],
+	z == b,
+	a == b
+]
+
+
+--RESULT--
+[true, true, true, true, false, false, false, false]
