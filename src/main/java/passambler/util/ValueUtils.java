@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import passambler.value.BooleanValue;
+import passambler.value.CharacterValue;
 import passambler.value.DictValue;
 import passambler.value.ListValue;
 import passambler.value.NumberValue;
@@ -34,6 +35,10 @@ public class ValueUtils {
 
         if ((value1.getValue() != null && value2.getValue() == null) || (value1.getValue() == null && value2.getValue() != null)) {
             return false;
+        }
+
+        if ((value1 instanceof StringValue || value1 instanceof CharacterValue) && (value2 instanceof StringValue || value2 instanceof CharacterValue)) {
+            return value1.toString().equals(value2.toString());
         }
 
         if (value1 instanceof ListValue && value2 instanceof ListValue) {
