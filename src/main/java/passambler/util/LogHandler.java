@@ -17,13 +17,16 @@ public class LogHandler extends Handler {
             builder.append(Constants.ANSI_YELLOW);
         }
 
-        builder.append(record.getLevel().toString().toLowerCase());
-        builder.append(Constants.ANSI_RESET);
+        builder.append(record.getLevel().toString().toLowerCase()).append(Constants.ANSI_RESET);
 
-        builder.append(": ").append(record.getMessage());
+        builder.append(": ");
+
+        writeMessage(record.getMessage(), builder);
 
         if (record.getThrown() != null) {
-            builder.append(": ").append(record.getThrown().getMessage());
+            builder.append(": ");
+
+            writeMessage(record.getThrown().getMessage(), builder);
 
             if (Constants.DEBUG) {
                 builder.append("\n");
@@ -38,6 +41,28 @@ public class LogHandler extends Handler {
 
         if (record.getLevel() == Level.SEVERE) {
             System.exit(-1);
+        }
+    }
+
+    private void writeMessage(String message, StringBuilder builder) {
+        boolean backtick = false;
+
+        for (char c : message.toCharArray()) {
+            if (c == '`') {
+                backtick = !backtick;
+
+                if (backtick) {
+                    builder.append(Constants.ANSI_PURPLE);
+                }
+
+                builder.append(c);
+
+                if (!backtick) {
+                    builder.append(Constants.ANSI_RESET);
+                }
+            } else {
+                builder.append(c);
+            }
         }
     }
 
