@@ -12,6 +12,8 @@ import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenType;
 import passambler.parser.Parser;
+import passambler.util.ValueConstants;
+import passambler.value.BooleanValue;
 
 public class ExpressionParser {
     private List<Expression> expressions = new ArrayList<>();
@@ -94,6 +96,18 @@ public class ExpressionParser {
                     expression.remove(expression.size() - 1);
 
                     lastOperator = token;
+                }
+
+                /*
+                 * If we are having an AND boolean expression, and the current value is already false,
+                 * we can just return false so the rest of the expression doesn't get parsed.
+                 */
+                if (lastOperator != null && lastOperator.getType() == TokenType.AND) {
+                    Value result = parsePairs(pairs);
+
+                    if (result instanceof BooleanValue && !((BooleanValue) result).getValue()) {
+                        return ValueConstants.FALSE;
+                    }
                 }
 
                 if (depth <= 0 && (token.getType().isOperator() || tokens.peek() == null)) {
