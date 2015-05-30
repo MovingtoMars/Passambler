@@ -1,6 +1,7 @@
 package passambler.value;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import passambler.lexer.Token;
 import passambler.exception.ParserException;
 import passambler.exception.ParserExceptionType;
@@ -43,7 +44,7 @@ public class NumberValue extends Value {
                         throw new ParserException(ParserExceptionType.CANNOT_DIVIDE_BY_ZERO, operatorToken.getPosition());
                     }
 
-                    return new NumberValue(getValue().divide(((NumberValue) value).getValue()));
+                    return new NumberValue(getValue().divide(((NumberValue) value).getValue(), MathContext.DECIMAL128));
                 case POWER:
                 case ASSIGN_POWER:
                     return new NumberValue(getValue().pow(((NumberValue) value).getValue().intValue()));
