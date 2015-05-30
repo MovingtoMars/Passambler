@@ -62,6 +62,7 @@ public class StdModule implements Module {
         symbols.put("join", new JoinFunction());
         symbols.put("filter", new FilterFunction());
         symbols.put("substr", new SubstrFunction());
+        symbols.put("format", new FormatFunction());
 
         symbols.put("out", new OutValue());
         symbols.put("in", new InValue());
