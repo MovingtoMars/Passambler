@@ -64,7 +64,7 @@ public class Main {
         }
 
         if (options.has("h") || (!options.hasOptions() && options.nonOptionArguments().isEmpty())) {
-            optionParser.printHelpOn(System.out);
+            optionParser.printHelpOn(System.err);
         }
     }
 
