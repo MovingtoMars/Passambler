@@ -164,6 +164,10 @@ public class ExpressionParser {
 
             if (current.getOperator() != null && current.getOperator().getType().isUnaryOperator()) {
                 current.setValue(current.getValue().onOperator(current.getValue(), current.getOperator()));
+
+                if (current.getValue() == null) {
+                    throw new ParserException(ParserExceptionType.UNSUPPORTED_OPERATOR, current.getOperator().getPosition(), current.getOperator().getType());
+                }
             }
         }
     }
@@ -176,6 +180,10 @@ public class ExpressionParser {
                 ValueOperatorPair behind = pairs.get(i - 1);
 
                 behind.setValue(behind.getValue().onOperator(current.getValue(), current.getOperator()));
+
+                if (behind.getValue() == null) {
+                    throw new ParserException(ParserExceptionType.UNSUPPORTED_OPERATOR, current.getOperator().getPosition(), current.getOperator().getType());
+                }
 
                 pairs.remove(current);
             }
