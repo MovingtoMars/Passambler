@@ -3,7 +3,6 @@ package passambler.parser.expression;
 import passambler.exception.EngineException;
 import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
-import passambler.parser.expression.ExpressionParser;
 import passambler.value.DictValue;
 import passambler.value.Value;
 
@@ -23,7 +22,11 @@ public class DictExpression implements Expression {
 
         while (tokens.hasNext()) {
             // Empty dicts
-            if (tokens.current().getType() == TokenType.RIGHT_BRACE) {
+            if (tokens.current().getType() == TokenType.NEW_LINE) {
+                tokens.next();
+
+                continue;
+            } else if (tokens.current().getType() == TokenType.RIGHT_BRACE) {
                 break;
             }
 

@@ -3,7 +3,6 @@ package passambler.parser.expression;
 import passambler.exception.EngineException;
 import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
-import passambler.parser.expression.ExpressionParser;
 import passambler.value.ListValue;
 import passambler.value.Value;
 
@@ -23,7 +22,11 @@ public class ListExpression implements Expression {
 
         while (tokens.hasNext()) {
             // Empty lists
-            if (tokens.current().getType() == TokenType.RIGHT_BRACKET) {
+            if (tokens.current().getType() == TokenType.NEW_LINE) {
+                tokens.next();
+
+                continue;
+            } else if (tokens.current().getType() == TokenType.RIGHT_BRACKET) {
                 break;
             }
 
