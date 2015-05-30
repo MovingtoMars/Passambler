@@ -16,6 +16,8 @@ import passambler.module.os.OsModule;
 import passambler.parser.Parser;
 import passambler.lexer.Lexer;
 import passambler.exception.EngineException;
+import passambler.lexer.Token;
+import passambler.lexer.TokenType;
 import passambler.util.OutputInterceptor;
 import passambler.tests.TestParser;
 import passambler.tests.TestRunner;
@@ -24,6 +26,7 @@ import passambler.util.PathWatcher;
 import static passambler.util.Constants.VERSION;
 import static passambler.util.Constants.LOGGER;
 import passambler.value.StringValue;
+import passambler.value.Value;
 
 public class Main {
     public Main(String[] args) throws IOException {
@@ -34,6 +37,7 @@ public class Main {
         optionParser.accepts("w", "Watches the file being run").withOptionalArg().defaultsTo("1000");
         optionParser.accepts("r", "Run a code snippet").withRequiredArg();
         optionParser.accepts("t", "Run a test (file(s) or a whole directory)").withRequiredArg();
+        optionParser.accepts("e", "Runs the REPL");
 
         OptionSet options = optionParser.parse(args);
 
@@ -66,6 +70,10 @@ public class Main {
         if (options.has("h") || (!options.hasOptions() && options.nonOptionArguments().isEmpty())) {
             optionParser.printHelpOn(System.err);
         }
+
+        if (options.has("e")) {
+            runREPL();
+        }
     }
 
     public void runWatchedFile(Path file, int watchTime) {
@@ -83,20 +91,24 @@ public class Main {
         timer.schedule(task, new Date(), watchTime);
     }
 
-    public void runFile(Path file) {
+    public Value runFile(Path file) {
         try {
-            runCode(String.join("\n", Files.readAllLines(file)));
+            return runCode(String.join("\n", Files.readAllLines(file)));
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "IO error", e);
         }
+
+        return null;
     }
 
-    public void runCode(String code) {
+    public Value runCode(String code) {
         try {
-            new Parser().parse(new Lexer(code));
+            return new Parser().parse(new Lexer(code));
         } catch (EngineException e) {
             LOGGER.log(Level.SEVERE, e.getName(), e);
         }
+
+        return null;
     }
 
     public void runTestFile(Path testFile) throws IOException {
@@ -126,6 +138,56 @@ public class Main {
                 OutputInterceptor.stop();
 
                 LOGGER.log(Level.INFO, "Test `" + file.getFileName() + "` " + Constants.ANSI_RED + "failed" + Constants.ANSI_RESET, e);
+            }
+        }
+    }
+
+    public void runREPL() {
+        Parser parser = new Parser();
+
+        StringBuilder input = new StringBuilder();
+
+        int depth = 0;
+
+        while (true) {
+            try {
+                if (System.console() != null) {
+                    String data = System.console().readLine("> ");
+
+                    if (data == null) {
+                        break;
+                    }
+
+                    input.append(data);
+
+                    for (Token token : new Lexer(data).tokenize()) {
+                        if (token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
+                            depth++;
+                        } else if (token.getType() == TokenType.RIGHT_BRACE || token.getType() == TokenType.RIGHT_PAREN || token.getType() == TokenType.RIGHT_BRACKET) {
+                            depth--;
+                        }
+                    }
+
+                    if (depth == 0) {
+                        Value result = parser.parse(new Lexer(input.toString()));
+
+                        input = new StringBuilder();
+
+                        if (result != null) {
+                            System.err.println(result);
+                        }
+                    }
+                } else {
+                    LOGGER.log(Level.SEVERE, "Console not available");
+
+                    break;
+                }
+            } catch (EngineException e) {
+                LOGGER.log(Level.WARNING, e.getName(), e);
+
+                depth = 0;
+
+                input = new StringBuilder();
             }
         }
     }
