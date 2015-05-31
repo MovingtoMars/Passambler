@@ -21,6 +21,8 @@ for x in 0...100 {
 ```
 For more examples, see the `examples` directory.
 
+If you want to see more examples of how the language works, check out the tests in the `tests` directory.
+
 ## Building
 Clone the repository and run Maven.
 ```
