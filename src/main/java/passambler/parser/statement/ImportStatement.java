@@ -1,10 +1,10 @@
 package passambler.parser.statement;
 
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import passambler.exception.EngineException;
+import passambler.exception.ErrorException;
 import passambler.exception.ParserException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenList;
@@ -12,6 +12,7 @@ import passambler.lexer.TokenType;
 import passambler.module.FilesystemModule;
 import passambler.module.Module;
 import passambler.parser.Parser;
+import passambler.value.ErrorValue;
 import passambler.value.Property;
 import passambler.value.StringValue;
 import passambler.value.Value;
@@ -50,26 +51,31 @@ public class ImportStatement implements Statement {
                     Module builtInModule = parser.getModules().stream().filter(m -> m.getId().equals(element)).findFirst().orElse(null);
 
                     if (builtInModule == null) {
-                        module = new FilesystemModule(Paths.get(element + ".psm"));
+                        module = new FilesystemModule(element);
                     } else {
                         module = builtInModule;
                     }
                 } else {
-                    module = Arrays.asList(module.getChildren()).stream().filter(m -> m.getId().equals(element)).findFirst().get();
+                    module = Arrays.asList(module.getChildren()).stream()
+                            .filter(m -> m.getId().equals(element))
+                            .findFirst()
+                            .orElseThrow(() -> new ErrorException(new ErrorValue(String.format("Module `%s` not found", element))));
                 }
 
                 moduleName = element;
             }
 
-            Map<String, Value> symbols = new HashMap();
+            if (module != null) {
+                Map<String, Value> symbols = new HashMap();
 
-            module.apply(symbols);
+                module.apply(symbols);
 
-            Value moduleValue = new Value();
+                Value moduleValue = new Value();
 
-            symbols.entrySet().stream().forEach((symbol) -> moduleValue.setProperty(symbol.getKey(), new Property(symbol.getValue())));
+                symbols.entrySet().stream().forEach((symbol) -> moduleValue.setProperty(symbol.getKey(), new Property(symbol.getValue())));
 
-            parser.getScope().setSymbol(alias != null ? ((StringValue) alias).toString() : moduleName, moduleValue);
+                parser.getScope().setSymbol(alias != null ? ((StringValue) alias).toString() : moduleName, moduleValue);
+            }
         } else {
             throw new ParserException(ParserExceptionType.NOT_A_STRING, tokens.current().getPosition());
         }
