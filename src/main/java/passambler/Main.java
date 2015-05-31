@@ -42,7 +42,7 @@ public class Main {
         OptionSet options = optionParser.parse(args);
 
         if (!options.nonOptionArguments().isEmpty()) {
-            String fileName = String.valueOf(options.nonOptionArguments().get(0));
+            String fileName = String.valueOf(options.nonOptionArguments().get(0)) + "." + Constants.EXTENSION;
 
             for (int i = 1; i < options.nonOptionArguments().size(); ++i) {
                 OsModule.args.getValue().add(new StringValue(String.valueOf(options.nonOptionArguments().get(i))));
@@ -56,7 +56,7 @@ public class Main {
         }
 
         if (options.has("t")) {
-            runTestFile(Paths.get(String.valueOf(options.valueOf("t"))));
+            runTestFile(Paths.get(String.valueOf(options.valueOf("t")) + "." + Constants.TEST_EXTENSION));
         }
 
         if (options.has("r")) {

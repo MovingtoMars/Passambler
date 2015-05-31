@@ -5,8 +5,11 @@ import java.util.logging.Logger;
 public class Constants {
     public static final String VERSION = "DEV";
     public static final Logger LOGGER = Logger.getLogger("Passambler");
-    public static final String EXTENSION = "psm";
+
     public static final boolean DEBUG = true;
+
+    public static final String EXTENSION = "psm";
+    public static final String TEST_EXTENSION = "psmt";
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
