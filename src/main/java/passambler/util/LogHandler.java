@@ -29,10 +29,8 @@ public class LogHandler extends Handler {
             writeMessage(record.getThrown().getMessage(), builder);
 
             if (Constants.DEBUG) {
-                builder.append("\n");
-
                 for (StackTraceElement stackTrace : record.getThrown().getStackTrace()) {
-                    builder.append(stackTrace.toString()).append("\n");
+                    builder.append("\n").append(stackTrace.toString());
                 }
             }
         }
