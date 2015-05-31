@@ -56,7 +56,7 @@ public class Main {
         }
 
         if (options.has("t")) {
-            runTestFile(Paths.get(String.valueOf(options.valueOf("t")) + "." + Constants.TEST_EXTENSION));
+            runTestFile(Paths.get(String.valueOf(options.valueOf("t"))));
         }
 
         if (options.has("r")) {
@@ -117,7 +117,7 @@ public class Main {
         if (Files.isDirectory(testFile)) {
             Files.newDirectoryStream(testFile).forEach(f -> files.add(f));
         } else {
-            files.add(testFile);
+            files.add(Paths.get(testFile + "." + Constants.TEST_EXTENSION));
         }
 
         for (Path file : files) {
