@@ -30,5 +30,6 @@ public class FileModule implements Module {
         symbols.put("type", new TypeFunction());
         symbols.put("modified", new ModifiedFunction());
         symbols.put("touch", new TouchFunction());
+        symbols.put("files", new FilesFunction());
     }
 }
