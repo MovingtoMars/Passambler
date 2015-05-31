@@ -115,9 +115,7 @@ public class Main {
         List<Path> files = new ArrayList<>();
 
         if (Files.isDirectory(testFile)) {
-            for (Path file : Files.newDirectoryStream(testFile)) {
-                files.add(file);
-            }
+            Files.newDirectoryStream(testFile).forEach(f -> files.add(f));
         } else {
             files.add(testFile);
         }

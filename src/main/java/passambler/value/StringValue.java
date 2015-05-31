@@ -31,7 +31,7 @@ public class StringValue extends ListValue {
         if (list.hashCode() != cachedList) {
             StringBuilder builder = new StringBuilder();
 
-            getValue().stream().forEach((item) -> builder.append(item.toString()));
+            getValue().stream().forEach(item -> builder.append(item.toString()));
 
             cached = builder.toString();
             cachedList = list.hashCode();
