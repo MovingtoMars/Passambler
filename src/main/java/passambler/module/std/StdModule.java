@@ -6,7 +6,6 @@ import passambler.module.std.function.*;
 import passambler.module.std.value.*;
 import passambler.value.BooleanValue;
 import passambler.value.CharacterValue;
-import passambler.value.ClassValue;
 import passambler.value.DictValue;
 import passambler.value.ErrorValue;
 import passambler.value.ListValue;
@@ -36,7 +35,6 @@ public class StdModule implements Module {
         symbols.put("is_bool", new IsFunction(BooleanValue.class));
         symbols.put("is_list", new IsFunction(ListValue.class));
         symbols.put("is_dict", new IsFunction(DictValue.class));
-        symbols.put("is_class", new IsFunction(ClassValue.class));
         symbols.put("is_char", new IsFunction(CharacterValue.class));
         symbols.put("is_err", new IsFunction(ErrorValue.class));
         symbols.put("lcase", new LCaseFunction());
