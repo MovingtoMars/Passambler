@@ -1,0 +1,56 @@
+--TEST--
+Tests match.
+
+--INPUT--
+x = 2
+
+match x {
+    3: {
+        x += 1
+    },
+    default: {
+        x += 3
+    }
+}
+
+y = match x {
+    1: {
+        return 100
+    },
+    5: {
+        return 200
+    },
+    default: {
+        return 300
+    }
+}
+
+return [
+    y,
+    match y {
+        200: {
+            return "hello"
+        },
+        300: {
+            return "world"
+        }
+    },
+    match "test" {
+        "test": {
+            return "ok"
+        }
+    },
+    match "hello" {
+    },
+    match "world" {
+        "world": {
+
+        },
+        default: {
+            return 500
+        }
+    }
+]
+
+--RESULT--
+[200, hello, ok, nil, nil]

@@ -21,11 +21,13 @@ public class Lexer {
 
         tokenMap.put("finally", TokenType.FINALLY);
         tokenMap.put("else if", TokenType.ELSEIF);
+        tokenMap.put("default", TokenType.DEFAULT);
 
         tokenMap.put("return", TokenType.RETURN);
         tokenMap.put("elseif", TokenType.ELSEIF);
         tokenMap.put("import", TokenType.IMPORT);
 
+        tokenMap.put("match", TokenType.MATCH);
         tokenMap.put("catch", TokenType.CATCH);
         tokenMap.put("while", TokenType.WHILE);
         tokenMap.put("defer", TokenType.DEFER);

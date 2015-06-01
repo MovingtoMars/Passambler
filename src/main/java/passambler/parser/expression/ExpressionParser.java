@@ -36,6 +36,7 @@ public class ExpressionParser {
         expressions.add(new PropertyAccessExpression());
         expressions.add(new FunctionExpression());
         expressions.add(new TernaryExpression());
+        expressions.add(new MatchExpression());
     }
 
     public Parser getParser() {
