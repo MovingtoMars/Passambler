@@ -3,7 +3,6 @@ package passambler.parser.expression;
 import passambler.exception.EngineException;
 import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
-import passambler.parser.expression.ExpressionParser;
 import passambler.value.BooleanValue;
 import passambler.value.Value;
 
@@ -19,13 +18,13 @@ public class TernaryExpression implements Expression {
 
         tokens.next();
 
-        Value ifTrue = parser.getParser().parseExpression(tokens, TokenType.EXCLUSIVE_SLICE);
+        TokenList ifTrue = new TokenList(parser.getParser().parseExpressionTokens(tokens, TokenType.EXCLUSIVE_SLICE));
 
         tokens.match(TokenType.EXCLUSIVE_SLICE);
         tokens.next();
 
-        Value ifFalse = parser.getParser().parseExpression(tokens);
+        TokenList ifFalse = new TokenList(parser.getParser().parseExpressionTokens(tokens));
 
-        return ((BooleanValue) currentValue).getValue() ? ifTrue : ifFalse;
+        return ((BooleanValue) currentValue).getValue() ? new ExpressionParser(parser.getParser(), ifTrue).parse() : new ExpressionParser(parser.getParser(), ifFalse).parse();
     }
 }
