@@ -73,11 +73,9 @@ public class FilesystemModule implements Module {
 
             parser.parse(new Lexer(String.join("\n", Files.readAllLines(file))));
 
-            for (Map.Entry<String, Value> symbol : parser.getScope().getSymbols().entrySet()) {
-                if (parser.getScope().isVisible(symbol.getKey())) {
-                    symbols.put(symbol.getKey(), symbol.getValue());
-                }
-            }
+            parser.getScope().getSymbols().entrySet().stream().filter(s -> parser.getScope().isVisible(s.getKey())).forEach(s -> {
+                symbols.put(s.getKey(), s.getValue());
+            });
         }
     }
 
