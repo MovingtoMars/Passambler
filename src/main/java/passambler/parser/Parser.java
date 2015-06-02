@@ -169,7 +169,7 @@ public class Parser {
         return null;
     }
 
-    public Block parseBlock(TokenList tokens) throws EngineException {
+    public Block parseBlock(TokenList tokens, TokenType... endingTokens) throws EngineException {
         Block block = new Block(scope);
 
         tokens.match(TokenType.LEFT_BRACE, TokenType.ARROW);
@@ -178,22 +178,26 @@ public class Parser {
 
         tokens.next();
 
-        int depth = 1;
+        int depth = arrow ? 0 : 1; // If we have an arrow, we won't have a depth of 1 because there is no opening brace
 
         while (tokens.hasNext()) {
-            if (!arrow) {
-                if (tokens.current().getType() == TokenType.LEFT_BRACE) {
-                    depth++;
-                } else if (tokens.current().getType() == TokenType.RIGHT_BRACE) {
-                    depth--;
+            Token token = tokens.current();
 
-                    if (depth == 0) {
-                        break;
-                    }
+            if (token.getType() == TokenType.LEFT_BRACE || token.getType() == TokenType.LEFT_PAREN || token.getType() == TokenType.LEFT_BRACKET) {
+                depth++;
+            } else if (token.getType() == TokenType.RIGHT_BRACE || token.getType() == TokenType.RIGHT_PAREN || token.getType() == TokenType.RIGHT_BRACKET) {
+                depth--;
+
+                if (depth == 0 && !arrow) {
+                    break;
                 }
             }
 
-            block.getTokens().add(tokens.current());
+            if (depth == 0 && Arrays.asList(endingTokens).contains(token.getType())) {
+                break;
+            }
+
+            block.getTokens().add(token);
 
             tokens.next();
         }

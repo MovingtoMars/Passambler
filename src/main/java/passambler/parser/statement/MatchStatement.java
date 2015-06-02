@@ -46,7 +46,7 @@ public class MatchStatement implements Statement {
                 }
             }
 
-            Block caseBlock = parser.parseBlock(block);
+            Block caseBlock = parser.parseBlock(block, TokenType.COMMA);
 
             expressions.forEach(e -> cases.put(e, caseBlock));
 

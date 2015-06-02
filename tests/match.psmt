@@ -37,6 +37,20 @@ z = match x {
     }
 }
 
+a = match x {
+    1, 2, 3 -> return 1,
+    4 -> return 2,
+    5 {
+        return 3
+    }
+}
+
+b = match 10 {
+    1, 2, 3, 4, 5 -> return 1,
+    default -> return 2,
+    6, 7, 8, 9 -> return 3
+}
+
 return [
     y,
     match y {
@@ -61,8 +75,10 @@ return [
             return 500
         }
     },
-    z
+    z,
+    a,
+    b
 ]
 
 --RESULT--
-[200, hello, ok, nil, nil, 3]
+[200, hello, ok, nil, nil, 3, 3, 2]
