@@ -93,6 +93,10 @@ public class Main {
 
     public Value runFile(Path file) {
         try {
+            if (!Files.exists(file) && System.getenv().containsKey(Constants.PATH_ENV_KEY)) {
+                file = Paths.get(System.getenv(Constants.PATH_ENV_KEY) + System.getProperty("file.separator") + file);
+            }
+
             return runCode(String.join("\n", Files.readAllLines(file)));
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "IO error", e);
