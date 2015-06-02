@@ -21,48 +21,34 @@ public class MatchStatement implements Statement {
 
         Value value = parser.parseExpression(tokens, TokenType.LEFT_BRACE);
 
-        tokens.match(TokenType.LEFT_BRACE);
-
-        tokens.next();
-        tokens.next();
+        TokenList block = new TokenList(parser.parseBlock(tokens).getTokens());
 
         Map<Value, Block> cases = new LinkedHashMap();
 
-        while (tokens.hasNext()) {
+        while (block.getTokens().stream().filter(t -> t.getType() != TokenType.NEW_LINE).count() > 0 && block.hasNext()) {
             Value expression = null;
 
-            if (tokens.current().getType() == TokenType.DEFAULT) {
+            if (block.current().getType() == TokenType.DEFAULT) {
                 expression = value;
 
-                tokens.next();
-            } else if (tokens.current().getType() == TokenType.RIGHT_BRACE) {
-                tokens.next();
-
-                break;
+                block.next();
             } else {
-                expression = parser.parseExpression(tokens, TokenType.EXCLUSIVE_SLICE);
+                expression = parser.parseExpression(block, TokenType.LEFT_BRACE, TokenType.ARROW);
             }
 
-            tokens.match(TokenType.EXCLUSIVE_SLICE);
-            tokens.next();
+            cases.put(expression, parser.parseBlock(block));
 
-            Block block = parser.parseBlock(tokens);
+            block.next();
 
-            cases.put(expression, block);
+            if (block.current() != null) {
+                block.match(TokenType.COMMA, TokenType.NEW_LINE);
 
-            tokens.next();
+                if (block.current().getType() == TokenType.COMMA) {
+                    block.next();
+                }
 
-            if (tokens.current().getType() == TokenType.NEW_LINE) {
-                tokens.next();
-                tokens.match(TokenType.RIGHT_BRACE);
-                tokens.next();
-                break;
-            } else {
-                tokens.match(TokenType.COMMA);
-                tokens.next();
+                block.next();
             }
-
-            tokens.next();
         }
 
         for (Map.Entry<Value, Block> entry : cases.entrySet()) {

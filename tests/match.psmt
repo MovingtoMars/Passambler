@@ -5,22 +5,22 @@ Tests match.
 x = 2
 
 match x {
-    3: {
+    3 {
         x += 1
     },
-    default: {
+    default {
         x += 3
     }
 }
 
 y = match x {
-    1: {
+    1 {
         return 100
     },
-    5: {
+    5 {
         return 200
     },
-    default: {
+    default {
         return 300
     }
 }
@@ -28,25 +28,24 @@ y = match x {
 return [
     y,
     match y {
-        200: {
+        200 {
             return "hello"
         },
-        300: {
+        300 {
             return "world"
         }
     },
     match "test" {
-        "test": {
+        "test" {
             return "ok"
         }
     },
     match "hello" {
     },
     match "world" {
-        "world": {
-
+        "world" {
         },
-        default: {
+        default {
             return 500
         }
     }
