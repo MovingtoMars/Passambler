@@ -21,11 +21,7 @@ public class FilesystemModule implements Module {
     private final Path file;
 
     public FilesystemModule(String name) {
-        if (Files.exists(Paths.get(name))) {
-            this.file = Paths.get(name);
-        } else {
-            this.file = Paths.get(name + "." + Constants.EXTENSION);
-        }
+        this.file = resolve(name);
     }
 
     @Override
@@ -85,7 +81,21 @@ public class FilesystemModule implements Module {
         }
     }
 
-    private String purify(Path path) {
+    private static String purify(Path path) {
         return path.getFileName().toString().replace("." + Constants.EXTENSION, "");
+    }
+
+    public static Path resolve(String name) {
+        if (Files.exists(Paths.get(name))) {
+            return Paths.get(name);
+        } else {
+            Path file = Paths.get(name + "." + Constants.EXTENSION);
+
+            if (!Files.exists(file) && System.getenv().containsKey(Constants.PATH_ENV_KEY)) {
+                return resolve(System.getenv(Constants.PATH_ENV_KEY) + System.getProperty("file.separator") + name);
+            }
+
+            return file;
+        }
     }
 }
