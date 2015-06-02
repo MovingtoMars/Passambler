@@ -1,6 +1,8 @@
 package passambler.parser.statement;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import passambler.exception.EngineException;
 import passambler.lexer.TokenList;
@@ -26,17 +28,27 @@ public class MatchStatement implements Statement {
         Map<Value, Block> cases = new LinkedHashMap();
 
         while (block.getTokens().stream().filter(t -> t.getType() != TokenType.NEW_LINE).count() > 0 && block.hasNext()) {
-            Value expression = null;
+            List<Value> expressions = new ArrayList<>();
 
             if (block.current().getType() == TokenType.DEFAULT) {
-                expression = value;
+                expressions.add(value);
 
                 block.next();
             } else {
-                expression = parser.parseExpression(block, TokenType.LEFT_BRACE, TokenType.ARROW);
+                while (block.hasNext()) {
+                    expressions.add(parser.parseExpression(block, TokenType.LEFT_BRACE, TokenType.ARROW, TokenType.COMMA));
+
+                    if (block.current().getType() == TokenType.COMMA) {
+                        block.next();
+                    } else {
+                        break;
+                    }
+                }
             }
 
-            cases.put(expression, parser.parseBlock(block));
+            Block caseBlock = parser.parseBlock(block);
+
+            expressions.forEach(e -> cases.put(e, caseBlock));
 
             block.next();
 

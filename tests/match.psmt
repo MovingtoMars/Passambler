@@ -25,6 +25,18 @@ y = match x {
     }
 }
 
+z = match x {
+    100 {
+        return 1
+    },
+    8, 6 {
+        return 2
+    },
+    10, 20, 5 {
+        return 3
+    }
+}
+
 return [
     y,
     match y {
@@ -48,8 +60,9 @@ return [
         default {
             return 500
         }
-    }
+    },
+    z
 ]
 
 --RESULT--
-[200, hello, ok, nil, nil]
+[200, hello, ok, nil, nil, 3]
