@@ -26,8 +26,8 @@ public class Block {
     public Value invoke() throws EngineException {
         Value result = parser.parse(tokens);
 
-        for (List<Token> defer : parser.getDefers()) {
-            parser.parse(defer);
+        for (int i = parser.getDefers().size() - 1; i >= 0; --i) {
+            parser.parse(parser.getDefers().get(i));
         }
 
         parser.getDefers().clear();
