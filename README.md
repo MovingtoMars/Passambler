@@ -31,7 +31,7 @@ $ git clone https://github.com/raoulvdberge/Passambler.git
 $ cd Passambler
 $ mvn install
 ```
-You will find the jar file and the REPL in the `target` directory.
+You will find the jar file in the `target` directory.
 
 Java 8 is required to build and run the language.
 
