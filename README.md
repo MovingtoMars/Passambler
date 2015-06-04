@@ -35,5 +35,12 @@ You will find the jar file and the REPL in the `target` directory.
 
 Java 8 is required to build and run the language.
 
+## Contributing
+Contributions are always welcome! You can contribute to Passambler in following ways:
+
+- Reporting and/or fixing bugs
+- Implementing new features
+- Comment on issues, we need your voice!
+
 ## License
 MIT license
