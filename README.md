@@ -42,5 +42,8 @@ Contributions are always welcome! You can contribute to Passambler in following 
 - Implementing new features
 - Comment on issues, we need your voice!
 
+## Questions
+If you have a question about the language, feel free to open an issue.
+
 ## License
 MIT license
