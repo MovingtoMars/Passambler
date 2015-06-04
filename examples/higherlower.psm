@@ -1,0 +1,24 @@
+import 'std'
+import 'math'
+
+x = math.rand(1, 100)
+
+while {
+    y = 0
+
+    try {
+        y = std.to_num(readln())
+    } catch e {
+        skip
+    }
+
+    if y > x {
+        writeln('Lower')
+    } elseif y < x {
+        writeln('Higher')
+    } elseif y == x {
+        writeln('Correct!')
+
+        stop
+    }
+}
