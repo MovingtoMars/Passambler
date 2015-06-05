@@ -35,6 +35,7 @@ import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenPosition;
 import passambler.lexer.TokenType;
+import passambler.parser.statement.FunctionStatement;
 import passambler.parser.statement.MatchStatement;
 import passambler.util.ValueConstants;
 import passambler.value.BooleanValue;
@@ -62,6 +63,7 @@ public class Parser {
 
         statements.add(new IfStatement());
         statements.add(new WhileStatement());
+        statements.add(new FunctionStatement());
         statements.add(new ForStatement());
         statements.add(new LeaveStatement());
         statements.add(new TryStatement());

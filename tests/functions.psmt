@@ -2,15 +2,15 @@
 Tests functions.
 
 --INPUT--
-a = func() {
+func a() {
     return
 }
 
-b = func(x) {
+func b(x) {
     return x + 2
 }
 
-c = func(x, y) {
+func c(x, y) {
     return x + y
 }
 
@@ -25,14 +25,20 @@ bb = func(x) {
 dd = func() {
 }
 
+func cc()
+
+func ee()
+
 return [
     a(),
     b(2),
     c(5, 6),
     aa(),
     bb(2),
-    dd()
+    dd(),
+    cc(),
+    ee()
 ]
 
 --RESULT--
-[nil, 4, 11, nil, 6, nil]
+[nil, 4, 11, nil, 6, nil, nil, nil]

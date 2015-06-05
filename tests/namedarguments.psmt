@@ -2,7 +2,7 @@
 Tests named arguments.
 
 --INPUT--
-s = func(a, b) {
+func s(a, b) {
     writeln(a - b)
 }
 
