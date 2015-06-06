@@ -47,9 +47,13 @@ public class FunctionCallExpression implements Expression {
             argumentTokenList.add(token);
 
             // If we reach the next argument, or if we are at the end of all the arguments
-            if (depth == 0 && (token.getType() == TokenType.COMMA || tokens.indexOf(token) == tokens.size() - 1)) {
-                if (token.getType() == TokenType.COMMA) {
+            if (depth == 0 && (token.getType() == TokenType.COMMA || token.getType() == TokenType.NEW_LINE || tokens.indexOf(token) == tokens.size() - 1)) {
+                if (token.getType() == TokenType.COMMA || token.getType() == TokenType.NEW_LINE) {
                     argumentTokenList.remove(argumentTokenList.size() - 1);
+                }
+
+                if (argumentTokenList.isEmpty()) {
+                    continue;
                 }
 
                 TokenList argumentTokens = new TokenList(argumentTokenList);
