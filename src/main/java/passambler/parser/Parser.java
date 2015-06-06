@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import passambler.lexer.Lexer;
 import passambler.lexer.Token;
 import passambler.lexer.TokenList;
@@ -50,7 +51,7 @@ public class Parser {
     private List<Statement> statements = new ArrayList<>();
     private List<Module> modules = new ArrayList<>();
     private Map<String, Value> globals = new HashMap();
-    private List<List<Token>> defers = new ArrayList<>();
+    private Stack<List<Token>> defers = new Stack<>();
 
     private Scope scope;
 
@@ -100,7 +101,7 @@ public class Parser {
         return globals;
     }
 
-    public List<List<Token>> getDefers() {
+    public Stack<List<Token>> getDefers() {
         return defers;
     }
 

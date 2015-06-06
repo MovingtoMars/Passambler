@@ -26,11 +26,9 @@ public class Block {
     public Value invoke() throws EngineException {
         Value result = parser.parse(tokens);
 
-        for (int i = parser.getDefers().size() - 1; i >= 0; --i) {
-            parser.parse(parser.getDefers().get(i));
+        while (!parser.getDefers().empty()) {
+            parser.parse(parser.getDefers().pop());
         }
-
-        parser.getDefers().clear();
 
         return result;
     }
