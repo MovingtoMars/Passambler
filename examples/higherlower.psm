@@ -8,7 +8,7 @@ while {
 
     try {
         y = std.to_num(readln())
-    } catch e {
+    } catch {
         skip
     }
 

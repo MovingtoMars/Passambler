@@ -13,7 +13,7 @@ try {
 
 try {
     writeln("no problem")
-} catch y {
+} catch {
     writeln("nope, not any problem")
 }
 
@@ -29,7 +29,7 @@ try {
 
 try {
     writeln("try / catch without error")
-} catch e {
+} catch {
     writeln("Error on a try catch block without error?!")
 } finally {
     writeln("Done")

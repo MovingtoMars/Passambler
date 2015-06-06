@@ -22,6 +22,8 @@ public class TryStatement implements Statement {
         boolean mayCatch = true;
         boolean mayFinally = true;
 
+        String name = null;
+
         tokens.next();
 
         Block tryBlock = parser.parseBlock(tokens);
@@ -31,10 +33,12 @@ public class TryStatement implements Statement {
         tokens.match(TokenType.CATCH);
         tokens.next();
 
-        tokens.match(TokenType.IDENTIFIER);
-        String name = tokens.current().getValue();
+        if (tokens.current().getType() == TokenType.IDENTIFIER) {
+            name = tokens.current().getValue();
 
-        tokens.next();
+            tokens.next();
+        }
+
         if (tokens.current().getType() == TokenType.IF) {
             tokens.next();
 
@@ -77,7 +81,9 @@ public class TryStatement implements Statement {
             }
 
             if (mayCatch) {
-                catchBlock.getParser().getScope().setSymbol(name, e.getError());
+                if (name != null) {
+                    catchBlock.getParser().getScope().setSymbol(name, e.getError());
+                }
 
                 Value result = catchBlock.invoke();
 
