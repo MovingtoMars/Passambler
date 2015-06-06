@@ -115,11 +115,7 @@ public class AssignmentExpression implements Expression {
 
                 Value value = new ExpressionParser(parser.getParser(), new TokenList(bracketTokens)).parse();
 
-                if (value instanceof NumberValue) {
-                    if (!(leftValue instanceof ListValue)) {
-                        throw new ParserException(ParserExceptionType.NOT_A_LIST, leftTokens.current().getPosition());
-                    }
-
+                if (leftValue instanceof ListValue) {
                     if (leftValue instanceof StringValue && !(rightValue instanceof CharacterValue)) {
                         throw new ParserException(ParserExceptionType.NOT_A_CHARACTER, leftTokens.current().getPosition());
                     }
