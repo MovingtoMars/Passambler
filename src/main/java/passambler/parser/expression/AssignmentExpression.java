@@ -149,6 +149,8 @@ public class AssignmentExpression implements Expression {
                     } else {
                         leftValue = dict.getEntry(value);
                     }
+                } else {
+                    throw new ParserException(ParserExceptionType.NOT_INDEXED, leftTokens.current().getPosition());
                 }
             }
 
