@@ -17,8 +17,6 @@ public enum ParserExceptionType {
     CANNOT_ITERATE("Cannot iterate over this value"),
     CANNOT_USE_NAMED_ARGUMENTS("Cannot use named arguments in this context"),
     CANNOT_DIVIDE_BY_ZERO("Cannot divide by 0"),
-    NOT_A_LIST("Value is not a list"),
-    NOT_A_DICT("Value is not a dictionary"),
     NOT_A_BOOLEAN("Value is not a boolean expression"),
     NOT_A_CHARACTER("Value is not a character"),
     NOT_A_STRING("Value is not a string"),
