@@ -1,5 +1,5 @@
 --TEST--
-Tests if statements and if/else if/else expressions.
+Tests if statements and expressions.
 
 --INPUT--
 a = 1
@@ -12,28 +12,19 @@ if 5 == 5 {
     a = 3
 }
 
-b = if 2 + 2 == 5 {
+b = if 2 + 3 == 5 {
+    return 20
 }
 
 x = if 2 + 2 == 5 {
     return 10
-} elseif 3 + 3 == 10 {
-    return 20
-} elseif 5 + 5 == 10 {
-    a += 5
-
-    if 5 + 5 == 10 -> return 25
-
-    return 30
-} else {
-    return 40
-} 
+}
 
 return [
     a,
-    x,
-    b
+    b,
+    x
 ]
 
 --RESULT--
-[8, 25, nil]
+[3, 20, nil]

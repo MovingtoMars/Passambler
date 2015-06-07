@@ -40,7 +40,7 @@ public class IfStatement implements Statement {
                     throw new ParserException(ParserExceptionType.UNEXPECTED_TOKEN, tokens.current().getPosition(), tokens.current().getType());
                 }
 
-                tokens.match(TokenType.ELSE, TokenType.ELSEIF);
+                tokens.match(TokenType.ELSE, TokenType.ELIF);
 
                 if (tokens.current().getType() == TokenType.ELSE) {
                     elseCondition = true;

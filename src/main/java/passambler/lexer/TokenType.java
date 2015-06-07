@@ -10,7 +10,7 @@ public enum TokenType {
     AND, OR, XOR,
     ARROW,
     RETURN, STOP, SKIP,
-    WHILE, FOR, FUNC, IF, ELSEIF, ELSE, DEFER, TRY, CATCH, FINALLY, PUB, IN, IMPORT, MATCH, DEFAULT,
+    WHILE, FOR, FUNC, IF, ELIF, ELSE, DEFER, TRY, CATCH, FINALLY, PUB, IN, IMPORT, MATCH, DEFAULT,
     PERIOD, COMMA, NEW_LINE, EXCLUSIVE_SLICE, INCLUSIVE_SLICE, AS;
 
     public boolean isOperator() {
@@ -32,7 +32,7 @@ public enum TokenType {
     }
 
     public boolean isAfterRightBrace() {
-        return this == ELSE || this == ELSEIF
+        return this == ELSE || this == ELIF
                 || this == CATCH || this == FINALLY;
     }
 

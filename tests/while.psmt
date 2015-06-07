@@ -16,9 +16,9 @@ while x < 15 {
 
     if x == 5 {
         skip
-    } elseif x == 6 {
+    } elif x == 6 {
         x += 2
-    } elseif x == 9 {
+    } elif x == 9 {
         stop
     }
 }
@@ -28,7 +28,7 @@ while {
     y += 1
     if y == 9 {
         skip
-    } elseif y == 16 {
+    } elif y == 16 {
         stop
     }
     y += 1

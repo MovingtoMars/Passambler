@@ -20,11 +20,9 @@ public class Lexer {
         this.input = input;
 
         tokenMap.put("finally", TokenType.FINALLY);
-        tokenMap.put("else if", TokenType.ELSEIF);
         tokenMap.put("default", TokenType.DEFAULT);
 
         tokenMap.put("return", TokenType.RETURN);
-        tokenMap.put("elseif", TokenType.ELSEIF);
         tokenMap.put("import", TokenType.IMPORT);
 
         tokenMap.put("match", TokenType.MATCH);
@@ -36,6 +34,7 @@ public class Lexer {
         tokenMap.put("skip", TokenType.SKIP);
         tokenMap.put("func", TokenType.FUNC);
         tokenMap.put("else", TokenType.ELSE);
+        tokenMap.put("elif", TokenType.ELIF);
 
         tokenMap.put("try", TokenType.TRY);
         tokenMap.put("for", TokenType.FOR);

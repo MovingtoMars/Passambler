@@ -14,9 +14,9 @@ while {
 
     if y > x {
         writeln('Lower')
-    } elseif y < x {
+    } elif y < x {
         writeln('Higher')
-    } elseif y == x {
+    } elif y == x {
         writeln('Correct!')
 
         stop

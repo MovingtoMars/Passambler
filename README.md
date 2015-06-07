@@ -13,9 +13,9 @@ And a FizzBuzz program is written like this:
 for x in 0...100 {
     if x % 15 == 0 {
         writeln("FizzBuzz")
-    } elseif x % 3 == 0 {
+    } elif x % 3 == 0 {
         writeln("Fizz")
-    } elseif x % 5 == 0 {
+    } elif x % 5 == 0 {
         writeln("Buzz")
     }
 }
