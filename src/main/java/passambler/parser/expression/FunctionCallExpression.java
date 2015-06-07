@@ -90,7 +90,7 @@ public class FunctionCallExpression implements Expression {
                     }
                 } else {
                     if (usedNamedArguments) {
-                        throw new ParserException(ParserExceptionType.BAD_SYNTAX, token.getPosition(), "Cannot specify a normal argument after a specifying a named argument");
+                        throw new ParserException(ParserExceptionType.CANNOT_USE_NAMED_ARGUMENTS, token.getPosition());
                     }
 
                     arguments.add(new ExpressionParser(parser.getParser(), argumentTokens).parse());

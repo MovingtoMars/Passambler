@@ -37,7 +37,7 @@ public class IfStatement implements Statement {
 
             if (tokens.current() != null) {
                 if (elseCondition) {
-                    throw new ParserException(ParserExceptionType.BAD_SYNTAX, tokens.get(0).getPosition(), "Else block should be the last statement");
+                    throw new ParserException(ParserExceptionType.UNEXPECTED_TOKEN, tokens.current().getPosition(), tokens.current().getType());
                 }
 
                 tokens.match(TokenType.ELSE, TokenType.ELSEIF);
