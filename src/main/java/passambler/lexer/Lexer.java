@@ -165,6 +165,18 @@ public class Lexer {
                         }
                     }
                 }
+            } else if (current() == '0' && peek() != null && peek() == 'x') {
+                Token hex = createToken(TokenType.HEX, "0x");
+
+                next();
+                next();
+
+                while (current() != null && Character.isLetterOrDigit(current())) {
+                    hex.setValue(hex.getValue() + current());
+                    next();
+                }
+
+                tokens.add(hex);
             } else if (Character.isDigit(current())) {
                 Token number = createToken(TokenType.NUMBER, "");
 

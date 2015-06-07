@@ -1,11 +1,11 @@
 package passambler.parser.expression;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import passambler.exception.EngineException;
 import passambler.lexer.Token;
 import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
-import passambler.parser.expression.ExpressionParser;
 import passambler.value.NumberValue;
 import passambler.value.StringValue;
 import passambler.value.Value;
@@ -13,7 +13,9 @@ import passambler.value.Value;
 public class LiteralExpression implements Expression {
     @Override
     public boolean canPerform(ExpressionParser parser, Value currentValue) {
-        return parser.getTokens().current().getType() == TokenType.NUMBER || parser.getTokens().current().getType() == TokenType.STRING;
+        return parser.getTokens().current().getType() == TokenType.NUMBER
+                || parser.getTokens().current().getType() == TokenType.STRING
+                || parser.getTokens().current().getType() == TokenType.HEX;
     }
 
     @Override
@@ -40,6 +42,8 @@ public class LiteralExpression implements Expression {
                 }
 
                 return new NumberValue(new BigDecimal(number.toString()));
+            case HEX:
+                return new NumberValue(new BigInteger(token.getValue().substring(2), 16).intValue());
             default:
                 return null;
         }
