@@ -31,7 +31,6 @@ import passambler.module.regex.RegexModule;
 import passambler.module.std.StdModule;
 import passambler.module.std.value.InValue;
 import passambler.module.std.value.OutValue;
-import passambler.module.thread.ThreadModule;
 import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenPosition;
@@ -77,7 +76,6 @@ public class Parser {
         modules.add(new FileModule());
         modules.add(new OsModule());
         modules.add(new NetModule());
-        modules.add(new ThreadModule());
         modules.add(new JsonModule());
         modules.add(new RegexModule());
         modules.add(new DbModule());
