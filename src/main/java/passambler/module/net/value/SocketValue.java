@@ -7,7 +7,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
+import passambler.util.ValueConstants;
+import passambler.value.BooleanValue;
 import passambler.value.CloseableValue;
+import passambler.value.Property;
 import passambler.value.Readable;
 import passambler.value.Value;
 import passambler.value.StringValue;
@@ -19,11 +22,19 @@ public class SocketValue extends Value implements Writeable, Readable, Closeable
     private BufferedReader reader;
     private PrintWriter writer;
 
+    private boolean closed = false;
+
     public SocketValue(Socket socket) {
         this.socket = socket;
 
         this.setProperty("host_addr", new StringValue(socket.getInetAddress().getHostAddress()));
         this.setProperty("host_name", new StringValue(socket.getInetAddress().getHostName()));
+        this.setProperty("closed", new Property() {
+            @Override
+            public Value getValue() {
+                return new BooleanValue(closed);
+            }
+        });
     }
 
     @Override
@@ -51,7 +62,21 @@ public class SocketValue extends Value implements Writeable, Readable, Closeable
         }
 
         try {
-            return new StringValue(line ? reader.readLine() : String.valueOf(Character.toChars(reader.read())));
+            String dataRead = null;
+
+            if (line) {
+                dataRead = reader.readLine();
+            } else {
+                int read = reader.read();
+
+                if (read >= 0) {
+                    dataRead = String.valueOf(Character.toChars(read));
+                }
+            }
+
+            closed = dataRead == null;
+
+            return closed ? ValueConstants.NIL : new StringValue(dataRead);
         } catch (IOException e) {
             throw new ErrorException(e);
         }
