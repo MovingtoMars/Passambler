@@ -18,7 +18,7 @@ public class JsonModule implements Module {
 
     @Override
     public void apply(Map<String, Value> symbols) {
-        symbols.put("encode", new EncodeFunction());
-        symbols.put("decode", new DecodeFunction());
+        symbols.put("Encode", new EncodeFunction());
+        symbols.put("Decode", new DecodeFunction());
     }
 }

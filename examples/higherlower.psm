@@ -1,13 +1,13 @@
 import 'std'
 import 'math'
 
-x = math.rand(1, 100)
+x = math.Rand(1, 100)
 
 while {
     y = 0
 
     try {
-        y = std.to_num(readln())
+        y = std.ToNum(readln())
     } catch {
         skip
     }

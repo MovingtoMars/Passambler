@@ -18,7 +18,7 @@ public class NetModule implements Module {
 
     @Override
     public void apply(Map<String, Value> symbols) {
-        symbols.put("listen", new ListenFunction());
-        symbols.put("open", new OpenFunction());
+        symbols.put("Listen", new ListenFunction());
+        symbols.put("Open", new OpenFunction());
     }
 }

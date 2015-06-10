@@ -19,16 +19,16 @@ public class MathModule implements Module {
 
     @Override
     public void apply(Map<String, Value> symbols) {
-        symbols.put("sin", new SinFunction());
-        symbols.put("cos", new CosFunction());
-        symbols.put("tan", new TanFunction());
-        symbols.put("abs", new AbsFunction());
-        symbols.put("ceil", new CeilFunction());
-        symbols.put("floor", new FloorFunction());
-        symbols.put("sqrt", new SqrtFunction());
-        symbols.put("log", new LogFunction());
-        symbols.put("log10", new Log10Function());
-        symbols.put("rand", new RandFunction());
+        symbols.put("Sin", new SinFunction());
+        symbols.put("Cos", new CosFunction());
+        symbols.put("Tan", new TanFunction());
+        symbols.put("Abs", new AbsFunction());
+        symbols.put("Ceil", new CeilFunction());
+        symbols.put("Floor", new FloorFunction());
+        symbols.put("Sqrt", new SqrtFunction());
+        symbols.put("Log", new LogFunction());
+        symbols.put("Log10", new Log10Function());
+        symbols.put("Rand", new RandFunction());
 
         symbols.put("PI", new NumberValue(Math.PI));
         symbols.put("E", new NumberValue(Math.E));

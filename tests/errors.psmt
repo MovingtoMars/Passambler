@@ -6,7 +6,7 @@ import "std"
 import "file"
 
 try {
-    read(file.open("sdjfisdjfidsfjisd"))
+    read(file.Open("sdjfisdjfidsfjisd"))
 } catch x {
     writeln(x)
 }
@@ -22,7 +22,7 @@ try {
     throw("Problem!!")
     writeln("not ran")
 } catch z {
-    writeln("problem found: " + std.to_str(z))
+    writeln("problem found: " + std.ToStr(z))
 } finally {
     writeln("DONE")
 }

@@ -7,6 +7,7 @@ import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
 import passambler.exception.ParserException;
 import passambler.exception.ParserExceptionType;
+import passambler.lexer.Lexer;
 import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
 import passambler.module.FilesystemModule;
@@ -72,7 +73,9 @@ public class ImportStatement implements Statement {
 
                 Value moduleValue = new Value();
 
-                symbols.entrySet().stream().forEach((symbol) -> moduleValue.setProperty(symbol.getKey(), new Property(symbol.getValue())));
+                symbols.entrySet().stream().filter(s -> Lexer.isPublic(s.getKey())).forEach(symbol -> {
+                    moduleValue.setProperty(symbol.getKey(), new Property(symbol.getValue()));
+                });
 
                 parser.getScope().setSymbol(alias != null ? ((StringValue) alias).toString() : moduleName, moduleValue);
             }

@@ -27,9 +27,9 @@ public class SocketValue extends Value implements Writeable, Readable, Closeable
     public SocketValue(Socket socket) {
         this.socket = socket;
 
-        this.setProperty("host_addr", new StringValue(socket.getInetAddress().getHostAddress()));
-        this.setProperty("host_name", new StringValue(socket.getInetAddress().getHostName()));
-        this.setProperty("closed", new Property() {
+        this.setProperty("HostAddr", new StringValue(socket.getInetAddress().getHostAddress()));
+        this.setProperty("HostName", new StringValue(socket.getInetAddress().getHostName()));
+        this.setProperty("Closed", new Property() {
             @Override
             public Value getValue() {
                 return new BooleanValue(closed);

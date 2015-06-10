@@ -18,7 +18,7 @@ public class ThreadModule implements Module {
 
     @Override
     public void apply(Map<String, Value> symbols) {
-        symbols.put("start", new StartFunction());
-        symbols.put("sleep", new SleepFunction());
+        symbols.put("Start", new StartFunction());
+        symbols.put("Sleep", new SleepFunction());
     }
 }

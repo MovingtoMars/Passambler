@@ -7,19 +7,19 @@ import "std"
 a = []
 
 if 5 > 10 {
-    std.push(a, 1)
+    std.Push(a, 1)
 } elif 10 < 5 {
-    std.push(a, 2)
+    std.Push(a, 2)
 } elif 10 == 10 {
-    std.push(a, 3)
+    std.Push(a, 3)
 }
 
 if 5 > 10 {
-    std.push(a, 1)
+    std.Push(a, 1)
 } elif 10 < 5 {
-    std.push(a, 2)
+    std.Push(a, 2)
 } elif 10 == 10 {
-    std.push(a, 3)
+    std.Push(a, 3)
 }
 
 return a

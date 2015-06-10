@@ -2,7 +2,7 @@ import "net"
 import "os"
 import "std"
 
-server = net.listen(std.to_num(os.args[0]))
+server = net.Listen(std.ToNum(os.Args[0]))
 
 while {
     client = read(server)

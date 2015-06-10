@@ -4,11 +4,11 @@ Tests import.
 --INPUT--
 import "std"
 
-writeln(std.ucase("hello"))
+writeln(std.Ucase("hello"))
 
 import "math" as "x"
 
-writeln(x.ceil(5.5))
+writeln(x.Ceil(5.5))
 
 --OUTPUT--
 HELLO

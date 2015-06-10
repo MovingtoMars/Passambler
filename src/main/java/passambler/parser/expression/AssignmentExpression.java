@@ -8,7 +8,6 @@ import passambler.exception.ParserExceptionType;
 import passambler.lexer.Token;
 import passambler.lexer.TokenList;
 import passambler.lexer.TokenType;
-import passambler.parser.expression.ExpressionParser;
 import passambler.value.CharacterValue;
 import passambler.value.DictValue;
 import passambler.value.ListValue;
@@ -45,8 +44,6 @@ public class AssignmentExpression implements Expression {
         while (tokens.hasNext()) {
             if (tokens.current().getType().isAssignmentOperator()) {
                 break;
-            } else if (tokens.current().getType() == TokenType.PUB) {
-                pub = tokens.current();
             } else {
                 leftTokens.getTokens().add(tokens.current());
             }
@@ -63,14 +60,6 @@ public class AssignmentExpression implements Expression {
 
         while (leftTokens.hasNext()) {
             Token token = leftTokens.current();
-
-            if (pub != null) {
-                if (token.getType() == TokenType.IDENTIFIER && leftTokens.peek() == null) {
-                    parser.getParser().getScope().setVisible(token.getValue());
-                } else {
-                    throw new ParserException(ParserExceptionType.INVALID_PUB_CONTEXT, pub.getPosition());
-                }
-            }
 
             if (token.getType() == TokenType.IDENTIFIER) {
                 if (leftTokens.peek() == null) {
