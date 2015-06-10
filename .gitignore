@@ -5,5 +5,5 @@
 manifest.mf
 build.xml
 nb-configuration.xml
-nbactions.xml
+nbactions*.xml
 Thumbs.db
