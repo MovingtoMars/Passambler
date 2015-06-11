@@ -36,7 +36,7 @@ public class MatchStatement implements Statement {
                 block.next();
             } else {
                 while (block.hasNext()) {
-                    expressions.add(parser.parseExpression(block, TokenType.LEFT_BRACE, TokenType.ARROW, TokenType.COMMA));
+                    expressions.add(parser.parseExpression(block, TokenType.ARROW, TokenType.COMMA));
 
                     if (block.current().getType() == TokenType.COMMA) {
                         block.next();
@@ -44,6 +44,10 @@ public class MatchStatement implements Statement {
                         break;
                     }
                 }
+            }
+
+            if (block.peek().getType() == TokenType.LEFT_BRACE) {
+                block.next();
             }
 
             Block caseBlock = parser.parseBlock(block, TokenType.COMMA);

@@ -5,7 +5,7 @@ Tests match.
 x = 2
 
 match x {
-    3 {
+    3 -> {
         x += 1
     },
     default {
@@ -14,25 +14,25 @@ match x {
 }
 
 y = match x {
-    1 {
+    1 -> {
         return 100
     },
-    5 {
+    5 -> {
         return 200
     },
-    default {
+    default -> {
         return 300
     }
 }
 
 z = match x {
-    100 {
+    100 -> {
         return 1
     },
-    8, 6 {
+    8, 6 -> {
         return 2
     },
-    10, 20, 5 {
+    10, 20, 5 -> {
         return 3
     }
 }
@@ -40,7 +40,7 @@ z = match x {
 a = match x {
     1, 2, 3 -> return 1,
     4 -> return 2,
-    5 {
+    5 -> {
         return 3
     }
 }
@@ -54,24 +54,24 @@ b = match 10 {
 return [
     y,
     match y {
-        200 {
+        200 -> {
             return "hello"
         },
-        300 {
+        300 -> {
             return "world"
         }
     },
     match "test" {
-        "test" {
+        "test" -> {
             return "ok"
         }
     },
     match "hello" {
     },
     match "world" {
-        "world" {
+        "world" -> {
         },
-        default {
+        default -> {
             return 500
         }
     },
