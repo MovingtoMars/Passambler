@@ -68,10 +68,11 @@ public class ImportStatement implements Statement {
                             module = builtInModule;
                         }
                     } else {
-                        JavaClassInitializerFunction func = new JavaClassInitializerFunction(cls);
+                        JavaClassInitializerFunction initializer = new JavaClassInitializerFunction(cls);
 
                         String[] parts = element.split(Pattern.quote("."));
-                        parser.getScope().setSymbol(parts[parts.length - 1], func);
+
+                        parser.getScope().setSymbol(parts[parts.length - 1], initializer);
                     }
                 } else {
                     module = Arrays.asList(module.getChildren()).stream()

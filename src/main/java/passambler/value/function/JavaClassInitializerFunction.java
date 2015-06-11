@@ -15,6 +15,7 @@ public class JavaClassInitializerFunction extends UserFunction {
 
     public JavaClassInitializerFunction(Class cls) {
         super(new Block(new Scope()), new ArrayList());
+
         this.cls = cls;
     }
 
@@ -33,6 +34,7 @@ public class JavaClassInitializerFunction extends UserFunction {
         Value value = new Value();
 
         Object obj;
+
         try {
             obj = cls.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
@@ -41,12 +43,15 @@ public class JavaClassInitializerFunction extends UserFunction {
 
         int i = 0;
         String lastName = "";
+
         for (Method method : cls.getMethods()) {
+            // Temporary hack
             if (lastName == method.getName()) {
                 i++;
             } else {
                 i = 0;
             }
+
             value.setProperty(method.getName() + i, new UserFunction(new Block(new Scope()), new ArrayList()) {
                 @Override
                 public int getArguments() {
@@ -73,6 +78,7 @@ public class JavaClassInitializerFunction extends UserFunction {
                     }
                 }
             });
+
             lastName = method.getName();
         }
 
