@@ -3,6 +3,7 @@ package passambler.parser.statement;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 import passambler.exception.EngineException;
 import passambler.exception.ErrorException;
 import passambler.exception.ParserException;
@@ -17,6 +18,7 @@ import passambler.value.ErrorValue;
 import passambler.value.Property;
 import passambler.value.StringValue;
 import passambler.value.Value;
+import passambler.value.function.JavaClassInitializerFunction;
 
 public class ImportStatement implements Statement {
     @Override
@@ -49,12 +51,28 @@ public class ImportStatement implements Statement {
 
             for (String element : data.split("/")) {
                 if (module == null) {
-                    Module builtInModule = parser.getModules().stream().filter(m -> m.getId().equals(element)).findFirst().orElse(null);
+                    Class cls = null;
 
-                    if (builtInModule == null) {
-                        module = new FilesystemModule(element);
+                    try {
+                        cls = Class.forName(element);
+                    } catch (ClassNotFoundException e) {
+
+                    }
+
+                    if (cls == null) {
+                        Module builtInModule = parser.getModules().stream().filter(m -> m.getId().equals(element)).findFirst().orElse(null);
+
+                        if (builtInModule == null) {
+                            module = new FilesystemModule(element);
+                        } else {
+                            module = builtInModule;
+                        }
                     } else {
-                        module = builtInModule;
+                        JavaClassInitializerFunction initializer = new JavaClassInitializerFunction(cls);
+
+                        String[] parts = element.split(Pattern.quote("."));
+
+                        parser.getScope().setSymbol(parts[parts.length - 1], initializer);
                     }
                 } else {
                     module = Arrays.asList(module.getChildren()).stream()

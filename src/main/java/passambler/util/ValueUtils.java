@@ -28,6 +28,16 @@ public class ValueUtils {
         return ValueConstants.NIL;
     }
 
+    public static Object toObject(Value value) {
+        if (value instanceof NumberValue) {
+            return ((NumberValue) value).getValue().intValue();
+        } else if (value instanceof StringValue) {
+            return ((StringValue) value).toString();
+        }
+
+        return value.getValue();
+    }
+
     public static boolean compare(Value value1, Value value2) {
         if (value1.getValue() == null && value2.getValue() == null) {
             return true;
