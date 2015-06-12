@@ -4,14 +4,9 @@ import passambler.exception.ParserException;
 import passambler.lexer.Token;
 import passambler.lexer.TokenType;
 
-public class CharacterValue extends Value {
+public class CharacterValue extends NumberValue {
     public CharacterValue(int character) {
-        setValue(character);
-    }
-
-    @Override
-    public Integer getValue() {
-        return (Integer) value;
+        super(character);
     }
 
     @Override
@@ -20,11 +15,17 @@ public class CharacterValue extends Value {
             return new StringValue(toString() + value.toString());
         }
 
-        return super.onOperator(value, operatorToken);
+        Value newValue = super.onOperator(value, operatorToken);
+
+        if (newValue instanceof NumberValue) {
+            return new CharacterValue(((NumberValue) newValue).getValue().intValue());
+        }
+
+        return newValue;
     }
 
     @Override
     public String toString() {
-        return String.valueOf(Character.toChars(getValue()));
+        return String.valueOf(Character.toChars(getValue().intValue()));
     }
 }
