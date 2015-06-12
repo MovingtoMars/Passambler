@@ -40,7 +40,7 @@ public class NumberValue extends Value {
                     return new NumberValue(getValue().multiply(((NumberValue) value).getValue()));
                 case DIVIDE:
                 case ASSIGN_DIVIDE:
-                    if (((NumberValue) value).getValue().intValue() == 0) {
+                    if (((NumberValue) value).getValue().compareTo(BigDecimal.ZERO) == 0) {
                         throw new ParserException(ParserExceptionType.CANNOT_DIVIDE_BY_ZERO, operatorToken.getPosition());
                     }
 
