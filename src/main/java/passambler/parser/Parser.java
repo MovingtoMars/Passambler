@@ -35,6 +35,7 @@ import passambler.exception.EngineException;
 import passambler.exception.ParserExceptionType;
 import passambler.lexer.TokenPosition;
 import passambler.lexer.TokenType;
+import passambler.module.crypto.CryptoModule;
 import passambler.parser.statement.FunctionStatement;
 import passambler.parser.statement.MatchStatement;
 import passambler.util.ValueConstants;
@@ -79,6 +80,7 @@ public class Parser {
         modules.add(new JsonModule());
         modules.add(new RegexModule());
         modules.add(new DbModule());
+        modules.add(new CryptoModule());
 
         globals.put("true", ValueConstants.TRUE);
         globals.put("false", ValueConstants.FALSE);
