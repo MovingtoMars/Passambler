@@ -31,12 +31,12 @@ public class DecryptFunction extends Value implements Function {
         String key = ((StringValue) context.getArgument(0)).toString();
 
         try {
-            if (context.getArgument(0) instanceof StringValue) {
+            if (context.getArgument(1) instanceof StringValue) {
                 StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
                 encryptor.setPassword(key);
 
                 return new StringValue(encryptor.decrypt(((StringValue) context.getArgument(1)).toString()));
-            } else if (context.getArgument(0) instanceof NumberValue) {
+            } else if (context.getArgument(1) instanceof NumberValue) {
                 StandardPBEBigDecimalEncryptor encryptor = new StandardPBEBigDecimalEncryptor();
                 encryptor.setPassword(key);
 
