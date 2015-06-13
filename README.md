@@ -2,6 +2,8 @@
 
 Passambler is a simple general purpose programming language.
 
+You can find the documentation [here](docs/index.md).
+
 ## Examples
 A simple Hello World program looks like this:
 ```
