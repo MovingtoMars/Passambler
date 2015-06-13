@@ -11,6 +11,7 @@ public class DictValue extends Value {
         return dict;
     }
 
+    // Use this method instead of HashMap's get(). This one actually compares on the actual value that the value holds.
     public Value getEntry(Value key) {
         return dict.entrySet().stream().filter(e -> e.getKey().getValue().equals(key.getValue())).findFirst().orElse(null).getValue();
     }
