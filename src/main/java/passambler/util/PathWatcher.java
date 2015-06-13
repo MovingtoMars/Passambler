@@ -8,9 +8,8 @@ import java.util.logging.Level;
 import static passambler.util.Constants.LOGGER;
 
 public abstract class PathWatcher extends TimerTask {
-    private long lastChangeTime;
-
-    private Path path;
+    private final Path path;
+    private long changed;
 
     public PathWatcher(Path file) {
         this.path = file;
@@ -21,8 +20,8 @@ public abstract class PathWatcher extends TimerTask {
         try {
             long time = Files.getLastModifiedTime(path).toMillis();
 
-            if (lastChangeTime != time) {
-                lastChangeTime = time;
+            if (changed != time) {
+                changed = time;
 
                 onChange();
             }
