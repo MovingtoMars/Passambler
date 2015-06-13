@@ -1,6 +1,22 @@
 # Module `math`
 [Standard Library Index](index.md)
 
+## Index
+- Constants
+  - [`PI`](constant-pi)
+  - [`E`](constant-e)
+- Functions
+  - [`Abs`](function-abs)
+  - [`Ceil`](function-ceil)
+  - [`Cos`](function-cos)
+  - [`Floor`](function-floor)
+  - [`Log10`](function-log10)
+  - [`Log`](function-log)
+  - [`Rand`](function-rand)
+  - [`Sin`](function-sin)
+  - [`Sqrt`](function-sqrt)
+  - [`Tan`](function-tan)
+
 ## Constants
 
 ### Constant `PI`
