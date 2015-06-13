@@ -5,6 +5,7 @@ import passambler.module.Module;
 import passambler.module.crypto.function.DecryptFunction;
 import passambler.module.crypto.function.DigestFunction;
 import passambler.module.crypto.function.EncryptFunction;
+import passambler.module.crypto.password.PasswordModule;
 import passambler.value.Value;
 
 public class CryptoModule implements Module {
@@ -15,7 +16,9 @@ public class CryptoModule implements Module {
 
     @Override
     public Module[] getChildren() {
-        return null;
+        return new Module[] {
+            new PasswordModule()
+        };
     }
 
     @Override
