@@ -11,27 +11,13 @@ public class DictValue extends Value {
         return dict;
     }
 
-    // This helper method exists because by default, Map.get() doesn't compare with
-    // the data of the value, it compares the value instance instead.
-    // Therefore, in most cases it isn't possible to retrieve a value with Map.get().
     public Value getEntry(Value key) {
-        for (Map.Entry<Value, Value> entry : dict.entrySet()) {
-            if (entry.getKey().getValue().equals(key.getValue())) {
-                return entry.getValue();
-            }
-        }
-
-        return null;
+        return dict.entrySet().stream().filter(e -> e.getKey().getValue().equals(key.getValue())).findFirst().orElse(null).getValue();
     }
 
     public void setEntry(Value key, Value value) {
-        // If we already have a key with the same value,
-        // remove that entry so that the value can be overridden.
-        for (Map.Entry<Value, Value> entry : dict.entrySet()) {
-            if (entry.getKey().getValue().equals(key.getValue())) {
-                dict.remove(entry.getKey());
-            }
-        }
+        // If the key already exists, remove it, so the key can be overriden
+        dict.entrySet().stream().filter(e -> e.getKey().getValue().equals(key.getValue())).forEach(e -> dict.remove(e.getKey()));
 
         dict.put(key, value);
     }
